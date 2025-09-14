@@ -1,0 +1,158 @@
+ManifestFileVersion: 0
+CRC: 4128684615
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: b4c96f783ffec8a835165606a552c01e
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 1f74aa34b80334e4a7bafcdc2f8fb509
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: b4c96f783ffec8a835165606a552c01e
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 58
+  Script: {instanceID: 0}
+- Class: 61
+  Script: {instanceID: 0}
+- Class: 70
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 111
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 3127ae91cd59144448ca0e879d7be2fb, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 369d0e21d6d8847d491b0550299b148d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 34654a47762b94a499210916b75690cf, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c35a6a8a50c7444739f3d31d10b2a7fb, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: aad3fd142125f49cd9203a06ab5cb8d1, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 6d361c7be1b1045d68393db32556cc66, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 69dad5500677a424b98dbef7e7b1c36b, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 740f4be0a788a49c6be4bfaa2df856e7, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+- Class: 212
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 223
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: CommonTools.GUIRefAnimation
+- AssemblyName: Assembly-CSharp
+  ClassName: CommonTools.GUIRefButton
+- AssemblyName: Assembly-CSharp
+  ClassName: CommonTools.GUIRefGameObject
+- AssemblyName: Assembly-CSharp
+  ClassName: CommonTools.GUIRefImage
+- AssemblyName: Assembly-CSharp
+  ClassName: CommonTools.GUIRefTextGUI
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.FaceInfo_Legacy
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.FontAssetCreationSettings
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.KerningTable
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_Character
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_FontFeatureTable
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_FontWeightPair
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_GlyphAdjustmentRecord
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_GlyphPairAdjustmentRecord
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_GlyphValueRecord
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.VertexGradient
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.PersistentCallGroup
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.RectOffset
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.FaceInfo
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.Glyph
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphMetrics
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphRect
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.AnimationTriggers
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Button/ButtonClickedEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.ColorBlock
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Navigation
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.SpriteState
+Assets:
+- Assets/Prefabs/CommonH/UI - Round Selection.prefab
+- Assets/Prefabs/CommonH/UI - Top Bar.prefab
+- Assets/Prefabs/CommonH/UI - Shop.prefab
+- Assets/Prefabs/CommonH/UI - Round Info.prefab
+- Assets/Prefabs/CommonH/UI - Main Menu.prefab
+- Assets/Prefabs/CommonH/UI - Win Screen.prefab
+- Assets/Prefabs/CommonH/UI - Boss Info.prefab
+- Assets/Prefabs/CommonH/UI - Wheel Selection.prefab
+- Assets/Prefabs/CommonH/UI - Round Complete.prefab
+- Assets/Prefabs/CommonH/UI - Cards Balls SpinWheel.prefab
+- Assets/Prefabs/CommonH/UI - In Game.prefab
+- Assets/Prefabs/CommonH/UI - Game Over.prefab
+Dependencies:
+- /Users/nitzanwilnai/Programming/Unity/SpinDropScore/Assets/StreamingAssets/AssetBundles/common

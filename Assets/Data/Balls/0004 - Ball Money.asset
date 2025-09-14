@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d018e43d2f3d49f7b4d96cb4df5520e, type: 3}
+  m_Name: 0004 - Ball Money
+  m_EditorClassIdentifier: 
+  ID: 4
+  BallSprite: {fileID: 21300000, guid: df6180fef59a84de7b9ff3a9e6d4383f, type: 3}
+  BallDescription: +$1
+  BallChips: 0
+  BallMultiplierAdd: 0
+  BallMultiplierMult: 1
+  BallMoney: 1
+  BallRevertChance: 0
+  BallColorMultiplier: 01000000010000000100000001000000

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48b4e425634cd4fdfb2e40236fa74d67, type: 3}
+  m_Name: 0003- Slot Change to Blue
+  m_EditorClassIdentifier: 
+  ID: 3
+  SlotChangeType: 3
+  NumSlots: 2
+  Weight: 100
+  DescriptionGO: {fileID: 7114289054184287703, guid: 065757f16687c4fc49b81caa0ca71cff, type: 3}
+  AffectSlotType: 3
+  Chips: 0
+  MultiplierAdd: 0
+  MultiplierMult: 0
+  Money: 0

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d818f41df5c94ac580e8cbcc1faf16c, type: 3}
+  m_Name: 0003 - Pack Balls - Chips Red
+  m_EditorClassIdentifier: 
+  BallSO:
+  - {fileID: 11400000, guid: 270bcb4074b5949f580faa96652d249c, type: 2}
+  Weight: 100
+  DescriptionGO: {fileID: 7114289054184287703, guid: 1eb53161ed1c04f048414992a86771a0, type: 3}
+  AffectSlotType: 0
