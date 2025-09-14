@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7a4dcac336914f5b94e423814720945, type: 3}
+  m_Name: JokerSO 0044 increase mult +5 when all balls land on 1 color
+  m_EditorClassIdentifier: 
+  JokerSprite: {fileID: 21300000, guid: 965c2bc0c98de4fae9c1eff118d70ef1, type: 3}
+  Cost: 10
+  SellValue: 5
+  Rarity: 2
+  DescriptionGO: {fileID: 7630852811119300315, guid: 9e91cbda4f5514d56bd5b2552264347e, type: 3}
+  BaseChipsAdd: 0
+  BaseMultiplierAdd: 0
+  BaseMultiplierMult: 0
+  TypeExists: 01010101
+  SizeExists: 000000000001
+  ChipsInreasePerBall: 0
+  MultIncreaseForSize: 5
+  SubtractMultiplierAddPerRound: {x: 0, y: 0}
+  SubtractChipsAddPerSpin: {x: 0, y: 0}
+  PerJokerMultiplierAdd: 0
+  PerNoJokerMultiplierAdd: 0
+  ChipsIncreasePerSpin: 0
+  MultIncreasePerUnusedSpin: 0
+  ChipIncreasePerBall: 0
+  MultiplierAddRandomRange: {x: 0, y: 0}
+  EarnMoneyEveryRound: 0
+  IncreaseSellValueEveryRound: 0
+  GoIntoDebt: 0
+  InterestIncrease: 0
+  ChanceBallGivesMoney: 0
+  ChipsPerDollar: 0
+  MultiplierMultForSpecialBall: 0
+  MultiplierMultForNonSpecialBall: 0
+  SortSlots: 0
+  FirstBallConvertSlot: {fileID: 0}
+  AddSpin: 0
+  LastSpinMultiplierAdd: 0
+  RetriggerBalls: 0
+  RetriggerBallsLastSpin: 0
+  DoubleScoreWorstBall: 0
+  AddCountToMult: 00000000
+  PerSpinRemainingChipsAdd: 0
+  PerSpinRemainingMultiplierAdd: 0
+  LastSpinChipsAdd: 0
+  TriggerEveryXSpins: 1
+  RandomMultiplierAdd: {x: 0, y: 0}

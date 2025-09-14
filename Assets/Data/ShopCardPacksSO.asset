@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8ad9ac9ded37424caefcfc8f8e9a2a9, type: 3}
+  m_Name: ShopCardPacksSO
+  m_EditorClassIdentifier: 
+  ShopCardPackInfo:
+  - CardPackType: 1
+    PickCards: 1
+    MaxCards: 2
+    Cost: 4
+    Weight: 60
+  - CardPackType: 1
+    PickCards: 1
+    MaxCards: 3
+    Cost: 8
+    Weight: 30
+  - CardPackType: 1
+    PickCards: 1
+    MaxCards: 4
+    Cost: 12
+    Weight: 15
+  - CardPackType: 2
+    PickCards: 1
+    MaxCards: 2
+    Cost: 4
+    Weight: 100
+  - CardPackType: 2
+    PickCards: 1
+    MaxCards: 3
+    Cost: 7
+    Weight: 50
+  - CardPackType: 2
+    PickCards: 1
+    MaxCards: 4
+    Cost: 10
+    Weight: 25
+  - CardPackType: 3
+    PickCards: 1
+    MaxCards: 2
+    Cost: 4
+    Weight: 100
+  - CardPackType: 3
+    PickCards: 1
+    MaxCards: 3
+    Cost: 6
+    Weight: 50
+  - CardPackType: 3
+    PickCards: 1
+    MaxCards: 4
+    Cost: 8
+    Weight: 25

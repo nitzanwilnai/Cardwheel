@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d818f41df5c94ac580e8cbcc1faf16c, type: 3}
+  m_Name: 0002 - Pack Balls - Money
+  m_EditorClassIdentifier: 
+  BallSO:
+  - {fileID: 11400000, guid: 229f8e906e33d4c3293cbc4203904b61, type: 2}
+  Description: Change 1 Ball to Earn $1 Every Spin
+  Weight: 50
+  DescriptionGO: {fileID: 7114289054184287703, guid: 9c043a7838b324aaab9fec26f0543169, type: 3}

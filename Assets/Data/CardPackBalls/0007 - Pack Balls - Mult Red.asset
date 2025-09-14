@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d818f41df5c94ac580e8cbcc1faf16c, type: 3}
+  m_Name: 0007 - Pack Balls - Mult Red
+  m_EditorClassIdentifier: 
+  BallSO:
+  - {fileID: 11400000, guid: 7c9046ad10a304f6a9e84d9089c77055, type: 2}
+  Weight: 50
+  DescriptionGO: {fileID: 7114289054184287703, guid: 7a9494604ae3b40c1849a1862871f4f0, type: 3}
+  AffectSlotType: 0

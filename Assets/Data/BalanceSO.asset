@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab049ac452c0f40318399904a1c61bfb, type: 3}
+  m_Name: BalanceSO
+  m_EditorClassIdentifier: 
+  NumSlots: 24
+  SlotColors:
+  - {r: 0.90588236, g: 0.29803923, b: 0.23529412, a: 1}
+  - {r: 0.9529412, g: 0.6117647, b: 0.07058824, a: 1}
+  - {r: 0.101960786, g: 0.7372549, b: 0.6117647, a: 1}
+  - {r: 0.20392157, g: 0.5921569, b: 0.85490197, a: 1}
+  SlotOffColor: {r: 0.7411765, g: 0.7647059, b: 0.78039217, a: 1}
+  RarityColors:
+  - {r: 0.7411765, g: 0.7647059, b: 0.78039217, a: 1}
+  - {r: 0.101960786, g: 0.7372549, b: 0.6117647, a: 1}
+  - {r: 0.20392157, g: 0.5921569, b: 0.85490197, a: 1}
+  - {r: 0.60784316, g: 0.34901962, b: 0.7137255, a: 1}
+  StartingMoney: 4
+  MaxBalls: 6
+  MaxRounds: 24
+  MaxJokers: 5
+  StartMaxJokers: 5
+  DefaultSpins: 4
+  BaseChips: 5
+  BaseMultiplier: 2
+  ShopRerollBaseCost: 5
+  CardPackRerollBaseCost: 5
+  InterestEveryXDollars: 5
+  InterestEarnedPerXDollars: 1
+  InterestMax: 5
+  NumShopJokers: 2
+  MaxShopJokers: 3
+  MaxShopCardPacks: 2
+  MaxShopCardPackCards: 4
+  VoucherCost: 10
+  ButtonColorEnabled: {r: 0.18039216, g: 0.8, b: 0.44313726, a: 1}
+  RerollColorEnabled: {r: 0.9019608, g: 0.49411765, b: 0.13333334, a: 1}
+  ButtonColorDisabled: {r: 0.7411765, g: 0.7647059, b: 0.78039217, a: 1}
+  UISpinWheelSpeed: -20
