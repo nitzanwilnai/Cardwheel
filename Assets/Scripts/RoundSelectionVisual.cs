@@ -1,11 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using CommonTools;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
 using UnityEngine.UI;
 
 namespace Cardwheel
@@ -50,6 +46,7 @@ namespace Cardwheel
             m_UI.GetComponent<Canvas>().worldCamera = camera;
 
             m_verticalLayoutGroup = m_UI.GetComponent<VerticalLayoutGroup>();
+            m_horiontalLayoutGroup = m_UI.GetComponent<HorizontalLayoutGroup>();
 
             m_roundGUIInfos = new RoundGUIInfo[3];
             m_bossRoundGUIInfo = new BossRoundGUIInfo();
@@ -141,8 +138,16 @@ namespace Cardwheel
             // CommonVisual.ShowJokersBallsAndSpinWheel(runData, balance, m_cardsBallsSpinWheelGUI);
 
             Canvas.ForceUpdateCanvases();
-            m_verticalLayoutGroup.enabled = false;
-            m_verticalLayoutGroup.enabled = true;
+            if (m_verticalLayoutGroup != null)
+            {
+                m_verticalLayoutGroup.enabled = false;
+                m_verticalLayoutGroup.enabled = true;
+            }
+            if (m_horiontalLayoutGroup != null)
+            {
+                m_horiontalLayoutGroup.enabled = false;
+                m_horiontalLayoutGroup.enabled = true;
+            }
         }
 
         public void Hide()
@@ -208,8 +213,8 @@ namespace Cardwheel
 
         public void TryUseBossReroll(RunData runData, Balance balance)
         {
-            if(Logic.TryUseBossRerolls(runData, balance))
-            Show(runData, balance);
+            if (Logic.TryUseBossRerolls(runData, balance))
+                Show(runData, balance);
         }
 
         public void SortSlots(RunData runData, Balance balance)

@@ -1,6 +1,5 @@
 using CommonTools;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -235,7 +234,7 @@ namespace Cardwheel
             if (balance.JokerBalance.MultiplierAddForLeastPlayedColor[jokerType] > 0.0f)
             {
                 SLOT_TYPE slotType = runData.LeastPlayedColorAtRoundStart;
-                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "<color=#" + balance.SlotColors[(int)slotType].ToHexString() + ">" + slotType.ToString() + "</color>";
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "<color=#" + ColorUtility.ToHtmlStringRGBA(balance.SlotColors[(int)slotType]) + ">" + slotType.ToString() + "</color>";
             }
         }
 
@@ -328,7 +327,7 @@ namespace Cardwheel
             string colorTitle = "";
             for (int i = 0; i < title.Length; i++)
             {
-                colorTitle += "<color=#" + balance.SlotColors[i % balance.SlotColors.Length].ToHexString() + ">";
+                colorTitle += "<color=#" + ColorUtility.ToHtmlStringRGBA(balance.SlotColors[i % balance.SlotColors.Length]) + ">";
                 colorTitle += title[i];
                 colorTitle += "</color>";
             }

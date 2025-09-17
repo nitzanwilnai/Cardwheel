@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using CommonTools;
 using TMPro;
-using Unity.VisualScripting;
 using System;
 
 namespace Cardwheel
@@ -274,8 +271,11 @@ namespace Cardwheel
             HideBuyPopupCommon();
 
             Canvas.ForceUpdateCanvases();
-            m_verticalLayoutGroup.enabled = false;
-            m_verticalLayoutGroup.enabled = true;
+            if (m_verticalLayoutGroup != null)
+            {
+                m_verticalLayoutGroup.enabled = false;
+                m_verticalLayoutGroup.enabled = true;
+            }
 
             Span<int> jokerIdxs = new int[balance.MaxJokersInHand];
             int jokerCount = 0;

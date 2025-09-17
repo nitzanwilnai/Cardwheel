@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CommonBundle: common_h
   CommonBundleUIPath: CommonH
-  Position: {x: 0, y: -0.1, z: 0}
-  Scale: {x: 1.2, y: 1.2, z: 1}
+  Position: {x: -0.25, y: -0.1, z: 0}
+  Scale: {x: 1.45, y: 1.45, z: 1}
