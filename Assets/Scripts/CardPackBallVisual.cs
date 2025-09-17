@@ -2,9 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using CommonTools;
 using TMPro;
-using System;
-using System.Linq;
-using Unity.VisualScripting;
 
 namespace Cardwheel
 {

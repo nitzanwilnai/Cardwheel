@@ -70,7 +70,7 @@ namespace Cardwheel
             for (int wheelIdx = 1; wheelIdx < balance.SpinWheelBalance.NumSpinWheels; wheelIdx++)
             {
                 m_wheelSelectionSpinWheels[wheelIdx].SpinWheelGO = GameObject.Instantiate(m_wheelSelectionSpinWheels[0].SpinWheelGO, m_spinWheelParent);
-                Vector3 pos = new Vector3(1080.0f * wheelIdx, 0.0f, 0.0f);
+                Vector3 pos = new Vector3(Screen.width * wheelIdx, 0.0f, 0.0f);
                 m_wheelSelectionSpinWheels[wheelIdx].SpinWheelGO.transform.localPosition = pos;
             }
 
@@ -200,7 +200,7 @@ namespace Cardwheel
                 m_wheelSelectionIdx--;
 
                 m_startX = m_targetX;
-                m_targetX += 1080;
+                m_targetX += Screen.width;
 
                 slideSpinWheel();
             }
@@ -213,7 +213,7 @@ namespace Cardwheel
                 m_wheelSelectionIdx++;
 
                 m_startX = m_targetX;
-                m_targetX -= 1080;
+                m_targetX -= Screen.width;
 
                 slideSpinWheel();
             }

@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using CommonTools;
 using TMPro;
-using Unity.VisualScripting;
 
 namespace Cardwheel
 {

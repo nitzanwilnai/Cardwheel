@@ -42,12 +42,13 @@ namespace Cardwheel
             m_interestText = guiRef.GetTextGUI("Interest");
             m_specialText = guiRef.GetTextGUI("Special");
             m_totalText = guiRef.GetTextGUI("Total");
-            m_moneyText = guiRef.GetTextGUI("Money");
             m_spinsText = guiRef.GetTextGUI("Spins");
             guiRef.GetButton("Claim").onClick.AddListener(Game.Instance.ClaimRoundRewardAndGoToShop);
 
             CommonVisual.InitTopBarGUI(guiRef.GetGameObject("TopBar"), ref m_topBarGUI);
             CommonVisual.InitCardsBallsSpinWheelGUI(runData, balance, guiRef.GetGameObject("CardsAndBalls"), ref m_cardsBallsSpinWheelGUI);
+
+            m_moneyText = m_topBarGUI.MoneyText;
 
             Hide();
         }
@@ -80,8 +81,12 @@ namespace Cardwheel
             CommonVisual.ShowJokersBallsAndSpinWheel(runData, balance, m_cardsBallsSpinWheelGUI, runData.SlotTypeInGame);
 
             Canvas.ForceUpdateCanvases();
-            m_verticalLayoutGroup.enabled = false;
-            m_verticalLayoutGroup.enabled = true;
+
+            if (m_verticalLayoutGroup != null)
+            {
+                m_verticalLayoutGroup.enabled = false;
+                m_verticalLayoutGroup.enabled = true;
+            }
         }
 
         public void Tick(RunData runData, Balance balance, float dt)

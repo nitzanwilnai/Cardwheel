@@ -20,7 +20,7 @@ namespace Cardwheel
         public Transform Joker1Parent;
         public Transform Joker2Parent;
 
-        public int NumJokers;
+        // public int NumJokers;
 
         GameObject[] m_jokersGO;
         Vector2[] m_jokerPos;
@@ -74,30 +74,18 @@ namespace Cardwheel
                 trans.localScale = new Vector3(0.5f, 0.5f, 1.0f);
 
                 trans.sizeDelta = new Vector2(256, 448); // custom size
-
-                m_jokerPos[i] = new Vector3(-1080.0f, 0.0f);
-                m_jokerSpeed[i] = 0.0f;
-
             }
 
-            for (int i = 0; i < NumJokers; i++)
-                moveNewJoker();
+            for (int i = 0; i < balance.JokerBalance.NumJokers; i++)
+                moveNewJoker(i);
 
             m_title = guiRef.GetTextGUI("Title");
             Hide();
         }
 
-        void stopJoker(int jkrIdx)
+        void moveNewJoker(int jkrIdx)
         {
-            m_jokerPos[jkrIdx] = new Vector3(-1080.0f, 0.0f);
-            m_jokerSpeed[jkrIdx] = 0.0f;
-        }
-
-        void moveNewJoker()
-        {
-            int jkrIdx = m_shuffledJokerIdxs[m_jokerIdx];
-            m_jokerIdx = (m_jokerIdx + 1) % m_shuffledJokerIdxs.Length;
-            float posX = -1080.0f - 2060.0f * UnityEngine.Random.value;
+            float posX = -2176 - (1920.0f * 2.5f) * UnityEngine.Random.value;
             float posY = 720.0f * UnityEngine.Random.value - 360.0f;
             m_jokerPos[jkrIdx] = new Vector2(posX, posY);
 
@@ -126,11 +114,9 @@ namespace Cardwheel
             for (int i = 0; i < balance.JokerBalance.NumJokers; i++)
             {
                 m_jokerPos[i].x += dt * m_jokerSpeed[i];
-                if (m_jokerPos[i].x > 1080.0f)
-                {
-                    stopJoker(i);
-                    moveNewJoker();
-                }
+                if (m_jokerPos[i].x > 2176.0f)
+                    moveNewJoker(i);
+
                 m_jokersGO[i].transform.localPosition = m_jokerPos[i];
 
                 m_jokerAngle[i] += m_jokerRotationSpeed[i] * dt;

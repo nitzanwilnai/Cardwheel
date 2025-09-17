@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using Cardwheel;
-using Unity.Burst.Intrinsics;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Ball : MonoBehaviour
