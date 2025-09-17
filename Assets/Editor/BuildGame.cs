@@ -27,7 +27,7 @@ namespace Cardwheel
 
             EditorUserBuildSettings.buildAppBundle = false;
 
-            Build(BuildTarget.Android, Application.dataPath + "/../../Build/Cardwheel " + dateTime + ".apk", BuildOptions.None);
+            Build(BuildTarget.Android, Application.dataPath + "/../../Build/Cardwheel " + dateTime + ".apk", BuildOptions.None, "Assets/Scenes/MainGameScene V.unity");
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -44,7 +44,7 @@ namespace Cardwheel
             DateTime theTime = DateTime.Now;
             string dateTime = theTime.ToString("yyyy-MM-dd HH.mm.ss");
             EditorUserBuildSettings.buildAppBundle = false;
-            Build(BuildTarget.Android, Application.dataPath + "/../../Build/ReleaseTest " + dateTime + ".apk", BuildOptions.None);
+            Build(BuildTarget.Android, Application.dataPath + "/../../Build/ReleaseTest " + dateTime + ".apk", BuildOptions.None, "Assets/Scenes/MainGameScene V.unity");
             PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Android, "");
 
             AssetDatabase.SaveAssets();
@@ -57,11 +57,11 @@ namespace Cardwheel
             setAndroidBuildNumber();
 
             PlayerSettings.Android.useCustomKeystore = true;
-            string path = Application.dataPath + "/../Android/Cardwheel.keystore";
-            PlayerSettings.Android.keystoreName = path;
-            PlayerSettings.Android.keystorePass = "";
-            PlayerSettings.Android.keyaliasName = "";
-            PlayerSettings.Android.keyaliasPass = "";
+            // string path = Application.dataPath + "/../Keys/cardwheel.keystore";
+            // PlayerSettings.Android.keystoreName = path;
+            // PlayerSettings.Android.keystorePass = "";
+            // PlayerSettings.Android.keyaliasName = "";
+            // PlayerSettings.Android.keyaliasPass = "";
 
             //PlayerSettings.Android.minifyRelease = true;
 
@@ -71,7 +71,9 @@ namespace Cardwheel
             EditorUserBuildSettings.buildAppBundle = true;
             EditorUserBuildSettings.androidCreateSymbols = AndroidCreateSymbols.Public;
 
-            Build(BuildTarget.Android, Application.dataPath + "/../../Build/Release " + dateTime + ".aab", BuildOptions.None);
+            PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARMv7 | AndroidArchitecture.ARM64;
+
+            Build(BuildTarget.Android, Application.dataPath + "/../../Build/Release " + dateTime + ".aab", BuildOptions.None, "Assets/Scenes/MainGameScene V.unity");
 
             EditorUserBuildSettings.androidCreateSymbols = AndroidCreateSymbols.Disabled;
             EditorUserBuildSettings.buildAppBundle = false;
@@ -105,7 +107,7 @@ namespace Cardwheel
 
             PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.iOS, "");
 
-            Build(BuildTarget.iOS, Application.dataPath + "/../../Build/iOSBuild", BuildOptions.AutoRunPlayer);
+            Build(BuildTarget.iOS, Application.dataPath + "/../../Build/iOSBuild", BuildOptions.AutoRunPlayer, "Assets/Scenes/MainGameScene V.unity");
 
             PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.iOS, "");
         }
@@ -117,7 +119,7 @@ namespace Cardwheel
 
             PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.iOS, "RELEASE");
 
-            Build(BuildTarget.iOS, Application.dataPath + "/../../Build/iOSBuild", BuildOptions.AutoRunPlayer);
+            Build(BuildTarget.iOS, Application.dataPath + "/../../Build/iOSBuild", BuildOptions.AutoRunPlayer, "Assets/Scenes/MainGameScene V.unity");
 
             PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.iOS, "");
         }
@@ -137,7 +139,7 @@ namespace Cardwheel
             }
         }
 
-        static void Build(BuildTarget buildTarget, string path, BuildOptions options)
+        static void Build(BuildTarget buildTarget, string path, BuildOptions options, string scene)
         {
             BalanceParser.ParseLocal();
 
@@ -159,7 +161,7 @@ namespace Cardwheel
             Debug.LogFormat("BuildAllAssetBundles elapsed time {0}", Time.realtimeSinceStartup - time);
 
             // Get filename.
-            string[] levels = new string[] { "Assets/Scenes/MainGameScene V.unity" };
+            string[] levels = new string[] { scene };
 
             // Build player.
             BuildPipeline.BuildPlayer(levels, path, buildTarget, options);
