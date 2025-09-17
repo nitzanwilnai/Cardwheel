@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 4128684615
+CRC: 4041953386
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b4c96f783ffec8a835165606a552c01e
+    Hash: 8ba400457134f83b5422480422ddc926
   TypeTreeHash:
     serializedVersion: 2
     Hash: 1f74aa34b80334e4a7bafcdc2f8fb509
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: b4c96f783ffec8a835165606a552c01e
+    Hash: 8ba400457134f83b5422480422ddc926
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -142,17 +142,28 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.SpriteState
 Assets:
+- Assets/Prefabs/CommonH/UI - Card Pack Slot.prefab
 - Assets/Prefabs/CommonH/UI - Round Selection.prefab
 - Assets/Prefabs/CommonH/UI - Top Bar.prefab
 - Assets/Prefabs/CommonH/UI - Shop.prefab
 - Assets/Prefabs/CommonH/UI - Round Info.prefab
 - Assets/Prefabs/CommonH/UI - Main Menu.prefab
+- Assets/Prefabs/CommonH/UI - In Game Info.prefab
 - Assets/Prefabs/CommonH/UI - Win Screen.prefab
 - Assets/Prefabs/CommonH/UI - Boss Info.prefab
+- Assets/Prefabs/CommonH/UI - Card Pack Balls.prefab
+- Assets/Prefabs/CommonH/UI - Joker Info Popup.prefab
 - Assets/Prefabs/CommonH/UI - Wheel Selection.prefab
 - Assets/Prefabs/CommonH/UI - Round Complete.prefab
+- Assets/Prefabs/CommonH/UI - Chips Info.prefab
 - Assets/Prefabs/CommonH/UI - Cards Balls SpinWheel.prefab
 - Assets/Prefabs/CommonH/UI - In Game.prefab
+- Assets/Prefabs/CommonH/UI - Ball Screen.prefab
+- Assets/Prefabs/CommonH/UI - Shop Info.prefab
+- Assets/Prefabs/CommonH/UI - Chips.prefab
+- Assets/Prefabs/CommonH/UI - Card Pack Chips.prefab
+- Assets/Prefabs/CommonH/UI - Settings.prefab
 - Assets/Prefabs/CommonH/UI - Game Over.prefab
+- Assets/Prefabs/CommonH/UI - Upgrade Chips.prefab
 Dependencies:
-- /Users/nitzanwilnai/Programming/Unity/SpinDropScore/Assets/StreamingAssets/AssetBundles/common
+- /Users/nitzanwilnai/Programming/UnityRelease/Cardwheel/Assets/StreamingAssets/AssetBundles/common
