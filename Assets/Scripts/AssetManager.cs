@@ -295,5 +295,10 @@ namespace Cardwheel
         {
             return loadSprite(m_commonBundle, name, "Assets/Textures/Vouchers/" + name + ".png");
         }
+
+        public GameObject GetButtonSelected(Transform parent)
+        {
+            return Instantiate(loadGameObject(m_commonBundle, "Selected", "Assets/Prefabs/Common/Selected.prefab"), parent);
+        }
     }
 }

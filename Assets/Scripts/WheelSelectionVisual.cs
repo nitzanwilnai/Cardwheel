@@ -44,13 +44,21 @@ namespace Cardwheel
         GameObject playButtonGO;
         GameObject lockedGO;
 
-        public void Init(Camera camera, Balance balance)
+        GameData gameData;
+        Balance balance;
+        SettingsData settingsData;
+
+        public void Init(Camera camera, GameData gameData, Balance balance, SettingsData settingsData)
         {
+            this.gameData = gameData;
+            this.balance = balance;
+            this.settingsData = settingsData;
+
             m_UI = AssetManager.Instance.LoadWheelSelectionUI();
             m_UI.GetComponent<Canvas>().worldCamera = camera;
 
             GUIRef guiRef = m_UI.GetComponent<GUIRef>();
-            guiRef.GetButton("Play").onClick.AddListener(Game.Instance.CloseWheelSelection);
+            guiRef.GetButton("Play").onClick.AddListener(animateClose);
             guiRef.GetButton("Prev").onClick.AddListener(prev);
             guiRef.GetButton("Next").onClick.AddListener(next);
             prevButtonGO = guiRef.GetButton("Prev");
@@ -93,21 +101,21 @@ namespace Cardwheel
             Hide();
         }
 
-        public void Show(GameData gameData, Balance balance)
+        public void Show()
         {
-            updateText(gameData, balance);
-            updateButton(gameData, balance);
+            updateText();
+            updateButton();
 
             m_UI.SetActive(true);
         }
 
-        void updateText(GameData gameData, Balance balance)
+        void updateText()
         {
             m_description.text = balance.SpinWheelBalance.Description[m_wheelSelectionIdx];
             m_winCount.text = "Wins: " + gameData.SpinWheelWinCount[m_wheelSelectionIdx];
         }
 
-        void updateButton(GameData gameData, Balance balance)
+        void updateButton()
         {
             prevButtonGO.interactable = (m_wheelSelectionIdx > 0);
             prevButtonGO.image.color = (m_wheelSelectionIdx > 0) ? balance.ButtonColorEnabled : balance.ButtonColorDisabled;
@@ -136,7 +144,7 @@ namespace Cardwheel
             m_UI.SetActive(false);
         }
 
-        public void Tick(GameData gameData, Balance balance, float dt)
+        public void Tick(float dt)
         {
             spinWheelAngle += dt * WheelSpeed;
             for (int i = 0; i < m_wheelSelectionSpinWheels.Length; i++)
@@ -156,8 +164,8 @@ namespace Cardwheel
                 {
                     m_slideValue = 1.0f;
 
-                    updateText(gameData, balance);
-                    updateButton(gameData, balance);
+                    updateText();
+                    updateButton();
 
                     m_description.gameObject.SetActive(true);
                     m_winCount.gameObject.SetActive(true);
@@ -169,27 +177,23 @@ namespace Cardwheel
                 m_spinWheelParent.localPosition = pos;
             }
 
-            // if (m_nextWheelTimer > 0.0f)
-            // {
-            //     m_nextWheelTimer -= dt;
-            //     if (m_nextWheelTimer <= 0.0f)
-            //     {
-            //         m_animation.Play("Wheel Selection Next 2");
-            //     }
-            // }
-
-            // if (m_prevWheelTimer > 0.0f)
-            // {
-            //     m_prevWheelTimer -= dt;
-            //     if (m_prevWheelTimer <= 0.0f)
-            //     {
-            //         m_animation.Play("Wheel Selection Prev 2");
-            //     }
-            // }
+            handleInput();
         }
 
-        public void AnimateClose()
+        void handleInput()
         {
+            if (Input.GetKeyUp(KeyCode.LeftArrow))
+                prev();
+            if (Input.GetKeyUp(KeyCode.RightArrow))
+                next();
+            if (Input.GetKeyUp(KeyCode.Return))
+                animateClose();
+        }
+
+        public void animateClose()
+        {
+            SoundManager.Instance.PlaySFXButtonOK(settingsData);
+
             CommonVisual.AnimateClose(ref m_closeTimer, m_closeTime, m_animation, "Wheel Selection Close");
         }
 

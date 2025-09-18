@@ -804,7 +804,7 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    Android: 
+    Android: MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
     iPhone: 
   additionalCompilerArguments: {}
   platformArchitecture: {}

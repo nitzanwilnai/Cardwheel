@@ -524,7 +524,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 0.5
+  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &3734908205503913257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1282,7 +1282,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: -32, y: 32}
-  m_SizeDelta: {x: 200, y: 100}
+  m_SizeDelta: {x: 400, y: 100}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &8509890424826299839
 CanvasRenderer:
@@ -1469,7 +1469,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 0.5
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &6142280927984359742
 GameObject:
   m_ObjectHideFlags: 0
@@ -1766,7 +1766,7 @@ RectTransform:
   m_GameObject: {fileID: 6561302643157579821}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.75, y: 0.75, z: 1}
+  m_LocalScale: {x: 0.89, y: 0.89, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8337553949704195780}
@@ -2343,7 +2343,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 0.5
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &8001976322355308922
 GameObject:
   m_ObjectHideFlags: 0

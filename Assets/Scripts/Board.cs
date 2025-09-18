@@ -1341,8 +1341,9 @@ namespace Cardwheel
             Logic.SortSlots(runData);
         }
 
+#if UNITY_EDITOR
         float m_droppedAngle;
-        float m_increaseSize = 1.0f;
+        float m_increaseSize;
         void doSpinTest(RunData runData, Balance balance)
         {
             Span<int> slotTypeCount = new int[4];
@@ -1353,6 +1354,7 @@ namespace Cardwheel
                 if (slotTypeCount[i] == 6)
                     dropped6 = true;
 
+            m_increaseSize = 1.0f;
             if (dropped6)
             {
                 Debug.Log("m_droppedAngle " + m_droppedAngle + " AutoDropAngle " + AutoDropAngle);
@@ -1369,5 +1371,6 @@ namespace Cardwheel
 
             startSpin(runData, balance);
         }
+#endif
     }
 }

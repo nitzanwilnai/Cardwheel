@@ -141,12 +141,17 @@ namespace Cardwheel
             m_chipsInfoVisual.Init(Camera);
             m_gameInfoVisual.Init(Camera, m_balance);
             m_shopInfoVisual.Init(Camera, m_balance);
-            m_wheelSelectionVisual.Init(Camera, m_balance);
+            m_wheelSelectionVisual.Init(Camera, m_gameData, m_balance, m_settingsData);
 
             MusicManager.Instance.Init(m_settingsData);
             MusicManager.Instance.PlayMusic();
 
             SetMenuState(MENU_STATE.MAIN_MENU);
+        }
+
+        void Start()
+        {
+            Debug.Log(Input.GetJoystickNames());
         }
 
         public void SetMenuState(MENU_STATE newMenuState)
@@ -234,7 +239,7 @@ namespace Cardwheel
             else if (menuState == MENU_STATE.SHOP_INFO)
                 m_shopInfoVisual.Show(m_runData, m_balance);
             else if (menuState == MENU_STATE.WHEEL_SELECTION)
-                m_wheelSelectionVisual.Show(m_gameData, m_balance);
+                m_wheelSelectionVisual.Show();
             else if (menuState == MENU_STATE.JOKER_INFO_POPUP)
             {
                 // has to be shown after setMenuState;
@@ -328,7 +333,7 @@ namespace Cardwheel
             }
             if (m_runData.MenuState == MENU_STATE.WHEEL_SELECTION)
             {
-                m_wheelSelectionVisual.Tick(m_gameData, m_balance, dt);
+                m_wheelSelectionVisual.Tick(dt);
             }
 
 #if UNITY_EDITOR
@@ -776,13 +781,6 @@ namespace Cardwheel
             SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
 
             SetMenuState(MENU_STATE.WHEEL_SELECTION);
-        }
-
-        public void CloseWheelSelection()
-        {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
-
-            m_wheelSelectionVisual.AnimateClose();
         }
     }
 }
