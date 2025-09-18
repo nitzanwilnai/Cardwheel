@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2851121707648652999}
   - component: {fileID: 4616390501085004732}
   - component: {fileID: 1717856178128800388}
+  - component: {fileID: 3674625364442402907}
   - component: {fileID: 5609582747791190386}
   m_Layer: 5
   m_Name: UI - Main Menu
@@ -130,15 +131,38 @@ MonoBehaviour:
     Value: {fileID: 5703497492678577983}
   GUIRefImages: []
   GUIRefRawImages: []
-  GUIRefButtons:
-  - Name: Play
-    Value: {fileID: 2723161256634728278}
-  - Name: Continue
-    Value: {fileID: 202257660630684268}
+  GUIRefButtons: []
   GUIRefSliders: []
   GUIRefAnimations:
   - Name: Animation
     Value: {fileID: 5609582747791190386}
+--- !u!114 &3674625364442402907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 471760104374161653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67e5b6a1a502544f795bb25d60791040, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Buttons:
+  - Key: Play
+    Button: {fileID: 2723161256634728278}
+    NavigationData:
+      Up: Continue
+      Down: Play
+      Left: Play
+      Right: Play
+  - Key: Continue
+    Button: {fileID: 202257660630684268}
+    NavigationData:
+      Up: Continue
+      Down: Play
+      Left: Continue
+      Right: Continue
 --- !u!111 &5609582747791190386
 Animation:
   m_ObjectHideFlags: 0

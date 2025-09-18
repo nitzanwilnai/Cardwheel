@@ -28,19 +28,26 @@ namespace Cardwheel
         float[] m_jokerAngle;
         float[] m_jokerRotationSpeed;
         int[] m_shuffledJokerIdxs;
-        int m_jokerIdx;
 
-        GameObject m_continueButton;
+        GUIButtonData m_continueButtonData;
+        ButtonNavigationIndices[] m_buttonNavigationIndices;
+        int m_selectedButtonIndex = 0;
 
         public void Init(Camera camera, Balance balance)
         {
             m_UI = AssetManager.Instance.LoadMainMenuUI();
             m_UI.GetComponent<Canvas>().worldCamera = camera;
 
+            GUIButtonRef guiButtonRef = m_UI.GetComponent<GUIButtonRef>();
+
+            CommonButtonVisual.InitButtonNavigationData(guiButtonRef, ref m_buttonNavigationIndices);
+
+            m_continueButtonData = guiButtonRef.GetButtonData("Continue");
+            guiButtonRef.GetButtonData("Play").Button.onClick.AddListener(Game.Instance.AnimateGoToWheelSelection);
+            m_continueButtonData.Button.onClick.AddListener(Game.Instance.AnimateContinueRun);
+
+
             GUIRef guiRef = m_UI.GetComponent<GUIRef>();
-            guiRef.GetButton("Play").onClick.AddListener(Game.Instance.AnimateGoToWheelSelection);
-            guiRef.GetButton("Continue").onClick.AddListener(Game.Instance.AnimateContinueRun);
-            m_continueButton = guiRef.GetButton("Continue").gameObject;
 
             m_animation = guiRef.GetAnimation("Animation");
 
@@ -99,7 +106,7 @@ namespace Cardwheel
             m_title.text = CommonVisual.ColorText(balance, "Cardwheel");
 
             MENU_STATE menuState = RunDataIO.LoadMenuStateOnly();
-            m_continueButton.SetActive(menuState >= MENU_STATE.IN_GAME && menuState < MENU_STATE.GAME_OVER);
+            m_continueButtonData.Button.gameObject.SetActive(menuState >= MENU_STATE.IN_GAME && menuState < MENU_STATE.GAME_OVER);
 
             m_UI.SetActive(true);
         }
@@ -123,9 +130,12 @@ namespace Cardwheel
                 if (m_jokerAngle[i] > 360.0f)
                     m_jokerAngle[i] -= 360.0f;
                 m_jokersGO[i].transform.localRotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, m_jokerAngle[i]));
-
             }
+
+            CommonButtonVisual.handleInput(m_buttonNavigationIndices, ref m_selectedButtonIndex);
         }
+
+
 
         public void Hide()
         {
