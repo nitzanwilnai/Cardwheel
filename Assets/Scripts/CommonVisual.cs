@@ -10,7 +10,7 @@ namespace Cardwheel
         public TextMeshProUGUI MoneyText;
         public Animation MoneyAnim;
         public TextMeshProUGUI TitleText;
-        public Button SettingsButton;
+        public GUIButtonData SettingsButtonData;
     }
 
     public struct CardsBallsSpinWheelGUI
@@ -272,14 +272,18 @@ namespace Cardwheel
             topBarGUI.MoneyText = guiRef.GetTextGUI("Money");
             topBarGUI.MoneyAnim = guiRef.GetAnimation("Money");
             topBarGUI.TitleText = guiRef.GetTextGUI("Title");
-            topBarGUI.SettingsButton = guiRef.GetButton("Settings");
-            topBarGUI.SettingsButton.onClick.AddListener(Game.Instance.GoToSettings);
+
+            GUIButtonRef guiButtonRef = go.GetComponent<GUIButtonRef>();
+            topBarGUI.SettingsButtonData = guiButtonRef.GetButtonData("Settings");
+            topBarGUI.SettingsButtonData.Button.onClick.AddListener(Game.Instance.GoToSettings);
+
+            // no need for navigation selection?
         }
 
         public static void ShowTopBarNoSettings(RunData runData, TopBarGUI topBarGUI, string title)
         {
             ShowTopBar(runData, topBarGUI, title);
-            topBarGUI.SettingsButton.gameObject.SetActive(false);
+            topBarGUI.SettingsButtonData.Button.gameObject.SetActive(false);
         }
 
         public static void ShowTopBar(RunData runData, TopBarGUI topBarGUI, string title)
