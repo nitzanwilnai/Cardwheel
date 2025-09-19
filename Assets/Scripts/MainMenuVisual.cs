@@ -29,6 +29,7 @@ namespace Cardwheel
         float[] m_jokerRotationSpeed;
         int[] m_shuffledJokerIdxs;
 
+        GUIButtonData m_newGameButtonData;
         GUIButtonData m_continueButtonData;
         ButtonNavigationIndices[] m_buttonNavigationIndices;
         int m_selectedButtonIndex = 0;
@@ -42,10 +43,13 @@ namespace Cardwheel
 
             CommonButtonVisual.InitButtonNavigationData(guiButtonRef, ref m_buttonNavigationIndices);
 
-            m_continueButtonData = guiButtonRef.GetButtonData("Continue");
-            guiButtonRef.GetButtonData("Play").Button.onClick.AddListener(Game.Instance.AnimateGoToWheelSelection);
-            m_continueButtonData.Button.onClick.AddListener(Game.Instance.AnimateContinueRun);
+            m_newGameButtonData = guiButtonRef.GetButtonData("Play");
+            m_newGameButtonData.Button.onClick.AddListener(Game.Instance.AnimateGoToWheelSelection);
+            m_newGameButtonData.Icon.SetActive(Game.Instance.Joystick);
 
+            m_continueButtonData = guiButtonRef.GetButtonData("Continue");
+            m_continueButtonData.Button.onClick.AddListener(Game.Instance.AnimateContinueRun);
+            m_continueButtonData.Icon.SetActive(Game.Instance.Joystick);
 
             GUIRef guiRef = m_UI.GetComponent<GUIRef>();
 

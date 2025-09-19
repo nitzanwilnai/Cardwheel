@@ -174,7 +174,7 @@ namespace Cardwheel
                 int numBallsRequired = balance.CardPackBallBalance.NumBalls[cardType];
                 // Debug.Log("cardIdx " + cardIdx + " cardType " + cardType + " numBallsSelected " + numBallsSelected + " numBallsRequired " + numBallsRequired);
                 m_cardPackCardGUIs[index][cardIdx].UseButton.interactable = (numBallsSelected == numBallsRequired);
-                Debug.Log("m_cardPackCardGUIs[" + index + "][" + cardIdx + "].UseButton.interactable " + m_cardPackCardGUIs[index][cardIdx].UseButton.interactable);
+                // Debug.Log("m_cardPackCardGUIs[" + index + "][" + cardIdx + "].UseButton.interactable " + m_cardPackCardGUIs[index][cardIdx].UseButton.interactable);
                 m_cardPackCardGUIs[index][cardIdx].UseButtonImage.color = (numBallsSelected == numBallsRequired) ? balance.ButtonColorEnabled : balance.ButtonColorDisabled;
             }
         }

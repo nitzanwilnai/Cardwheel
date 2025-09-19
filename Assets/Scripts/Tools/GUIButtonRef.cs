@@ -22,6 +22,7 @@ namespace CommonTools
         public string Key;
         public Button Button;
         public GUIButtonNavigationData NavigationData;
+        public GameObject Icon;
     }
 
     public enum NAV_DIRECTION { UP, DOWN, LEFT, RIGHT };

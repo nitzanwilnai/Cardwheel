@@ -13,13 +13,19 @@ namespace Cardwheel
         public TextMeshProUGUI Reward;
         public GameObject Cover;
         public TextMeshProUGUI Description;
+        public GUIButtonData PlayButtonData;
+    }
+
+    public class RegularRoundGUIInfo
+    {
+        public GUIButtonData SkipButtonData;
     }
 
     public class BossRoundGUIInfo
     {
         // boss only
         public TextMeshProUGUI RerollButtonText;
-        public Button RerollButton;
+        public GUIButtonData RerollButtonData;
     }
 
     public class RoundSelectionVisual : MonoBehaviour
@@ -32,6 +38,7 @@ namespace Cardwheel
 
         RoundGUIInfo[] m_roundGUIInfos;
         BossRoundGUIInfo m_bossRoundGUIInfo;
+        RegularRoundGUIInfo[] m_regularRoundGUIInfo;
         VerticalLayoutGroup m_verticalLayoutGroup;
         HorizontalLayoutGroup m_horiontalLayoutGroup;
 
@@ -45,18 +52,23 @@ namespace Cardwheel
             m_UI = AssetManager.Instance.LoadRoundSelectionUI();
             m_UI.GetComponent<Canvas>().worldCamera = camera;
 
-            m_verticalLayoutGroup = m_UI.GetComponent<VerticalLayoutGroup>();
-            m_horiontalLayoutGroup = m_UI.GetComponent<HorizontalLayoutGroup>();
-
             m_roundGUIInfos = new RoundGUIInfo[3];
+            m_regularRoundGUIInfo = new RegularRoundGUIInfo[2];
+            for (int i = 0; i < 2; i++)
+                m_regularRoundGUIInfo[i] = new RegularRoundGUIInfo();
             m_bossRoundGUIInfo = new BossRoundGUIInfo();
+
             GUIRef guiRef = m_UI.GetComponent<GUIRef>();
+            GameObject RoundSelection = guiRef.GetGameObject("RoundSelection");
+
+            m_verticalLayoutGroup = RoundSelection.GetComponent<VerticalLayoutGroup>();
+            m_horiontalLayoutGroup = RoundSelection.GetComponent<HorizontalLayoutGroup>();
 
             for (int i = 0; i < 3; i++)
             {
                 m_roundGUIInfos[i] = new RoundGUIInfo();
                 if (i < 2)
-                    FillRoundGUIInfoNoBoss(guiRef.GetGameObject("Round" + (i + 1)), m_roundGUIInfos[i]);
+                    FillRoundGUIInfoNoBoss(guiRef.GetGameObject("Round" + (i + 1)), m_roundGUIInfos[i], m_regularRoundGUIInfo[i]);
                 else
                     FillRoundGUIInfoBoss(guiRef.GetGameObject("Round" + (i + 1)), m_roundGUIInfos[i], m_bossRoundGUIInfo);
             }
@@ -75,20 +87,23 @@ namespace Cardwheel
             roundGUIInfo.Reward = guiRef.GetTextGUI("Reward");
             roundGUIInfo.Cover = guiRef.GetGameObject("Cover");
 
-            Button playButton = guiRef.GetButton("Play");
-            playButton.onClick.AddListener(Game.Instance.StartRound);
+            GUIButtonRef gUIButtonRef = go.GetComponent<GUIButtonRef>();
+            roundGUIInfo.PlayButtonData = gUIButtonRef.GetButtonData("Play");
+            roundGUIInfo.PlayButtonData.Button.onClick.AddListener(Game.Instance.StartRound);
+            roundGUIInfo.PlayButtonData.Icon.SetActive(Game.Instance.Joystick);
 
             roundGUIInfo.Description = guiRef.GetTextGUI("Description");
         }
 
-        void FillRoundGUIInfoNoBoss(GameObject go, RoundGUIInfo roundGUIInfo)
+        void FillRoundGUIInfoNoBoss(GameObject go, RoundGUIInfo roundGUIInfo, RegularRoundGUIInfo regularRoundGUIInfo)
         {
             fillRoundGUIInfoCommon(go, roundGUIInfo);
 
-            GUIRef guiRef = go.GetComponent<GUIRef>();
+            GUIButtonRef guiRef = go.GetComponent<GUIButtonRef>();
 
-            Button skipButton = guiRef.GetButton("Skip");
-            skipButton.onClick.AddListener(Game.Instance.SkipRound);
+            GUIButtonData skipButtonData = guiRef.GetButtonData("Skip");
+            skipButtonData.Button.onClick.AddListener(Game.Instance.SkipRound);
+            skipButtonData.Icon.SetActive(Game.Instance.Joystick);
         }
 
         void FillRoundGUIInfoBoss(GameObject go, RoundGUIInfo roundGUIInfo, BossRoundGUIInfo bossRoundGUIInfo)
@@ -96,11 +111,12 @@ namespace Cardwheel
             fillRoundGUIInfoCommon(go, roundGUIInfo);
 
             GUIRef guiRef = go.GetComponent<GUIRef>();
-
-            bossRoundGUIInfo.RerollButton = guiRef.GetButton("Reroll");
-            bossRoundGUIInfo.RerollButton.onClick.AddListener(Game.Instance.UseBossReroll);
-
             bossRoundGUIInfo.RerollButtonText = guiRef.GetTextGUI("Reroll");
+
+            GUIButtonRef guiButtonRef = go.GetComponent<GUIButtonRef>();
+            bossRoundGUIInfo.RerollButtonData = guiButtonRef.GetButtonData("Reroll");
+            bossRoundGUIInfo.RerollButtonData.Button.onClick.AddListener(Game.Instance.UseBossReroll);
+            bossRoundGUIInfo.RerollButtonData.Icon.SetActive(Game.Instance.Joystick);
         }
 
         public void Show(RunData runData, Balance balance)
@@ -122,7 +138,7 @@ namespace Cardwheel
             }
 
             m_bossRoundGUIInfo.RerollButtonText.text = "Reroll\n(" + runData.BossRerolls + " left)";
-            m_bossRoundGUIInfo.RerollButton.image.color = runData.BossRerolls > 0 ? balance.RerollColorEnabled : balance.ButtonColorDisabled;
+            m_bossRoundGUIInfo.RerollButtonData.Button.image.color = runData.BossRerolls > 0 ? balance.RerollColorEnabled : balance.ButtonColorDisabled;
 
             m_UI.SetActive(true);
 
@@ -148,6 +164,7 @@ namespace Cardwheel
                 m_horiontalLayoutGroup.enabled = false;
                 m_horiontalLayoutGroup.enabled = true;
             }
+            Canvas.ForceUpdateCanvases();
         }
 
         public void Hide()

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using CommonTools;
+using UnityEngine.InputSystem;
 
 namespace Cardwheel
 {
@@ -14,7 +15,6 @@ namespace Cardwheel
 
     public static class CommonButtonVisual
     {
-
         public static void InitButtonNavigationData(GUIButtonRef guiButtonRef, ref ButtonNavigationIndices[] m_buttonNavigationIndices)
         {
             m_buttonNavigationIndices = new ButtonNavigationIndices[guiButtonRef.Buttons.Length];
@@ -37,25 +37,25 @@ namespace Cardwheel
 
         public static void handleInput(ButtonNavigationIndices[] buttonNavigationIndices, ref int selectedButtonIndex)
         {
-            if (Input.GetKeyUp(KeyCode.UpArrow))
+            if (Keyboard.current[Key.UpArrow].wasReleasedThisFrame)
             {
                 buttonNavigationIndices[selectedButtonIndex].Selected.SetActive(false);
                 selectedButtonIndex = buttonNavigationIndices[selectedButtonIndex].Directions[(int)NAV_DIRECTION.UP];
                 buttonNavigationIndices[selectedButtonIndex].Selected.SetActive(true);
             }
-            if (Input.GetKeyUp(KeyCode.DownArrow))
+            if (Keyboard.current[Key.DownArrow].wasReleasedThisFrame)
             {
                 buttonNavigationIndices[selectedButtonIndex].Selected.SetActive(false);
                 selectedButtonIndex = buttonNavigationIndices[selectedButtonIndex].Directions[(int)NAV_DIRECTION.DOWN];
                 buttonNavigationIndices[selectedButtonIndex].Selected.SetActive(true);
             }
-            if (Input.GetKeyUp(KeyCode.LeftArrow))
+            if (Keyboard.current[Key.LeftArrow].wasReleasedThisFrame)
             {
                 buttonNavigationIndices[selectedButtonIndex].Selected.SetActive(false);
                 selectedButtonIndex = buttonNavigationIndices[selectedButtonIndex].Directions[(int)NAV_DIRECTION.LEFT];
                 buttonNavigationIndices[selectedButtonIndex].Selected.SetActive(true);
             }
-            if (Input.GetKeyUp(KeyCode.RightArrow))
+            if (Keyboard.current[Key.RightArrow].wasReleasedThisFrame)
             {
                 buttonNavigationIndices[selectedButtonIndex].Selected.SetActive(false);
                 selectedButtonIndex = buttonNavigationIndices[selectedButtonIndex].Directions[(int)NAV_DIRECTION.RIGHT];

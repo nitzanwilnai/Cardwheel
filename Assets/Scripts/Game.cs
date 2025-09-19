@@ -2,6 +2,12 @@ using System;
 using System.IO;
 using CommonTools;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.InputSystem.Controls;
+
+
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -70,10 +76,31 @@ namespace Cardwheel
         [Header("Set to 0 for Random")]
         public uint StartSeed;
 
+        public bool Joystick = false;
 
         override protected void Awake()
         {
             base.Awake();
+
+            InputSystem.onDeviceChange +=
+                (device, change) =>
+                {
+                    Debug.Log("onDeviceChange(" + device + ", " + change + ")");
+
+                    switch (change)
+                    {
+                        case InputDeviceChange.Added:
+                            Debug.Log("Device added: " + device);
+                            break;
+                        case InputDeviceChange.Removed:
+                            Debug.Log("Device removed: " + device);
+                            break;
+                        case InputDeviceChange.ConfigurationChanged:
+                            Debug.Log("Device configuration changed: " + device);
+                            break;
+                    }
+                };
+            InputSystem.onDeviceChange += onDeviceChange;
 
             UIDebug.SetActive(false);
 
@@ -90,11 +117,9 @@ namespace Cardwheel
 
             m_runData = new RunData();
 
-            string s = Logic.EncodeSeed(StartSeed);
-            uint ui = Logic.DecodeSeed(s);
-            Debug.Log(StartSeed);
-            Debug.Log(s);
-            Debug.Log(ui);
+            string encodedSeed = Logic.EncodeSeed(StartSeed);
+            uint decodedSeed = Logic.DecodeSeed(encodedSeed);
+            Debug.Log("Start seed " + StartSeed + " Encdoed " + encodedSeed + " decoded " + decodedSeed);
 
             m_balance = new Balance();
             m_balance.LoadBalance();
@@ -151,7 +176,28 @@ namespace Cardwheel
 
         void Start()
         {
-            Debug.Log(Input.GetJoystickNames());
+            // Debug.Log(Input.GetJoystickNames());
+            // Joystick = Input.GetJoystickNames().Length > 0;
+        }
+
+        void onDeviceChange(InputDevice inputDevice, InputDeviceChange inputDeviceChange)
+        {
+            Debug.Log("onDeviceChange " + inputDevice.displayName + " inputDevice.shortDisplayName " + inputDevice.shortDisplayName + " inputDevice.deviceId " + inputDevice.deviceId + " inputDeviceChange " + inputDeviceChange.ToString());
+
+            if (inputDevice is Gamepad gamepad)
+            {
+                Debug.Log("device is gamepad!");
+                switch (inputDeviceChange)
+                {
+                    case InputDeviceChange.Added:
+                        Debug.Log($"Gamepad plugged in: {gamepad.displayName}");
+                        break;
+                    case InputDeviceChange.Disconnected:
+                        Debug.Log($"Gamepad unplugged: {gamepad.displayName}");
+                        break;
+                        // You can add cases for Connected and Removed specifically for gamepads too
+                }
+            }
         }
 
         public void SetMenuState(MENU_STATE newMenuState)
@@ -386,6 +432,23 @@ namespace Cardwheel
                     m_shopVisual.SortSlots(m_runData, m_balance);
             }
 
+            Debug.Log("Gamepad.current.leftStick.value " + Gamepad.current.leftStick.value);
+            if (Gamepad.current.aButton.wasPressedThisFrame)
+            {
+                Debug.Log("Gamepad.current.aButton.value " + Gamepad.current.aButton.value);
+            }
+            if (Gamepad.current.bButton.value > 0.0f)
+            {
+                Debug.Log("Gamepad.current.bButton.value " + Gamepad.current.bButton.value);
+            }
+            if (Gamepad.current.xButton.value > 0.0f)
+            {
+                Debug.Log("Gamepad.current.xButton.value " + Gamepad.current.xButton.value);
+            }
+            if (Gamepad.current.yButton.value > 0.0f)
+            {
+                Debug.Log("Gamepad.current.yButton.value " + Gamepad.current.yButton.value);
+            }
 #endif
         }
 

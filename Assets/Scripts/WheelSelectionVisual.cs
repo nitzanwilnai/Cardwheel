@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CommonTools;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Cardwheel
@@ -182,11 +183,14 @@ namespace Cardwheel
 
         void handleInput()
         {
-            if (Input.GetKeyUp(KeyCode.LeftArrow))
+            Gamepad gamepad = Gamepad.current;
+
+
+            if (Keyboard.current[Key.LeftArrow].wasReleasedThisFrame)
                 prev();
-            if (Input.GetKeyUp(KeyCode.RightArrow))
+            if (Keyboard.current[Key.RightArrow].wasReleasedThisFrame)
                 next();
-            if (Input.GetKeyUp(KeyCode.Return))
+            if (Keyboard.current[Key.Enter].wasReleasedThisFrame)
                 animateClose();
         }
 
