@@ -156,6 +156,8 @@ MonoBehaviour:
       Down: Play
       Left: Play
       Right: Play
+    Icon: {fileID: 0}
+    GamepadButton: 0
   - Key: Continue
     Button: {fileID: 202257660630684268}
     NavigationData:
@@ -163,6 +165,8 @@ MonoBehaviour:
       Down: Play
       Left: Continue
       Right: Continue
+    Icon: {fileID: 0}
+    GamepadButton: 0
 --- !u!111 &5609582747791190386
 Animation:
   m_ObjectHideFlags: 0

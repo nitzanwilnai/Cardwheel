@@ -22,14 +22,22 @@ namespace Cardwheel
         float m_closeTime = 0.1f;
         Animation m_animation;
 
-        public void Init(Camera camera, Balance balance)
+        GUIButtonData m_closeButtonData;
+        SettingsData settingsData;
+
+        public void Init(Camera camera, Balance balance, SettingsData settingsData)
         {
+            this.settingsData = settingsData;
+
             m_UI = AssetManager.Instance.LoadGameInfoUI();
             m_UI.GetComponent<Canvas>().worldCamera = camera;
             GUIRef guiRef = m_UI.GetComponent<GUIRef>();
-
-            guiRef.GetButton("Close").onClick.AddListener(Game.Instance.CloseGameInfo);
             m_animation = guiRef.GetAnimation("Animation");
+
+            GUIButtonRef guiButtonRef = m_UI.GetComponent<GUIButtonRef>();
+            m_closeButtonData = guiButtonRef.GetButtonData("Close");
+            m_closeButtonData.Button.onClick.AddListener(animateClose);
+            CommonButtonVisual.AddSelectedBorder(m_closeButtonData);
 
             CommonBallVisual.InitBallsVisualData(balance, guiRef.GetGameObject("Balls").GetComponent<GUIRef>(), m_uiBallVisualData);
 
@@ -39,19 +47,24 @@ namespace Cardwheel
             m_UI.SetActive(false);
         }
 
-        public void Show(RunData runData, Balance balance)
+        public void Show(RunData runData, Balance balance, int availableInputs)
         {
             m_UI.SetActive(true);
 
             CommonChipsVisual.Show(runData, m_baseChipsText);
 
             CommonBallVisual.ShowBalls(runData.BallTypesInGame, balance, m_uiBallVisualData);
+
+            m_closeButtonData.SelectedGO.SetActive(Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD));
         }
 
-        public void Tick(RunData runData, float dt)
+        public void Tick(RunData runData, float dt, int availableInputs)
         {
             if (CommonVisual.AnimateCloseTick(ref m_closeTimer, dt))
                 Game.Instance.SetMenuState(runData.PrevMenuState);
+
+            if (CommonButtonVisual.NavigateEnter(availableInputs) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, availableInputs))
+                animateClose();
         }
 
         public void Hide()
@@ -59,8 +72,10 @@ namespace Cardwheel
             m_UI.SetActive(false);
         }
 
-        public void AnimateClose()
+        void animateClose()
         {
+            SoundManager.Instance.PlaySFXButtonOK(settingsData);
+
             CommonVisual.AnimateClose(ref m_closeTimer, m_closeTime, m_animation, "In Game Info Close");
         }
     }

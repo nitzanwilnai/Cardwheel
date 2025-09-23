@@ -1639,20 +1639,14 @@ MonoBehaviour:
   Buttons:
   - Key: Play
     Button: {fileID: 382155572231996158}
-    NavigationData:
-      Up: Play
-      Down: Play
-      Left: Play
-      Right: Continue
-    Icon: {fileID: 5604626748559697214}
+    GlyphImage: {fileID: 6260941126622868100}
+    GamepadButton: 2
+    SelectedGO: {fileID: 0}
   - Key: Continue
     Button: {fileID: 7377683105701921624}
-    NavigationData:
-      Up: Continue
-      Down: Continue
-      Left: Play
-      Right: Continue
-    Icon: {fileID: 348897685247881882}
+    GlyphImage: {fileID: 3550056531362281861}
+    GamepadButton: 3
+    SelectedGO: {fileID: 0}
 --- !u!1 &5604626748559697214
 GameObject:
   m_ObjectHideFlags: 0

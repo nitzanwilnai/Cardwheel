@@ -40,14 +40,16 @@ namespace Cardwheel
         float m_slideValue;
         public float SlideSpeed;
 
-        Button prevButtonGO;
-        Button nextButtonGO;
         GameObject playButtonGO;
         GameObject lockedGO;
 
         GameData gameData;
         Balance balance;
         SettingsData settingsData;
+
+        GUIButtonData m_playButtonData;
+        GUIButtonData m_prevButtonData;
+        GUIButtonData m_nextButtonData;
 
         public void Init(Camera camera, GameData gameData, Balance balance, SettingsData settingsData)
         {
@@ -58,13 +60,20 @@ namespace Cardwheel
             m_UI = AssetManager.Instance.LoadWheelSelectionUI();
             m_UI.GetComponent<Canvas>().worldCamera = camera;
 
-            GUIRef guiRef = m_UI.GetComponent<GUIRef>();
-            guiRef.GetButton("Play").onClick.AddListener(animateClose);
-            guiRef.GetButton("Prev").onClick.AddListener(prev);
-            guiRef.GetButton("Next").onClick.AddListener(next);
-            prevButtonGO = guiRef.GetButton("Prev");
-            nextButtonGO = guiRef.GetButton("Next");
+            GUIButtonRef guiButtonRef = m_UI.GetComponent<GUIButtonRef>();
+            m_playButtonData = guiButtonRef.GetButtonData("Play");
+            m_prevButtonData = guiButtonRef.GetButtonData("Prev");
+            m_nextButtonData = guiButtonRef.GetButtonData("Next");
 
+            CommonButtonVisual.AddSelectedBorder(m_playButtonData);
+            CommonButtonVisual.AddSelectedBorder(m_prevButtonData);
+            CommonButtonVisual.AddSelectedBorder(m_nextButtonData);
+
+            m_playButtonData.Button.onClick.AddListener(animateClose);
+            m_prevButtonData.Button.onClick.AddListener(prev);
+            m_nextButtonData.Button.onClick.AddListener(next);
+
+            GUIRef guiRef = m_UI.GetComponent<GUIRef>();
             m_description = guiRef.GetTextGUI("Description");
             m_winCount = guiRef.GetTextGUI("WinCount");
 
@@ -102,10 +111,17 @@ namespace Cardwheel
             Hide();
         }
 
-        public void Show()
+        public void Show(GAMEPAD_TYPE gamepadType, int availableInputs)
         {
             updateText();
             updateButton();
+
+            CommonButtonVisual.UpdateButtonIcons(m_playButtonData, gamepadType);
+            CommonButtonVisual.UpdateButtonIcons(m_nextButtonData, gamepadType);
+            CommonButtonVisual.UpdateButtonIcons(m_prevButtonData, gamepadType);
+
+            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+                m_playButtonData.SelectedGO.SetActive(true);
 
             m_UI.SetActive(true);
         }
@@ -118,10 +134,10 @@ namespace Cardwheel
 
         void updateButton()
         {
-            prevButtonGO.interactable = (m_wheelSelectionIdx > 0);
-            prevButtonGO.image.color = (m_wheelSelectionIdx > 0) ? balance.ButtonColorEnabled : balance.ButtonColorDisabled;
-            nextButtonGO.interactable = (m_wheelSelectionIdx < gameData.SpinWheelWinCount.Length - 1);
-            nextButtonGO.image.color = (m_wheelSelectionIdx < gameData.SpinWheelWinCount.Length - 1) ? balance.ButtonColorEnabled : balance.ButtonColorDisabled;
+            m_prevButtonData.Button.interactable = (m_wheelSelectionIdx > 0);
+            m_prevButtonData.Button.image.color = (m_wheelSelectionIdx > 0) ? balance.ButtonColorEnabled : balance.ButtonColorDisabled;
+            m_nextButtonData.Button.interactable = (m_wheelSelectionIdx < gameData.SpinWheelWinCount.Length - 1);
+            m_nextButtonData.Button.image.color = (m_wheelSelectionIdx < gameData.SpinWheelWinCount.Length - 1) ? balance.ButtonColorEnabled : balance.ButtonColorDisabled;
 
             if (m_wheelSelectionIdx == 0)
             {
@@ -145,7 +161,7 @@ namespace Cardwheel
             m_UI.SetActive(false);
         }
 
-        public void Tick(float dt)
+        public void Tick(float dt, int availableInputs)
         {
             spinWheelAngle += dt * WheelSpeed;
             for (int i = 0; i < m_wheelSelectionSpinWheels.Length; i++)
@@ -178,19 +194,22 @@ namespace Cardwheel
                 m_spinWheelParent.localPosition = pos;
             }
 
-            handleInput();
+            handleInput(availableInputs);
         }
 
-        void handleInput()
+        void handleInput(int availableInputs)
         {
-            Gamepad gamepad = Gamepad.current;
 
-
-            if (Keyboard.current[Key.LeftArrow].wasReleasedThisFrame)
+            if (CommonButtonVisual.NavigateLeft(availableInputs))
                 prev();
-            if (Keyboard.current[Key.RightArrow].wasReleasedThisFrame)
+
+            if (CommonButtonVisual.NavigateRight(availableInputs))
                 next();
-            if (Keyboard.current[Key.Enter].wasReleasedThisFrame)
+
+            if (CommonButtonVisual.NavigateGamepadButton(m_playButtonData, availableInputs))
+                animateClose();
+
+            if (CommonButtonVisual.NavigateEnter(availableInputs))
                 animateClose();
         }
 

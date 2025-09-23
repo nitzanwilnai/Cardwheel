@@ -2,65 +2,124 @@ using UnityEngine;
 using UnityEngine.UI;
 using CommonTools;
 using UnityEngine.InputSystem;
+using TMPro;
 
 namespace Cardwheel
 {
-    public class ButtonNavigationIndices
-    {
-        public int[] Directions = new int[4];
-        public string Key;
-        public Button Button;
-        public GameObject Selected;
-    }
+    public enum GAMEPAD_TYPE { NONE, STEAM, PS5, SWITCH, XBOX };
 
     public static class CommonButtonVisual
     {
-        public static void InitButtonNavigationData(GUIButtonRef guiButtonRef, ref ButtonNavigationIndices[] m_buttonNavigationIndices)
+        public static void UpdateButtonIcons(GUIButtonData guiButtonData, GAMEPAD_TYPE gamepadType)
         {
-            m_buttonNavigationIndices = new ButtonNavigationIndices[guiButtonRef.Buttons.Length];
-            for (int i = 0; i < guiButtonRef.Buttons.Length; i++)
+            if (guiButtonData.GlyphImage != null)
             {
-                m_buttonNavigationIndices[i] = new ButtonNavigationIndices();
-                m_buttonNavigationIndices[i].Key = guiButtonRef.Buttons[i].Key;
-
-                m_buttonNavigationIndices[i].Button = guiButtonRef.Buttons[i].Button;
-                m_buttonNavigationIndices[i].Selected = AssetManager.Instance.GetButtonSelected(m_buttonNavigationIndices[i].Button.transform);
-                m_buttonNavigationIndices[i].Selected.SetActive(false);
-
-                m_buttonNavigationIndices[i].Directions[(int)NAV_DIRECTION.UP] = guiButtonRef.GetButtonIndex(guiButtonRef.Buttons[i].NavigationData.Up);
-                m_buttonNavigationIndices[i].Directions[(int)NAV_DIRECTION.DOWN] = guiButtonRef.GetButtonIndex(guiButtonRef.Buttons[i].NavigationData.Down);
-                m_buttonNavigationIndices[i].Directions[(int)NAV_DIRECTION.LEFT] = guiButtonRef.GetButtonIndex(guiButtonRef.Buttons[i].NavigationData.Left);
-                m_buttonNavigationIndices[i].Directions[(int)NAV_DIRECTION.RIGHT] = guiButtonRef.GetButtonIndex(guiButtonRef.Buttons[i].NavigationData.Right);
+                guiButtonData.GlyphImage.gameObject.SetActive(gamepadType != GAMEPAD_TYPE.NONE);
+                guiButtonData.GlyphImage.sprite = AssetManager.Instance.GetGamepadGlyph(gamepadType, guiButtonData.GamepadButton);
             }
         }
 
-
-        public static void handleInput(ButtonNavigationIndices[] buttonNavigationIndices, ref int selectedButtonIndex)
+        public static void AddSelectedBorder(GUIButtonData gUIButtonData)
         {
-            if (Keyboard.current[Key.UpArrow].wasReleasedThisFrame)
-            {
-                buttonNavigationIndices[selectedButtonIndex].Selected.SetActive(false);
-                selectedButtonIndex = buttonNavigationIndices[selectedButtonIndex].Directions[(int)NAV_DIRECTION.UP];
-                buttonNavigationIndices[selectedButtonIndex].Selected.SetActive(true);
-            }
-            if (Keyboard.current[Key.DownArrow].wasReleasedThisFrame)
-            {
-                buttonNavigationIndices[selectedButtonIndex].Selected.SetActive(false);
-                selectedButtonIndex = buttonNavigationIndices[selectedButtonIndex].Directions[(int)NAV_DIRECTION.DOWN];
-                buttonNavigationIndices[selectedButtonIndex].Selected.SetActive(true);
-            }
-            if (Keyboard.current[Key.LeftArrow].wasReleasedThisFrame)
-            {
-                buttonNavigationIndices[selectedButtonIndex].Selected.SetActive(false);
-                selectedButtonIndex = buttonNavigationIndices[selectedButtonIndex].Directions[(int)NAV_DIRECTION.LEFT];
-                buttonNavigationIndices[selectedButtonIndex].Selected.SetActive(true);
-            }
-            if (Keyboard.current[Key.RightArrow].wasReleasedThisFrame)
-            {
-                buttonNavigationIndices[selectedButtonIndex].Selected.SetActive(false);
-                selectedButtonIndex = buttonNavigationIndices[selectedButtonIndex].Directions[(int)NAV_DIRECTION.RIGHT];
-                buttonNavigationIndices[selectedButtonIndex].Selected.SetActive(true);
-            }
+            gUIButtonData.SelectedGO = AssetManager.Instance.GetButtonSelected(gUIButtonData.Button.transform);
+            gUIButtonData.SelectedGO.SetActive(false);
+        }
+
+        public static bool NavigateEnter(int availableInputs)
+        {
+            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+                if (Gamepad.current.buttonSouth.wasPressedThisFrame)
+                    return true;
+
+
+            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+                if (Keyboard.current.enterKey.wasPressedThisFrame)
+                    return true;
+
+            return false;
+        }
+
+        public static bool NavigateUp(int availableInputs)
+        {
+            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+                if (Gamepad.current.dpad.up.wasPressedThisFrame || Gamepad.current.leftStick.up.wasPressedThisFrame)
+                    return true;
+
+            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+                if (Keyboard.current.upArrowKey.wasPressedThisFrame)
+                    return true;
+
+            return false;
+        }
+
+        public static bool NavigateDown(int availableInputs)
+        {
+            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+                if (Gamepad.current.dpad.down.wasPressedThisFrame || Gamepad.current.leftStick.down.wasPressedThisFrame)
+                    return true;
+
+            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+                if (Keyboard.current.downArrowKey.wasPressedThisFrame)
+                    return true;
+
+            return false;
+        }
+
+        public static bool NavigateRight(int availableInputs)
+        {
+            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+                if (Gamepad.current.dpad.right.wasPressedThisFrame || Gamepad.current.leftStick.right.wasPressedThisFrame)
+                    return true;
+
+
+            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+                if (Keyboard.current.rightArrowKey.wasPressedThisFrame)
+                    return true;
+
+            return false;
+        }
+
+        public static bool NavigateLeft(int availableInputs)
+        {
+            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+                if (Gamepad.current.dpad.left.wasPressedThisFrame || Gamepad.current.leftStick.left.wasPressedThisFrame)
+                    return true;
+
+            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+                if (Keyboard.current.leftArrowKey.wasPressedThisFrame)
+                    return true;
+
+            return false;
+        }
+
+        public static bool NavigateGamepadButton(GUIButtonData guiButtonData, int availableInputs)
+        {
+            if (guiButtonData.GamepadButton == GAMEPAD_BUTTON.NORTH)
+                if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+                    if (Gamepad.current.buttonNorth.wasPressedThisFrame)
+                        return true;
+
+            if (guiButtonData.GamepadButton == GAMEPAD_BUTTON.SOUTH)
+                if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+                    if (Gamepad.current.buttonSouth.wasPressedThisFrame)
+                        return true;
+
+            if (guiButtonData.GamepadButton == GAMEPAD_BUTTON.WEST)
+                if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+                    if (Gamepad.current.buttonWest.wasPressedThisFrame)
+                        return true;
+
+            if (guiButtonData.GamepadButton == GAMEPAD_BUTTON.EAST)
+                if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+                    if (Gamepad.current.buttonEast.wasPressedThisFrame)
+                        return true;
+
+            if (guiButtonData.GamepadButton == GAMEPAD_BUTTON.OPTIONS)
+                if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+                    if (Gamepad.current.startButton.wasPressedThisFrame)
+                        return true;
+
+            return false;
         }
     }
 }

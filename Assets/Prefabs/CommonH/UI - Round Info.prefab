@@ -101,20 +101,14 @@ MonoBehaviour:
   Buttons:
   - Key: Play
     Button: {fileID: 1811551173245794851}
-    NavigationData:
-      Up: Skip
-      Down: Play
-      Left: Play
-      Right: Play
-    Icon: {fileID: 3064059951255076632}
+    GlyphImage: {fileID: 7635503816741964340}
+    GamepadButton: 2
+    SelectedGO: {fileID: 0}
   - Key: Skip
     Button: {fileID: 50145548624742959}
-    NavigationData:
-      Up: Skip
-      Down: Play
-      Left: Skip
-      Right: Skip
-    Icon: {fileID: 3321273882039329902}
+    GlyphImage: {fileID: 7587844049401039833}
+    GamepadButton: 3
+    SelectedGO: {fileID: 0}
 --- !u!114 &8142184328659513073
 MonoBehaviour:
   m_ObjectHideFlags: 0

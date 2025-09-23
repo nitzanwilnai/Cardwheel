@@ -519,6 +519,7 @@ MonoBehaviour:
   CommonBundle: common
   GameInfoSO: {fileID: 11400000, guid: e6581526bdc7e48a384cfc00e68bf4ea, type: 2}
   StartSeed: 0
+  m_gamepadType: 0
 --- !u!4 &844177295
 Transform:
   m_ObjectHideFlags: 0
@@ -698,6 +699,62 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_commonUIBundlePath: 
+  GamepadGlyphsPS5:
+  - {fileID: 21300000, guid: 0f21028f65e8a418f90c7c14a4629d18, type: 3}
+  - {fileID: 21300000, guid: 2eaf78674b251426ab7a6827a3a2c600, type: 3}
+  - {fileID: 21300000, guid: bf8f0185fb63f41b0b6d2320368c823d, type: 3}
+  - {fileID: 21300000, guid: 41d1e1f3c62de4a04bd4143f6d1640bb, type: 3}
+  - {fileID: 21300000, guid: 5259260998eab4dd590f14ad93be6c46, type: 3}
+  - {fileID: 21300000, guid: 23ae01217d2e0490ab0d72230d90ff8e, type: 3}
+  - {fileID: 21300000, guid: 6a5642a99328b45929b31bde97def624, type: 3}
+  - {fileID: 21300000, guid: 5d11ba87b301f4cfd9bf7091c4820332, type: 3}
+  - {fileID: 21300000, guid: 16f147e6cb77a49128f015f7e9bdbcf2, type: 3}
+  - {fileID: 21300000, guid: 48edb819422bb48fe98894b3205754b0, type: 3}
+  - {fileID: 21300000, guid: 685e8a3fe3eac4f09857ce7a62a50873, type: 3}
+  - {fileID: 21300000, guid: 890d51e810e384f0d9adb3fbd95c801d, type: 3}
+  - {fileID: 21300000, guid: 38e25de1cee734d1f8be2bc4469030ce, type: 3}
+  GamepadGlyphsSteam:
+  - {fileID: 21300000, guid: bc7fbfced0e264bc1949b082ca98f57e, type: 3}
+  - {fileID: 21300000, guid: c043691e307f245c49d265c9283c0a4f, type: 3}
+  - {fileID: 21300000, guid: fa00b623927d74d9bb4040a3cab67731, type: 3}
+  - {fileID: 21300000, guid: 4e4a923d871f44087b5cb1e984944db2, type: 3}
+  - {fileID: 21300000, guid: 55634c3d344ba47f99d328ca27090915, type: 3}
+  - {fileID: 21300000, guid: 68a75448349ee4e7fb2ff5ee4f76a5fb, type: 3}
+  - {fileID: 21300000, guid: 8130808255aff48edb3b8c16b4c6062a, type: 3}
+  - {fileID: 21300000, guid: d9f0a49cdae3249c89442fec59e5ebc7, type: 3}
+  - {fileID: 21300000, guid: 3822cf818af1d4c28bca2ff26127c7d5, type: 3}
+  - {fileID: 21300000, guid: baac07714d8ca42bbb45dcda26504e54, type: 3}
+  - {fileID: 21300000, guid: e062c496544424a50b600ecf5e68e8a4, type: 3}
+  - {fileID: 21300000, guid: d20c6966f66704209af0213708f8527a, type: 3}
+  - {fileID: 21300000, guid: 674ad7cb7c328442f9ef197728004ea9, type: 3}
+  GamepadGlyphsXbox:
+  - {fileID: 21300000, guid: ed5b783761f594fe18169ac09c623d38, type: 3}
+  - {fileID: 21300000, guid: a6aea1b98c20b4448a212ce0dcdc5f4e, type: 3}
+  - {fileID: 21300000, guid: 7dc1cac54422347bba41d20c7b64d31c, type: 3}
+  - {fileID: 21300000, guid: 843542f8f4ade4640993c05211389bef, type: 3}
+  - {fileID: 21300000, guid: ebdb972c01d9d49e0ac4dce901b9cfae, type: 3}
+  - {fileID: 21300000, guid: 22228adca47bc4ea6ae9cb80e300a821, type: 3}
+  - {fileID: 21300000, guid: 1883f5646f8a44a68b3a92366158afb9, type: 3}
+  - {fileID: 21300000, guid: 9ddd7df74412648449f03b9c287b9a43, type: 3}
+  - {fileID: 21300000, guid: bccc691b6d4ce4708a7e56b63d8577cf, type: 3}
+  - {fileID: 21300000, guid: 25e9bdcd0d3194560ab847e93b0b880c, type: 3}
+  - {fileID: 21300000, guid: 04ec7fc75747c473eb580ba5f0c305cd, type: 3}
+  - {fileID: 21300000, guid: 8c2aa03b7c26f406a9b5485decd26ce7, type: 3}
+  - {fileID: 21300000, guid: f80aead7ed8024cb1ad3b0f6fe7830bd, type: 3}
+  GamepadGlyphsSwitch:
+  - {fileID: 21300000, guid: 1574a185cbf48407fbc24b3466bd3b0b, type: 3}
+  - {fileID: 21300000, guid: a8e552d2cb0574ca2a3d170abad9b0b1, type: 3}
+  - {fileID: 21300000, guid: 31c6ca080eb6440d68b8a3c3870af3c6, type: 3}
+  - {fileID: 21300000, guid: f0dd83cde3bac42a6b303eda30eace25, type: 3}
+  - {fileID: 21300000, guid: 4e297487f23664bbb9a2d48da87e398f, type: 3}
+  - {fileID: 21300000, guid: 0ca1d2993481a4c899e791597d1a24b7, type: 3}
+  - {fileID: 21300000, guid: 2c2826bc92aa244bca7a358ee7b606d4, type: 3}
+  - {fileID: 21300000, guid: 19da2359b62644e189e7923055a0fa38, type: 3}
+  - {fileID: 21300000, guid: 0aa859f2a66ce4afd950224e542fe2a9, type: 3}
+  - {fileID: 21300000, guid: 10a6442e17dee457683c15e5255cd744, type: 3}
+  - {fileID: 21300000, guid: e7fd3a146a345420f946b64d4c66630a, type: 3}
+  - {fileID: 21300000, guid: 1decb95627ed6462fa8d2a61a517faac, type: 3}
+  - {fileID: 21300000, guid: df9222e7474eb4c60ba3ba5e723d4f7e, type: 3}
 --- !u!4 &1555261573
 Transform:
   m_ObjectHideFlags: 0

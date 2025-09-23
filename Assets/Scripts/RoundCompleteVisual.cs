@@ -46,7 +46,7 @@ namespace Cardwheel
             guiRef.GetButton("Claim").onClick.AddListener(Game.Instance.ClaimRoundRewardAndGoToShop);
 
             CommonVisual.InitTopBarGUI(guiRef.GetGameObject("TopBar"), ref m_topBarGUI);
-            CommonVisual.InitCardsBallsSpinWheelGUI(runData, balance, guiRef.GetGameObject("CardsAndBalls"), ref m_cardsBallsSpinWheelGUI);
+            CommonVisual.InitCardsBallsSpinWheelGUI(balance, guiRef.GetGameObject("CardsAndBalls"), ref m_cardsBallsSpinWheelGUI);
 
             m_moneyText = m_topBarGUI.MoneyText;
 

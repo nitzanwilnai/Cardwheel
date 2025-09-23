@@ -130,7 +130,7 @@ namespace Cardwheel
             m_voucherPopupAnimation = guiRef.GetAnimation("VoucherPopup");
 
             CommonVisual.InitTopBarGUI(guiRef.GetGameObject("TopBar"), ref m_topBarGUI);
-            CommonVisual.InitCardsBallsSpinWheelGUI(runData, balance, guiRef.GetGameObject("CardsAndBalls"), ref m_cardsBallsSpinWheelGUI);
+            CommonVisual.InitCardsBallsSpinWheelGUI(balance, guiRef.GetGameObject("CardsAndBalls"), ref m_cardsBallsSpinWheelGUI);
 
             m_jokerBuyPopupGUI.GO = guiRef.GetGameObject("JokerBuyPopup");
             GUIRef jokerBuyPopupGUIRef = m_jokerBuyPopupGUI.GO.GetComponent<GUIRef>();
@@ -209,7 +209,7 @@ namespace Cardwheel
             jokerGUIRef.GetGameObject("Debuffed").SetActive(false);
         }
 
-        public void Show(RunData runData, Balance balance)
+        public void Show(RunData runData, Balance balance, GAMEPAD_TYPE gamepadType)
         {
             m_UI.SetActive(true);
 
@@ -288,6 +288,8 @@ namespace Cardwheel
             }
 
             UpdateRerollButton(runData, balance);
+
+            CommonButtonVisual.UpdateButtonIcons(m_topBarGUI.SettingsButtonData, gamepadType);
         }
 
         public void UpdateRerollButton(RunData runData, Balance balance)
@@ -446,13 +448,13 @@ namespace Cardwheel
             HideCardpackBuyPopup();
         }
 
-        public void BuyVoucher(RunData runData, Balance balance)
+        public void BuyVoucher(RunData runData, Balance balance, GAMEPAD_TYPE gamepadType)
         {
             Logic.BuyVoucher(runData, balance);
 
             HideVoucherBuyPopup();
 
-            Show(runData, balance);
+            Show(runData, balance, gamepadType);
         }
 
         public void UpdateTopUI(RunData runData, Balance balance)
@@ -466,11 +468,11 @@ namespace Cardwheel
             CommonSlotsVisual.TrySortSlots(runData, balance, m_cardsBallsSpinWheelGUI);
         }
 
-        public void RerollShop(RunData runData, Balance balance)
+        public void RerollShop(RunData runData, Balance balance, GAMEPAD_TYPE gamepadType)
         {
 
             if (Logic.TryRerollShop(runData, balance))
-                Show(runData, balance);
+                Show(runData, balance, gamepadType);
         }
     }
 

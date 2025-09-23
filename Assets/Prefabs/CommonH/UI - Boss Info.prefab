@@ -2152,20 +2152,14 @@ MonoBehaviour:
   Buttons:
   - Key: Play
     Button: {fileID: 4705298692468157464}
-    NavigationData:
-      Up: Reroll
-      Down: Play
-      Left: Play
-      Right: Play
-    Icon: {fileID: 7346823814659732938}
+    GlyphImage: {fileID: 6502055762105998372}
+    GamepadButton: 2
+    SelectedGO: {fileID: 0}
   - Key: Reroll
     Button: {fileID: 1702118409692758531}
-    NavigationData:
-      Up: Reroll
-      Down: Play
-      Left: Reroll
-      Right: Reroll
-    Icon: {fileID: 7558468263414778613}
+    GlyphImage: {fileID: 1281391213036507799}
+    GamepadButton: 3
+    SelectedGO: {fileID: 0}
 --- !u!114 &614299919775592188
 MonoBehaviour:
   m_ObjectHideFlags: 0

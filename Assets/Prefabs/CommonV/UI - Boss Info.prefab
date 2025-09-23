@@ -1342,6 +1342,7 @@ GameObject:
   - component: {fileID: 7282533155384434102}
   - component: {fileID: 1470563322333565119}
   - component: {fileID: 8871985170700814712}
+  - component: {fileID: 2946323507658839423}
   m_Layer: 5
   m_Name: UI - Boss Info
   m_TagString: Untagged
@@ -1447,6 +1448,35 @@ MonoBehaviour:
     Value: {fileID: 5997146439628891226}
   GUIRefSliders: []
   GUIRefAnimations: []
+--- !u!114 &2946323507658839423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5992461697789856702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67e5b6a1a502544f795bb25d60791040, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Buttons:
+  - Key: Play
+    Button: {fileID: 2789643079864062042}
+    NavigationData:
+      Up: Play
+      Down: Reroll
+      Left: Play
+      Right: Play
+    Icon: {fileID: 0}
+  - Key: Reroll
+    Button: {fileID: 5997146439628891226}
+    NavigationData:
+      Up: Play
+      Down: Reroll
+      Left: Reroll
+      Right: Reroll
+    Icon: {fileID: 0}
 --- !u!1 &6492917997507673878
 GameObject:
   m_ObjectHideFlags: 0

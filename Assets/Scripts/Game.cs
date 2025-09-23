@@ -5,13 +5,13 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.Controls;
-
-
+#if STEAM
+using Steamworks;
+#endif
 
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-using Lofelt.NiceVibrations;
 
 namespace Cardwheel
 {
@@ -37,6 +37,8 @@ namespace Cardwheel
         GAME_OVER,
         WIN_SCREEN,
     };
+
+    public enum INPUT_TYPES { KEYBOARD, GAMEPAD };
 
     public class Game : Singleton<Game>
     {
@@ -73,38 +75,79 @@ namespace Cardwheel
         GameData m_gameData;
         Balance m_balance;
 
+        int m_availableInputs;
+
         [Header("Set to 0 for Random")]
         public uint StartSeed;
 
-        public bool Joystick = false;
+        public GAMEPAD_TYPE m_gamepadType = GAMEPAD_TYPE.NONE;
+
+        void gamepadInit()
+        {
+#if STEAM
+            bool steamInit = SteamAPI.Init();
+            if (!steamInit)
+            {
+                Debug.LogError("[Steamworks.NET] SteamAPI_Init() failed. Refer to Valve's documentation or the comment above this line for more information.", this);
+            }
+            else
+                Debug.Log("Steam Init Success");
+
+#endif
+
+            // InputSystem.onDeviceChange +=
+            //                 (device, change) =>
+            //                 {
+            //                     Debug.Log("onDeviceChange(" + device + ", " + change + ")");
+
+            //                     switch (change)
+            //                     {
+            //                         case InputDeviceChange.Added:
+            //                             Debug.Log("Device added: " + device);
+            //                             break;
+            //                         case InputDeviceChange.Removed:
+            //                             Debug.Log("Device removed: " + device);
+            //                             break;
+            //                         case InputDeviceChange.ConfigurationChanged:
+            //                             Debug.Log("Device configuration changed: " + device);
+            //                             break;
+            //                     }
+            //                 };
+            // InputSystem.onDeviceChange += onDeviceChange;
+
+        }
+
+        void gamepadCheck()
+        {
+            m_gamepadType = GAMEPAD_TYPE.NONE;
+
+            if (Gamepad.current != null)
+            {
+                Debug.Log(Gamepad.current.description);
+                string gamepadString = Gamepad.current.description.ToJson();
+                if (gamepadString.Contains("Dualsense") || gamepadString.Contains("Sony"))
+                    m_gamepadType = GAMEPAD_TYPE.PS5;
+
+                m_availableInputs = Logic.SetBit(m_availableInputs, (int)INPUT_TYPES.GAMEPAD);
+            }
+            else
+                m_availableInputs= Logic.RemoveBit(m_availableInputs, (int)INPUT_TYPES.GAMEPAD);
+
+            if (Keyboard.current != null)
+                m_availableInputs = Logic.SetBit(m_availableInputs, (int)INPUT_TYPES.KEYBOARD);
+            else
+                m_availableInputs = Logic.RemoveBit(m_availableInputs, (int)INPUT_TYPES.KEYBOARD);
+
+            Debug.Log("m_availableInputs " + m_availableInputs);
+        }
 
         override protected void Awake()
         {
             base.Awake();
 
-            InputSystem.onDeviceChange +=
-                (device, change) =>
-                {
-                    Debug.Log("onDeviceChange(" + device + ", " + change + ")");
-
-                    switch (change)
-                    {
-                        case InputDeviceChange.Added:
-                            Debug.Log("Device added: " + device);
-                            break;
-                        case InputDeviceChange.Removed:
-                            Debug.Log("Device removed: " + device);
-                            break;
-                        case InputDeviceChange.ConfigurationChanged:
-                            Debug.Log("Device configuration changed: " + device);
-                            break;
-                    }
-                };
-            InputSystem.onDeviceChange += onDeviceChange;
+            gamepadInit();
 
             UIDebug.SetActive(false);
-
-            Debug.Log("vector2 " + System.Runtime.InteropServices.Marshal.SizeOf(typeof(Vector2)));
 
             AssetManager.Instance.LoadCommonAssetBundle();
             AssetManager.Instance.LoadCommonUIAssetBundle(GameInfoSO.CommonBundle, GameInfoSO.CommonBundleUIPath);
@@ -124,7 +167,7 @@ namespace Cardwheel
             m_balance = new Balance();
             m_balance.LoadBalance();
             Logic.AllocateRunData(m_runData, m_balance);
-            Board.Init(m_balance, GameInfoSO);
+            Board.Init(m_balance, GameInfoSO, m_settingsData);
 
             m_gameData = new GameData();
             if (!GameDataIO.LoadGameData(m_gameData, m_balance))
@@ -163,8 +206,8 @@ namespace Cardwheel
             m_ballScreenVisual.Init(m_balance, Camera);
             m_settingsVisual.Init(Camera, m_settingsData);
             m_winScreenVisual.Init(m_runData, m_balance, Camera);
-            m_chipsInfoVisual.Init(Camera);
-            m_gameInfoVisual.Init(Camera, m_balance);
+            m_chipsInfoVisual.Init(Camera, m_settingsData);
+            m_gameInfoVisual.Init(Camera, m_balance, m_settingsData);
             m_shopInfoVisual.Init(Camera, m_balance);
             m_wheelSelectionVisual.Init(Camera, m_gameData, m_balance, m_settingsData);
 
@@ -198,6 +241,9 @@ namespace Cardwheel
                         // You can add cases for Connected and Removed specifically for gamepads too
                 }
             }
+
+            if (Gamepad.current != null)
+                Debug.Log("onDeviceChange " + Gamepad.current.description);
         }
 
         public void SetMenuState(MENU_STATE newMenuState)
@@ -254,16 +300,18 @@ namespace Cardwheel
 
         void showMenuState(MENU_STATE menuState)
         {
+            gamepadCheck();
+
             if (menuState == MENU_STATE.MAIN_MENU)
-                m_mainMenuVisual.Show(m_balance);
+                m_mainMenuVisual.Show(m_balance, m_gamepadType, m_availableInputs);
             else if (menuState == MENU_STATE.ROUND_SELECTION)
-                m_roundSelectionVisual.Show(m_runData, m_balance);
+                m_roundSelectionVisual.Show(m_runData, m_balance, m_gamepadType, m_availableInputs);
             else if (menuState == MENU_STATE.ROUND_COMPLETE)
                 m_roundCompleteVisual.Show(m_runData, m_balance);
             else if (menuState == MENU_STATE.GAME_OVER)
                 m_gameOverVisual.Show(m_runData);
             else if (menuState == MENU_STATE.SHOP)
-                m_shopVisual.Show(m_runData, m_balance);
+                m_shopVisual.Show(m_runData, m_balance, m_gamepadType);
             else if (menuState == MENU_STATE.CARD_PACK_BALL)
                 m_cardPackBallVisual.Show(m_runData, m_balance);
             else if (menuState == MENU_STATE.CARD_PACK_SLOT)
@@ -271,7 +319,7 @@ namespace Cardwheel
             else if (menuState == MENU_STATE.CARD_PACK_CHIPS)
                 m_cardPackChipsVisual.Show(m_runData, m_balance);
             else if (menuState == MENU_STATE.IN_GAME)
-                Board.Show(m_runData, m_balance);
+                Board.Show(m_runData, m_balance, m_gamepadType, m_availableInputs);
             else if (menuState == MENU_STATE.BALL_SCREEN)
                 m_ballScreenVisual.Show(m_runData, m_balance);
             else if (menuState == MENU_STATE.SETTINGS)
@@ -279,13 +327,13 @@ namespace Cardwheel
             else if (menuState == MENU_STATE.WIN_SCREEN)
                 m_winScreenVisual.Show(m_runData, m_balance);
             else if (menuState == MENU_STATE.CHIPS_INFO)
-                m_chipsInfoVisual.Show(m_runData);
+                m_chipsInfoVisual.Show(m_runData, m_availableInputs);
             else if (menuState == MENU_STATE.IN_GAME_INFO)
-                m_gameInfoVisual.Show(m_runData, m_balance);
+                m_gameInfoVisual.Show(m_runData, m_balance, m_availableInputs);
             else if (menuState == MENU_STATE.SHOP_INFO)
                 m_shopInfoVisual.Show(m_runData, m_balance);
             else if (menuState == MENU_STATE.WHEEL_SELECTION)
-                m_wheelSelectionVisual.Show();
+                m_wheelSelectionVisual.Show(m_gamepadType, m_availableInputs);
             else if (menuState == MENU_STATE.JOKER_INFO_POPUP)
             {
                 // has to be shown after setMenuState;
@@ -325,61 +373,66 @@ namespace Cardwheel
         void Update()
         {
             float dt = Time.deltaTime;
+
+#if STEAM
+            SteamInput.RunFrame();
+#endif
+
             if (m_runData.MenuState == MENU_STATE.IN_GAME)
             {
-                Board.Tick(m_runData, m_balance, m_settingsData, dt);
+                Board.Tick(m_runData, m_balance, m_settingsData, dt, m_availableInputs);
             }
-            if (m_runData.MenuState == MENU_STATE.BALL_SCREEN)
+            else if (m_runData.MenuState == MENU_STATE.BALL_SCREEN)
             {
                 m_ballScreenVisual.Tick(m_runData, Camera, dt);
             }
-            if (m_runData.MenuState == MENU_STATE.CARD_PACK_BALL)
+            else if (m_runData.MenuState == MENU_STATE.CARD_PACK_BALL)
             {
                 m_cardPackBallVisual.Tick(m_runData, m_balance, Camera, dt);
             }
-            if (m_runData.MenuState == MENU_STATE.CARD_PACK_SLOT)
+            else if (m_runData.MenuState == MENU_STATE.CARD_PACK_SLOT)
             {
                 m_cardPackSlotVisual.Tick(m_runData, m_balance, dt);
             }
-            if (m_runData.MenuState == MENU_STATE.CARD_PACK_CHIPS)
+            else if (m_runData.MenuState == MENU_STATE.CARD_PACK_CHIPS)
             {
                 m_cardPackChipsVisual.Tick(m_runData, m_balance, dt);
             }
-            if (m_runData.MenuState == MENU_STATE.SHOP)
+            else if (m_runData.MenuState == MENU_STATE.SHOP)
             {
                 m_shopVisual.Tick(m_runData, m_balance, dt);
             }
-            if (m_runData.MenuState == MENU_STATE.ROUND_SELECTION)
+            else if (m_runData.MenuState == MENU_STATE.ROUND_SELECTION)
             {
-                m_roundSelectionVisual.Tick(m_runData, m_balance, dt);
+                m_roundSelectionVisual.Tick(m_runData, m_balance, dt, m_availableInputs);
             }
-            if (m_runData.MenuState == MENU_STATE.ROUND_COMPLETE)
+            else if (m_runData.MenuState == MENU_STATE.ROUND_COMPLETE)
             {
                 m_roundCompleteVisual.Tick(m_runData, m_balance, dt);
             }
-            if (m_runData.MenuState == MENU_STATE.IN_GAME_INFO)
+            else if (m_runData.MenuState == MENU_STATE.IN_GAME_INFO)
             {
-                m_gameInfoVisual.Tick(m_runData, dt);
+                m_gameInfoVisual.Tick(m_runData, dt, m_availableInputs);
             }
-            if (m_runData.MenuState == MENU_STATE.SHOP_INFO)
+            else if (m_runData.MenuState == MENU_STATE.SHOP_INFO)
             {
                 m_shopInfoVisual.Tick(m_runData, dt);
             }
-            if (m_runData.MenuState == MENU_STATE.MAIN_MENU)
+            else if (m_runData.MenuState == MENU_STATE.MAIN_MENU)
             {
-                m_mainMenuVisual.Tick(m_balance, dt);
+                m_mainMenuVisual.Tick(m_balance, dt, m_availableInputs);
             }
-            if (m_runData.MenuState == MENU_STATE.SETTINGS)
+            else if (m_runData.MenuState == MENU_STATE.SETTINGS)
             {
                 m_settingsVisual.Tick(m_runData, dt);
             }
-            if (m_runData.MenuState == MENU_STATE.CHIPS_INFO)
+            else if (m_runData.MenuState == MENU_STATE.CHIPS_INFO)
             {
-                m_chipsInfoVisual.Tick(m_runData, dt);
+                m_chipsInfoVisual.Tick(m_runData, dt, m_availableInputs);
             }
-            if (m_runData.MenuState == MENU_STATE.WHEEL_SELECTION)
+            else if (m_runData.MenuState == MENU_STATE.WHEEL_SELECTION)
             {
-                m_wheelSelectionVisual.Tick(dt);
+                m_wheelSelectionVisual.Tick(dt, m_availableInputs);
             }
 
 #if UNITY_EDITOR
@@ -423,32 +476,37 @@ namespace Cardwheel
             if (Input.GetKeyUp(KeyCode.P))
                 EditorApplication.isPaused = true;
 
-            if (Input.GetKeyUp(KeyCode.Space))
-                DropBalls();
-
             if (Input.GetKeyUp(KeyCode.S))
             {
                 if (m_runData.MenuState == MENU_STATE.SHOP)
                     m_shopVisual.SortSlots(m_runData, m_balance);
             }
 
-            Debug.Log("Gamepad.current.leftStick.value " + Gamepad.current.leftStick.value);
-            if (Gamepad.current.aButton.wasPressedThisFrame)
+            if (Input.GetKeyUp(KeyCode.D))
             {
-                Debug.Log("Gamepad.current.aButton.value " + Gamepad.current.aButton.value);
+                gamepadCheck();
             }
-            if (Gamepad.current.bButton.value > 0.0f)
-            {
-                Debug.Log("Gamepad.current.bButton.value " + Gamepad.current.bButton.value);
-            }
-            if (Gamepad.current.xButton.value > 0.0f)
-            {
-                Debug.Log("Gamepad.current.xButton.value " + Gamepad.current.xButton.value);
-            }
-            if (Gamepad.current.yButton.value > 0.0f)
-            {
-                Debug.Log("Gamepad.current.yButton.value " + Gamepad.current.yButton.value);
-            }
+
+            // if (Gamepad.current != null)
+            // {
+            //     Debug.Log("Gamepad.current.leftStick.value " + Gamepad.current.leftStick.value);
+            //     if (Gamepad.current.aButton.wasPressedThisFrame)
+            //     {
+            //         Debug.Log("Gamepad.current.aButton.value " + Gamepad.current.aButton.value);
+            //     }
+            //     if (Gamepad.current.bButton.value > 0.0f)
+            //     {
+            //         Debug.Log("Gamepad.current.bButton.value " + Gamepad.current.bButton.value);
+            //     }
+            //     if (Gamepad.current.xButton.value > 0.0f)
+            //     {
+            //         Debug.Log("Gamepad.current.xButton.value " + Gamepad.current.xButton.value);
+            //     }
+            //     if (Gamepad.current.yButton.value > 0.0f)
+            //     {
+            //         Debug.Log("Gamepad.current.yButton.value " + Gamepad.current.yButton.value);
+            //     }
+            // }
 #endif
         }
 
@@ -525,12 +583,12 @@ namespace Cardwheel
         {
             SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
 
-            m_roundSelectionVisual.Skip(m_runData, m_balance);
+            m_roundSelectionVisual.Skip(m_runData, m_balance, m_gamepadType, m_availableInputs);
         }
 
         public void UseBossReroll()
         {
-            m_roundSelectionVisual.TryUseBossReroll(m_runData, m_balance);
+            m_roundSelectionVisual.TryUseBossReroll(m_runData, m_balance, m_gamepadType, m_availableInputs);
 
             RunDataIO.SaveRun(m_runData, m_balance);
         }
@@ -569,12 +627,6 @@ namespace Cardwheel
             SoundManager.Instance.PlaySFXMarbleInSlot(m_settingsData);
         }
 
-        public void DropBalls()
-        {
-            Board.DropBalls(m_balance);
-            SoundManager.Instance.PlaySFXGateOpen(m_settingsData);
-        }
-
         public void SkipRound1()
         {
             m_runData.CurrentSpin = 3;
@@ -596,7 +648,7 @@ namespace Cardwheel
         {
             SoundManager.Instance.PlaySFXMoney(m_settingsData);
 
-            m_shopVisual.RerollShop(m_runData, m_balance);
+            m_shopVisual.RerollShop(m_runData, m_balance, m_gamepadType);
 
             RunDataIO.SaveRun(m_runData, m_balance);
         }
@@ -666,7 +718,7 @@ namespace Cardwheel
             SoundManager.Instance.PlaySFXMoney(m_settingsData);
 
             if (!m_runData.VoucherPurchased)
-                m_shopVisual.BuyVoucher(m_runData, m_balance);
+                m_shopVisual.BuyVoucher(m_runData, m_balance, m_gamepadType);
 
             RunDataIO.SaveRun(m_runData, m_balance);
         }
@@ -802,27 +854,6 @@ namespace Cardwheel
             SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
 
             SetMenuState(MENU_STATE.CHIPS_INFO);
-        }
-
-        public void CloseChipsInfo()
-        {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
-
-            m_chipsInfoVisual.AnimateClose();
-        }
-
-        public void ShowGameInfo()
-        {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
-
-            SetMenuState(MENU_STATE.IN_GAME_INFO);
-        }
-
-        public void CloseGameInfo()
-        {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
-
-            m_gameInfoVisual.AnimateClose();
         }
 
         public void ShowShopInfo()

@@ -612,7 +612,8 @@ MonoBehaviour:
       Down: Settings
       Left: Settings
       Right: Settings
-    Icon: {fileID: 4975561524125461204}
+    GlyphImage: {fileID: 8970735295329170865}
+    GamepadButton: 12
 --- !u!1 &8133717945388243090
 GameObject:
   m_ObjectHideFlags: 0
