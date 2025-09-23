@@ -34,7 +34,7 @@ namespace Cardwheel
             guiRef.GetButton("NewGame").onClick.AddListener(Game.Instance.StartNewRunSameWheel);
             guiRef.GetButton("Retry").onClick.AddListener(Game.Instance.RetryRun);
 
-            CommonVisual.InitCardsBallsSpinWheelGUI(runData, balance, guiRef.GetGameObject("CardsAndBalls"), ref m_cardsBallsSpinWheelGUI);
+            CommonVisual.InitCardsBallsSpinWheelGUI(balance, guiRef.GetGameObject("CardsAndBalls"), ref m_cardsBallsSpinWheelGUI);
 
             Hide();
         }

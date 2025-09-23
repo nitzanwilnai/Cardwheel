@@ -2059,6 +2059,54 @@ public static class Logic
             decoded += (uint)Digits.IndexOf(value[i]) * (uint)(Mathf.Pow(Digits.Length, value.Length - i - 1));
         return decoded;
     }
+
+    public static byte SetBit(byte array, int bit)
+    {
+        return (array |= (byte)(1 << bit));
+    }
+
+    public static int SetBit(int array, int bit)
+    {
+        Debug.Log("set bit " + bit);
+        return (array |= 1 << bit);
+    }
+
+    public static long SetBit(long array, int bit)
+    {
+        return (array |= 1L << bit);
+    }
+
+   public static byte RemoveBit(byte array, int bit)
+    {
+        return (array &= (byte)~bit);
+    }
+
+    public static int RemoveBit(int array, int bit)
+    {
+        Debug.Log("remove bit " + bit);
+        return (array &= ~bit);
+    }
+
+   public static long RemoveBit(long array, int bit)
+    {
+        return (array &= ~bit);
+    }
+
+    public static bool IsBitSet(byte array, byte bit)
+    {
+        return (array & (byte)(1 << bit)) > 0;
+    }
+
+    public static bool IsBitSet(int array, byte bit)
+    {
+        return (array & (1 << bit)) > 0;
+    }
+
+    public static bool IsBitSet(long array, int bit)
+    {
+        return (array & 1L << bit) > 0;
+    }
+
 }
 
 

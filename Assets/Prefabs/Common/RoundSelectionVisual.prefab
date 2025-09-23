@@ -44,6 +44,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99ec229ab9087491a8e353c4facde73e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MenuNavigationData:
+  - MenuButton: 0
+    Up: 1
+    Down: 0
+    Right: 0
+    Left: 0
+  - MenuButton: 0
+    Up: 0
+    Down: 0
+    Right: 0
+    Left: 0
+  - MenuButton: 0
+    Up: 0
+    Down: 0
+    Right: 0
+    Left: 0
+  - MenuButton: 0
+    Up: 0
+    Down: 0
+    Right: 0
+    Left: 0
   SlotScaleCurve:
     serializedVersion: 2
     m_Curve:
@@ -77,4 +98,3 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  RotationSpeed: -20

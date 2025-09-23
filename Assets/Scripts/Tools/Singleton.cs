@@ -28,7 +28,6 @@ namespace CommonTools
             if (instance == null)
             {
                 instance = this as T;
-                DontDestroyOnLoad(gameObject);
             }
             else
                 Destroy(gameObject);

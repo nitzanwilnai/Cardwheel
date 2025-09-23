@@ -17,7 +17,6 @@ namespace Cardwheel
     public class CardPackBallVisual : MonoBehaviour
     {
         public AnimationCurve BallChangeAnimCurve;
-        public AnimationCurve StarAnimCurve;
 
         GameObject m_UI;
 

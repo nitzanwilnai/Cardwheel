@@ -20,6 +20,8 @@ namespace Cardwheel
         public ScoringSlot[] ScoringSlots;
         public GameObject SortingPopup;
         public SpinCircle SpinCircle;
+        public GUIButtonData BallsButtonData;
+        public GUIButtonData SpinwheelButtonData;
     }
 
     public static class CommonVisual
@@ -277,7 +279,7 @@ namespace Cardwheel
             topBarGUI.SettingsButtonData = guiButtonRef.GetButtonData("Settings");
             topBarGUI.SettingsButtonData.Button.onClick.AddListener(Game.Instance.GoToSettings);
 
-            // no need for navigation selection?
+            CommonButtonVisual.AddSelectedBorder(topBarGUI.SettingsButtonData);
         }
 
         public static void ShowTopBarNoSettings(RunData runData, TopBarGUI topBarGUI, string title)
@@ -298,15 +300,20 @@ namespace Cardwheel
             topBarGUI.MoneyAnim.Play();
         }
 
-        public static void InitCardsBallsSpinWheelGUI(RunData runData, Balance balance, GameObject go, ref CardsBallsSpinWheelGUI cardsBallsSpinWheelGUI)
+        public static void InitCardsBallsSpinWheelGUI(Balance balance, GameObject go, ref CardsBallsSpinWheelGUI cardsBallsSpinWheelGUI)
         {
             GUIRef guiRef = go.GetComponentInParent<GUIRef>();
             cardsBallsSpinWheelGUI.JokerParent = guiRef.GetGameObject("Cards").transform;
             cardsBallsSpinWheelGUI.Balls = new Image[balance.MaxBalls];
             for (int i = 0; i < balance.MaxBalls; i++)
                 cardsBallsSpinWheelGUI.Balls[i] = guiRef.GetImage("Ball" + (i + 1).ToString());
-            guiRef.GetButton("BallScreen").onClick.AddListener(Game.Instance.GoToBallScreen);
-            guiRef.GetButton("SpinWheel").onClick.AddListener(Game.Instance.GoToChipsInfo);
+
+            GUIButtonRef guiButtonRef = go.GetComponentInParent<GUIButtonRef>();
+            cardsBallsSpinWheelGUI.BallsButtonData = guiButtonRef.GetButtonData("BallScreen");
+            cardsBallsSpinWheelGUI.SpinwheelButtonData = guiButtonRef.GetButtonData("SpinWheel");
+            cardsBallsSpinWheelGUI.BallsButtonData.Button.onClick.AddListener(Game.Instance.GoToBallScreen);
+            cardsBallsSpinWheelGUI.SpinwheelButtonData.Button.onClick.AddListener(Game.Instance.GoToChipsInfo);
+            CommonButtonVisual.AddSelectedBorder(cardsBallsSpinWheelGUI.BallsButtonData);
 
             SpinWheelRef spinWheelRef = guiRef.GetGameObject("SpinWheel").GetComponent<SpinWheelRef>();
             cardsBallsSpinWheelGUI.SortingPopup = spinWheelRef.SortingPopup;

@@ -1,13 +1,18 @@
 using System;
 using CommonTools;
+using Steamworks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Cardwheel
 {
     public class MainMenuVisual : MonoBehaviour
     {
+        public enum MENU_BUTTONS { NEW_GAME, CONTINUE };
+        MENU_BUTTONS m_selectedButton;
+
         GameObject m_UI;
         TextMeshProUGUI m_title;
 
@@ -31,8 +36,6 @@ namespace Cardwheel
 
         GUIButtonData m_newGameButtonData;
         GUIButtonData m_continueButtonData;
-        ButtonNavigationIndices[] m_buttonNavigationIndices;
-        int m_selectedButtonIndex = 0;
 
         public void Init(Camera camera, Balance balance)
         {
@@ -41,15 +44,13 @@ namespace Cardwheel
 
             GUIButtonRef guiButtonRef = m_UI.GetComponent<GUIButtonRef>();
 
-            CommonButtonVisual.InitButtonNavigationData(guiButtonRef, ref m_buttonNavigationIndices);
-
             m_newGameButtonData = guiButtonRef.GetButtonData("Play");
             m_newGameButtonData.Button.onClick.AddListener(Game.Instance.AnimateGoToWheelSelection);
-            m_newGameButtonData.Icon.SetActive(Game.Instance.Joystick);
+            CommonButtonVisual.AddSelectedBorder(m_newGameButtonData);
 
             m_continueButtonData = guiButtonRef.GetButtonData("Continue");
             m_continueButtonData.Button.onClick.AddListener(Game.Instance.AnimateContinueRun);
-            m_continueButtonData.Icon.SetActive(Game.Instance.Joystick);
+            CommonButtonVisual.AddSelectedBorder(m_continueButtonData);
 
             GUIRef guiRef = m_UI.GetComponent<GUIRef>();
 
@@ -105,17 +106,30 @@ namespace Cardwheel
             m_jokerRotationSpeed[jkrIdx] = UnityEngine.Random.value * 50.0f + 50.0f;
         }
 
-        public void Show(Balance balance)
+        public void Show(Balance balance, GAMEPAD_TYPE gamepadType, int availableInputs)
         {
             m_title.text = CommonVisual.ColorText(balance, "Cardwheel");
 
             MENU_STATE menuState = RunDataIO.LoadMenuStateOnly();
             m_continueButtonData.Button.gameObject.SetActive(menuState >= MENU_STATE.IN_GAME && menuState < MENU_STATE.GAME_OVER);
 
+            CommonButtonVisual.UpdateButtonIcons(m_newGameButtonData, gamepadType);
+            CommonButtonVisual.UpdateButtonIcons(m_continueButtonData, gamepadType);
+
+            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+                selectButton(MENU_BUTTONS.NEW_GAME);
+
             m_UI.SetActive(true);
         }
 
-        public void Tick(Balance balance, float dt)
+        void selectButton(MENU_BUTTONS selectedButton)
+        {
+            m_selectedButton = selectedButton;
+            m_newGameButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.NEW_GAME);
+            m_continueButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.CONTINUE);
+        }
+
+        public void Tick(Balance balance, float dt, int availableInputs)
         {
             if (CommonVisual.AnimateCloseTick(ref m_goToWheelSelectTimer, dt))
                 Game.Instance.GoToWheelSelection();
@@ -136,10 +150,29 @@ namespace Cardwheel
                 m_jokersGO[i].transform.localRotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, m_jokerAngle[i]));
             }
 
-            CommonButtonVisual.handleInput(m_buttonNavigationIndices, ref m_selectedButtonIndex);
+            handleInput(availableInputs);
+
         }
 
+        private void handleInput(int availableInputs)
+        {
+            if (CommonButtonVisual.NavigateGamepadButton(m_newGameButtonData, availableInputs))
+                Game.Instance.AnimateGoToWheelSelection();
 
+            if (CommonButtonVisual.NavigateGamepadButton(m_continueButtonData, availableInputs))
+                Game.Instance.AnimateContinueRun();
+
+            if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateEnter(availableInputs))
+                Game.Instance.AnimateGoToWheelSelection();
+
+            if (m_selectedButton == MENU_BUTTONS.CONTINUE && CommonButtonVisual.NavigateEnter(availableInputs))
+                Game.Instance.AnimateContinueRun();
+
+            if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateRight(availableInputs))
+                selectButton(MENU_BUTTONS.CONTINUE);
+            if (m_selectedButton == MENU_BUTTONS.CONTINUE && CommonButtonVisual.NavigateLeft(availableInputs))
+                selectButton(MENU_BUTTONS.NEW_GAME);
+        }
 
         public void Hide()
         {

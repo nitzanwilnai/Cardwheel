@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 4616390501085004732}
   - component: {fileID: 1717856178128800388}
   - component: {fileID: 5244449484810840742}
+  - component: {fileID: 9102157602902039639}
   m_Layer: 5
   m_Name: UI - Wheel Selection
   m_TagString: Untagged
@@ -257,13 +258,7 @@ MonoBehaviour:
     Value: {fileID: 3906909683212692585}
   GUIRefImages: []
   GUIRefRawImages: []
-  GUIRefButtons:
-  - Name: Play
-    Value: {fileID: 2723161256634728278}
-  - Name: Prev
-    Value: {fileID: 9153298154057847904}
-  - Name: Next
-    Value: {fileID: 996946157642622104}
+  GUIRefButtons: []
   GUIRefSliders: []
   GUIRefAnimations:
   - Name: Animation
@@ -289,6 +284,43 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
+--- !u!114 &9102157602902039639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 471760104374161653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67e5b6a1a502544f795bb25d60791040, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Buttons:
+  - Key: Play
+    Button: {fileID: 2723161256634728278}
+    NavigationData:
+      Up: Play
+      Down: Play
+      Left: Prev
+      Right: Next
+    Icon: {fileID: 0}
+  - Key: Prev
+    Button: {fileID: 9153298154057847904}
+    NavigationData:
+      Up: Prev
+      Down: Prev
+      Left: Prev
+      Right: Play
+    Icon: {fileID: 0}
+  - Key: Next
+    Button: {fileID: 996946157642622104}
+    NavigationData:
+      Up: Next
+      Down: Next
+      Left: Play
+      Right: Next
+    Icon: {fileID: 0}
 --- !u!1 &1383738937172598622
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,6 +15,11 @@ namespace Cardwheel
         AssetBundle m_commonBundleUI;
         public string m_commonUIBundlePath;
 
+        public Sprite[] GamepadGlyphsPS5;
+        public Sprite[] GamepadGlyphsSteam;
+        public Sprite[] GamepadGlyphsXbox;
+        public Sprite[] GamepadGlyphsSwitch;
+
         public void LoadCommonAssetBundle()
         {
 #if UNITY_EDITOR
@@ -299,6 +304,18 @@ namespace Cardwheel
         public GameObject GetButtonSelected(Transform parent)
         {
             return Instantiate(loadGameObject(m_commonBundle, "Selected", "Assets/Prefabs/Common/Selected.prefab"), parent);
+        }
+
+        public Sprite GetGamepadGlyph(GAMEPAD_TYPE gamepadType, GAMEPAD_BUTTON gamepadButton)
+        {
+            if (gamepadType == GAMEPAD_TYPE.PS5)
+                return GamepadGlyphsPS5[(int)gamepadButton];
+            else if (gamepadType == GAMEPAD_TYPE.XBOX)
+                return GamepadGlyphsXbox[(int)gamepadButton];
+            else if (gamepadType == GAMEPAD_TYPE.SWITCH)
+                return GamepadGlyphsSwitch[(int)gamepadButton];
+            else // STEAM
+                return GamepadGlyphsSteam[(int)gamepadButton];
         }
     }
 }

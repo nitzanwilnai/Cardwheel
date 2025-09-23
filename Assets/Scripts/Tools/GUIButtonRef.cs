@@ -16,13 +16,16 @@ namespace CommonTools
     }
 
 
+    public enum GAMEPAD_BUTTON { NORTH, SOUTH, WEST, EAST, UP, DOWN, LEFT, RIGHT, R1, R2, L1, L2, OPTIONS };
+
     [Serializable]
     public class GUIButtonData
     {
         public string Key;
         public Button Button;
-        public GUIButtonNavigationData NavigationData;
-        public GameObject Icon;
+        public Image GlyphImage;
+        public GAMEPAD_BUTTON GamepadButton;
+        public GameObject SelectedGO;
     }
 
     public enum NAV_DIRECTION { UP, DOWN, LEFT, RIGHT };
@@ -35,13 +38,6 @@ namespace CommonTools
         // validate
         public void Start()
         {
-            for (int i = 0; i < Buttons.Length; i++)
-            {
-                GetButtonData(Buttons[i].NavigationData.Up);
-                GetButtonData(Buttons[i].NavigationData.Down);
-                GetButtonData(Buttons[i].NavigationData.Left);
-                GetButtonData(Buttons[i].NavigationData.Right);
-            }
         }
 #endif
 

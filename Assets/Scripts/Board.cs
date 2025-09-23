@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Lofelt.NiceVibrations;
+using UnityEngine.InputSystem;
 
 namespace Cardwheel
 {
@@ -30,6 +31,9 @@ namespace Cardwheel
 
     public class Board : MonoBehaviour
     {
+        public enum MENU_BUTTONS { DROP, INFO, SETTINGS, JOKER_1, JOKER_2, JOKER_3, JOKER_4, JOKER_5 };
+        MENU_BUTTONS m_selectedButton = MENU_BUTTONS.DROP;
+
         public GameObject GateGO;
 
         public enum GAME_STATE
@@ -126,8 +130,9 @@ namespace Cardwheel
 
         // spins
         TextMeshProUGUI m_spinsText;
-        Button m_spinButton;
         Image m_spinButtonImage;
+        GUIButtonData m_spinButtonData;
+        GUIButtonData m_infoButtonData;
 
         [Header("Jokers")]
         Transform m_jokerParent;
@@ -155,14 +160,19 @@ namespace Cardwheel
         bool m_showSlotEffects = true;
         bool m_slotsDebuffed = false;
 
+        Balance balance;
+        SettingsData settingsData;
+
         [Header("Debug")]
         public bool ShowDebug;
         public float DebugRotationSpeed;
 
-
         // Start is called before the first frame update
-        public void Init(Balance balance, GameInfoSO gameInfoSO)
+        public void Init(Balance balance, GameInfoSO gameInfoSO, SettingsData settingsData)
         {
+            this.balance = balance;
+            this.settingsData = settingsData;
+
             transform.localPosition = gameInfoSO.Position;
             transform.localScale = gameInfoSO.Scale;
 
@@ -196,13 +206,20 @@ namespace Cardwheel
             }
 
             m_UI = AssetManager.Instance.LoadInGameUI();
-            GUIRef guiRef = m_UI.GetComponent<GUIRef>();
 
+            GUIButtonRef guiButtonRef = m_UI.GetComponent<GUIButtonRef>();
+            m_spinButtonData = guiButtonRef.GetButtonData("Spin");
+            m_spinButtonData.Button.onClick.AddListener(dropBalls);
+            CommonButtonVisual.AddSelectedBorder(m_spinButtonData);
+
+            m_infoButtonData = guiButtonRef.GetButtonData("Info");
+            m_infoButtonData.Button.onClick.AddListener(showGameInfo);
+            CommonButtonVisual.AddSelectedBorder(m_infoButtonData);
+
+            GUIRef guiRef = m_UI.GetComponent<GUIRef>();
             CommonVisual.InitTopBarGUI(guiRef.GetGameObject("TopBar"), ref m_topBarGUI);
 
-            m_spinButton = guiRef.GetButton("Spin");
             m_spinButtonImage = guiRef.GetImage("Spin");
-            m_spinButton.onClick.AddListener(Game.Instance.DropBalls);
             m_roundChipsText = guiRef.GetTextGUI("Score");
             m_roundMultiplierText = guiRef.GetTextGUI("Multiplier");
             m_roundMultiplierAnimation = guiRef.GetAnimation("Multiplier");
@@ -212,8 +229,6 @@ namespace Cardwheel
             m_totalRoundScoreText = guiRef.GetTextGUI("TotalRoundScore");
             m_totalRoundScoreAnimation = guiRef.GetAnimation("TotalRoundScore");
             m_goalText = guiRef.GetTextGUI("Goal");
-
-            guiRef.GetButton("Info").onClick.AddListener(Game.Instance.ShowGameInfo);
 
             m_spinsText = guiRef.GetTextGUI("Spins");
 
@@ -236,7 +251,7 @@ namespace Cardwheel
             SpinWheelLights.Init();
         }
 
-        public void Show(RunData runData, Balance balance)
+        public void Show(RunData runData, Balance balance, GAMEPAD_TYPE gamepadType, int availableInputs)
         {
             m_goalText.text = Logic.GetRoundGoal(runData, balance).ToString("N0");
             m_totalScoreText.text = runData.TotalChips.ToString("N0");
@@ -275,6 +290,33 @@ namespace Cardwheel
             SpinWheelLights.StartAnimation();
 
             CommonVisual.UpdateTopBarMoney(runData, m_topBarGUI);
+
+            CommonButtonVisual.UpdateButtonIcons(m_spinButtonData, gamepadType);
+            CommonButtonVisual.UpdateButtonIcons(m_infoButtonData, gamepadType);
+            CommonButtonVisual.UpdateButtonIcons(m_topBarGUI.SettingsButtonData, gamepadType);
+
+            selectButton(MENU_BUTTONS.DROP, availableInputs);
+        }
+
+        void hideAllButtonSelections()
+        {
+            m_spinButtonData.SelectedGO.SetActive(false);
+            m_infoButtonData.SelectedGO.SetActive(false);
+            m_topBarGUI.SettingsButtonData.SelectedGO.SetActive(false);
+        }
+
+        void selectButton(MENU_BUTTONS selectedButton, int availableInputs)
+        {
+            hideAllButtonSelections();
+
+            m_selectedButton = selectedButton;
+
+            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+            {
+                m_spinButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.DROP);
+                m_infoButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.INFO);
+                m_topBarGUI.SettingsButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.SETTINGS);
+            }
         }
 
         public void showBalls(RunData runData, Balance balance, int useBallSprite, bool debuffed)
@@ -373,18 +415,18 @@ namespace Cardwheel
 
             if (GameState == GAME_STATE.WAITING_FOR_INPUT)
             {
-                m_spinButton.interactable = true;
+                m_spinButtonData.Button.interactable = true;
                 m_spinButtonImage.color = balance.ButtonColorEnabled;
             }
             else
             {
-                m_spinButton.interactable = false;
+                m_spinButtonData.Button.interactable = false;
                 m_spinButtonImage.color = balance.ButtonColorDisabled;
             }
         }
 
         // Update is called once per frame
-        public void Tick(RunData runData, Balance balance, SettingsData settingsData, float dt)
+        public void Tick(RunData runData, Balance balance, SettingsData settingsData, float dt, int availableInputs)
         {
             SpinWheelLights.Tick(dt);
 
@@ -1138,6 +1180,7 @@ namespace Cardwheel
                 CommonSlotsVisual.TickHighlightChangedSlots(value, SlotScaleAnimCurve, m_scoringSlots, runData.SlotTypeInGame, runData.SlotColors);
             }
 
+            handleInput(availableInputs);
 
             // AI
             if (GameState == GAME_STATE.WAITING_FOR_INPUT)
@@ -1149,7 +1192,7 @@ namespace Cardwheel
                     // m_waitingForInputTime 0.9099129 angle 238.6025
                     if (m_prevSpinWheelZ > AutoDropAngle && SpinCircle.transform.eulerAngles.z < AutoDropAngle)
                     {
-                        DropBalls(balance);
+                        dropBalls();
                     }
                 }
             }
@@ -1159,6 +1202,68 @@ namespace Cardwheel
             {
                 DebugRotationSpeed = runData.RotationSpeed;
             }
+        }
+
+        void handleInput(int availableInputs)
+        {
+            if (GameState == GAME_STATE.WAITING_FOR_INPUT)
+            {
+                if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+                    if (Keyboard.current.spaceKey.wasPressedThisFrame)
+                        dropBalls();
+
+                // button trigger
+                if (m_selectedButton == MENU_BUTTONS.DROP && CommonButtonVisual.NavigateEnter(availableInputs))
+                {
+                    dropBalls();
+                    return;
+                }
+
+                if (CommonButtonVisual.NavigateGamepadButton(m_spinButtonData, availableInputs))
+                {
+                    dropBalls();
+                    return;
+                }
+
+                if (m_selectedButton == MENU_BUTTONS.INFO && CommonButtonVisual.NavigateEnter(availableInputs))
+                {
+                    showGameInfo();
+                    return;
+                }
+
+                if (m_selectedButton == MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateEnter(availableInputs))
+                {
+                    Game.Instance.GoToSettings();
+                    return;
+                }
+
+                // navigation
+                if (m_selectedButton == MENU_BUTTONS.DROP && CommonButtonVisual.NavigateLeft(availableInputs))
+                {
+                    selectButton(MENU_BUTTONS.INFO, availableInputs);
+                    return;
+                }
+
+                if (m_selectedButton == MENU_BUTTONS.INFO && CommonButtonVisual.NavigateRight(availableInputs))
+                {
+                    selectButton(MENU_BUTTONS.DROP, availableInputs);
+                    return;
+                }
+
+                if (m_selectedButton == MENU_BUTTONS.INFO && CommonButtonVisual.NavigateUp(availableInputs))
+                {
+                    selectButton(MENU_BUTTONS.SETTINGS, availableInputs);
+                    return;
+                }
+
+                if (m_selectedButton == MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateDown(availableInputs))
+                {
+                    selectButton(MENU_BUTTONS.INFO, availableInputs);
+                    return;
+                }
+            }
+
+
         }
 
         bool allBlocksLocked()
@@ -1275,8 +1380,10 @@ namespace Cardwheel
             RunDataIO.SaveRun(runData, balance);
         }
 
-        public void DropBalls(Balance balance)
+        public void dropBalls()
         {
+            SoundManager.Instance.PlaySFXGateOpen(settingsData);
+
             if (GameState == GAME_STATE.WAITING_FOR_INPUT)
             {
                 // m_waitingForInputTime 0.9099129 angle 238.6025 - 6 balls
@@ -1341,6 +1448,13 @@ namespace Cardwheel
             Logic.SortSlots(runData);
         }
 
+        void showGameInfo()
+        {
+            SoundManager.Instance.PlaySFXButtonOK(settingsData);
+
+            Game.Instance.SetMenuState(MENU_STATE.IN_GAME_INFO);
+        }
+
 #if UNITY_EDITOR
         float m_droppedAngle;
         float m_increaseSize;
@@ -1359,15 +1473,15 @@ namespace Cardwheel
             {
                 Debug.Log("m_droppedAngle " + m_droppedAngle + " AutoDropAngle " + AutoDropAngle);
             }
-            // else
-            // {
-            //     AutoDropAngle += m_increaseSize;
-            //     if (AutoDropAngle > 152.0f)
-            //     {
-            //         AutoDropAngle = 148.0f;
-            //         m_increaseSize /= 2.0f;
-            //     }
-            // }
+            else
+            {
+                AutoDropAngle += m_increaseSize;
+                if (AutoDropAngle > 152.0f)
+                {
+                    AutoDropAngle = 148.0f;
+                    m_increaseSize /= 2.0f;
+                }
+            }
 
             startSpin(runData, balance);
         }
