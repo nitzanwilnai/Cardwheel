@@ -16,7 +16,7 @@ namespace CommonTools
     }
 
 
-    public enum GAMEPAD_BUTTON { NORTH, SOUTH, WEST, EAST, UP, DOWN, LEFT, RIGHT, R1, R2, L1, L2, OPTIONS };
+    public enum GAMEPAD_BUTTON { NONE, NORTH, SOUTH, WEST, EAST, UP, DOWN, LEFT, RIGHT, R1, R2, L1, L2, OPTIONS };
 
     [Serializable]
     public class GUIButtonData

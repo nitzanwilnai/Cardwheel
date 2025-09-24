@@ -205,7 +205,7 @@ namespace Cardwheel
             m_cardPackBallVisual.Init(m_runData, m_balance, Camera);
             m_cardPackSlotVisual.Init(m_runData, m_balance, Camera);
             m_cardPackChipsVisual.Init(m_balance, Camera);
-            m_jokerInfoPopupVisual.Init(Camera);
+            m_jokerInfoPopupVisual.Init(m_runData, Camera, m_settingsData);
             m_ballScreenVisual.Init(m_balance, Camera);
             m_settingsVisual.Init(Camera, m_settingsData);
             m_winScreenVisual.Init(m_runData, m_balance, Camera);
@@ -413,6 +413,10 @@ namespace Cardwheel
             else if (m_runData.MenuState == MENU_STATE.WHEEL_SELECTION)
             {
                 m_wheelSelectionVisual.Tick(dt, m_availableInputs);
+            }
+            else if (m_runData.MenuState == MENU_STATE.JOKER_INFO_POPUP)
+            {
+                m_jokerInfoPopupVisual.Tick(m_availableInputs);
             }
 
 #if UNITY_EDITOR
@@ -719,21 +723,6 @@ namespace Cardwheel
             m_jokerInfoPopupVisual.ShowInGame(m_runData, m_balance, jokerIdx, m_availableInputs);
         }
 
-        public void HideJokerInfoPopup()
-        {
-            SoundManager.Instance.PlaySFXButtonCancel(m_settingsData);
-
-            SetMenuState(m_runData.PrevMenuState);
-        }
-
-        public void SellJoker(int jokerIdx)
-        {
-            SoundManager.Instance.PlaySFXMoney(m_settingsData);
-
-            Logic.SellJoker(m_runData, jokerIdx);
-            HideJokerInfoPopup();
-        }
-
         public void CloseCardPack()
         {
             SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
@@ -855,6 +844,11 @@ namespace Cardwheel
             SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
 
             SetMenuState(MENU_STATE.WHEEL_SELECTION);
+        }
+
+        public void GoToPrivacyPolicy()
+        {
+            Application.OpenURL("https://nitzanwilnai.github.io/PrivacyPolicy/Cardwheel");
         }
     }
 }
