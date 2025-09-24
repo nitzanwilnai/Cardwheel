@@ -24,8 +24,16 @@ namespace Cardwheel
         Image m_border;
         Image m_borderRarity;
 
-        public void Init(Camera camera)
+        SettingsData settingsData;
+        RunData runData;
+
+        int m_jokerIndex;
+
+        public void Init(RunData runData, Camera camera, SettingsData settingsData)
         {
+            this.runData = runData;
+            this.settingsData = settingsData;
+
             m_UI = AssetManager.Instance.LoadJokerInfoPopupUI();
             m_UI.GetComponent<Canvas>().worldCamera = camera;
 
@@ -43,8 +51,8 @@ namespace Cardwheel
             m_sellButtonData = guiButtonRef.GetButtonData("Sell");
             m_closeButtonData = guiButtonRef.GetButtonData("Close");
 
-            m_closeButtonData.Button.onClick.AddListener(Game.Instance.HideJokerInfoPopup);
-            guiButtonRef.GetButtonData("CloseBackground").Button.onClick.AddListener(Game.Instance.HideJokerInfoPopup);
+            m_closeButtonData.Button.onClick.AddListener(hideJokerInfoPopup);
+            guiButtonRef.GetButtonData("CloseBackground").Button.onClick.AddListener(hideJokerInfoPopup);
 
             CommonButtonVisual.AddSelectedBorder(m_sellButtonData);
             CommonButtonVisual.AddSelectedBorder(m_closeButtonData);
@@ -56,11 +64,12 @@ namespace Cardwheel
 
         public void Show(RunData runData, Balance balance, int jokerIdx, int availableInputs)
         {
-            ShowCommon(runData, balance, jokerIdx);
+            m_jokerIndex = jokerIdx;
+            ShowCommon(runData, balance);
 
             m_sellButtonData.Button.image.color = balance.ButtonColorEnabled;
 
-            m_sellButtonData.Button.onClick.AddListener(() => Game.Instance.SellJoker(jokerIdx));
+            m_sellButtonData.Button.onClick.AddListener(() => sellJoker());
 
             m_sellButtonData.SelectedGO.SetActive(false);
             m_closeButtonData.SelectedGO.SetActive(CommonButtonVisual.NavigateEnter(availableInputs) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, availableInputs));
@@ -68,20 +77,21 @@ namespace Cardwheel
 
         public void ShowInGame(RunData runData, Balance balance, int jokerIdx, int availableInputs)
         {
+            m_jokerIndex = jokerIdx;
             m_sellButtonData.Button.image.color = balance.ButtonColorDisabled;
 
             m_sellButtonData.SelectedGO.SetActive(false);
             m_closeButtonData.SelectedGO.SetActive(CommonButtonVisual.NavigateEnter(availableInputs) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, availableInputs));
 
-            ShowCommon(runData, balance, jokerIdx);
+            ShowCommon(runData, balance);
         }
 
-        void ShowCommon(RunData runData, Balance balance, int jokerIdx)
+        void ShowCommon(RunData runData, Balance balance)
         {
-            int jokerType = runData.JokerTypes[jokerIdx];
+            int jokerType = runData.JokerTypes[m_jokerIndex];
             m_sellButtonData.Button.onClick.RemoveAllListeners();
 
-            m_cost.text = "$" + runData.JokerSellValues[jokerIdx].ToString();
+            m_cost.text = "$" + runData.JokerSellValues[m_jokerIndex].ToString();
 
             m_shopCard.sprite = AssetManager.Instance.LoadJokerSprite(balance.JokerBalance.JokerSpritesNames[jokerType]);
 
@@ -95,7 +105,7 @@ namespace Cardwheel
             m_border.color = balance.RarityColors[(int)rarity];
             m_borderRarity.color = balance.RarityColors[(int)rarity];
 
-            CommonVisual.ShowJokerDescriptionInHand(runData, balance, m_descriptionGO, jokerIdx);
+            CommonVisual.ShowJokerDescriptionInHand(runData, balance, m_descriptionGO, m_jokerIndex);
 
             m_UI.SetActive(true);
         }
@@ -106,6 +116,38 @@ namespace Cardwheel
                 GameObject.Destroy(m_descriptionGO);
 
             m_UI.SetActive(false);
+        }
+
+        public void Tick(int availableInputs)
+        {
+            if (CommonButtonVisual.NavigateEnter(availableInputs) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, availableInputs))
+            {
+                hideJokerInfoPopup();
+                return;
+            }
+
+            if (CommonButtonVisual.NavigateEnter(availableInputs) || CommonButtonVisual.NavigateGamepadButton(m_sellButtonData, availableInputs))
+            {
+                sellJoker();
+                return;
+            }
+
+        }
+
+        void sellJoker()
+        {
+            SoundManager.Instance.PlaySFXMoney(settingsData);
+
+            Logic.SellJoker(runData, m_jokerIndex);
+
+            hideJokerInfoPopup();
+        }
+
+        void hideJokerInfoPopup()
+        {
+            SoundManager.Instance.PlaySFXButtonCancel(settingsData);
+
+            Game.Instance.SetMenuState(runData.PrevMenuState);
         }
     }
 }
