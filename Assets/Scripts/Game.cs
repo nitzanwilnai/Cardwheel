@@ -322,12 +322,16 @@ namespace Cardwheel
 
         void OnEnable()
         {
+#if !RELEASE
             Application.logMessageReceived += HandleLog;
+#endif
         }
 
         void OnDisable()
         {
+#if !RELEASE
             Application.logMessageReceived -= HandleLog;
+#endif
         }
 
         void HandleLog(string logString, string stackTrace, LogType type)
