@@ -227,11 +227,11 @@ public static class Logic
         // runData.SkipType[3] = 13;
         // runData.SkipType[1] = 7;
 
-        AddJoker(runData, balance, 67);
-        AddJoker(runData, balance, 70);
-        AddJoker(runData, balance, 5);
-        AddJoker(runData, balance, 24);
-        AddJoker(runData, balance, 11);
+        // AddJoker(runData, balance, 67);
+        // AddJoker(runData, balance, 70);
+        // AddJoker(runData, balance, 5);
+        // AddJoker(runData, balance, 24);
+        // AddJoker(runData, balance, 11);
 
         // for (int i = 0; i < runData.BallTypes.Length; i++)
         //     runData.BallTypes[i] = i;
@@ -1274,6 +1274,17 @@ public static class Logic
         }
     }
 
+    public static int CalculateTotalScore(RunData runData)
+    {
+        int roundTotalScore = Mathf.FloorToInt((float)runData.SpinChips * runData.SpinMultiplier);
+
+        if (runData.BestSpin < roundTotalScore)
+            runData.BestSpin = roundTotalScore;
+        runData.TotalChips += roundTotalScore;
+
+        return roundTotalScore;
+    }
+
     public static void JokerPostSpin(RunData runData, Balance balance)
     {
         for (int jokerIdx = 0; jokerIdx < runData.JokerCount; jokerIdx++)
@@ -2076,7 +2087,7 @@ public static class Logic
         return (array |= 1L << bit);
     }
 
-   public static byte RemoveBit(byte array, int bit)
+    public static byte RemoveBit(byte array, int bit)
     {
         return (array &= (byte)~bit);
     }
@@ -2087,7 +2098,7 @@ public static class Logic
         return (array &= ~bit);
     }
 
-   public static long RemoveBit(long array, int bit)
+    public static long RemoveBit(long array, int bit)
     {
         return (array &= ~bit);
     }

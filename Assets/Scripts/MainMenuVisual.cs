@@ -38,6 +38,7 @@ namespace Cardwheel
 
         GUIButtonData m_newGameButtonData;
         GUIButtonData m_continueButtonData;
+        GUIButtonData m_privacyPolicyButtonData;
 
         public void Init(Camera camera, Balance balance)
         {
@@ -53,6 +54,10 @@ namespace Cardwheel
             m_continueButtonData = guiButtonRef.GetButtonData("Continue");
             m_continueButtonData.Button.onClick.AddListener(Game.Instance.AnimateContinueRun);
             CommonButtonVisual.AddSelectedBorder(m_continueButtonData);
+
+            m_privacyPolicyButtonData = guiButtonRef.GetButtonData("PrivacyPolicy");
+            m_privacyPolicyButtonData.Button.onClick.AddListener(Game.Instance.GoToPrivacyPolicy);
+            CommonButtonVisual.AddSelectedBorder(m_privacyPolicyButtonData);
 
             GUIRef guiRef = m_UI.GetComponent<GUIRef>();
 

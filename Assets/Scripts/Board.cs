@@ -526,6 +526,7 @@ namespace Cardwheel
                         Vector3 ballPos = BallsGO[ballIdx].transform.position;
                         ballPos.z = slotPos.z;
 
+                        // move out of runData
                         runData.BallSnapTime[ballIdx] += dt;
                         if (runData.BallSnapTime[ballIdx] > 1.0f)
                             runData.BallSnapTime[ballIdx] = 1.0f;
@@ -1011,13 +1012,10 @@ namespace Cardwheel
                 {
                     m_scoringTimer = 0.0f;
 
-                    int roundTotalScore = Mathf.FloorToInt((float)runData.SpinChips * runData.SpinMultiplier);
+                    int roundTotalScore = Logic.CalculateTotalScore(runData);
                     m_totalRoundScoreText.text = roundTotalScore.ToString("N0");
                     m_totalRoundScoreAnimation.Play();
 
-                    if (runData.BestSpin < roundTotalScore)
-                        runData.BestSpin = roundTotalScore;
-                    runData.TotalChips += roundTotalScore;
                     m_totalScoreText.text = runData.TotalChips.ToString("N0");
                     m_totalScoreAnimation.Play();
                     SoundManager.Instance.PlaySFXScoringTotal(settingsData);
