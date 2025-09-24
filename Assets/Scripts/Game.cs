@@ -121,22 +121,25 @@ namespace Cardwheel
         {
             m_gamepadType = GAMEPAD_TYPE.NONE;
 
-            if (Gamepad.current != null)
+            if (GameInfoSO.KeyboardGamepadSupport)
             {
-                Debug.Log(Gamepad.current.description);
-                string gamepadString = Gamepad.current.description.ToJson();
-                if (gamepadString.Contains("Dualsense") || gamepadString.Contains("Sony"))
-                    m_gamepadType = GAMEPAD_TYPE.PS5;
+                if (Gamepad.current != null)
+                {
+                    Debug.Log(Gamepad.current.description);
+                    string gamepadString = Gamepad.current.description.ToJson();
+                    if (gamepadString.Contains("Dualsense") || gamepadString.Contains("Sony"))
+                        m_gamepadType = GAMEPAD_TYPE.PS5;
 
-                m_availableInputs = Logic.SetBit(m_availableInputs, (int)INPUT_TYPES.GAMEPAD);
+                    m_availableInputs = Logic.SetBit(m_availableInputs, (int)INPUT_TYPES.GAMEPAD);
+                }
+                else
+                    m_availableInputs = Logic.RemoveBit(m_availableInputs, (int)INPUT_TYPES.GAMEPAD);
+
+                if (Keyboard.current != null)
+                    m_availableInputs = Logic.SetBit(m_availableInputs, (int)INPUT_TYPES.KEYBOARD);
+                else
+                    m_availableInputs = Logic.RemoveBit(m_availableInputs, (int)INPUT_TYPES.KEYBOARD);
             }
-            else
-                m_availableInputs= Logic.RemoveBit(m_availableInputs, (int)INPUT_TYPES.GAMEPAD);
-
-            if (Keyboard.current != null)
-                m_availableInputs = Logic.SetBit(m_availableInputs, (int)INPUT_TYPES.KEYBOARD);
-            else
-                m_availableInputs = Logic.RemoveBit(m_availableInputs, (int)INPUT_TYPES.KEYBOARD);
 
             Debug.Log("m_availableInputs " + m_availableInputs);
         }
@@ -221,29 +224,6 @@ namespace Cardwheel
         {
             // Debug.Log(Input.GetJoystickNames());
             // Joystick = Input.GetJoystickNames().Length > 0;
-        }
-
-        void onDeviceChange(InputDevice inputDevice, InputDeviceChange inputDeviceChange)
-        {
-            Debug.Log("onDeviceChange " + inputDevice.displayName + " inputDevice.shortDisplayName " + inputDevice.shortDisplayName + " inputDevice.deviceId " + inputDevice.deviceId + " inputDeviceChange " + inputDeviceChange.ToString());
-
-            if (inputDevice is Gamepad gamepad)
-            {
-                Debug.Log("device is gamepad!");
-                switch (inputDeviceChange)
-                {
-                    case InputDeviceChange.Added:
-                        Debug.Log($"Gamepad plugged in: {gamepad.displayName}");
-                        break;
-                    case InputDeviceChange.Disconnected:
-                        Debug.Log($"Gamepad unplugged: {gamepad.displayName}");
-                        break;
-                        // You can add cases for Connected and Removed specifically for gamepads too
-                }
-            }
-
-            if (Gamepad.current != null)
-                Debug.Log("onDeviceChange " + Gamepad.current.description);
         }
 
         public void SetMenuState(MENU_STATE newMenuState)
@@ -728,7 +708,7 @@ namespace Cardwheel
             SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
 
             SetMenuState(MENU_STATE.JOKER_INFO_POPUP);
-            m_jokerInfoPopupVisual.Show(m_runData, m_balance, jokerIdx);
+            m_jokerInfoPopupVisual.Show(m_runData, m_balance, jokerIdx, m_availableInputs);
         }
 
         public void ShowJokerInfoPopupInGame(int jokerIdx)
@@ -736,7 +716,7 @@ namespace Cardwheel
             SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
 
             SetMenuState(MENU_STATE.JOKER_INFO_POPUP);
-            m_jokerInfoPopupVisual.ShowInGame(m_runData, m_balance, jokerIdx);
+            m_jokerInfoPopupVisual.ShowInGame(m_runData, m_balance, jokerIdx, m_availableInputs);
         }
 
         public void HideJokerInfoPopup()

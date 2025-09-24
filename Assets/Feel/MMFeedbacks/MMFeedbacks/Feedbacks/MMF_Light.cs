@@ -251,6 +251,7 @@ namespace MoreMountains.Feedbacks
 					{
 						return;
 					}
+					if (_coroutine != null) { Owner.StopCoroutine(_coroutine); }
 					_coroutine = Owner.StartCoroutine(LightSequence(intensityMultiplier));
 					break;
 				case Modes.ShakerEvent:

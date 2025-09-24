@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using MoreMountains.Tools;
 using UnityEngine;
+#if MM_UI
 using UnityEngine.UI;
 using UnityEngine.Scripting.APIUpdating;
 
@@ -64,13 +65,15 @@ namespace MoreMountains.Feedbacks
 		[Tooltip("the curve to tween the offset on")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime)]
 		public AnimationCurve OffsetCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0));
-		/// the value to remap the offset curve's 0 to
-		[Tooltip("the value to remap the offset curve's 0 to")]
+		/// the value to remap the offset curve's 0 to, randomized between its min and max - put the same value in both min and max if you don't want any randomness
+		[Tooltip("the value to remap the offset curve's 0 to, randomized between its min and max - put the same value in both min and max if you don't want any randomness")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime)]
+		[MMFVector("Min", "Max")]
 		public Vector2 RemapZero = Vector2.zero;
-		/// the value to remap the offset curve's 1 to
-		[Tooltip("the value to remap the offset curve's 1 to")]
+		/// the value to remap the offset curve's 1 to, randomized between its min and max - put the same value in both min and max if you don't want any randomness
+		[Tooltip("the value to remap the offset curve's 1 to, randomized between its min and max - put the same value in both min and max if you don't want any randomness")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime)]
+		[MMFVector("Min", "Max")]
 		public Vector2 RemapOne = Vector2.one;
 		/// the value to move the intensity to in instant mode
 		[Tooltip("the value to move the intensity to in instant mode")]
@@ -131,6 +134,7 @@ namespace MoreMountains.Feedbacks
 					{
 						return;
 					}
+					if (_coroutine != null) { Owner.StopCoroutine(_coroutine); }
 					_coroutine = Owner.StartCoroutine(TransitionCo(intensityMultiplier));
 					break;
 			}
@@ -211,3 +215,4 @@ namespace MoreMountains.Feedbacks
 		}
 	}
 }
+#endif

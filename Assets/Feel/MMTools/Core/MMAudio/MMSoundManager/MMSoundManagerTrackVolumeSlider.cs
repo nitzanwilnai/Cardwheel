@@ -1,4 +1,4 @@
-﻿using System;
+﻿#if MM_UI
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -65,6 +65,17 @@ namespace MoreMountains.Tools
 		protected virtual void Awake()
 		{
 			_slider = this.gameObject.GetComponent<Slider>();
+		}
+
+		/// <summary>
+		/// On Start we update our slider's value to reflect the current track volume
+		/// </summary>
+		protected virtual void Start()
+		{
+			if (MMSoundManager.HasInstance)
+			{
+				UpdateSliderValueWithTrackVolume();
+			}
 		}
 
 		/// <summary>
@@ -192,4 +203,4 @@ namespace MoreMountains.Tools
 		}
 	}
 }
-
+#endif

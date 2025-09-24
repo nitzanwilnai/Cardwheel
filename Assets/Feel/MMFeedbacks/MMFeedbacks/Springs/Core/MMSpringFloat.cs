@@ -77,8 +77,6 @@ namespace MoreMountains.Feedbacks
 		[MMHidden]
 		public float VelocityDisplay;
 		
-		
-
 		protected float _actualCurrentValue;
 		protected float _returnCurrentValue;
 		protected float _targetValue;

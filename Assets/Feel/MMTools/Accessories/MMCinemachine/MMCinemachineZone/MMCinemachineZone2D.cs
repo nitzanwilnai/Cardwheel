@@ -73,6 +73,8 @@ namespace MoreMountains.Tools
 			#elif MM_CINEMACHINE3
 			_cinemachineConfiner = VirtualCamera.gameObject.MMGetComponentAroundOrAdd<CinemachineConfiner2D>();
 			_cinemachineConfiner.BoundingShape2D = _confinerCompositeCollider2D;
+			_cinemachineConfiner.InvalidateBoundingShapeCache();
+			_cinemachineConfiner.InvalidateLensCache();
 			#endif
 		}
 
@@ -164,6 +166,12 @@ namespace MoreMountains.Tools
 			if (_circleCollider2D != null && _circleCollider2D.enabled)
 			{
 				Gizmos.DrawSphere((Vector2)this.transform.position + _circleCollider2D.offset, _circleCollider2D.radius);                
+			}
+			if (_polygonCollider2D != null && _polygonCollider2D.enabled)
+			{
+				Mesh mesh = _polygonCollider2D.CreateMesh(true, false);
+				mesh.RecalculateNormals();
+				Gizmos.DrawMesh(mesh, Vector2.zero, this.transform.rotation, this.transform.lossyScale);
 			}
 		}
 		#endif

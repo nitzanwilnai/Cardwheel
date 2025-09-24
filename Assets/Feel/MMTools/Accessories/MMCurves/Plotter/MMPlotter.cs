@@ -1,7 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using System;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
@@ -263,8 +260,9 @@ namespace MoreMountains.Tools
 				_lastMovementEndedAt = Time.unscaledTime;
 				_currentMovement = 1f;
 			}
-			//_timeString = String.Format("t = {0}s", _currentMovement.ToString("0.000"));
+			#if MM_UI
 			_axis.TimeLabel.text = _timeString;
+			#endif
 		}
 	}
 }

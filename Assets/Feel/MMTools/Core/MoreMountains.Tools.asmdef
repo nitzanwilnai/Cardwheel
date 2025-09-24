@@ -11,7 +11,8 @@
         "GUID:d60799ab2a985554ea1a39cd38695018",
         "GUID:57a0b9bc628ab4740af4b6f1f0b2e134",
         "GUID:d04eb9c554ad44ceab303cecf0c0cf82",
-        "GUID:516a5277b8c3b4f4c8cc86b77b1591ff"
+        "GUID:516a5277b8c3b4f4c8cc86b77b1591ff",
+        "GUID:2bafac87e7f4b9b418d9448d219b01ab"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -65,6 +66,11 @@
             "name": "com.unity.ugui",
             "expression": "2.0.0",
             "define": "MM_UGUI2"
+        },
+        {
+            "name": "com.unity.ugui",
+            "expression": "1.0.0",
+            "define": "MM_UI"
         }
     ],
     "noEngineReferences": false

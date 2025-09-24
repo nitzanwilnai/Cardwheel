@@ -4,6 +4,7 @@ using UnityEngine.Events;
 #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
 using UnityEngine.InputSystem;
 #endif
+#if MM_UI
 using UnityEngine.UI;
 
 namespace MoreMountains.Tools
@@ -518,5 +519,5 @@ namespace MoreMountains.Tools
 			Application.logMessageReceived -= CaptureConsoleLog;
 		}
 	}
-
 }
+#endif

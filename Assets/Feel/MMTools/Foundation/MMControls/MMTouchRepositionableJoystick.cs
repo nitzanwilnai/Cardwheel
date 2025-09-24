@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
-using UnityEngine.EventSystems;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-
+#if MM_UI
+using UnityEngine.EventSystems;
 namespace MoreMountains.Tools
 {
 	/// <summary>
@@ -146,3 +146,4 @@ namespace MoreMountains.Tools
 		#endif
 	}
 }
+#endif

@@ -7,6 +7,8 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 #endif
 
+#if MM_UI
+
 namespace MoreMountains.Tools
 {
 	/// <summary>
@@ -173,3 +175,5 @@ namespace MoreMountains.Tools
 		public Color TextColor = Color.white;
 	}
 }
+
+#endif

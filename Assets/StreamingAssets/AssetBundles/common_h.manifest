@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 4041953386
+CRC: 31727214
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 8ba400457134f83b5422480422ddc926
+    Hash: 1d7b96313cebf89efe83fba8e6210ebd
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 1f74aa34b80334e4a7bafcdc2f8fb509
+    Hash: 2c08333db949d4d98e06bc2e328019ba
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 8ba400457134f83b5422480422ddc926
+    Hash: 1d7b96313cebf89efe83fba8e6210ebd
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -67,6 +67,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: aad3fd142125f49cd9203a06ab5cb8d1, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 67e5b6a1a502544f795bb25d60791040, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 6d361c7be1b1045d68393db32556cc66, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 69dad5500677a424b98dbef7e7b1c36b, type: 3}
@@ -87,6 +89,8 @@ ClassTypes:
 - Class: 224
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: CommonTools.GUIButtonData
 - AssemblyName: Assembly-CSharp
   ClassName: CommonTools.GUIRefAnimation
 - AssemblyName: Assembly-CSharp

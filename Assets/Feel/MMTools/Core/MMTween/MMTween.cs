@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
-using System;
 
 namespace MoreMountains.Tools
 {
@@ -63,6 +61,13 @@ namespace MoreMountains.Tools
 			currentTime = MMMaths.Remap(currentTime, initialTime, endTime, 0f, 1f);
 			currentTime = TweenDelegateArray[(int)curve](currentTime);
 			return startValue + currentTime * (endValue - startValue);
+		}
+		
+		public static long Tween(float currentTime, float initialTime, float endTime, long startValue, long endValue, MMTweenCurve curve)
+		{
+			currentTime = MMMaths.Remap(currentTime, initialTime, endTime, 0f, 1f);
+			currentTime = TweenDelegateArray[(int)curve](currentTime);
+			return startValue + (long)(currentTime * (endValue - startValue));
 		}
 
 		public static float Evaluate(float t, MMTweenCurve curve)
@@ -209,6 +214,13 @@ namespace MoreMountains.Tools
 			currentTime = curve.Evaluate(currentTime);
 			return startValue + currentTime * (endValue - startValue);
 		}
+		
+		public static long Tween(float currentTime, float initialTime, float endTime, long startValue, long endValue, AnimationCurve curve)
+		{
+			currentTime = MMMaths.Remap(currentTime, initialTime, endTime, 0f, 1f);
+			currentTime = curve.Evaluate(currentTime);
+			return startValue + (long)currentTime * (endValue - startValue);
+		}
 
 		public static Vector2 Tween(float currentTime, float initialTime, float endTime, Vector2 startValue, Vector2 endValue, AnimationCurve curve)
 		{
@@ -254,6 +266,18 @@ namespace MoreMountains.Tools
 				return Tween(currentTime, initialTime, endTime, startValue, endValue, tweenType.Curve);
 			}
 			return 0f;
+		}
+		public static long Tween(float currentTime, float initialTime, float endTime, long startValue, long endValue, MMTweenType tweenType)
+		{
+			if (tweenType.MMTweenDefinitionType == MMTweenDefinitionTypes.MMTween)
+			{
+				return Tween(currentTime, initialTime, endTime, startValue, endValue, tweenType.MMTweenCurve);
+			}
+			if (tweenType.MMTweenDefinitionType == MMTweenDefinitionTypes.AnimationCurve)
+			{
+				return Tween(currentTime, initialTime, endTime, startValue, endValue, tweenType.Curve);
+			}
+			return 0;
 		}
 		public static Vector2 Tween(float currentTime, float initialTime, float endTime, Vector2 startValue, Vector2 endValue, MMTweenType tweenType)
 		{

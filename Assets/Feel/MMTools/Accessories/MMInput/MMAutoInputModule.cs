@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿#if MM_UI
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
@@ -54,3 +55,4 @@ namespace MoreMountains.Tools
 		}
 	}	
 }
+#endif

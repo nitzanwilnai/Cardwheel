@@ -1,9 +1,9 @@
-﻿using System;
-using UnityEngine;
-using MoreMountains.Tools;
+﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+#if MM_UI
 using UnityEngine.UI;
+#endif
 
 namespace MoreMountains.Tools
 {
@@ -14,6 +14,7 @@ namespace MoreMountains.Tools
 	[AddComponentMenu("More Mountains/Tools/GUI/MMHealthBar")]
 	public class MMHealthBar : MonoBehaviour 
 	{
+		#if MM_UI
 		/// the possible health bar types
 		public enum HealthBarTypes { Prefab, Drawn, Existing }
 		/// the possible timescales the bar can work on
@@ -516,5 +517,7 @@ namespace MoreMountains.Tools
 		{
 			UpdateBar(TestCurrentHealth, TestMinHealth, TestMaxHealth, true);
 		}
+
+		#endif
 	}
 }

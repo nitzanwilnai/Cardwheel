@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
+#if MM_UI
 using UnityEngine.UI;
-using MoreMountains.Tools;
+#endif
 
 namespace MoreMountains.Tools
 {
@@ -27,7 +27,9 @@ namespace MoreMountains.Tools
 		[Tooltip("the index of the material")]
 		public int MaterialIndex = 0;
         
+		#if MM_UI
 		protected RawImage _rawImage;
+		#endif		
 		protected Renderer _renderer;
 		protected Vector4 _position = Vector4.one;
 		protected Vector4 _speed;
@@ -47,7 +49,9 @@ namespace MoreMountains.Tools
 			}            
 			_position.x = _renderer.sharedMaterials[MaterialIndex].GetVector(MaterialPropertyName).x;
 			_position.y = _renderer.sharedMaterials[MaterialIndex].GetVector(MaterialPropertyName).y;
+			#if MM_UI
 			_rawImage = GetComponent<RawImage>();
+			#endif
 
 			_speed = new Vector4(0f, 0f, Speed.x, Speed.y);
 		}
@@ -61,8 +65,13 @@ namespace MoreMountains.Tools
 			{
 				return;
 			}
-            
-			if ((_rawImage == null) && (_renderer == null))
+
+			bool rawImageIsNull = false;
+			#if MM_UI
+			rawImageIsNull = (_rawImage == null);
+			#endif
+			
+			if (rawImageIsNull && (_renderer == null))
 			{
 				return;
 			}
@@ -87,9 +96,11 @@ namespace MoreMountains.Tools
 				_propertyBlock.SetVector(MaterialPropertyName, _position);
 				_renderer.SetPropertyBlock(_propertyBlock, MaterialIndex);
 			}
-			if (_rawImage != null)
+			if (!rawImageIsNull)
 			{
+				#if MM_UI
 				_rawImage.material.mainTextureOffset = _position;
+				#endif
 			}
 
 		}

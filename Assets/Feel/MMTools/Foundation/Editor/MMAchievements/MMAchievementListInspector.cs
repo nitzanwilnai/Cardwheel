@@ -1,9 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
-using MoreMountains.Tools;
-using System.Collections.Generic;
 using UnityEditor;
-using UnityEngine.UI;
 
 namespace MoreMountains.Tools
 {

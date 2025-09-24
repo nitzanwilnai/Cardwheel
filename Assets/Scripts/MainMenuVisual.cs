@@ -1,6 +1,8 @@
 using System;
 using CommonTools;
+#if !(PLATFORM_IOS || PLATFORM_ANDROID)
 using Steamworks;
+#endif
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -118,6 +120,11 @@ namespace Cardwheel
 
             if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
                 selectButton(MENU_BUTTONS.NEW_GAME);
+            else
+            {
+                m_newGameButtonData.SelectedGO.SetActive(false);
+                m_continueButtonData.SelectedGO.SetActive(false);
+            }
 
             m_UI.SetActive(true);
         }

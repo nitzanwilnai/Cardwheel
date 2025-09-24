@@ -39,7 +39,7 @@ namespace  MoreMountains.Feedbacks
 		static public void Register(Delegate callback) { OnEvent += callback; }
 		static public void Unregister(Delegate callback) { OnEvent -= callback; }
 
-		public enum EventTypes { Play, Pause, Resume, Revert, Complete, SkipToTheEnd, RestoreInitialValues, Loop, Enable, Disable }
+		public enum EventTypes { Play, Pause, Resume, Revert, Complete, SkipToTheEnd, RestoreInitialValues, Loop, Enable, Disable, InitializationComplete }
 		public delegate void Delegate(MMFeedbacks source, EventTypes type);
 		static public void Trigger(MMFeedbacks source, EventTypes type)
 		{
@@ -98,6 +98,9 @@ namespace  MoreMountains.Feedbacks
 		/// This event will fire every time this MMFeedbacks gets skipped to the end
 		[Tooltip("This event will fire every time this MMFeedbacks gets skipped to the end")]
 		public UnityEvent OnSkipToTheEnd;
+		/// This event will fire after the MMF Player is done initializing
+		[Tooltip("This event will fire after the MMF Player is done initializing")]
+		public UnityEvent OnInitializationComplete;
 		/// This event will fire every time this MMFeedbacks' game object gets enabled
 		[Tooltip("This event will fire every time this MMFeedbacks' game object gets enabled")]
 		public UnityEvent OnEnable;
@@ -112,6 +115,7 @@ namespace  MoreMountains.Feedbacks
 		public virtual bool OnCompleteIsNull { get; protected set; }
 		public virtual bool OnRestoreInitialValuesIsNull { get; protected set; }
 		public virtual bool OnSkipToTheEndIsNull { get; protected set; }
+		public virtual bool OnInitializationCompleteIsNull { get; protected set; }
 		public virtual bool OnEnableIsNull { get; protected set; }
 		public virtual bool OnDisableIsNull { get; protected set; }
 
@@ -127,6 +131,7 @@ namespace  MoreMountains.Feedbacks
 			OnCompleteIsNull = OnComplete == null;
 			OnRestoreInitialValuesIsNull = OnRestoreInitialValues == null;
 			OnSkipToTheEndIsNull = OnSkipToTheEnd == null;
+			OnInitializationCompleteIsNull = OnInitializationComplete == null;
 			OnEnableIsNull = OnEnable == null;
 			OnDisableIsNull = OnDisable == null;
 		}
@@ -230,6 +235,19 @@ namespace  MoreMountains.Feedbacks
 			if (TriggerMMFeedbacksEvents)
 			{
 				MMFeedbacksEvent.Trigger(source, MMFeedbacksEvent.EventTypes.SkipToTheEnd);
+			}
+		}
+
+		public virtual void TriggerOnInitializationComplete(MMFeedbacks source)
+		{
+			if (!OnInitializationCompleteIsNull && TriggerUnityEvents)
+			{
+				OnInitializationComplete.Invoke();
+			}
+
+			if (TriggerMMFeedbacksEvents)
+			{
+				MMFeedbacksEvent.Trigger(source, MMFeedbacksEvent.EventTypes.InitializationComplete);
 			}
 		}
 

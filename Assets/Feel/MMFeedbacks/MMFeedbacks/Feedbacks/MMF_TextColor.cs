@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.UI;
 using UnityEngine.Scripting.APIUpdating;
+#if MM_UI
+using UnityEngine.UI;
 
 namespace MoreMountains.Feedbacks
 {
@@ -112,6 +113,7 @@ namespace MoreMountains.Feedbacks
 					{
 						return;
 					}
+					if (_coroutine != null) { Owner.StopCoroutine(_coroutine); }
 					_coroutine = Owner.StartCoroutine(ChangeColor());
 					break;
 				case ColorModes.Interpolate:
@@ -119,6 +121,7 @@ namespace MoreMountains.Feedbacks
 					{
 						return;
 					}
+					if (_coroutine != null) { Owner.StopCoroutine(_coroutine); }
 					_coroutine = Owner.StartCoroutine(ChangeColor());
 					break;
 			}
@@ -194,3 +197,4 @@ namespace MoreMountains.Feedbacks
 		}
 	}
 }
+#endif

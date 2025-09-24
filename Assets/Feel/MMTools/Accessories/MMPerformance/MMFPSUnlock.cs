@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
 using UnityEngine.InputSystem;
 #endif

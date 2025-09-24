@@ -3,7 +3,6 @@ using CommonTools;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Lofelt.NiceVibrations;
 using UnityEngine.InputSystem;
 
 namespace Cardwheel
@@ -27,6 +26,7 @@ namespace Cardwheel
         public GameObject RainbowGO;
         public GameObject ShinyGO;
         public GameObject MetalGO;
+        public GameObject SelectedGO;
     }
 
     public class Board : MonoBehaviour
@@ -303,6 +303,7 @@ namespace Cardwheel
             m_spinButtonData.SelectedGO.SetActive(false);
             m_infoButtonData.SelectedGO.SetActive(false);
             m_topBarGUI.SettingsButtonData.SelectedGO.SetActive(false);
+            CommonVisual.UnselectAllJokers();
         }
 
         void selectButton(MENU_BUTTONS selectedButton, int availableInputs)
@@ -316,6 +317,9 @@ namespace Cardwheel
                 m_spinButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.DROP);
                 m_infoButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.INFO);
                 m_topBarGUI.SettingsButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.SETTINGS);
+
+                if (m_selectedButton >= MENU_BUTTONS.JOKER_1 && m_selectedButton <= MENU_BUTTONS.JOKER_5)
+                    CommonVisual.SelectJoker((int)m_selectedButton - (int)MENU_BUTTONS.JOKER_1);
             }
         }
 
@@ -567,8 +571,10 @@ namespace Cardwheel
                         {
                             startScoring(runData, balance);
                             SpinState = SPIN_STATE.DONE;
+#if UNITY_EDITOR
                             if (SpinTest)
                                 doSpinTest(runData, balance);
+#endif
                         }
                         else if (spinTime > 2.0f)
                         {
@@ -1237,10 +1243,22 @@ namespace Cardwheel
                     return;
                 }
 
+                if ((m_selectedButton >= MENU_BUTTONS.JOKER_1 && m_selectedButton <= MENU_BUTTONS.JOKER_5) && CommonButtonVisual.NavigateEnter(availableInputs))
+                {
+                    Game.Instance.ShowJokerInfoPopupInGame((int)m_selectedButton - (int)MENU_BUTTONS.JOKER_1);
+                    return;
+                }
+
                 // navigation
                 if (m_selectedButton == MENU_BUTTONS.DROP && CommonButtonVisual.NavigateLeft(availableInputs))
                 {
                     selectButton(MENU_BUTTONS.INFO, availableInputs);
+                    return;
+                }
+
+                if (m_selectedButton == MENU_BUTTONS.DROP && CommonButtonVisual.NavigateUp(availableInputs))
+                {
+                    selectButton(MENU_BUTTONS.JOKER_1, availableInputs);
                     return;
                 }
 
@@ -1261,6 +1279,24 @@ namespace Cardwheel
                     selectButton(MENU_BUTTONS.INFO, availableInputs);
                     return;
                 }
+
+                if ((m_selectedButton >= MENU_BUTTONS.JOKER_1 && m_selectedButton <= MENU_BUTTONS.JOKER_5) && CommonButtonVisual.NavigateDown(availableInputs))
+                {
+                    selectButton(MENU_BUTTONS.DROP, availableInputs);
+                    return;
+                }
+
+                if ((m_selectedButton >= MENU_BUTTONS.JOKER_1 && m_selectedButton <= MENU_BUTTONS.JOKER_4) && CommonButtonVisual.NavigateRight(availableInputs))
+                {
+                    selectButton(m_selectedButton + 1, availableInputs);
+                    return;
+                }
+                if ((m_selectedButton >= MENU_BUTTONS.JOKER_2 && m_selectedButton <= MENU_BUTTONS.JOKER_5) && CommonButtonVisual.NavigateLeft(availableInputs))
+                {
+                    selectButton(m_selectedButton - 1, availableInputs);
+                    return;
+                }
+
             }
 
 
@@ -1386,10 +1422,11 @@ namespace Cardwheel
 
             if (GameState == GAME_STATE.WAITING_FOR_INPUT)
             {
+#if UNITY_EDITOR
                 // m_waitingForInputTime 0.9099129 angle 238.6025 - 6 balls
                 Debug.Log("m_waitingForInputTime " + m_waitingForInputTime + " angle " + SpinCircle.transform.rotation.eulerAngles.z);
                 m_droppedAngle = SpinCircle.transform.rotation.eulerAngles.z;
-
+#endif
                 GateGO.SetActive(false);
                 setGameState(GAME_STATE.BALLS_DROPPED, balance);
                 SpinState = SPIN_STATE.SPIN_BALLS;

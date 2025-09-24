@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections;
 using MoreMountains.Tools;
 
+#if MM_UI
+
 namespace MoreMountains.Tools
 {	
 	/// <summary>
@@ -73,3 +75,5 @@ namespace MoreMountains.Tools
 		}
 	}
 }
+
+#endif

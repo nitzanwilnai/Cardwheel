@@ -12,5 +12,8 @@ namespace Cardwheel
         [Header("Board Position")]
         public Vector3 Position;
         public Vector3 Scale;
+
+        [Header("Keyboard Gamepad")]
+        public bool KeyboardGamepadSupport = false;
     }
 }

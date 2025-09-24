@@ -1717,6 +1717,7 @@ GameObject:
   - component: {fileID: 4322330833359903410}
   - component: {fileID: 5512439413605136860}
   - component: {fileID: 6116542389673872261}
+  - component: {fileID: 8800613527361704056}
   m_Layer: 5
   m_Name: UI - Joker Info Popup
   m_TagString: Untagged
@@ -1843,15 +1844,37 @@ MonoBehaviour:
   - Name: BorderRarity
     Value: {fileID: 4900800274050825396}
   GUIRefRawImages: []
-  GUIRefButtons:
-  - Name: Sell
-    Value: {fileID: 2357691668558538435}
-  - Name: Close
-    Value: {fileID: 2226616386476741282}
-  - Name: CloseBackground
-    Value: {fileID: 5610952549149496487}
+  GUIRefButtons: []
   GUIRefSliders: []
   GUIRefAnimations: []
+--- !u!114 &8800613527361704056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6281457563159616687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67e5b6a1a502544f795bb25d60791040, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Buttons:
+  - Key: Sell
+    Button: {fileID: 2357691668558538435}
+    GlyphImage: {fileID: 0}
+    GamepadButton: 0
+    SelectedGO: {fileID: 0}
+  - Key: Close
+    Button: {fileID: 2226616386476741282}
+    GlyphImage: {fileID: 0}
+    GamepadButton: 0
+    SelectedGO: {fileID: 0}
+  - Key: CloseBackground
+    Button: {fileID: 5610952549149496487}
+    GlyphImage: {fileID: 0}
+    GamepadButton: 0
+    SelectedGO: {fileID: 0}
 --- !u!1 &7094952529186297803
 GameObject:
   m_ObjectHideFlags: 0

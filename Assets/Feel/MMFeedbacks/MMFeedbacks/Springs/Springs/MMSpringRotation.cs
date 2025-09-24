@@ -1,9 +1,9 @@
 using MoreMountains.Tools;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace MoreMountains.Feedbacks
 {
+	[AddComponentMenu("More Mountains/Springs/MMSpringRotation")]
 	public class MMSpringRotation : MMSpringVector3Component<Transform>
 	{
 		public enum Spaces { Local, World }

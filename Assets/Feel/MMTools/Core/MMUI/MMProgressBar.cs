@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+#if MM_UI
 using UnityEngine.UI;
+#endif
 using System.Collections;
 #if (MM_TEXTMESHPRO || MM_UGUI2)
 using TMPro;
@@ -17,6 +19,7 @@ namespace MoreMountains.Tools
 	[AddComponentMenu("More Mountains/Tools/GUI/MMProgressBar")]
 	public class MMProgressBar : MMMonoBehaviour
 	{
+		#if MM_UI
 		public enum MMProgressBarStates {Idle, Decreasing, Increasing, InDecreasingDelay, InIncreasingDelay }
 		/// the possible fill modes 
 		public enum FillModes { LocalScale, FillAmount, Width, Height, Anchor }
@@ -589,14 +592,16 @@ namespace MoreMountains.Tools
 
 		#endregion TESTS
 
+		/// <summary>
+		/// Updates the text component of the progress bar
+		/// </summary>
 		protected virtual void UpdateText()
 		{
-			_updatedText = TextPrefix + (BarTarget * TextValueMultiplier).ToString(TextFormat);
-			if (DisplayTotal)
+			if (_isPercentageTextMeshProNotNull || _isPercentageTextNotNull)
 			{
-				_updatedText += TotalSeparator + (TextValueMultiplier).ToString(TextFormat);
+				ComputeUpdatedText();
 			}
-			_updatedText += TextSuffix;
+			
 			if (_isPercentageTextNotNull)
 			{
 				PercentageText.text = _updatedText;
@@ -607,6 +612,19 @@ namespace MoreMountains.Tools
 				PercentageTextMeshPro.text = _updatedText;
 			}
 			#endif
+		}
+
+		/// <summary>
+		/// Computes the updated text value to display on the progress bar
+		/// </summary>
+		protected virtual void ComputeUpdatedText()
+		{
+			_updatedText = TextPrefix + (BarTarget * TextValueMultiplier).ToString(TextFormat);
+			if (DisplayTotal)
+			{
+				_updatedText += TotalSeparator + (TextValueMultiplier).ToString(TextFormat);
+			}
+			_updatedText += TextSuffix;
 		}
         
 		/// <summary>
@@ -979,5 +997,6 @@ namespace MoreMountains.Tools
 
 		#endregion ShowHide
 		
+		#endif
 	}
 }
