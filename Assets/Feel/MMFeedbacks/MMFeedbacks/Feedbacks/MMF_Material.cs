@@ -142,6 +142,7 @@ namespace MoreMountains.Feedbacks
 			{
 				for (int i = 0; i < RendererMaterialIndexes.Length; i++)
 				{
+					if (_coroutines[i] != null) { Owner.StopCoroutine(_coroutines[i]); }
 					_coroutines[i] = Owner.StartCoroutine(TransitionMaterial(TargetRenderer.materials[RendererMaterialIndexes[i]], Materials[newIndex], RendererMaterialIndexes[i]));
 				}
 			}

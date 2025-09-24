@@ -194,7 +194,7 @@ namespace Cardwheel
             {
                 project.SetBuildProperty(targetGuid, "ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES", "NO");
                 project.SetBuildProperty(targetGuid, "ENABLE_BITCODE", "NO");
-                project.SetTeamId(targetGuid, "LGRYQ2SFF9");
+                project.SetTeamId(targetGuid, "CLKC34YN6T");
 
                 Debug.Log("project.GetUnityMainTargetGuid()" + project.GetUnityMainTargetGuid());
                 Debug.Log("project.GetUnityFrameworkTargetGuid() " + project.GetUnityFrameworkTargetGuid());
@@ -235,7 +235,7 @@ namespace Cardwheel
                 sw.WriteLine("  installer.generated_projects.each do |project|");
                 sw.WriteLine("    project.targets.each do |target|");
                 sw.WriteLine("        target.build_configurations.each do |config|");
-                sw.WriteLine("            config.build_settings[\"DEVELOPMENT_TEAM\"] = \"65294JA6HM\"");
+                sw.WriteLine("            config.build_settings[\"DEVELOPMENT_TEAM\"] = \"CLKC34YN6T\"");
                 sw.WriteLine("         end");
                 sw.WriteLine("    end");
                 sw.WriteLine("  end");

@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1109232889
+CRC: 2522231800
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6dc8141a69ef0db437f4760b90b35582
+    Hash: 2a285cdf32bdf05a17643a939d7ecfd9
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 289d6a909d0d245d6390eb6bab37b1c9
+    Hash: a9da114cd56bc46a0bb5b6407c4306b4
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 6dc8141a69ef0db437f4760b90b35582
+    Hash: 2a285cdf32bdf05a17643a939d7ecfd9
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -178,6 +178,7 @@ Assets:
   and 2 balls on another color.png
 - Assets/Prefabs/Descriptions/Joker 0001 +4 Mult On Red.prefab
 - Assets/Prefabs/Descriptions/Joker 0022 Increase Interest to $2.prefab
+- Assets/Prefabs/Common/Selected.prefab
 - Assets/Textures/Jokers/0013 - Joker.png
 - Assets/Textures/Balls/B 0003 - Money.png
 - Assets/Textures/Jokers/0030 - Joker Change Slot to Money on First Ball.png

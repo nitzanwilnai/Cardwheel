@@ -111,7 +111,8 @@ namespace MoreMountains.Feedbacks
 		public AnimationCurve RangeFalloff = new AnimationCurve(new Keyframe(0f, 1f), new Keyframe(1f, 0f));
 
 		/// the values to remap the falloff curve's y axis' 0 and 1
-		[Tooltip("the values to remap the falloff curve's y axis' 0 and 1")] [MMFVector("Zero", "One")]
+		[Tooltip("the values to remap the falloff curve's y axis' 0 and 1")] 
+		[MMFVector("Zero", "One")]
 		public Vector2 RemapRangeFalloff = new Vector2(0f, 1f);
 		
 		[MMFInspectorGroup(_automaticSetupGroupName, true, 49, false, true)]
@@ -238,37 +239,39 @@ namespace MoreMountains.Feedbacks
 		{
 			get
 			{
+				float timescaleMultiplier = Owner.TimescaleMultiplier;
+				
 				#if UNITY_EDITOR
 				if (!Application.isPlaying)
 				{
-					return (float)EditorApplication.timeSinceStartup;
+					return (float)EditorApplication.timeSinceStartup * timescaleMultiplier;
 				}
 				#endif
 
 				if (Timing.UseScriptDrivenTimescale)
 				{
-					return Timing.ScriptDrivenTime;
+					return Timing.ScriptDrivenTime * timescaleMultiplier;
 				}
 
 				if (Owner.ForceTimescaleMode)
 				{
 					if (Owner.ForcedTimescaleMode == TimescaleModes.Scaled)
 					{
-						return Time.time;
+						return Time.time * timescaleMultiplier;
 					}
 					else
 					{
-						return Time.unscaledTime;
+						return Time.unscaledTime * timescaleMultiplier;
 					}
 				}
 
 				if (Timing.TimescaleMode == TimescaleModes.Scaled)
 				{
-					return Time.time;
+					return Time.time * timescaleMultiplier;
 				}
 				else
 				{
-					return Time.unscaledTime;
+					return Time.unscaledTime * timescaleMultiplier;
 				}
 			}
 		}
@@ -278,20 +281,22 @@ namespace MoreMountains.Feedbacks
 		{
 			get
 			{
+				float timescaleMultiplier = Owner.TimescaleMultiplier;
+				
 				if (Timing.UseScriptDrivenTimescale)
 				{
-					return Timing.ScriptDrivenDeltaTime;
+					return Timing.ScriptDrivenDeltaTime * timescaleMultiplier;
 				}
 
 				if (Owner.ForceTimescaleMode)
 				{
 					if (Owner.ForcedTimescaleMode == TimescaleModes.Scaled)
 					{
-						return Time.deltaTime;
+						return Time.deltaTime * timescaleMultiplier;
 					}
 					else
 					{
-						return Time.unscaledDeltaTime;
+						return Time.unscaledDeltaTime * timescaleMultiplier;
 					}
 				}
 
@@ -302,11 +307,11 @@ namespace MoreMountains.Feedbacks
 
 				if (Timing.TimescaleMode == TimescaleModes.Scaled)
 				{
-					return Time.deltaTime;
+					return Time.deltaTime * timescaleMultiplier;
 				}
 				else
 				{
-					return Time.unscaledDeltaTime;
+					return Time.unscaledDeltaTime * timescaleMultiplier;
 				}
 			}
 		}
@@ -341,10 +346,11 @@ namespace MoreMountains.Feedbacks
 			{
 				_requiresSetup = false;
 			}
-			if (RequiredTargetText != _requiredTargetTextCached)
+			if ((RequiredTargetText != _requiredTargetTextCached) || (RequiredTargetTextExtra != _requiredTargetTextCachedExtra))
 			{
-				_requiredTarget = RequiredTargetText == "" ? "" : "[" + RequiredTargetText + "]";
+				_requiredTarget = RequiredTargetText == "" ? "" : "[" + RequiredTargetText + "]" + RequiredTargetTextExtra;
 				_requiredTargetTextCached = RequiredTargetText;
+				_requiredTargetTextCachedExtra = RequiredTargetTextExtra;
 			}
 			
 			#endif
@@ -357,6 +363,8 @@ namespace MoreMountains.Feedbacks
 		public virtual string RequiresSetupText => "This feedback requires some additional setup.";
 		/// the text used to describe the required target
 		public virtual string RequiredTargetText => "";
+		/// the text used to describe the required target, if more info is needed
+		public virtual string RequiredTargetTextExtra => "";
 
 		/// <summary>
 		/// Override this method to determine if a feedback requires setup 
@@ -429,6 +437,7 @@ namespace MoreMountains.Feedbacks
 		protected float _totalDuration = 0f;
 		protected int _indexInOwnerFeedbackList = 0;
 		protected string _requiredTargetTextCached = ".";
+		protected string _requiredTargetTextCachedExtra = "";
 		protected float _repeatOffset = 0f;
 
 		#endregion Properties

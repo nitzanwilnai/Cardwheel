@@ -1,7 +1,6 @@
 ﻿using MoreMountains.Tools;
 using UnityEngine;
 using System.Collections;
-using UnityEngine.UI;
 using UnityEngine.Scripting.APIUpdating;
 
 namespace MoreMountains.Feedbacks

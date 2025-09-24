@@ -1,9 +1,9 @@
 using MoreMountains.Tools;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace MoreMountains.Feedbacks
 {
+	[AddComponentMenu("More Mountains/Springs/MMSpringSquashAndStretch")]
 	public class MMSpringSquashAndStretch : MMSpringFloatComponent<Transform>
 	{
 		public enum PossibleAxis { XtoYZ, XtoY, XtoZ, YtoXZ, YtoX, YtoZ, ZtoXZ, ZtoX, ZtoY }

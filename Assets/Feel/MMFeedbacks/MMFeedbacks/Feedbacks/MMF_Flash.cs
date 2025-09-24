@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
 using UnityEngine.Serialization;
+#if MM_UI
 using UnityEngine.UI;
 
 namespace MoreMountains.Feedbacks
@@ -127,3 +128,4 @@ namespace MoreMountains.Feedbacks
 		}
 	}
 }
+#endif

@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 
+#if MM_UI
 namespace MoreMountains.Tools
 {
 	/// <summary>
@@ -278,3 +277,4 @@ namespace MoreMountains.Tools
 		}
 	}
 }
+#endif

@@ -24,6 +24,10 @@ namespace MoreMountains.Feedbacks
 		/// if this is true, unscaled delta time, otherwise regular delta time
 		[Tooltip("if this is true, unscaled delta time, otherwise regular delta time")]
 		public bool UseUnscaledTime = false;
+		/// a multiplier to apply to all time related operations, allowing you to speed up or slow down the wiggle
+		[Tooltip("a multiplier to apply to all time related operations, allowing you to speed up or slow down the wiggle")]
+		public float TimeMultiplier = 1f;
+		
 		/// whether or not this object should start wiggling automatically on Start()
 		[Tooltip("whether or not this object should start wiggling automatically on Start()")]
 		public bool StartWigglingAutomatically = true;
@@ -140,7 +144,9 @@ namespace MoreMountains.Feedbacks
 		/// <returns></returns>
 		public float GetDeltaTime()
 		{
-			return UseUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
+			float deltaTime = UseUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
+			deltaTime *= TimeMultiplier;
+			return deltaTime;
 		}
 
 		/// <summary>
@@ -149,7 +155,9 @@ namespace MoreMountains.Feedbacks
 		/// <returns></returns>
 		public float GetTime()
 		{
-			return UseUnscaledTime ? Time.unscaledTime : Time.time;
+			float time = UseUnscaledTime ? Time.unscaledTime : Time.time;
+			time *= TimeMultiplier;
+			return time;
 		}
 	}
 

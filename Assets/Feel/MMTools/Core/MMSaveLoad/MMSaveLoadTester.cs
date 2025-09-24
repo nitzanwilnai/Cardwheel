@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if MM_UI
 using UnityEngine.UI;
+#endif
 
 namespace MoreMountains.Tools
 {
@@ -20,9 +22,11 @@ namespace MoreMountains.Tools
 	public class MMSaveLoadTester : MonoBehaviour
 	{
 		[Header("Bindings")]
+		#if MM_UI
 		/// the text to save
 		[Tooltip("the text to save")]
 		public InputField TargetInputField;
+		#endif
 
 		[Header("Save settings")]
 		/// the chosen save method (json, encrypted json, binary, encrypted binary)
@@ -60,7 +64,9 @@ namespace MoreMountains.Tools
 		{
 			InitializeSaveLoadMethod();
 			MMSaveLoadTestObject testObject = new MMSaveLoadTestObject();
+			#if MM_UI
 			testObject.SavedText = TargetInputField.text;
+			#endif
 			MMSaveLoadManager.Save(testObject, FileName+SaveFileExtension, FolderName);
 		}
 
@@ -71,7 +77,9 @@ namespace MoreMountains.Tools
 		{
 			InitializeSaveLoadMethod();
 			MMSaveLoadTestObject testObject = (MMSaveLoadTestObject)MMSaveLoadManager.Load(typeof(MMSaveLoadTestObject), FileName + SaveFileExtension, FolderName);
+			#if MM_UI
 			TargetInputField.text = testObject.SavedText;
+			#endif
 		}
 
 		/// <summary>

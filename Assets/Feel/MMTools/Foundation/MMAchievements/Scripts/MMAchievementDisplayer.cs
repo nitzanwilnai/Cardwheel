@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
-using MoreMountains.Tools;
-using UnityEngine.SceneManagement;
+
+#if MM_UI
 
 namespace MoreMountains.Tools
 {
@@ -102,3 +102,4 @@ namespace MoreMountains.Tools
 		}
 	}
 }
+#endif

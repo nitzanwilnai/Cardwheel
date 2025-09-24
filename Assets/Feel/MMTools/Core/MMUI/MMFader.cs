@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+#if MM_UI
 using UnityEngine.UI;
+#endif
 using MoreMountains.Tools;
 
 namespace MoreMountains.Tools
@@ -164,7 +166,9 @@ namespace MoreMountains.Tools
 	/// The Fader class can be put on an Image, and it'll intercept MMFadeEvents and turn itself on or off accordingly.
 	/// </summary>
 	[RequireComponent(typeof(CanvasGroup))]
+	#if MM_UI
 	[RequireComponent(typeof(Image))]
+	#endif
 	[AddComponentMenu("More Mountains/Tools/GUI/MMFader")]
 	public class MMFader : MMMonoBehaviour, MMEventListener<MMFadeEvent>, MMEventListener<MMFadeInEvent>, MMEventListener<MMFadeOutEvent>, MMEventListener<MMFadeStopEvent>
 	{
@@ -213,7 +217,9 @@ namespace MoreMountains.Tools
 		public bool DebugToolbar;
 		
 		protected CanvasGroup _canvasGroup;
+		#if MM_UI
 		protected Image _image;
+		#endif
 
 		protected float _initialAlpha;
 		protected float _currentTargetAlpha;
@@ -270,6 +276,8 @@ namespace MoreMountains.Tools
 		protected virtual void Initialization()
 		{
 			_canvasGroup = GetComponent<CanvasGroup>();
+			
+			#if MM_UI
 			_image = GetComponent<Image>();
 
 			if (ForcedInitState == ForcedInitStates.Inactive)
@@ -282,6 +290,7 @@ namespace MoreMountains.Tools
 				_canvasGroup.alpha = ActiveAlpha;    
 				_image.enabled = true;
 			}
+			#endif
 		}
 
 		/// <summary>
@@ -346,7 +355,9 @@ namespace MoreMountains.Tools
 		/// </summary>
 		protected virtual void DisableFader()
 		{
+			#if MM_UI
 			_image.enabled = false;
+			#endif
 			if (ShouldBlockRaycasts)
 			{
 				_canvasGroup.blocksRaycasts = false;
@@ -358,7 +369,9 @@ namespace MoreMountains.Tools
 		/// </summary>
 		protected virtual void EnableFader()
 		{
+			#if MM_UI
 			_image.enabled = true;
+			#endif
 			if (ShouldBlockRaycasts)
 			{
 				_canvasGroup.blocksRaycasts = true;

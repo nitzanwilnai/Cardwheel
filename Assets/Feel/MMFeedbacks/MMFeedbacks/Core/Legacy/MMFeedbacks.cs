@@ -71,6 +71,9 @@ namespace MoreMountains.Feedbacks
 		/// a time multiplier that will be applied to all feedback durations (initial delay, duration, delay between repeats...)
 		[Tooltip("a time multiplier that will be applied to all feedback durations (initial delay, duration, delay between repeats...)")]
 		public float DurationMultiplier = 1f;
+		/// a multiplier to apply to all timescale operations (1: normal, less than 1: slower operations, higher than 1: faster operations)
+		[Tooltip("a multiplier to apply to all timescale operations (1: normal, less than 1: slower operations, higher than 1: faster operations)")]
+		public float TimescaleMultiplier = 1f;
 		/// if this is true, will expose a RandomDurationMultiplier. The final duration of each feedback will be : their base duration * DurationMultiplier * a random value between RandomDurationMultiplier.x and RandomDurationMultiplier.y
 		[Tooltip("if this is true, will expose a RandomDurationMultiplier. The final duration of each feedback will be : their base duration * DurationMultiplier * a random value between RandomDurationMultiplier.x and RandomDurationMultiplier.y")]
 		public bool RandomizeDuration = false;
@@ -565,7 +568,7 @@ namespace MoreMountains.Feedbacks
 					if (GetTime() - _startTime > _totalDuration)
 					{
 						_shouldStop = true;
-					}    
+					}
 				}
 			}
 			else

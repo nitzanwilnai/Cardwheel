@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if MM_UI
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -358,3 +359,4 @@ namespace MoreMountains.Tools
 		#endregion
 	}
 }
+#endif

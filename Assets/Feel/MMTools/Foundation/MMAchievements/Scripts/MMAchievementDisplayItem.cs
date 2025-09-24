@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if MM_UI
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using MoreMountains.Tools;
@@ -19,3 +20,4 @@ namespace MoreMountains.Tools
 		public MMProgressBar ProgressBarDisplay;	
 	}
 }
+#endif

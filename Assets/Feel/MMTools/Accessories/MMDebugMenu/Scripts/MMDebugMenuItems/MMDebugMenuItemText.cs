@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if MM_UI
 using UnityEngine.UI;
 
 namespace MoreMountains.Tools
@@ -16,3 +17,4 @@ namespace MoreMountains.Tools
 		public Text ContentText;
 	}
 }
+#endif

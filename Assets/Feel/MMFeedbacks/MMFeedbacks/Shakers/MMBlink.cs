@@ -436,7 +436,7 @@ namespace MoreMountains.Feedbacks
 		{
 			TargetRenderer.GetPropertyBlock(_propertyBlock, MaterialIndex);
 			_propertyID = Shader.PropertyToID(ShaderPropertyName);
-			_initialColor = UseMaterialPropertyBlocks ? TargetRenderer.sharedMaterial.GetColor(_propertyID) : TargetRenderer.materials[MaterialIndex].GetColor(_propertyID);
+			_initialColor = UseMaterialPropertyBlocks ? TargetRenderer.sharedMaterials[MaterialIndex].GetColor(_propertyID) : TargetRenderer.materials[MaterialIndex].GetColor(_propertyID);
 			_currentColor = _initialColor;
 		}
 
@@ -444,7 +444,7 @@ namespace MoreMountains.Feedbacks
 		{
 			TargetRenderer.GetPropertyBlock(_propertyBlock, MaterialIndex);
 			_propertyID = Shader.PropertyToID(ShaderPropertyName);
-			_initialShaderFloatValue = UseMaterialPropertyBlocks ? TargetRenderer.sharedMaterial.GetFloat(_propertyID) : TargetRenderer.materials[MaterialIndex].GetFloat(_propertyID);
+			_initialShaderFloatValue = UseMaterialPropertyBlocks ? TargetRenderer.sharedMaterials[MaterialIndex].GetFloat(_propertyID) : TargetRenderer.materials[MaterialIndex].GetFloat(_propertyID);
 		}
 		
 		/// <summary>

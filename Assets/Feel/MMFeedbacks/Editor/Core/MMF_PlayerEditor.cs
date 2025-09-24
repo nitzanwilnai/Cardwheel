@@ -31,6 +31,7 @@ namespace MoreMountains.Feedbacks
 		protected SerializedProperty _mmfeedbacksFeedbacksIntensity;
 		protected SerializedProperty _mmfeedbacksAutoChangeDirectionOnEnd;
 		protected SerializedProperty _mmfeedbacksDurationMultiplier;
+		protected SerializedProperty _mmfeedbacksTimescaleMultiplier;
 		protected SerializedProperty _mmfeedbacksForceTimescaleMode;
 		protected SerializedProperty _mmfeedbacksForcedTimescaleMode;
 		protected SerializedProperty _mmfeedbacksPlayerTimescaleMode;
@@ -184,6 +185,7 @@ namespace MoreMountains.Feedbacks
 			_mmfeedbacksDirection = serializedObject.FindProperty("Direction");
 			_mmfeedbacksAutoChangeDirectionOnEnd = serializedObject.FindProperty("AutoChangeDirectionOnEnd");
 			_mmfeedbacksDurationMultiplier = serializedObject.FindProperty("DurationMultiplier");
+			_mmfeedbacksTimescaleMultiplier = serializedObject.FindProperty("TimescaleMultiplier");
 			_mmfeedbacksRandomizeDuration = serializedObject.FindProperty("RandomizeDuration");
 			_mmfeedbacksRandomDurationMultiplier = serializedObject.FindProperty("RandomDurationMultiplier");
 			_mmfeedbacksForceTimescaleMode = serializedObject.FindProperty("ForceTimescaleMode");
@@ -394,6 +396,7 @@ namespace MoreMountains.Feedbacks
 				EditorGUILayout.PropertyField(_mmfeedbacksPlayerTimescaleMode);
 				EditorGUILayout.PropertyField(_mmfeedbacksForceTimescaleMode);
 				EditorGUILayout.PropertyField(_mmfeedbacksForcedTimescaleMode);
+				EditorGUILayout.PropertyField(_mmfeedbacksTimescaleMultiplier);
 
 				EditorGUILayout.Space(10);
 				EditorGUILayout.LabelField(_rangeText, EditorStyles.boldLabel);

@@ -19,10 +19,21 @@ namespace MoreMountains.Feedbacks
 		public static bool FeedbackTypeAuthorized = true;
 		/// sets the inspector color for this feedback
 		#if UNITY_EDITOR
-		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.GameObjectColor; } }
-		public override bool EvaluateRequiresSetup() { return (TargetGameObject == null); }
-		public override string RequiredTargetText { get { return TargetGameObject != null ? TargetGameObject.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that a TargetGameObject be set to be able to work properly. You can set one below."; } }
+		public override Color FeedbackColor => MMFeedbacksInspectorColors.GameObjectColor; 
+		public override bool EvaluateRequiresSetup() => (TargetGameObject == null); 
+		public override string RequiredTargetText => TargetGameObject != null ? TargetGameObject.name : "";
+		public override string RequiredTargetTextExtra
+		{
+			get
+			{
+				if (ExtraTargetGameObjects.Count > 0)
+				{
+					return " (+"+ExtraTargetGameObjects.Count+")";
+				}
+				return "";
+			}
+		}
+		public override string RequiresSetupText => "This feedback requires that a TargetGameObject be set to be able to work properly. You can set one below."; 
 		#endif
 		public override bool HasAutomatedTargetAcquisition => true;
 		protected override void AutomateTargetAcquisition() => TargetGameObject = FindAutomatedTargetGameObject();

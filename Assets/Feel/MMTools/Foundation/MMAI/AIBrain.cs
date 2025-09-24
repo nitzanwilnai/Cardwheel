@@ -264,5 +264,48 @@ namespace MoreMountains.Tools
 				CurrentState?.EnterState();
 			}  
 		}
+		
+		/// <summary>
+		/// Triggered via the context menu in its inspector (or if you call it directly), this will remove any unused actions and decisions from the brain
+		/// </summary>
+		[ContextMenu("Delete unused actions and decisions")]
+		public virtual void DeleteUnusedActionsAndDecisions()
+		{
+			AIAction[] actions = this.gameObject.GetComponentsInChildren<AIAction>();
+			AIDecision[] decisions = this.gameObject.GetComponentsInChildren<AIDecision>();
+			foreach (AIAction action in actions)
+			{
+				bool found = false;
+				foreach (AIState state in States)
+				{
+					if (state.Actions.Contains(action))
+					{
+						found = true;
+					}
+				}
+				if (!found)
+				{	
+					DestroyImmediate(action);
+				}
+			}
+			foreach (AIDecision decision in decisions)
+			{
+				bool found = false;
+				foreach (AIState state in States)
+				{
+					foreach (AITransition transition in state.Transitions)
+					{
+						if (transition.Decision == decision)
+						{
+							found = true;
+						}
+					}
+				}
+				if (!found)
+				{	
+					DestroyImmediate(decision);
+				}
+			}
+		}
 	}
 }

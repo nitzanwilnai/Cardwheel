@@ -1,9 +1,7 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
-using MoreMountains.Tools;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 
@@ -176,6 +174,30 @@ namespace MoreMountains.Tools
 		protected const float _asyncProgressLimit = 0.9f;
 		protected MMSceneLoadingAntiSpill _antiSpill = new MMSceneLoadingAntiSpill();
 		protected static string _antiSpillSceneName = "";
+		
+		/// <summary>
+		/// Statics initialization to support enter play modes
+		/// </summary>
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		protected static void InitializeStatics()
+		{
+			_loadingInProgress = false;
+			_interpolateProgress = false;
+			_progressInterpolationSpeed = 0f;
+			_speedIntervals = new List<MMSceneLoadingSpeedInterval>();
+			_beforeEntryFadeDelay = 0f;
+			_entryFadeTween = null;
+			_entryFadeDuration = 0f;
+			_afterEntryFadeDelay = 0f;
+			_beforeExitFadeDelay = 0f;
+			_exitFadeTween = null;
+			_exitFadeDuration = 0f;
+			_sceneToLoadName = "";
+			_loadingScreenSceneName = "";
+			_scenesInBuild = new List<string>();
+			_initialScenes = null;
+			_antiSpillSceneName = "";
+		}
 
 		/// <summary>
 		/// Call this static method to load a scene from anywhere (packed settings signature)

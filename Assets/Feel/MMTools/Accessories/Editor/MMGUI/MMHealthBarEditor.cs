@@ -1,9 +1,6 @@
-﻿using System;
-using UnityEngine;
-using MoreMountains.Tools;
-using UnityEditor;
-using UnityEngine.UI;
+﻿using UnityEditor;
 
+#if MM_UI
 namespace MoreMountains.Tools
 {	
 	[CanEditMultipleObjects]
@@ -43,3 +40,4 @@ namespace MoreMountains.Tools
 
 	}
 }
+#endif

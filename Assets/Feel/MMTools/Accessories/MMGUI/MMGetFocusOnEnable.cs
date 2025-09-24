@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if MM_UI
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using MoreMountains.Tools;
@@ -18,3 +19,4 @@ namespace MoreMountains.Tools
 		}
 	}
 }
+#endif

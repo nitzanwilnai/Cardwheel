@@ -523,6 +523,7 @@ namespace MoreMountains.Tools
 
 		#region DebugOnScreen
         
+		#if MM_UI
 		//public static MMConsole _console;
 		public static MMDebugOnScreenConsole _console;
 		private const string _debugConsolePrefabPath = "MMDebugOnScreenConsole";
@@ -592,6 +593,7 @@ namespace MoreMountains.Tools
 		{
 			_console = newConsole;
 		}
+		#endif
 
 		#endregion
 

@@ -1,10 +1,8 @@
-using System;
-using MoreMountains.Tools;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace MoreMountains.Feedbacks
 {
+	[AddComponentMenu("More Mountains/Springs/MMSpringRectTransformSizeDelta")]
 	public class MMSpringRectTransformSizeDelta : MMSpringVector2Component<RectTransform>
 	{
 		public override Vector2 TargetVector2

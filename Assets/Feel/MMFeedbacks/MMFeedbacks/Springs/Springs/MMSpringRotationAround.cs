@@ -1,9 +1,9 @@
 using MoreMountains.Tools;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace MoreMountains.Feedbacks
 {
+	[AddComponentMenu("More Mountains/Springs/MMSpringRotationAround")]
 	public class MMSpringRotationAround : MMSpringFloatComponent<Transform>
 	{
 		public Transform RotationCenter;

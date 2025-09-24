@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+#if MM_UI
 using UnityEngine.UI;
+#endif
 using System.Collections;
 using MoreMountains.Tools;
 
@@ -46,7 +48,9 @@ namespace MoreMountains.Tools
 		{
 			if (TestMode == TestModes.Permanent)
 			{
+				#if MM_UI
 				_progressBar.UpdateBar(CurrentValue, MinValue, MaxValue);
+				#endif
 				CurrentValue += Speed * Time.deltaTime * _direction;
 				if ((CurrentValue <= MinValue) || (CurrentValue >= MaxValue))
 				{
@@ -57,7 +61,9 @@ namespace MoreMountains.Tools
 
 		protected virtual void OneTime()
 		{
+			#if MM_UI
 			_progressBar.UpdateBar(OneTimeNewValue, OneTimeMinValue, OneTimeMaxValue);
+			#endif
 		}
 	}
 }

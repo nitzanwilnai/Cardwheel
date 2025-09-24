@@ -1,5 +1,6 @@
 using MoreMountains.Tools;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.PlayerLoop;
 
 namespace MoreMountains.Feedbacks
@@ -14,6 +15,9 @@ namespace MoreMountains.Feedbacks
 		public enum TimeScaleModes { Unscaled, Scaled }
 		/// whether or not this spring has reached a low enough velocity to self disable
 		public virtual bool LowVelocity => false;
+
+		[MMInspectorGroup("Events", true, 16, true)] 
+		public UnityEvent OnEquilibriumReached;
 		
 		protected float _velocityLowThreshold = 0.001f;
 		
@@ -59,6 +63,10 @@ namespace MoreMountains.Feedbacks
 		{
 			if (LowVelocity)
 			{
+				if (OnEquilibriumReached != null)
+				{
+					OnEquilibriumReached.Invoke();
+				}
 				Finish();
 				this.enabled = false;
 			}

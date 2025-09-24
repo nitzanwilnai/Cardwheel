@@ -1,9 +1,9 @@
 using MoreMountains.Tools;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace MoreMountains.Feedbacks
 {
+	[AddComponentMenu("More Mountains/Springs/MMSpringScale")]
 	public class MMSpringScale : MMSpringVector3Component<Transform>
 	{
 		protected override void Initialization()

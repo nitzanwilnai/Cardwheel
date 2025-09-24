@@ -1003,8 +1003,11 @@ namespace MoreMountains.Tools
 		{
 			foreach (MMSoundManagerSound sound in _sounds)
 			{
-				sound.Source.Play();
-			}    
+				if (sound.Source.isActiveAndEnabled)
+				{
+					sound.Source.Play();
+				}
+			}
 		}
 
 		/// <summary>

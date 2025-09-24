@@ -31,16 +31,25 @@ namespace MoreMountains.Tools
 	public class MMMultipleObjectPooler : MMObjectPooler
 	{
 		/// the list of objects to pool
+		[Tooltip("the list of objects to pool")]
 		public List<MMMultipleObjectPoolerObject> Pool;
 		[MMInformation("A MultipleObjectPooler is a reserve of objects, to be used by a Spawner. When asked, it will return an object from the pool (ideally an inactive one) chosen based on the pooling method you've chosen.\n- OriginalOrder will spawn objects in the order you've set them in the inspector (from top to bottom)\n- OriginalOrderSequential will do the same, but will empty each pool before moving to the next object\n- RandomBetweenObjects will pick one object from the pool, at random, but ignoring its pool size, each object has equal chances to get picked\n- PoolSizeBased randomly choses one object from the pool, based on its pool size probability (the larger the pool size, the higher the chances it'll get picked)'...",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
 		/// the chosen pooling method
+		[Tooltip("the chosen pooling method")]
 		public MMPoolingMethods PoolingMethod = MMPoolingMethods.RandomPoolSizeBased;
 		[MMInformation("If you set CanPoolSameObjectTwice to false, the Pooler will try to prevent the same object from being pooled twice to avoid repetition. This will only affect random pooling methods, not ordered pooling.",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
 		/// whether or not the same object can be pooled twice in a row. If you set CanPoolSameObjectTwice to false, the Pooler will try to prevent the same object from being pooled twice to avoid repetition. This will only affect random pooling methods, not ordered pooling.
+		[Tooltip("whether or not the same object can be pooled twice in a row. If you set CanPoolSameObjectTwice to false, the Pooler will try to prevent the same object from being pooled twice to avoid repetition. This will only affect random pooling methods, not ordered pooling.")]
 		public bool CanPoolSameObjectTwice = true;
 		/// a unique name that should match on all MMMultipleObjectPoolers you want to use together
+		[Tooltip("a unique name that should match on all MMMultipleObjectPoolers you want to use together")]
 		[MMCondition("MutualizeWaitingPools", true)]
 		public string MutualizedPoolName = "";
+		
+		/// if CanPoolSameObjectTwice is set to false, this determines up to how many times we'll iterate to try and find a different object
+		[Tooltip("if CanPoolSameObjectTwice is set to false, this determines up to how many times we'll iterate to try and find a different object")]
+		[MMCondition("CanPoolSameObjectTwice", true, true)]
+		public float OverflowAmount = 10f;
 		
 		public virtual List<MMMultipleObjectPooler> Owner { get; set; }
 		private void OnDestroy() { Owner?.Remove(this); }
@@ -340,19 +349,19 @@ namespace MoreMountains.Tools
 				randomIndex = UnityEngine.Random.Range(0, _objectPool.PooledGameObjects.Count);
 				overflowCounter++;
 			}
+			
 			if (!PoolObjectEnabled(_objectPool.PooledGameObjects[randomIndex]))
 			{ 
 				return null; 
 			}
 
 			// if we can't pool the same object twice, we'll loop for a while to try and get another one
-			bool test = _objectPool.PooledGameObjects[randomIndex] == _lastPooledObject;
 			overflowCounter = 0;
 			if (_lastPooledObject != null)
 			{
 				while (!CanPoolSameObjectTwice 
-				       && _objectPool.PooledGameObjects[randomIndex].name == _lastPooledObject.name 
-				       && overflowCounter < _objectPool.PooledGameObjects.Count * 10)
+				       && (_objectPool.PooledGameObjects[randomIndex].name == _lastPooledObject.name || !PoolObjectEnabled(_objectPool.PooledGameObjects[randomIndex]))
+				       && overflowCounter < _objectPool.PooledGameObjects.Count * OverflowAmount)
 				{
 					randomIndex = UnityEngine.Random.Range(0, _objectPool.PooledGameObjects.Count);
 					overflowCounter++;
@@ -410,8 +419,8 @@ namespace MoreMountains.Tools
 			if (_lastPooledObject != null)
 			{
 				while (!CanPoolSameObjectTwice
-				       && Pool[randomIndex].GameObjectToPool.name == _lastPooledObject.name
-				       && overflowCounter < _objectPool.PooledGameObjects.Count * 10)
+				       && (Pool[randomIndex].GameObjectToPool.name == _lastPooledObject.name || !PoolObjectEnabled(Pool[randomIndex].GameObjectToPool))
+				       && overflowCounter < _objectPool.PooledGameObjects.Count * OverflowAmount)
 				{
 					randomIndex = UnityEngine.Random.Range(0, Pool.Count);
 					overflowCounter++;

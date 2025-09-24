@@ -122,6 +122,8 @@ namespace Cardwheel
 
             if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
                 m_playButtonData.SelectedGO.SetActive(true);
+            else
+                m_playButtonData.SelectedGO.SetActive(false);
 
             m_UI.SetActive(true);
         }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if MM_UI
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Scripting.APIUpdating;
 
@@ -69,3 +70,4 @@ namespace MoreMountains.Feedbacks
 		}
 	}
 }
+#endif

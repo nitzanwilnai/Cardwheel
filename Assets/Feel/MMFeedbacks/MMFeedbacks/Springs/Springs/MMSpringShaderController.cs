@@ -1,8 +1,10 @@
 using MoreMountains.Tools;
 using UnityEngine;
 
+#if MM_UI
 namespace MoreMountains.Feedbacks
 {
+	[AddComponentMenu("More Mountains/Springs/MMSpringShaderController")]
 	public class MMSpringShaderController : MMSpringFloatComponent<ShaderController>
 	{
 		public override float TargetFloat
@@ -12,3 +14,4 @@ namespace MoreMountains.Feedbacks
 		}
 	}
 }
+#endif

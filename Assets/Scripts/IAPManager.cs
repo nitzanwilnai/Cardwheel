@@ -5,6 +5,8 @@ using UnityEngine.Purchasing;
 
 public class IAPManager : MonoBehaviour
 {
+#if false
+
     // Cross-platform ID you’ll use in code (must match the one you create on the stores)
     public const string PremiumUpgradeId = "unlock_premium";
 
@@ -157,4 +159,5 @@ public class IAPManager : MonoBehaviour
         PlayerPrefs.Save();
         // Update UI/feature flags here
     }
+#endif
 }

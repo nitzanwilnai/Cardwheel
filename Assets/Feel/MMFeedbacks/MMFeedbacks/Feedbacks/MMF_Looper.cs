@@ -36,6 +36,7 @@ namespace MoreMountains.Feedbacks
 		public bool InfiniteLoop = false;
 		/// how many times this loop should run
 		[Tooltip("how many times this loop should run")]
+		[MMCondition("InfiniteLoop", true, true)]
 		public int NumberOfLoops = 2;
 		/// the amount of loops left (updated at runtime)
 		[Tooltip("the amount of loops left (updated at runtime)")]

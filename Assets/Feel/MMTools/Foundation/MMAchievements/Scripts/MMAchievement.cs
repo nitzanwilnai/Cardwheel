@@ -44,8 +44,6 @@ namespace MoreMountains.Tools
 		/// the current amount of progress made on this achievement
 		public int ProgressCurrent;
 
-		protected MMAchievementDisplayItem _achievementDisplayItem;
-
 		/// <summary>
 		/// Unlocks the achievement, asks for a save of the current achievements, and triggers an MMAchievementUnlockedEvent for this achievement.
 		/// This will usually then be caught by the MMAchievementDisplay class.

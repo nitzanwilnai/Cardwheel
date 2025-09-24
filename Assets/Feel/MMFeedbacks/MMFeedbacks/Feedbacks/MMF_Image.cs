@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿#if MM_UI
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -124,6 +125,7 @@ namespace MoreMountains.Feedbacks
 					{
 						return;
 					}
+					if (_coroutine != null) { Owner.StopCoroutine(_coroutine); }
 					_coroutine = Owner.StartCoroutine(ImageSequence());
 					break;
 			}
@@ -218,3 +220,4 @@ namespace MoreMountains.Feedbacks
 		}
 	}
 }
+#endif

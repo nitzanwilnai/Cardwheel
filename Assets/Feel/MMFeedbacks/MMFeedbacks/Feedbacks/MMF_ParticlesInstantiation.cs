@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using MoreMountains.Tools;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
@@ -116,6 +117,7 @@ namespace MoreMountains.Feedbacks
 		protected MMMiniObjectPooler _objectPooler; 
 		protected GameObject _newGameObject;
 		protected bool _poolCreatedOrFound = false;
+		protected Vector3 _scriptPosition;
 		
 		/// <summary>
 		/// On init, instantiates the particle system, positions it and nests it if needed
@@ -278,6 +280,7 @@ namespace MoreMountains.Feedbacks
 				system.Stop();
 				
 				system.transform.position = GetPosition(Owner.transform.position);
+				
 				if (ApplyRotation)
 				{
 					system.transform.rotation = GetRotation(Owner.transform);    
@@ -352,9 +355,9 @@ namespace MoreMountains.Feedbacks
 				case PositionModes.WorldPosition:
 					return TargetWorldPosition + Offset;
 				case PositionModes.Script:
-					return position + Offset;
+					return _scriptPosition + Offset;
 				default:
-					return position + Offset;
+					return _scriptPosition + Offset;
 			}
 		}
 
@@ -369,6 +372,8 @@ namespace MoreMountains.Feedbacks
 			{
 				return;
 			}
+
+			_scriptPosition = position;
 			
 			if (Mode == Modes.Pool)
 			{

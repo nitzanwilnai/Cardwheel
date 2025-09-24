@@ -48,11 +48,13 @@ namespace Cardwheel
                 JokerGUIs[i].RainbowGO = guiRef.GetGameObject("Rainbow");
                 JokerGUIs[i].MetalGO = guiRef.GetGameObject("Metal");
                 JokerGUIs[i].ShinyGO = guiRef.GetGameObject("Shiny");
+                JokerGUIs[i].SelectedGO = guiRef.GetGameObject("Selected");
 
                 JokerGUIs[i].DebuffGO.SetActive(false);
                 JokerGUIs[i].RainbowGO.SetActive(false);
                 JokerGUIs[i].MetalGO.SetActive(false);
                 JokerGUIs[i].ShinyGO.SetActive(false);
+                JokerGUIs[i].SelectedGO.SetActive(false);
 
                 JokerPool[i] = go;
             }
@@ -93,6 +95,7 @@ namespace Cardwheel
                 JokerGUIs[jkrIdx].RainbowGO.SetActive(false);
                 JokerGUIs[jkrIdx].MetalGO.SetActive(false);
                 JokerGUIs[jkrIdx].ShinyGO.SetActive(false);
+                JokerGUIs[jkrIdx].SelectedGO.SetActive(false);
             }
 
             for (int jkrIdx = 0; jkrIdx < runData.JokerCount; jkrIdx++)
@@ -105,6 +108,17 @@ namespace Cardwheel
 
                 JokerGUIs[jkrIdx].Button.onClick.RemoveAllListeners();
             }
+        }
+
+        public static void UnselectAllJokers()
+        {
+            for (int jkrIdx = 0; jkrIdx < JokerPool.Length; jkrIdx++)
+                JokerGUIs[jkrIdx].SelectedGO.SetActive(false);
+        }
+
+        public static void SelectJoker(int jkrIdx)
+        {
+            JokerGUIs[jkrIdx].SelectedGO.SetActive(true);
         }
 
         public static void UpdateJokerDebuff(RunData runData)

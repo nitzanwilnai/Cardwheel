@@ -16,7 +16,9 @@ namespace Cardwheel
         Image m_shopCard;
         Transform m_descriptionParent;
         TextMeshProUGUI m_cost;
-        Button m_sellButton;
+
+        GUIButtonData m_sellButtonData;
+        GUIButtonData m_closeButtonData;
 
         TextMeshProUGUI m_rarityText;
         Image m_border;
@@ -32,28 +34,44 @@ namespace Cardwheel
             m_shopCard = guiRef.GetImage("Card");
             m_descriptionParent = guiRef.GetGameObject("Description").transform;
             m_cost = guiRef.GetTextGUI("Cost");
-            m_sellButton = guiRef.GetButton("Sell");
-            guiRef.GetButton("Close").onClick.AddListener(Game.Instance.HideJokerInfoPopup);
-            guiRef.GetButton("CloseBackground").onClick.AddListener(Game.Instance.HideJokerInfoPopup);
 
             m_rarityText = guiRef.GetTextGUI("Rarity");
             m_border = guiRef.GetImage("Border");
             m_borderRarity = guiRef.GetImage("BorderRarity");
+
+            GUIButtonRef guiButtonRef = m_UI.GetComponent<GUIButtonRef>();
+            m_sellButtonData = guiButtonRef.GetButtonData("Sell");
+            m_closeButtonData = guiButtonRef.GetButtonData("Close");
+
+            m_closeButtonData.Button.onClick.AddListener(Game.Instance.HideJokerInfoPopup);
+            guiButtonRef.GetButtonData("CloseBackground").Button.onClick.AddListener(Game.Instance.HideJokerInfoPopup);
+
+            CommonButtonVisual.AddSelectedBorder(m_sellButtonData);
+            CommonButtonVisual.AddSelectedBorder(m_closeButtonData);
+            m_sellButtonData.SelectedGO.SetActive(false);
+            m_closeButtonData.SelectedGO.SetActive(false);
+
             Hide();
         }
 
-        public void Show(RunData runData, Balance balance, int jokerIdx)
+        public void Show(RunData runData, Balance balance, int jokerIdx, int availableInputs)
         {
             ShowCommon(runData, balance, jokerIdx);
 
-            m_sellButton.image.color = balance.ButtonColorEnabled;
+            m_sellButtonData.Button.image.color = balance.ButtonColorEnabled;
 
-            m_sellButton.onClick.AddListener(() => Game.Instance.SellJoker(jokerIdx));
+            m_sellButtonData.Button.onClick.AddListener(() => Game.Instance.SellJoker(jokerIdx));
+
+            m_sellButtonData.SelectedGO.SetActive(false);
+            m_closeButtonData.SelectedGO.SetActive(CommonButtonVisual.NavigateEnter(availableInputs) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, availableInputs));
         }
 
-        public void ShowInGame(RunData runData, Balance balance, int jokerIdx)
+        public void ShowInGame(RunData runData, Balance balance, int jokerIdx, int availableInputs)
         {
-            m_sellButton.image.color = balance.ButtonColorDisabled;
+            m_sellButtonData.Button.image.color = balance.ButtonColorDisabled;
+
+            m_sellButtonData.SelectedGO.SetActive(false);
+            m_closeButtonData.SelectedGO.SetActive(CommonButtonVisual.NavigateEnter(availableInputs) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, availableInputs));
 
             ShowCommon(runData, balance, jokerIdx);
         }
@@ -61,7 +79,7 @@ namespace Cardwheel
         void ShowCommon(RunData runData, Balance balance, int jokerIdx)
         {
             int jokerType = runData.JokerTypes[jokerIdx];
-            m_sellButton.onClick.RemoveAllListeners();
+            m_sellButtonData.Button.onClick.RemoveAllListeners();
 
             m_cost.text = "$" + runData.JokerSellValues[jokerIdx].ToString();
 

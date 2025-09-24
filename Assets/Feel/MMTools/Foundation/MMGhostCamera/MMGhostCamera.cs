@@ -7,6 +7,7 @@ using UnityEditor;
 using UnityEngine.InputSystem;
 #endif
 
+#if MM_UI
 namespace MoreMountains.Tools 
 {
 	/// <summary>
@@ -360,3 +361,4 @@ namespace MoreMountains.Tools
 		}
 	}
 }
+#endif

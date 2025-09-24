@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 using System;
+#if MM_UI
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
+#endif
 
 namespace MoreMountains.Tools
 {
@@ -27,7 +29,7 @@ namespace MoreMountains.Tools
 		/// <returns></returns>
 		public static bool PointOrTouchBlockedByUI()
 		{
-
+			#if MM_UI
 			if (EventSystem.current.IsPointerOverGameObject())
 			{
 				return true;
@@ -40,6 +42,7 @@ namespace MoreMountains.Tools
 					return true;
 				}
 			}
+			#endif
 
 			return false;
 		}

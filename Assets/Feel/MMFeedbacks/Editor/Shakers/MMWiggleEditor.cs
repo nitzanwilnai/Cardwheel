@@ -15,6 +15,7 @@ namespace MoreMountains.Feedbacks
 
 			public SerializedProperty WiggleType;
 			public SerializedProperty UseUnscaledTime;
+			public SerializedProperty TimeMultiplier;
 			public SerializedProperty RelativeAmplitude;
 			public SerializedProperty UniformValues;
 			public SerializedProperty ForceVectorLength;
@@ -99,6 +100,7 @@ namespace MoreMountains.Feedbacks
 			editorProperties.WigglePermitted = targetProperty.FindPropertyRelative("WigglePermitted");
 			editorProperties.WiggleType = targetProperty.FindPropertyRelative("WiggleType");
 			editorProperties.UseUnscaledTime = targetProperty.FindPropertyRelative("UseUnscaledTime");
+			editorProperties.TimeMultiplier = targetProperty.FindPropertyRelative("TimeMultiplier");
 			editorProperties.RelativeAmplitude = targetProperty.FindPropertyRelative("RelativeAmplitude");
 			editorProperties.UniformValues = targetProperty.FindPropertyRelative("UniformValues");
 			editorProperties.ForceVectorLength = targetProperty.FindPropertyRelative("ForceVectorLength");
@@ -189,6 +191,7 @@ namespace MoreMountains.Feedbacks
 				EditorGUILayout.PropertyField(editorProperties.WigglePermitted);
 				EditorGUILayout.PropertyField(editorProperties.WiggleType);
 				EditorGUILayout.PropertyField(editorProperties.UseUnscaledTime);
+				EditorGUILayout.PropertyField(editorProperties.TimeMultiplier);
 
 				if ((wiggleType == WiggleTypes.PingPong) || (wiggleType == WiggleTypes.Random))
 				{

@@ -1,9 +1,8 @@
-using MoreMountains.Tools;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace MoreMountains.Feedbacks
 {
+	[AddComponentMenu("More Mountains/Springs/MMSpringMMTimeScale")]
 	public class MMSpringMMTimeScale : MMSpringFloatComponent<Transform>
 	{
 		protected override void Initialization()

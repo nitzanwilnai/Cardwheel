@@ -23,7 +23,7 @@ namespace MoreMountains.Tools
 		[Header("Virtual Camera")]
 		/// whether to enable/disable virtual cameras, or to play on their priority for transitions
 		[Tooltip("whether to enable/disable virtual cameras, or to play on their priority for transitions")]
-		public Modes Mode = Modes.Enable;
+		public Modes Mode = Modes.Priority;
 		/// whether or not the camera in this zone should start active
 		[Tooltip("whether or not the camera in this zone should start active")]
 		public bool CameraStartsActive = false;
@@ -284,7 +284,10 @@ namespace MoreMountains.Tools
 		{
 			CurrentRoom = false;
 			OnExitZoneEvent.Invoke();
-			StartCoroutine(EnableCamera(false, 0));
+			if (this.gameObject.activeInHierarchy)
+			{
+				StartCoroutine(EnableCamera(false, 0));	
+			}
 			foreach (GameObject go in ActivationList)
 			{
 				go.SetActive(false);
