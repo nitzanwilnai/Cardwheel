@@ -59,6 +59,7 @@ namespace Cardwheel
 
             m_UI = AssetManager.Instance.LoadWheelSelectionUI();
             m_UI.GetComponent<Canvas>().worldCamera = camera;
+            CommonVisual.ChangeCanvasScalerMatching(m_UI);
 
             GUIButtonRef guiButtonRef = m_UI.GetComponent<GUIButtonRef>();
             m_playButtonData = guiButtonRef.GetButtonData("Play");

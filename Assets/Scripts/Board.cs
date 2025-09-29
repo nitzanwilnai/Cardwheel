@@ -206,6 +206,7 @@ namespace Cardwheel
             }
 
             m_UI = AssetManager.Instance.LoadInGameUI();
+            CommonVisual.ChangeCanvasScalerMatching(m_UI);
 
             GUIButtonRef guiButtonRef = m_UI.GetComponent<GUIButtonRef>();
             m_spinButtonData = guiButtonRef.GetButtonData("Spin");

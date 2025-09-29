@@ -35,6 +35,8 @@ namespace Cardwheel
             this.settingsData = settingsData;
 
             m_UI = AssetManager.Instance.LoadJokerInfoPopupUI();
+            CommonVisual.ChangeCanvasScalerMatching(m_UI);
+
             m_UI.GetComponent<Canvas>().worldCamera = camera;
 
             GUIRef guiRef = m_UI.GetComponent<GUIRef>();

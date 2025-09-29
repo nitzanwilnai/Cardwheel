@@ -26,6 +26,8 @@ namespace Cardwheel
 
             m_UI = AssetManager.Instance.LoadChipsInfoUI();
             m_UI.GetComponent<Canvas>().worldCamera = camera;
+            CommonVisual.ChangeCanvasScalerMatching(m_UI);
+
             GUIRef guiRef = m_UI.GetComponent<GUIRef>();
             m_animation = guiRef.GetAnimation("Animation");
 

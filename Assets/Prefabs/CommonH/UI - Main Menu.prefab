@@ -1872,10 +1872,10 @@ Animation:
   m_GameObject: {fileID: 5524677304088210075}
   m_Enabled: 1
   serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: 07bb2a9eb6d574180b7a5bbcf70014fd, type: 2}
+  m_Animation: {fileID: 7400000, guid: cf52487c6ceec482b827b19252682b82, type: 2}
   m_Animations:
-  - {fileID: 7400000, guid: 07bb2a9eb6d574180b7a5bbcf70014fd, type: 2}
-  - {fileID: 7400000, guid: e5185eda21f31437d8db8fdd5aaeb0c4, type: 2}
+  - {fileID: 7400000, guid: cf52487c6ceec482b827b19252682b82, type: 2}
+  - {fileID: 7400000, guid: b45f52430fb644d12a2410f809212d37, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0

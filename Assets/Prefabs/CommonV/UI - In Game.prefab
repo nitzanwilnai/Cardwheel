@@ -970,22 +970,14 @@ MonoBehaviour:
   Buttons:
   - Key: Spin
     Button: {fileID: 1075077271947550301}
-    NavigationData:
-      Up: Spin
-      Down: Spin
-      Left: Spin
-      Right: Spin
     GlyphImage: {fileID: 0}
     GamepadButton: 0
+    SelectedGO: {fileID: 0}
   - Key: Info
     Button: {fileID: 4010104226236876780}
-    NavigationData:
-      Up: Info
-      Down: Info
-      Left: Info
-      Right: Info
     GlyphImage: {fileID: 0}
     GamepadButton: 0
+    SelectedGO: {fileID: 0}
 --- !u!1 &5214409610228653888
 GameObject:
   m_ObjectHideFlags: 0
@@ -1177,7 +1169,7 @@ MonoBehaviour:
     m_Right: 40
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 5
+  m_ChildAlignment: 4
   m_Spacing: 100
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0

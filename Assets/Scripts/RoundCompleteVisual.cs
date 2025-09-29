@@ -29,6 +29,8 @@ namespace Cardwheel
         public void Init(RunData runData, Balance balance, Camera camera)
         {
             m_UI = AssetManager.Instance.LoadRoundCompleteUI();
+            CommonVisual.ChangeCanvasScalerMatching(m_UI);
+
             m_UI.GetComponent<Canvas>().worldCamera = camera;
 
             m_verticalLayoutGroup = m_UI.GetComponent<VerticalLayoutGroup>();

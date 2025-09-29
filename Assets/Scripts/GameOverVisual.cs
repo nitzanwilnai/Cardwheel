@@ -19,6 +19,8 @@ namespace Cardwheel
         public void Init(Camera camera)
         {
             m_UI = AssetManager.Instance.LoadGameOverUI();
+            CommonVisual.ChangeCanvasScalerMatching(m_UI);
+
             m_UI.GetComponent<Canvas>().worldCamera = camera;
 
             GUIRef guiRef = m_UI.GetComponent<GUIRef>();
