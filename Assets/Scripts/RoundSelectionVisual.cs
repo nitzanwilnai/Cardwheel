@@ -53,6 +53,8 @@ namespace Cardwheel
         public void Init(RunData runData, Balance balance, Camera camera)
         {
             m_UI = AssetManager.Instance.LoadRoundSelectionUI();
+            CommonVisual.ChangeCanvasScalerMatching(m_UI);
+
             m_UI.GetComponent<Canvas>().worldCamera = camera;
 
             m_roundGUIInfos = new RoundGUIInfo[3];

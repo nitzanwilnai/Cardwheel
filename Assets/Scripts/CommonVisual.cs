@@ -471,5 +471,14 @@ namespace Cardwheel
                     return num + "th";
             }
         }
+
+        public static void ChangeCanvasScalerMatching(GameObject UI)
+        {
+            if ( (float)Screen.width / (float)Screen.height > 9.0f / 16.0f)
+                UI.GetComponent<CanvasScaler>().matchWidthOrHeight = 1.0f;
+            else
+                UI.GetComponent<CanvasScaler>().matchWidthOrHeight = 0.0f;
+
+        }
     }
 }

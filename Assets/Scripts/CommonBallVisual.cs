@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using CommonTools;
 using TMPro;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 namespace Cardwheel
 {
@@ -137,17 +139,17 @@ namespace Cardwheel
         public static void HanleInput(RunData runData, UIBallMoveData uiBallMoveData, Camera camera, bool allowSelection)
         {
 #if UNITY_EDITOR
-            bool mouseDown = Input.GetMouseButtonDown(0);
-            bool mouseMove = Input.GetMouseButton(0);
-            bool mouseUp = Input.GetMouseButtonUp(0);
-            Vector3 mousePosition = Input.mousePosition;
+            bool mouseDown = Mouse.current.leftButton.wasPressedThisFrame;
+            bool mouseMove = Mouse.current.leftButton.isPressed;
+            bool mouseUp = Mouse.current.leftButton.wasReleasedThisFrame;
+            Vector3 mousePosition = Mouse.current.position.ReadValue();
 #else
-            bool mouseDown = (Input.touchCount > 0) && Input.GetTouch(0).phase == TouchPhase.Began;
-            bool mouseMove = (Input.touchCount > 0) && Input.GetTouch(0).phase == TouchPhase.Moved;
-            bool mouseUp = (Input.touchCount > 0) && (Input.GetTouch(0).phase == TouchPhase.Ended || Input.GetTouch(0).phase == TouchPhase.Canceled);
+            bool mouseDown = Touchscreen.current.touches[0].press.wasPressedThisFrame;
+            bool mouseMove = Touchscreen.current.touches[0].press.isPressed;
+            bool mouseUp = Touchscreen.current.touches[0].press.wasReleasedThisFrame;
             Vector3 mousePosition = Vector3.zero;
-            if (Input.touchCount > 0)
-                mousePosition = Input.GetTouch(0).position;
+            if (Touchscreen.current.touches.Count > 0)
+                mousePosition = Touchscreen.current.touches[0].position.ReadValue();
 #endif
 
             Vector3 worldPosition = camera.ScreenToWorldPoint(mousePosition);

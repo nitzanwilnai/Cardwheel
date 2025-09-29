@@ -47,6 +47,8 @@ namespace Cardwheel
         {
             m_UI = AssetManager.Instance.LoadCardPackBallUI();
             m_UI.GetComponent<Canvas>().worldCamera = camera;
+            CommonVisual.ChangeCanvasScalerMatching(m_UI);
+
             GUIRef guiRef = m_UI.GetComponent<GUIRef>();
 
             CardPackCommonVisual.InitRerollButton(guiRef, ref m_rerollButton, ref m_rerollCostText);

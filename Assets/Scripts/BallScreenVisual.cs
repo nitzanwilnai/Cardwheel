@@ -22,6 +22,7 @@ namespace Cardwheel
         {
             m_UI = AssetManager.Instance.LoadBallScreenUI();
             m_UI.GetComponent<Canvas>().worldCamera = camera;
+            CommonVisual.ChangeCanvasScalerMatching(m_UI);
 
             GUIRef guiRef = m_UI.GetComponent<GUIRef>();
             CommonVisual.InitTopBarGUI(guiRef.GetGameObject("TopBar"), ref m_topBarGUI);

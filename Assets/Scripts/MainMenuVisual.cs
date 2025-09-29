@@ -43,6 +43,8 @@ namespace Cardwheel
         public void Init(Camera camera, Balance balance)
         {
             m_UI = AssetManager.Instance.LoadMainMenuUI();
+            CommonVisual.ChangeCanvasScalerMatching(m_UI);
+
             m_UI.GetComponent<Canvas>().worldCamera = camera;
 
             GUIButtonRef guiButtonRef = m_UI.GetComponent<GUIButtonRef>();

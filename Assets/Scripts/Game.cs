@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.Controls;
+using System.Collections.Generic;
+
 #if STEAM
 using Steamworks;
 #endif
@@ -222,8 +224,6 @@ namespace Cardwheel
 
         void Start()
         {
-            // Debug.Log(Input.GetJoystickNames());
-            // Joystick = Input.GetJoystickNames().Length > 0;
         }
 
         public void SetMenuState(MENU_STATE newMenuState)
@@ -424,7 +424,7 @@ namespace Cardwheel
             }
 
 #if UNITY_EDITOR
-            if (Input.GetKeyUp("s"))
+            if (Keyboard.current.sKey.wasPressedThisFrame)
             {
                 if (!Directory.Exists("Screenshots"))
                     Directory.CreateDirectory("Screenshots");
@@ -434,43 +434,39 @@ namespace Cardwheel
                 ScreenCapture.CaptureScreenshot(name);
             }
 
-            if (Input.GetKeyUp(KeyCode.X))
+            if (Keyboard.current.xKey.wasPressedThisFrame)
                 m_runData.TotalChips += 100000;
 
-            if (Input.GetKeyUp(KeyCode.C))
+            if (Keyboard.current.cKey.wasPressedThisFrame)
                 RoundComplete();
 
-            if (Input.GetKeyUp(KeyCode.O))
+            if (Keyboard.current.oKey.wasPressedThisFrame)
                 ContinueRun();
 
-            if (Input.GetKeyUp(KeyCode.A))
-                SetMenuState(MENU_STATE.WHEEL_SELECTION);
 
-            // if (Input.GetKeyUp(KeyCode.N))
-            //     m_runData.Money = 3;
 
-            if (Input.GetKeyUp(KeyCode.M))
+            if (Keyboard.current.mKey.wasPressedThisFrame)
                 m_runData.Money += 100;
 
-            if (Input.GetKeyUp(KeyCode.R))
+            if (Keyboard.current.rKey.wasPressedThisFrame)
                 m_runData.BossRerolls++;
 
-            if (Input.GetKeyUp(KeyCode.W))
+            if (Keyboard.current.wKey.wasPressedThisFrame)
                 WinScreen();
 
-            if (Input.GetKeyUp(KeyCode.G))
+            if (Keyboard.current.gKey.wasPressedThisFrame)
                 SetMenuState(MENU_STATE.GAME_OVER);
 
-            if (Input.GetKeyUp(KeyCode.P))
+            if (Keyboard.current.pKey.wasPressedThisFrame)
                 EditorApplication.isPaused = true;
 
-            if (Input.GetKeyUp(KeyCode.S))
-            {
-                if (m_runData.MenuState == MENU_STATE.SHOP)
-                    m_shopVisual.SortSlots(m_runData, m_balance);
-            }
+            // if (Keyboard.current.sKey.wasPressedThisFrame)
+            // {
+            //     if (m_runData.MenuState == MENU_STATE.SHOP)
+            //         m_shopVisual.SortSlots(m_runData, m_balance);
+            // }
 
-            if (Input.GetKeyUp(KeyCode.D))
+            if (Keyboard.current.dKey.wasPressedThisFrame)
             {
                 gamepadCheck();
             }

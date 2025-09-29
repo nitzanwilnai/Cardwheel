@@ -104,6 +104,8 @@ namespace Cardwheel
         {
             m_UI = AssetManager.Instance.LoadShopUI();
             m_UI.GetComponent<Canvas>().worldCamera = camera;
+            CommonVisual.ChangeCanvasScalerMatching(m_UI);
+
             GUIRef guiRef = m_UI.GetComponent<GUIRef>();
 
 

@@ -169,10 +169,10 @@ PlayerSettings:
   buildNumber:
     Standalone: 0
     VisionOS: 0
-    iPhone: 152
+    iPhone: 155
     tvOS: 0
   overrideDefaultApplicationIdentifier: 0
-  AndroidBundleVersionCode: 17
+  AndroidBundleVersionCode: 20
   AndroidMinSdkVersion: 22
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
@@ -806,7 +806,7 @@ PlayerSettings:
   scriptingDefineSymbols:
     Android: MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
     Standalone: MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED;STEAMWORKS_NET
-    iPhone: RELEASE
+    iPhone: MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
@@ -914,7 +914,7 @@ PlayerSettings:
   hmiLogStartupTiming: 0
   hmiCpuConfiguration: 
   apiCompatibilityLevel: 6
-  activeInputHandler: 2
+  activeInputHandler: 1
   windowsGamepadBackendHint: 0
   cloudProjectId: a6edee37-80af-4f75-a393-882c3228445d
   framebufferDepthMemorylessMode: 0
