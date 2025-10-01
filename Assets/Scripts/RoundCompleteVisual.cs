@@ -9,6 +9,20 @@ namespace Cardwheel
 {
     public class RoundCompleteVisual : MonoBehaviour
     {
+        public enum MENU_BUTTONS
+        {
+            CLAIM_REWARD,
+            SETTINGS = 10,
+            WHEEL = 11,
+            BALLS = 12,
+            JOKER_1 = 20,
+            JOKER_2 = 21,
+            JOKER_3 = 22,
+            JOKER_4 = 23,
+            JOKER_5 = 24,
+        };
+        MENU_BUTTONS m_selectedButton = MENU_BUTTONS.CLAIM_REWARD;
+
         GameObject m_UI;
 
         VerticalLayoutGroup m_verticalLayoutGroup;
@@ -26,8 +40,18 @@ namespace Cardwheel
         TopBarGUI m_topBarGUI;
         CardsBallsSpinWheelGUI m_cardsBallsSpinWheelGUI;
 
-        public void Init(RunData runData, Balance balance, Camera camera)
+        GUIButtonData m_claimRewardData;
+
+        RunData runData;
+        Balance balance;
+        SettingsData settingsData;
+
+        public void Init(RunData runData, SettingsData settingsData, Balance balance, Camera camera)
         {
+            this.runData = runData;
+            this.balance = balance;
+            this.settingsData = settingsData;
+
             m_UI = AssetManager.Instance.LoadRoundCompleteUI();
             CommonVisual.ChangeCanvasScalerMatching(m_UI);
 
@@ -45,7 +69,11 @@ namespace Cardwheel
             m_specialText = guiRef.GetTextGUI("Special");
             m_totalText = guiRef.GetTextGUI("Total");
             m_spinsText = guiRef.GetTextGUI("Spins");
-            guiRef.GetButton("Claim").onClick.AddListener(Game.Instance.ClaimRoundRewardAndGoToShop);
+
+            GUIButtonRef guiButtonRef = m_UI.GetComponent<GUIButtonRef>();
+            m_claimRewardData = guiButtonRef.GetButtonData("Claim");
+            m_claimRewardData.Button.onClick.AddListener(claimRoundRewardAndGoToShop);
+            CommonButtonVisual.AddSelectedBorder(m_claimRewardData);
 
             CommonVisual.InitTopBarGUI(guiRef.GetGameObject("TopBar"), ref m_topBarGUI);
             CommonVisual.InitCardsBallsSpinWheelGUI(balance, guiRef.GetGameObject("CardsAndBalls"), ref m_cardsBallsSpinWheelGUI);
@@ -55,7 +83,7 @@ namespace Cardwheel
             Hide();
         }
 
-        public void Show(RunData runData, Balance balance)
+        public void Show(RunData runData, Balance balance, GAMEPAD_TYPE gamepadType, int avaiableInputs)
         {
             m_moneyText.text = runData.Money.ToString("N0");
             m_rewardText.text = "$" + balance.RoundReward[runData.Round % 3].ToString("N0");
@@ -82,6 +110,11 @@ namespace Cardwheel
             CommonVisual.ShowTopBar(runData, m_topBarGUI, "Round Complete");
             CommonVisual.ShowJokersBallsAndSpinWheel(runData, balance, m_cardsBallsSpinWheelGUI, runData.SlotTypeInGame);
 
+            CommonButtonVisual.UpdateCommonButtonIcons(m_topBarGUI, m_cardsBallsSpinWheelGUI, gamepadType);
+            CommonButtonVisual.UpdateButtonIcons(m_claimRewardData, gamepadType);
+
+            selectButton(MENU_BUTTONS.CLAIM_REWARD, avaiableInputs);
+
             Canvas.ForceUpdateCanvases();
 
             if (m_verticalLayoutGroup != null)
@@ -91,15 +124,110 @@ namespace Cardwheel
             }
         }
 
-        public void Tick(RunData runData, Balance balance, float dt)
+        void hideAllButtonSelections()
+        {
+            m_claimRewardData.SelectedGO.SetActive(false);
+
+            CommonButtonVisual.HideAllButtonSelections(m_topBarGUI, m_cardsBallsSpinWheelGUI);
+        }
+
+        void selectButton(MENU_BUTTONS selectedButton, int availableInputs)
+        {
+            m_selectedButton = selectedButton;
+
+            hideAllButtonSelections();
+
+            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+            {
+                m_claimRewardData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.CLAIM_REWARD);
+
+                CommonButtonVisual.CommonSelectButton(m_topBarGUI, m_cardsBallsSpinWheelGUI, (COMMON_BUTTONS)m_selectedButton);
+            }
+        }
+
+        public void Tick(RunData runData, Balance balance, float dt, int avaiableInputs)
         {
             CommonSlotsVisual.TickSpinWheelUI(runData, balance.UISpinWheelSpeed, dt, m_cardsBallsSpinWheelGUI);
+
+            handleInput(avaiableInputs);
+        }
+
+        void handleInput(int availableInputs)
+        {
+            // common input (settings, balls, spinwheel and jokers)
+            if (CommonButtonVisual.CommonHandleInput(m_topBarGUI, m_cardsBallsSpinWheelGUI, availableInputs, (COMMON_BUTTONS)m_selectedButton))
+                return;
+
+            int newSelectedButton = CommonButtonVisual.CommonNavigation(availableInputs, (COMMON_BUTTONS)m_selectedButton);
+            if (newSelectedButton > -1)
+            {
+                selectButton((MENU_BUTTONS)newSelectedButton, availableInputs);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.CLAIM_REWARD && CommonButtonVisual.NavigateEnter(availableInputs))
+            {
+                claimRoundRewardAndGoToShop();
+                return;
+            }
+
+
+            if (m_selectedButton == MENU_BUTTONS.CLAIM_REWARD && CommonButtonVisual.NavigateRight(availableInputs))
+            {
+                selectButton(MENU_BUTTONS.WHEEL, availableInputs);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.CLAIM_REWARD && CommonButtonVisual.NavigateLeft(availableInputs))
+            {
+                selectButton(MENU_BUTTONS.SETTINGS, availableInputs);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.SETTINGS && (CommonButtonVisual.NavigateRight(availableInputs) || CommonButtonVisual.NavigateDown(availableInputs)))
+            {
+                selectButton(MENU_BUTTONS.CLAIM_REWARD, availableInputs);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.WHEEL && (CommonButtonVisual.NavigateLeft(availableInputs) || CommonButtonVisual.NavigateDown(availableInputs)))
+            {
+                selectButton(MENU_BUTTONS.CLAIM_REWARD, availableInputs);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.BALLS && CommonButtonVisual.NavigateLeft(availableInputs))
+            {
+                selectButton(MENU_BUTTONS.CLAIM_REWARD, availableInputs);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.WHEEL && CommonButtonVisual.NavigateUp(availableInputs))
+            {
+                selectButton(MENU_BUTTONS.BALLS, availableInputs);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.BALLS && CommonButtonVisual.NavigateDown(availableInputs))
+            {
+                selectButton(MENU_BUTTONS.WHEEL, availableInputs);
+                return;
+            }
         }
 
         public void Hide()
         {
             m_UI.SetActive(false);
             CommonVisual.HideJokers();
+        }
+
+        void claimRoundRewardAndGoToShop()
+        {
+            SoundManager.Instance.PlaySFXMoney(settingsData);
+
+            Logic.ClaimRoundReward(runData, balance);
+            Logic.PopulateShop(runData, balance);
+            Game.Instance.SetMenuState(MENU_STATE.SHOP);
         }
     }
 }

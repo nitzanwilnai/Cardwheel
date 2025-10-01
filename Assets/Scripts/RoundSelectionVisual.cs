@@ -30,7 +30,20 @@ namespace Cardwheel
 
     public class RoundSelectionVisual : MonoBehaviour
     {
-        public enum MENU_BUTTONS { PLAY, SKIP, REROLL, SETTINGS, WHEEL, BALLS };
+        public enum MENU_BUTTONS
+        {
+            PLAY,
+            SKIP,
+            REROLL,
+            SETTINGS = 10,
+            WHEEL = 11,
+            BALLS = 12,
+            JOKER_1 = 20,
+            JOKER_2 = 21,
+            JOKER_3 = 22,
+            JOKER_4 = 23,
+            JOKER_5 = 24,
+        };
         MENU_BUTTONS m_selectedButton = MENU_BUTTONS.PLAY;
 
         public AnimationCurve SlotScaleCurve;
@@ -50,7 +63,7 @@ namespace Cardwheel
         float m_slotAnimTimer = 0.0f;
         float m_slotAnimTime = 1.5f;
 
-        public void Init(RunData runData, Balance balance, Camera camera)
+        public void Init(Balance balance, Camera camera)
         {
             m_UI = AssetManager.Instance.LoadRoundSelectionUI();
             CommonVisual.ChangeCanvasScalerMatching(m_UI);
@@ -152,6 +165,8 @@ namespace Cardwheel
 
             CommonButtonVisual.UpdateButtonIcons(m_topBarGUI.SettingsButtonData, gamepadType);
 
+            CommonButtonVisual.UpdateCommonButtonIcons(m_topBarGUI, m_cardsBallsSpinWheelGUI, gamepadType);
+
             m_UI.SetActive(true);
 
             CommonVisual.ShowTopBar(runData, m_topBarGUI, "Round Selection");
@@ -160,8 +175,6 @@ namespace Cardwheel
             CommonVisual.ShowBalls(runData, balance, m_cardsBallsSpinWheelGUI);
 
             CommonSlotsVisual.ShowSpinWheelForRound(runData, balance, m_cardsBallsSpinWheelGUI.ScoringSlots, runData.Round);
-
-            hideAllButtonSelections();
 
             selectButton(runData, MENU_BUTTONS.PLAY, availableInputs);
 
@@ -195,11 +208,7 @@ namespace Cardwheel
 
                 m_bossRoundGUIInfo.RerollButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.REROLL);
 
-                m_topBarGUI.SettingsButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.SETTINGS);
-
-                m_cardsBallsSpinWheelGUI.BallsButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.BALLS);
-
-                m_cardsBallsSpinWheelGUI.SpinwheelButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.WHEEL);
+                CommonButtonVisual.CommonSelectButton(m_topBarGUI, m_cardsBallsSpinWheelGUI, (COMMON_BUTTONS)m_selectedButton);
             }
         }
 
@@ -214,10 +223,7 @@ namespace Cardwheel
                     m_bossRoundGUIInfo.RerollButtonData.SelectedGO.SetActive(false);
             }
 
-            m_topBarGUI.SettingsButtonData.SelectedGO.SetActive(false);
-
-            m_cardsBallsSpinWheelGUI.BallsButtonData.SelectedGO.SetActive(false);
-            m_cardsBallsSpinWheelGUI.SpinwheelButtonData.SelectedGO.SetActive(false);
+            CommonButtonVisual.HideAllButtonSelections(m_topBarGUI, m_cardsBallsSpinWheelGUI);
         }
 
         public void Hide()
@@ -259,6 +265,17 @@ namespace Cardwheel
         {
             int smallRound = runData.Round % 3;
 
+            // common input (settings, balls, spinwheel and jokers)
+            if (CommonButtonVisual.CommonHandleInput(m_topBarGUI, m_cardsBallsSpinWheelGUI, availableInputs, (COMMON_BUTTONS)m_selectedButton))
+                return;
+
+            int newSelectedButton = CommonButtonVisual.CommonNavigation(availableInputs, (COMMON_BUTTONS)m_selectedButton);
+            if (newSelectedButton > -1)
+            {
+                selectButton(runData, (MENU_BUTTONS)newSelectedButton, availableInputs);
+                return;
+            }
+
             // handle gamepad buttons
             if (CommonButtonVisual.NavigateGamepadButton(m_roundGUIInfos[smallRound].PlayButtonData, availableInputs))
             {
@@ -277,7 +294,6 @@ namespace Cardwheel
                 Game.Instance.UseBossReroll();
                 return;
             }
-
 
             // handle button trigger
             if (m_selectedButton == MENU_BUTTONS.PLAY && CommonButtonVisual.NavigateEnter(availableInputs))
@@ -310,7 +326,6 @@ namespace Cardwheel
                 Game.Instance.GoToChipsInfo();
                 return;
             }
-
 
             // handle navigation
             if (m_selectedButton == MENU_BUTTONS.PLAY && CommonButtonVisual.NavigateUp(availableInputs))
@@ -370,27 +385,15 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateRight(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.SETTINGS && (CommonButtonVisual.NavigateRight(availableInputs) || CommonButtonVisual.NavigateDown(availableInputs)))
             {
                 selectButton(runData, MENU_BUTTONS.PLAY, availableInputs);
-                return;
-            }
-
-            if (m_selectedButton == MENU_BUTTONS.WHEEL && CommonButtonVisual.NavigateUp(availableInputs))
-            {
-                selectButton(runData, MENU_BUTTONS.BALLS, availableInputs);
                 return;
             }
 
             if (m_selectedButton == MENU_BUTTONS.WHEEL && CommonButtonVisual.NavigateLeft(availableInputs))
             {
                 selectButton(runData, MENU_BUTTONS.PLAY, availableInputs);
-                return;
-            }
-
-            if (m_selectedButton == MENU_BUTTONS.BALLS && CommonButtonVisual.NavigateDown(availableInputs))
-            {
-                selectButton(runData, MENU_BUTTONS.WHEEL, availableInputs);
                 return;
             }
 

@@ -9,6 +9,9 @@ namespace Cardwheel
 {
     public class JokerInfoPopupVisual : MonoBehaviour
     {
+        public enum MENU_BUTTONS { NONE, SELL, CLOSE };
+        MENU_BUTTONS m_selectedButton = MENU_BUTTONS.NONE;
+
         GameObject m_UI;
 
         GameObject m_descriptionGO;
@@ -67,28 +70,24 @@ namespace Cardwheel
         public void Show(RunData runData, Balance balance, int jokerIdx, int availableInputs)
         {
             m_jokerIndex = jokerIdx;
-            ShowCommon(runData, balance);
+            ShowCommon(runData, balance, availableInputs);
 
+            m_sellButtonData.Button.interactable = true;
             m_sellButtonData.Button.image.color = balance.ButtonColorEnabled;
-
             m_sellButtonData.Button.onClick.AddListener(() => sellJoker());
 
-            m_sellButtonData.SelectedGO.SetActive(false);
-            m_closeButtonData.SelectedGO.SetActive(CommonButtonVisual.NavigateEnter(availableInputs) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, availableInputs));
         }
 
         public void ShowInGame(RunData runData, Balance balance, int jokerIdx, int availableInputs)
         {
             m_jokerIndex = jokerIdx;
+            m_sellButtonData.Button.interactable = false;
             m_sellButtonData.Button.image.color = balance.ButtonColorDisabled;
 
-            m_sellButtonData.SelectedGO.SetActive(false);
-            m_closeButtonData.SelectedGO.SetActive(CommonButtonVisual.NavigateEnter(availableInputs) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, availableInputs));
-
-            ShowCommon(runData, balance);
+            ShowCommon(runData, balance, availableInputs);
         }
 
-        void ShowCommon(RunData runData, Balance balance)
+        void ShowCommon(RunData runData, Balance balance, int availableInputs)
         {
             int jokerType = runData.JokerTypes[m_jokerIndex];
             m_sellButtonData.Button.onClick.RemoveAllListeners();
@@ -109,6 +108,15 @@ namespace Cardwheel
 
             CommonVisual.ShowJokerDescriptionInHand(runData, balance, m_descriptionGO, m_jokerIndex);
 
+            m_sellButtonData.SelectedGO.SetActive(false);
+            m_closeButtonData.SelectedGO.SetActive(false);
+
+            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+            {
+                m_selectedButton = MENU_BUTTONS.CLOSE;
+                m_closeButtonData.SelectedGO.SetActive(true);
+            }
+
             m_UI.SetActive(true);
         }
 
@@ -122,18 +130,39 @@ namespace Cardwheel
 
         public void Tick(int availableInputs)
         {
-            if (CommonButtonVisual.NavigateEnter(availableInputs) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, availableInputs))
+            handleInput(availableInputs);
+        }
+
+        void handleInput(int availableInputs)
+        {
+            if ((m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateEnter(availableInputs)) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, availableInputs))
             {
                 hideJokerInfoPopup();
                 return;
             }
 
-            if (CommonButtonVisual.NavigateEnter(availableInputs) || CommonButtonVisual.NavigateGamepadButton(m_sellButtonData, availableInputs))
+            if (m_sellButtonData.Button.interactable)
+                if ((m_selectedButton == MENU_BUTTONS.SELL && CommonButtonVisual.NavigateEnter(availableInputs)) || CommonButtonVisual.NavigateGamepadButton(m_sellButtonData, availableInputs))
+                {
+                    sellJoker();
+                    return;
+                }
+
+            if (m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateUp(availableInputs))
             {
-                sellJoker();
+                m_selectedButton = MENU_BUTTONS.SELL;
+                m_sellButtonData.SelectedGO.SetActive(true);
+                m_closeButtonData.SelectedGO.SetActive(false);
                 return;
             }
 
+            if (m_selectedButton == MENU_BUTTONS.SELL && CommonButtonVisual.NavigateDown(availableInputs))
+            {
+                m_selectedButton = MENU_BUTTONS.CLOSE;
+                m_sellButtonData.SelectedGO.SetActive(false);
+                m_closeButtonData.SelectedGO.SetActive(true);
+                return;
+            }
         }
 
         void sellJoker()

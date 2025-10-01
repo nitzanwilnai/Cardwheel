@@ -730,7 +730,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 369d0e21d6d8847d491b0550299b148d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  yOffset: -100
+  yOffset: -120
 --- !u!1 &1840910280049383347
 GameObject:
   m_ObjectHideFlags: 0
@@ -3967,7 +3967,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 369d0e21d6d8847d491b0550299b148d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  yOffset: -100
+  yOffset: -120
 --- !u!224 &8499169136415758046 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8929236323844248354, guid: 696b6e72f0b194081ad36a1ce9ab7c9c, type: 3}

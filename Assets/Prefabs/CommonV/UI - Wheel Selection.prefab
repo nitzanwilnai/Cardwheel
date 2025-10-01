@@ -299,28 +299,19 @@ MonoBehaviour:
   Buttons:
   - Key: Play
     Button: {fileID: 2723161256634728278}
-    NavigationData:
-      Up: Play
-      Down: Play
-      Left: Prev
-      Right: Next
-    Icon: {fileID: 0}
+    GlyphImage: {fileID: 0}
+    GamepadButton: 0
+    SelectedGO: {fileID: 0}
   - Key: Prev
     Button: {fileID: 9153298154057847904}
-    NavigationData:
-      Up: Prev
-      Down: Prev
-      Left: Prev
-      Right: Play
-    Icon: {fileID: 0}
+    GlyphImage: {fileID: 0}
+    GamepadButton: 0
+    SelectedGO: {fileID: 0}
   - Key: Next
     Button: {fileID: 996946157642622104}
-    NavigationData:
-      Up: Next
-      Down: Next
-      Left: Play
-      Right: Next
-    Icon: {fileID: 0}
+    GlyphImage: {fileID: 0}
+    GamepadButton: 0
+    SelectedGO: {fileID: 0}
 --- !u!1 &1383738937172598622
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,7 +522,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -100}
+  m_AnchoredPosition: {x: 0, y: -140}
   m_SizeDelta: {x: 0, y: 150}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &7875466588815044421
@@ -546,7 +537,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 369d0e21d6d8847d491b0550299b148d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  yOffset: -100
+  yOffset: -140
 --- !u!1 &3458278647982509936
 GameObject:
   m_ObjectHideFlags: 0
