@@ -50,11 +50,11 @@ namespace Cardwheel
             GUIButtonRef guiButtonRef = m_UI.GetComponent<GUIButtonRef>();
 
             m_newGameButtonData = guiButtonRef.GetButtonData("Play");
-            m_newGameButtonData.Button.onClick.AddListener(Game.Instance.AnimateGoToWheelSelection);
+            m_newGameButtonData.Button.onClick.AddListener(animateGoToWheelSelection);
             CommonButtonVisual.AddSelectedBorder(m_newGameButtonData);
 
             m_continueButtonData = guiButtonRef.GetButtonData("Continue");
-            m_continueButtonData.Button.onClick.AddListener(Game.Instance.AnimateContinueRun);
+            m_continueButtonData.Button.onClick.AddListener(animateContinueGame);
             CommonButtonVisual.AddSelectedBorder(m_continueButtonData);
 
             m_privacyPolicyButtonData = guiButtonRef.GetButtonData("PrivacyPolicy");
@@ -171,16 +171,16 @@ namespace Cardwheel
         private void handleInput(int availableInputs)
         {
             if (CommonButtonVisual.NavigateGamepadButton(m_newGameButtonData, availableInputs))
-                Game.Instance.AnimateGoToWheelSelection();
+                animateGoToWheelSelection();
 
             if (CommonButtonVisual.NavigateGamepadButton(m_continueButtonData, availableInputs))
-                Game.Instance.AnimateContinueRun();
+                animateContinueGame();
 
             if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateEnter(availableInputs))
-                Game.Instance.AnimateGoToWheelSelection();
+                animateGoToWheelSelection();
 
             if (m_selectedButton == MENU_BUTTONS.CONTINUE && CommonButtonVisual.NavigateEnter(availableInputs))
-                Game.Instance.AnimateContinueRun();
+                animateContinueGame();
 
             if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateRight(availableInputs))
                 selectButton(MENU_BUTTONS.CONTINUE);
@@ -193,13 +193,17 @@ namespace Cardwheel
             m_UI.SetActive(false);
         }
 
-        public void AnimateGoToWheelSelection()
+        void animateGoToWheelSelection()
         {
+            SoundManager.Instance.PlaySFXButtonOK();
+
             CommonVisual.AnimateClose(ref m_goToWheelSelectTimer, m_goToWheelSelectionTime, m_animation, "Main Menu Close");
         }
 
-        public void AnimateContinueGame()
+        void animateContinueGame()
         {
+            SoundManager.Instance.PlaySFXButtonOK();
+
             CommonVisual.AnimateClose(ref m_continueGametTimer, m_continueGameTime, m_animation, "Main Menu Close");
         }
     }

@@ -8,6 +8,9 @@ namespace Cardwheel
 {
     public class SettingsVisual : MonoBehaviour
     {
+        enum MENU_BUTTONS { NONE, CLOSE, MAIN_MENU, NEW_RUN, RETRY, SFX, MUSIC, VIBRATE, SPEED, SKIP };
+        MENU_BUTTONS m_selectedButton = MENU_BUTTONS.NONE;
+
         GameObject m_UI;
 
         TextMeshProUGUI m_bestSpinText;
@@ -20,15 +23,25 @@ namespace Cardwheel
         TextMeshProUGUI m_speedText;
         TextMeshProUGUI m_skipFirstRound;
 
-        SettingsData m_settingsDataRef;
+        SettingsData settingsData;
 
         float m_closeTimer = 0.0f;
         float m_closeTime = 0.1f;
         Animation m_animation;
 
+        GUIButtonData m_closeButtonData;
+        GUIButtonData m_mainMenuButtonData;
+        GUIButtonData m_newRunButtonData;
+        GUIButtonData m_retryButtonData;
+        GUIButtonData m_sfxButtonData;
+        GUIButtonData m_musicButtonData;
+        GUIButtonData m_vibrateButtonData;
+        GUIButtonData m_speedButtonData;
+        GUIButtonData m_skipRound1ButtonData;        
+
         public void Init(Camera camera, SettingsData settingsData)
         {
-            m_settingsDataRef = settingsData;
+            this.settingsData = settingsData;
 
             m_UI = AssetManager.Instance.LoadSettingsUI();
             m_UI.GetComponent<Canvas>().worldCamera = camera;
@@ -47,18 +60,43 @@ namespace Cardwheel
             m_speedText = guiRef.GetTextGUI("Speed");
             m_skipFirstRound = guiRef.GetTextGUI("SkipRound1");
 
-            guiRef.GetButton("SFX").onClick.AddListener(toggleSFX);
-            guiRef.GetButton("Music").onClick.AddListener(toggleMusic);
-            guiRef.GetButton("Vibrate").onClick.AddListener(toggleVibrate);
-            guiRef.GetButton("Speed").onClick.AddListener(toggleSpeed);
-            guiRef.GetButton("SkipRound1").onClick.AddListener(toggleSkipRound1);
-
-            guiRef.GetButton("MainMenu").onClick.AddListener(Game.Instance.GoToMainMenu);
-            guiRef.GetButton("New").onClick.AddListener(Game.Instance.StartNewRunSameWheel);
-            guiRef.GetButton("Retry").onClick.AddListener(Game.Instance.RetryRun);
-
-            guiRef.GetButton("Close").onClick.AddListener(Game.Instance.CloseSettings);
             m_animation = guiRef.GetAnimation("Animation");
+
+            GUIButtonRef guiButtonRef = m_UI.GetComponent<GUIButtonRef>();
+            m_sfxButtonData = guiButtonRef.GetButtonData("SFX");
+            m_musicButtonData = guiButtonRef.GetButtonData("Music");
+            m_vibrateButtonData = guiButtonRef.GetButtonData("Vibrate");
+            m_speedButtonData = guiButtonRef.GetButtonData("Speed");
+            m_skipRound1ButtonData = guiButtonRef.GetButtonData("SkipRound1");
+
+            m_mainMenuButtonData = guiButtonRef.GetButtonData("MainMenu");
+            m_newRunButtonData = guiButtonRef.GetButtonData("New");
+            m_retryButtonData = guiButtonRef.GetButtonData("Retry");
+            m_closeButtonData = guiButtonRef.GetButtonData("Close");
+
+            m_sfxButtonData.Button.onClick.AddListener(toggleSFX);
+            m_musicButtonData.Button.onClick.AddListener(toggleMusic);
+            m_vibrateButtonData.Button.onClick.AddListener(toggleVibrate);
+            m_speedButtonData.Button.onClick.AddListener(toggleSpeed);
+            m_skipRound1ButtonData.Button.onClick.AddListener(toggleSkipRound1);
+
+            m_mainMenuButtonData.Button.onClick.AddListener(Game.Instance.GoToMainMenu);
+            m_newRunButtonData.Button.onClick.AddListener(Game.Instance.StartNewRunSameWheel);
+            m_retryButtonData.Button.onClick.AddListener(Game.Instance.RetryRun);
+
+            m_closeButtonData.Button.onClick.AddListener(closeSettings);
+
+            CommonButtonVisual.AddSelectedBorder(m_sfxButtonData);
+            CommonButtonVisual.AddSelectedBorder(m_musicButtonData);
+            CommonButtonVisual.AddSelectedBorder(m_vibrateButtonData);
+            CommonButtonVisual.AddSelectedBorder(m_speedButtonData);
+            CommonButtonVisual.AddSelectedBorder(m_skipRound1ButtonData);
+            CommonButtonVisual.AddSelectedBorder(m_mainMenuButtonData);
+            CommonButtonVisual.AddSelectedBorder(m_newRunButtonData);
+            CommonButtonVisual.AddSelectedBorder(m_retryButtonData);
+            CommonButtonVisual.AddSelectedBorder(m_closeButtonData);
+
+            selectButton(MENU_BUTTONS.NONE);
         }
 
         public void Show(RunData runData, Balance balance, SettingsData settingsData)
@@ -74,10 +112,39 @@ namespace Cardwheel
             updateToggles(settingsData);
         }
 
-        public void Tick(RunData runData, float dt)
+        void selectButton(MENU_BUTTONS newSelectedButton)
+        {
+            m_selectedButton = newSelectedButton;
+
+            m_sfxButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.SFX);
+            m_musicButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.MUSIC);
+            m_vibrateButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.VIBRATE);
+            m_speedButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.SPEED);
+            m_skipRound1ButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.SKIP);
+
+            m_mainMenuButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.MAIN_MENU);
+            m_newRunButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.NEW_RUN);
+            m_retryButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.RETRY);
+
+            m_closeButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.CLOSE);
+        }
+
+        public void Tick(RunData runData, float dt, int availableInputs)
         {
             if (CommonVisual.AnimateCloseTick(ref m_closeTimer, dt))
                 Game.Instance.SetMenuState(runData.PrevMenuState);
+
+            handleInput(availableInputs);
+        }
+
+        void handleInput(int availableInputs)
+        {
+            if ((m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateEnter(availableInputs)) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, availableInputs))
+            {
+                Hide();
+                return;
+            }
+
         }
 
         void updateToggles(SettingsData settingsData)
@@ -94,8 +161,10 @@ namespace Cardwheel
             m_UI.SetActive(false);
         }
 
-        public void AnimateClose()
+        void closeSettings()
         {
+            SoundManager.Instance.PlaySFXButtonOK();
+
             Debug.Log("clip count " + m_animation.GetClipCount());
             Debug.Log("clips " + m_animation.GetClip("Settings Close"));
             CommonVisual.AnimateClose(ref m_closeTimer, m_closeTime, m_animation, "Settings Close");
@@ -103,41 +172,41 @@ namespace Cardwheel
 
         void toggleSFX()
         {
-            m_settingsDataRef.SFX = !m_settingsDataRef.SFX;
-            updateToggles(m_settingsDataRef);
-            SettingsDataIO.SaveSettings(m_settingsDataRef);
+            settingsData.SFX = !settingsData.SFX;
+            updateToggles(settingsData);
+            SettingsDataIO.SaveSettings(settingsData);
         }
 
         void toggleMusic()
         {
-            m_settingsDataRef.Music = !m_settingsDataRef.Music;
-            updateToggles(m_settingsDataRef);
-            SettingsDataIO.SaveSettings(m_settingsDataRef);
+            settingsData.Music = !settingsData.Music;
+            updateToggles(settingsData);
+            SettingsDataIO.SaveSettings(settingsData);
 
-            MusicManager.Instance.Mute(m_settingsDataRef);
+            MusicManager.Instance.Mute();
         }
 
         void toggleVibrate()
         {
-            m_settingsDataRef.Vibrate = !m_settingsDataRef.Vibrate;
-            updateToggles(m_settingsDataRef);
-            SettingsDataIO.SaveSettings(m_settingsDataRef);
+            settingsData.Vibrate = !settingsData.Vibrate;
+            updateToggles(settingsData);
+            SettingsDataIO.SaveSettings(settingsData);
         }
 
         void toggleSpeed()
         {
-            m_settingsDataRef.Speed *= 2.0f;
-            if (m_settingsDataRef.Speed > 4.0f)
-                m_settingsDataRef.Speed = 0.5f;
-            updateToggles(m_settingsDataRef);
-            SettingsDataIO.SaveSettings(m_settingsDataRef);
+            settingsData.Speed *= 2.0f;
+            if (settingsData.Speed > 4.0f)
+                settingsData.Speed = 0.5f;
+            updateToggles(settingsData);
+            SettingsDataIO.SaveSettings(settingsData);
         }
 
         void toggleSkipRound1()
         {
-            m_settingsDataRef.SkipRound1 = !m_settingsDataRef.SkipRound1;
-            updateToggles(m_settingsDataRef);
-            SettingsDataIO.SaveSettings(m_settingsDataRef);
+            settingsData.SkipRound1 = !settingsData.SkipRound1;
+            updateToggles(settingsData);
+            SettingsDataIO.SaveSettings(settingsData);
         }
     }
 }

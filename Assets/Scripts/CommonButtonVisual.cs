@@ -162,19 +162,19 @@ namespace Cardwheel
 
         public static bool CommonHandleInput(TopBarGUI topBarGUI, CardsBallsSpinWheelGUI cardsBallsSpinWheelGUI, int availableInputs, COMMON_BUTTONS selectedButton)
         {
-            if (NavigateGamepadButton(topBarGUI.SettingsButtonData, availableInputs))
+            if ((selectedButton == COMMON_BUTTONS.SETTINGS && NavigateEnter(availableInputs)) || NavigateGamepadButton(topBarGUI.SettingsButtonData, availableInputs))
             {
                 Game.Instance.GoToSettings();
                 return true;
             }
 
-            if (NavigateGamepadButton(cardsBallsSpinWheelGUI.BallsButtonData, availableInputs))
+            if ((selectedButton == COMMON_BUTTONS.BALLS && NavigateEnter(availableInputs)) || NavigateGamepadButton(cardsBallsSpinWheelGUI.BallsButtonData, availableInputs))
             {
                 Game.Instance.GoToBallScreen();
                 return true;
             }
 
-            if (NavigateGamepadButton(cardsBallsSpinWheelGUI.SpinwheelButtonData, availableInputs))
+            if ((selectedButton == COMMON_BUTTONS.WHEEL && NavigateEnter(availableInputs)) || NavigateGamepadButton(cardsBallsSpinWheelGUI.SpinwheelButtonData, availableInputs))
             {
                 Game.Instance.GoToChipsInfo();
                 return true;
@@ -191,7 +191,7 @@ namespace Cardwheel
 
         public static int CommonNavigation(int availableInputs, COMMON_BUTTONS selectedButton)
         {
-            if (selectedButton == COMMON_BUTTONS.WHEEL && (CommonButtonVisual.NavigateUp(availableInputs)))
+            if (selectedButton == COMMON_BUTTONS.WHEEL && CommonButtonVisual.NavigateUp(availableInputs))
                 return (int)COMMON_BUTTONS.BALLS;
 
             if (selectedButton == COMMON_BUTTONS.BALLS && CommonButtonVisual.NavigateDown(availableInputs))

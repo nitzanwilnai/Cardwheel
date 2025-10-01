@@ -23,6 +23,8 @@ namespace Cardwheel
         public AudioClip SFXWinGame;
         public AudioClip SFXGateOpen;
 
+        SettingsData settingsData;
+
         //Awake is always called before any Start functions
         protected override void Awake()
         {
@@ -31,11 +33,12 @@ namespace Cardwheel
             m_audioSource = GetComponent<AudioSource>();
         }
 
-        protected void Start()
+        public void Init(SettingsData settingsData)
         {
+            this.settingsData = settingsData;
         }
 
-        public void PlaySFXMarbleMarble(SettingsData settingsData)
+        public void PlaySFXMarbleMarble()
         {
             if (settingsData.Vibrate)
                 HapticPatterns.PlayPreset(HapticPatterns.PresetType.HeavyImpact);
@@ -44,7 +47,7 @@ namespace Cardwheel
                 m_audioSource.PlayOneShot(SFXMarbleMarble);
         }
 
-        public void PlaySFXMarbleSlot(SettingsData settingsData)
+        public void PlaySFXMarbleSlot()
         {
             if (settingsData.Vibrate)
                 HapticPatterns.PlayPreset(HapticPatterns.PresetType.MediumImpact);
@@ -53,7 +56,7 @@ namespace Cardwheel
                 m_audioSource.PlayOneShot(SFXMarbleSlot);
         }
 
-        public void PlaySFXMarbleInSlot(SettingsData settingsData)
+        public void PlaySFXMarbleInSlot()
         {
             if (settingsData.Vibrate)
                 HapticPatterns.PlayPreset(HapticPatterns.PresetType.Failure);
@@ -62,7 +65,7 @@ namespace Cardwheel
                 m_audioSource.PlayOneShot(SFXMarbleInSlot);
         }
 
-        public void PlaySFXScoring(SettingsData settingsData)
+        public void PlaySFXScoring()
         {
             if (settingsData.Vibrate)
                 HapticPatterns.PlayPreset(HapticPatterns.PresetType.SoftImpact);
@@ -71,7 +74,7 @@ namespace Cardwheel
                 m_audioSource.PlayOneShot(SFXScoring);
         }
 
-        public void PlaySFXScoringTotal(SettingsData settingsData)
+        public void PlaySFXScoringTotal()
         {
             if (settingsData.Vibrate)
                 HapticPatterns.PlayPreset(HapticPatterns.PresetType.MediumImpact);
@@ -80,7 +83,7 @@ namespace Cardwheel
                 m_audioSource.PlayOneShot(SFXScoringTotal);
         }
 
-        public void PlaySFXMoney(SettingsData settingsData)
+        public void PlaySFXMoney()
         {
             if (settingsData.Vibrate)
                 HapticPatterns.PlayPreset(HapticPatterns.PresetType.SoftImpact);
@@ -89,7 +92,7 @@ namespace Cardwheel
                 m_audioSource.PlayOneShot(SFXMoney);
         }
 
-        public void PlaySFXWheelSpin(SettingsData settingsData)
+        public void PlaySFXWheelSpin()
         {
             if (settingsData.Vibrate)
                 HapticPatterns.PlayPreset(HapticPatterns.PresetType.SoftImpact);
@@ -98,7 +101,7 @@ namespace Cardwheel
                 m_audioSource.PlayOneShot(SFXWheelSpin);
         }
 
-        public void PlaySFXButtonOK(SettingsData settingsData)
+        public void PlaySFXButtonOK()
         {
             if (settingsData.Vibrate)
                 HapticPatterns.PlayPreset(HapticPatterns.PresetType.SoftImpact);
@@ -107,7 +110,7 @@ namespace Cardwheel
                 m_audioSource.PlayOneShot(SFXButtonOK);
         }
 
-        public void PlaySFXButtonCancel(SettingsData settingsData)
+        public void PlaySFXButtonCancel()
         {
             if (settingsData.Vibrate)
                 HapticPatterns.PlayPreset(HapticPatterns.PresetType.SoftImpact);
@@ -116,7 +119,7 @@ namespace Cardwheel
                 m_audioSource.PlayOneShot(SFXButtonCancel);
         }
 
-        public void PlaySFXGameOver(SettingsData settingsData)
+        public void PlaySFXGameOver()
         {
             if (settingsData.Vibrate)
                 HapticPatterns.PlayPreset(HapticPatterns.PresetType.SoftImpact);
@@ -125,7 +128,7 @@ namespace Cardwheel
                 m_audioSource.PlayOneShot(SFXGameOver);
         }
 
-        public void PlaySFXWinRound(SettingsData settingsData)
+        public void PlaySFXWinRound()
         {
             if (settingsData.Vibrate)
                 HapticPatterns.PlayPreset(HapticPatterns.PresetType.MediumImpact);
@@ -134,7 +137,7 @@ namespace Cardwheel
                 m_audioSource.PlayOneShot(SFXWinRound);
         }
 
-        public void PlaySFXWinGame(SettingsData settingsData)
+        public void PlaySFXWinGame()
         {
             if (settingsData.Vibrate)
                 HapticPatterns.PlayPreset(HapticPatterns.PresetType.HeavyImpact);
@@ -143,7 +146,7 @@ namespace Cardwheel
                 m_audioSource.PlayOneShot(SFXWinGame);
         }
 
-        public void PlaySFXGateOpen(SettingsData settingsData)
+        public void PlaySFXGateOpen()
         {
             if (settingsData.Vibrate)
                 HapticPatterns.PlayPreset(HapticPatterns.PresetType.HeavyImpact);

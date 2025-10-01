@@ -16,17 +16,19 @@ namespace Cardwheel
         public float MusicTime;
 
         AudioSource m_audioSource;
+        SettingsData settingsData;
 
         public void Init(SettingsData settingsData)
         {
+            this.settingsData = settingsData;
             m_audioSource = GetComponent<AudioSource>();
             m_audioSource.loop = true;
-            Mute(settingsData);
+            Mute();
 
             SecondsPerBeat = 60.0f / BeatsPerMinute;
         }
 
-        public void Mute(SettingsData settingsData)
+        public void Mute()
         {
             m_audioSource.mute = !settingsData.Music;
         }

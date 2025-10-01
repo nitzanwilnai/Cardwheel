@@ -27,15 +27,13 @@ namespace Cardwheel
         Image m_border;
         Image m_borderRarity;
 
-        SettingsData settingsData;
         RunData runData;
 
         int m_jokerIndex;
 
-        public void Init(RunData runData, Camera camera, SettingsData settingsData)
+        public void Init(RunData runData, Camera camera)
         {
             this.runData = runData;
-            this.settingsData = settingsData;
 
             m_UI = AssetManager.Instance.LoadJokerInfoPopupUI();
             CommonVisual.ChangeCanvasScalerMatching(m_UI);
@@ -167,7 +165,7 @@ namespace Cardwheel
 
         void sellJoker()
         {
-            SoundManager.Instance.PlaySFXMoney(settingsData);
+            SoundManager.Instance.PlaySFXMoney();
 
             Logic.SellJoker(runData, m_jokerIndex);
 
@@ -176,7 +174,7 @@ namespace Cardwheel
 
         void hideJokerInfoPopup()
         {
-            SoundManager.Instance.PlaySFXButtonCancel(settingsData);
+            SoundManager.Instance.PlaySFXButtonCancel();
 
             Game.Instance.SetMenuState(runData.PrevMenuState);
         }

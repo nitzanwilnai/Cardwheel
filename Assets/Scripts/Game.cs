@@ -201,20 +201,20 @@ namespace Cardwheel
 
             m_mainMenuVisual.Init(Camera, m_balance);
             m_roundSelectionVisual.Init(m_balance, Camera);
-            m_roundCompleteVisual.Init(m_runData, m_settingsData, m_balance, Camera);
+            m_roundCompleteVisual.Init(m_runData, m_balance, Camera);
             m_gameOverVisual.Init(Camera);
             m_shopVisual.Init(m_runData, m_balance, Camera);
             m_cardPackBallVisual.Init(m_runData, m_balance, Camera);
             m_cardPackSlotVisual.Init(m_runData, m_balance, Camera);
             m_cardPackChipsVisual.Init(m_balance, Camera);
-            m_jokerInfoPopupVisual.Init(m_runData, Camera, m_settingsData);
+            m_jokerInfoPopupVisual.Init(m_runData, Camera);
             m_ballScreenVisual.Init(m_balance, Camera);
             m_settingsVisual.Init(Camera, m_settingsData);
             m_winScreenVisual.Init(m_runData, m_balance, Camera);
-            m_chipsInfoVisual.Init(Camera, m_settingsData);
-            m_gameInfoVisual.Init(Camera, m_balance, m_settingsData);
-            m_shopInfoVisual.Init(Camera, m_balance);
-            m_wheelSelectionVisual.Init(Camera, m_gameData, m_balance, m_settingsData);
+            m_chipsInfoVisual.Init(Camera);
+            m_gameInfoVisual.Init(Camera, m_balance);
+            m_shopInfoVisual.Init(Camera);
+            m_wheelSelectionVisual.Init(Camera, m_gameData, m_balance);
 
             MusicManager.Instance.Init(m_settingsData);
             MusicManager.Instance.PlayMusic();
@@ -222,8 +222,9 @@ namespace Cardwheel
             SetMenuState(MENU_STATE.MAIN_MENU);
         }
 
-        void Start()
+        public void Start()
         {
+            SoundManager.Instance.Init(m_settingsData);
         }
 
         public void SetMenuState(MENU_STATE newMenuState)
@@ -408,7 +409,7 @@ namespace Cardwheel
             }
             else if (m_runData.MenuState == MENU_STATE.SETTINGS)
             {
-                m_settingsVisual.Tick(m_runData, dt);
+                m_settingsVisual.Tick(m_runData, dt, m_availableInputs);
             }
             else if (m_runData.MenuState == MENU_STATE.CHIPS_INFO)
             {
@@ -496,28 +497,14 @@ namespace Cardwheel
 
         public void GoToMainMenu()
         {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
+            SoundManager.Instance.PlaySFXButtonOK();
 
             SetMenuState(MENU_STATE.MAIN_MENU);
         }
 
-        public void AnimateGoToWheelSelection()
-        {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
-
-            m_mainMenuVisual.AnimateGoToWheelSelection();
-        }
-
-        public void AnimateContinueRun()
-        {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
-
-            m_mainMenuVisual.AnimateContinueGame();
-        }
-
         public void RetryRun()
         {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
+            SoundManager.Instance.PlaySFXButtonOK();
 
             StartGame(m_runData.StartSeed, m_runData.WheelIdx);
         }
@@ -529,7 +516,7 @@ namespace Cardwheel
 
         public void StartNewRun(int wheelIdx)
         {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
+            SoundManager.Instance.PlaySFXButtonOK();
 
             uint seed = (uint)Mathf.FloorToInt(UnityEngine.Random.value * int.MaxValue);
 #if UNITY_EDITOR
@@ -557,7 +544,7 @@ namespace Cardwheel
 
         public void StartRound()
         {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
+            SoundManager.Instance.PlaySFXButtonOK();
 
             Board.StartRound(m_runData, m_balance);
             SetMenuState(MENU_STATE.IN_GAME);
@@ -565,7 +552,7 @@ namespace Cardwheel
 
         public void SkipRound()
         {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
+            SoundManager.Instance.PlaySFXButtonOK();
 
             m_roundSelectionVisual.Skip(m_runData, m_balance, m_gamepadType, m_availableInputs);
         }
@@ -579,7 +566,7 @@ namespace Cardwheel
 
         public void RoundComplete()
         {
-            SoundManager.Instance.PlaySFXWinRound(m_settingsData);
+            SoundManager.Instance.PlaySFXWinRound();
 
             Logic.RoundComplete(m_runData, m_balance);
             SetMenuState(MENU_STATE.ROUND_COMPLETE);
@@ -589,7 +576,7 @@ namespace Cardwheel
         {
             Logic.WinGame(m_gameData, m_runData);
 
-            SoundManager.Instance.PlaySFXWinGame(m_settingsData);
+            SoundManager.Instance.PlaySFXWinGame();
 
             Logic.RoundComplete(m_runData, m_balance);
             SetMenuState(MENU_STATE.WIN_SCREEN);
@@ -599,7 +586,7 @@ namespace Cardwheel
 
         public void GameOver()
         {
-            SoundManager.Instance.PlaySFXGameOver(m_settingsData);
+            SoundManager.Instance.PlaySFXGameOver();
 
             SetMenuState(MENU_STATE.GAME_OVER);
         }
@@ -608,7 +595,7 @@ namespace Cardwheel
         {
             Board.BallInSlot(m_runData, m_balance, m_settingsData, ballIdx, slotIdx);
 
-            SoundManager.Instance.PlaySFXMarbleInSlot(m_settingsData);
+            SoundManager.Instance.PlaySFXMarbleInSlot();
         }
 
         public void SkipRound1()
@@ -621,39 +608,16 @@ namespace Cardwheel
 
         public void RerollShop()
         {
-            SoundManager.Instance.PlaySFXMoney(m_settingsData);
+            SoundManager.Instance.PlaySFXMoney();
 
             m_shopVisual.RerollShop(m_runData, m_balance, m_gamepadType);
 
             RunDataIO.SaveRun(m_runData, m_balance);
         }
 
-        public void ShowJokerBuyPopup(int shopIdx)
-        {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
-
-            Debug.Log("Game.ShowBuyPopup(shopIdx " + shopIdx + ")");
-            m_shopVisual.ShowJokerBuyPopup(m_runData, m_balance, shopIdx);
-        }
-
-        public void ShowCardBuyPopup(int shopIdx)
-        {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
-
-            Debug.Log("Game.ShowBuyPopup(shopIdx " + shopIdx + ")");
-            m_shopVisual.ShowCardBuyPopup(m_runData, m_balance, shopIdx);
-        }
-
-        public void ShowVoucherBuyPopup()
-        {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
-
-            m_shopVisual.ShowVoucherBuyPopup(m_runData, m_balance);
-        }
-
         public void BuyShopJoker(int shopJokerIdx)
         {
-            SoundManager.Instance.PlaySFXMoney(m_settingsData);
+            SoundManager.Instance.PlaySFXMoney();
 
             Debug.Log("Game.BuyShopJoker(shopJokerIdx " + shopJokerIdx + ")");
             m_shopVisual.BuyShopJoker(m_runData, m_balance, shopJokerIdx);
@@ -663,7 +627,7 @@ namespace Cardwheel
 
         public void BuyShopCardPack(int shopCardIdx)
         {
-            SoundManager.Instance.PlaySFXMoney(m_settingsData);
+            SoundManager.Instance.PlaySFXMoney();
 
             Debug.Log("Game.BuyShopJoker(shopJokerIdx " + shopCardIdx + ")");
             m_shopVisual.BuyShopCardPack(m_runData, m_balance, shopCardIdx);
@@ -690,7 +654,7 @@ namespace Cardwheel
 
         public void BuyVoucher()
         {
-            SoundManager.Instance.PlaySFXMoney(m_settingsData);
+            SoundManager.Instance.PlaySFXMoney();
 
             if (!m_runData.VoucherPurchased)
                 m_shopVisual.BuyVoucher(m_runData, m_balance, m_gamepadType);
@@ -700,7 +664,7 @@ namespace Cardwheel
 
         public void ShowJokerInfoPopup(int jokerIdx)
         {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
+            SoundManager.Instance.PlaySFXButtonOK();
 
             SetMenuState(MENU_STATE.JOKER_INFO_POPUP);
             m_jokerInfoPopupVisual.Show(m_runData, m_balance, jokerIdx, m_availableInputs);
@@ -708,7 +672,7 @@ namespace Cardwheel
 
         public void ShowJokerInfoPopupInGame(int jokerIdx)
         {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
+            SoundManager.Instance.PlaySFXButtonOK();
 
             SetMenuState(MENU_STATE.JOKER_INFO_POPUP);
             m_jokerInfoPopupVisual.ShowInGame(m_runData, m_balance, jokerIdx, m_availableInputs);
@@ -716,35 +680,28 @@ namespace Cardwheel
 
         public void CloseCardPack()
         {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
+            SoundManager.Instance.PlaySFXButtonOK();
 
             SetMenuState(m_runData.PrevMenuState);
         }
 
-        public void UseCardPackOnBalls(int cardIdx)
-        {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
-
-            m_cardPackBallVisual.UseCardPackOnBalls(m_runData, m_balance, cardIdx);
-        }
-
         public void UseCardPackOnSlots(int cardIdx)
         {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
+            SoundManager.Instance.PlaySFXButtonOK();
 
             m_cardPackSlotVisual.UseCardPackOnSlots(m_runData, m_balance, cardIdx);
         }
 
         public void UseCardPackOnChips(int cardIdx)
         {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
+            SoundManager.Instance.PlaySFXButtonOK();
 
             m_cardPackChipsVisual.UseCardPackChips(m_runData, m_balance, cardIdx);
         }
 
         public void RerollCardPack()
         {
-            SoundManager.Instance.PlaySFXMoney(m_settingsData);
+            SoundManager.Instance.PlaySFXMoney();
 
             if (m_balance.CardPackType[m_runData.SelectedShopCardPackIdx] == CARD_PACK_TYPE.BALL)
                 m_cardPackBallVisual.Reroll(m_runData, m_balance);
@@ -758,23 +715,16 @@ namespace Cardwheel
 
         public void GoToRoundSelection()
         {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
+            SoundManager.Instance.PlaySFXButtonOK();
 
             SetMenuState(MENU_STATE.ROUND_SELECTION);
         }
 
         public void GoToBallScreen()
         {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
+            SoundManager.Instance.PlaySFXButtonOK();
 
             SetMenuState(MENU_STATE.BALL_SCREEN);
-        }
-
-        public void CloseBallScreen()
-        {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
-
-            m_ballScreenVisual.AnimateClose();
         }
 
         public void CopySeed()
@@ -784,55 +734,35 @@ namespace Cardwheel
 
         public void GoToSettings()
         {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
+            SoundManager.Instance.PlaySFXButtonOK();
 
             SetMenuState(MENU_STATE.SETTINGS);
-        }
-        public void CloseSettings()
-        {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
-
-            m_settingsVisual.AnimateClose();
         }
 
         public void BallBallCollision()
         {
             // Debug.Log("ball ball collision");
 
-            SoundManager.Instance.PlaySFXMarbleMarble(m_settingsData);
+            SoundManager.Instance.PlaySFXMarbleMarble();
         }
 
         public void BallSpinWheelCollision()
         {
             // Debug.Log("ball spinwheel collision");
 
-            SoundManager.Instance.PlaySFXMarbleSlot(m_settingsData);
+            SoundManager.Instance.PlaySFXMarbleSlot();
         }
 
         public void GoToChipsInfo()
         {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
+            SoundManager.Instance.PlaySFXButtonOK();
 
             SetMenuState(MENU_STATE.CHIPS_INFO);
         }
 
-        public void ShowShopInfo()
-        {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
-
-            SetMenuState(MENU_STATE.SHOP_INFO);
-        }
-
-        public void CloseShopInfo()
-        {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
-
-            m_shopInfoVisual.AnimateClose();
-        }
-
         public void GoToWheelSelection()
         {
-            SoundManager.Instance.PlaySFXButtonOK(m_settingsData);
+            SoundManager.Instance.PlaySFXButtonOK();
 
             SetMenuState(MENU_STATE.WHEEL_SELECTION);
         }

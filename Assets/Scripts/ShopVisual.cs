@@ -99,15 +99,20 @@ namespace Cardwheel
         Animation m_jokerPopupAnimation;
         Animation m_cardpackPopupAnimation;
 
+        RunData runData;
+        Balance balance;
+
         // Start is called before the first frame update
         public void Init(RunData runData, Balance balance, Camera camera)
         {
+            this.runData = runData;
+            this.balance = balance;
+
             m_UI = AssetManager.Instance.LoadShopUI();
             m_UI.GetComponent<Canvas>().worldCamera = camera;
             CommonVisual.ChangeCanvasScalerMatching(m_UI);
 
             GUIRef guiRef = m_UI.GetComponent<GUIRef>();
-
 
             m_jokers = new ShopCardGUI[3];
             for (int i = 0; i < m_jokers.Length; i++)
@@ -125,7 +130,7 @@ namespace Cardwheel
             guiRef.GetButton("Reroll").onClick.AddListener(Game.Instance.RerollShop);
             m_rerollCostText = guiRef.GetTextGUI("RerollCost");
             guiRef.GetButton("NextRound").onClick.AddListener(Game.Instance.GoToRoundSelection);
-            guiRef.GetButton("Info").onClick.AddListener(Game.Instance.ShowShopInfo);
+            guiRef.GetButton("Info").onClick.AddListener(showShopInfo);
 
             m_jokerPopupAnimation = guiRef.GetAnimation("JokerPopup");
             m_cardpackPopupAnimation = guiRef.GetAnimation("CardpackPopup");
@@ -232,7 +237,7 @@ namespace Cardwheel
 
                     int localI = i;
                     m_jokers[i].JokerGO.GetComponent<Button>().onClick.RemoveAllListeners();
-                    m_jokers[i].JokerGO.GetComponent<Button>().onClick.AddListener(() => Game.Instance.ShowJokerBuyPopup(localI));
+                    m_jokers[i].JokerGO.GetComponent<Button>().onClick.AddListener(() => showJokerBuyPopup(localI));
 
                     m_jokers[i].CostText.text = "$" + Logic.GetJokerShopCost(runData, balance, jokerType).ToString();
                 }
@@ -255,7 +260,7 @@ namespace Cardwheel
 
                     int localI = i;
                     m_cardPacks[i].CardPackGO.GetComponent<Button>().onClick.RemoveAllListeners();
-                    m_cardPacks[i].CardPackGO.GetComponent<Button>().onClick.AddListener(() => Game.Instance.ShowCardBuyPopup(localI));
+                    m_cardPacks[i].CardPackGO.GetComponent<Button>().onClick.AddListener(() => showCardBuyPopup(localI));
 
                     m_cardPacks[i].CostText.text = "$" + Logic.GetCardPackShopCost(runData, balance, cardPackIdx);
                 }
@@ -264,7 +269,7 @@ namespace Cardwheel
             // show voucher
             m_voucher.CardImage.sprite = AssetManager.Instance.LoadVoucherSprite(balance.VoucherBalance.SpriteName[Logic.GetVoucherForRound(runData)]);
             m_voucher.CardPackGO.GetComponent<Button>().onClick.RemoveAllListeners();
-            m_voucher.CardPackGO.GetComponent<Button>().onClick.AddListener(Game.Instance.ShowVoucherBuyPopup);
+            m_voucher.CardPackGO.GetComponent<Button>().onClick.AddListener(showVoucherBuyPopup);
             m_voucher.CostText.text = "$" + Logic.GetVoucherCost(runData, balance);
             m_voucher.GO.SetActive(!runData.VoucherPurchased);
 
@@ -308,8 +313,10 @@ namespace Cardwheel
             CommonVisual.HideJokers();
         }
 
-        public void ShowJokerBuyPopup(RunData runData, Balance balance, int shopJokerIdx)
+        void showJokerBuyPopup(int shopJokerIdx)
         {
+            SoundManager.Instance.PlaySFXButtonOK();
+
             int jokerType = runData.ShopJokerIdxs[shopJokerIdx];
 
             if (jokerType > -1)
@@ -338,8 +345,10 @@ namespace Cardwheel
             }
         }
 
-        public void ShowCardBuyPopup(RunData runData, Balance balance, int shopPackIdx)
+        void showCardBuyPopup(int shopPackIdx)
         {
+            SoundManager.Instance.PlaySFXButtonOK();
+
             int cardPackIdx = runData.ShopCardPackIdxs[shopPackIdx];
 
             m_cardPackBuyPopupGUI.BuyButton.onClick.RemoveAllListeners();
@@ -361,8 +370,10 @@ namespace Cardwheel
             m_cardPackBuyPopupGUI.GO.SetActive(true);
         }
 
-        public void ShowVoucherBuyPopup(RunData runData, Balance balance)
+        void showVoucherBuyPopup()
         {
+            SoundManager.Instance.PlaySFXButtonOK();
+
             m_voucherBuyPopupGUI.BuyButton.onClick.RemoveAllListeners();
             m_voucherBuyPopupGUI.BuyButton.onClick.AddListener(Game.Instance.BuyVoucher);
 
@@ -475,6 +486,13 @@ namespace Cardwheel
 
             if (Logic.TryRerollShop(runData, balance))
                 Show(runData, balance, gamepadType);
+        }
+
+        void showShopInfo()
+        {
+            SoundManager.Instance.PlaySFXButtonOK();
+
+            Game.Instance.SetMenuState(MENU_STATE.SHOP_INFO);
         }
     }
 

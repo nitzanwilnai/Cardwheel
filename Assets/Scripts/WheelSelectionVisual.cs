@@ -45,17 +45,15 @@ namespace Cardwheel
 
         GameData gameData;
         Balance balance;
-        SettingsData settingsData;
 
         GUIButtonData m_playButtonData;
         GUIButtonData m_prevButtonData;
         GUIButtonData m_nextButtonData;
 
-        public void Init(Camera camera, GameData gameData, Balance balance, SettingsData settingsData)
+        public void Init(Camera camera, GameData gameData, Balance balance)
         {
             this.gameData = gameData;
             this.balance = balance;
-            this.settingsData = settingsData;
 
             m_UI = AssetManager.Instance.LoadWheelSelectionUI();
             m_UI.GetComponent<Canvas>().worldCamera = camera;
@@ -218,7 +216,7 @@ namespace Cardwheel
 
         public void animateClose()
         {
-            SoundManager.Instance.PlaySFXButtonOK(settingsData);
+            SoundManager.Instance.PlaySFXButtonOK();
 
             CommonVisual.AnimateClose(ref m_closeTimer, m_closeTime, m_animation, "Wheel Selection Close");
         }

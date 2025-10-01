@@ -369,14 +369,14 @@ namespace Cardwheel
         {
             m_roundChipsText.text = runData.SpinChips.ToString("N0");
             m_roundScoreAnimation.Play();
-            SoundManager.Instance.PlaySFXScoring(settingsData);
+            SoundManager.Instance.PlaySFXScoring();
         }
 
         public void AnimateRoundMultipierText(RunData runData, SettingsData settingsData)
         {
             m_roundMultiplierText.text = "x" + CommonVisual.GetMultiplierString(runData.SpinMultiplier);
             m_roundMultiplierAnimation.Play();
-            SoundManager.Instance.PlaySFXScoring(settingsData);
+            SoundManager.Instance.PlaySFXScoring();
         }
 
         public void ShowBallChipsPopup(int ballIdx, int chips)
@@ -457,7 +457,7 @@ namespace Cardwheel
             float currentTickAngle = runData.SpinWheelAngle - (Mathf.FloorToInt(runData.SpinWheelAngle / 15) * 15.0f);
             if (prevTickAngle < currentTickAngle & runData.RotationSpeed < 0.0f)
             {
-                SoundManager.Instance.PlaySFXWheelSpin(settingsData);
+                SoundManager.Instance.PlaySFXWheelSpin();
             }
 
             if (GameState == GAME_STATE.START_ROUND)
@@ -1030,7 +1030,7 @@ namespace Cardwheel
 
                     m_totalScoreText.text = runData.TotalChips.ToString("N0");
                     m_totalScoreAnimation.Play();
-                    SoundManager.Instance.PlaySFXScoringTotal(settingsData);
+                    SoundManager.Instance.PlaySFXScoringTotal();
 
                     Logic.JokerPostSpin(runData, balance);
 
@@ -1073,7 +1073,7 @@ namespace Cardwheel
 
                                     ShowJokerChipsPopup(jokerIdx, "-" + amount.ToString("N0"));
 
-                                    SoundManager.Instance.PlaySFXScoring(settingsData);
+                                    SoundManager.Instance.PlaySFXScoring();
                                     break;
                                 }
 
@@ -1082,7 +1082,7 @@ namespace Cardwheel
                                     // lose money and update top bar
                                     CommonVisual.UpdateTopBarMoney(runData, m_topBarGUI);
                                     CommonVisual.JokerGUIs[jokerIdx].Animation.Play("ScoreGrow");
-                                    SoundManager.Instance.PlaySFXMoney(settingsData);
+                                    SoundManager.Instance.PlaySFXMoney();
                                 }
                             }
                         }
@@ -1140,7 +1140,7 @@ namespace Cardwheel
                             Logic.PostRoundBossEffect(runData, balance);
 
                             CommonVisual.UpdateTopBarMoney(runData, m_topBarGUI);
-                            SoundManager.Instance.PlaySFXMoney(settingsData);
+                            SoundManager.Instance.PlaySFXMoney();
                         }
                     }
                     m_nextSpinTimer = 0.0f;
@@ -1420,7 +1420,7 @@ namespace Cardwheel
 
         public void dropBalls()
         {
-            SoundManager.Instance.PlaySFXGateOpen(settingsData);
+            SoundManager.Instance.PlaySFXGateOpen();
 
             if (GameState == GAME_STATE.WAITING_FOR_INPUT)
             {
@@ -1473,7 +1473,7 @@ namespace Cardwheel
             m_ballsMoneyText.text = "$" + money.ToString("N0");
 
             CommonVisual.UpdateTopBarMoney(runData, m_topBarGUI);
-            SoundManager.Instance.PlaySFXMoney(settingsData);
+            SoundManager.Instance.PlaySFXMoney();
         }
 
         public void UpdateTopUI(RunData runData, Balance balance)
@@ -1489,7 +1489,7 @@ namespace Cardwheel
 
         void showGameInfo()
         {
-            SoundManager.Instance.PlaySFXButtonOK(settingsData);
+            SoundManager.Instance.PlaySFXButtonOK();
 
             Game.Instance.SetMenuState(MENU_STATE.IN_GAME_INFO);
         }
