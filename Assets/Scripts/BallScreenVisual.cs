@@ -48,7 +48,7 @@ namespace Cardwheel
 
             GUIRef guiRef = m_UI.GetComponent<GUIRef>();
             guiRef.GetButton("Close").onClick.RemoveAllListeners();
-            guiRef.GetButton("Close").onClick.AddListener(Game.Instance.CloseBallScreen);
+            guiRef.GetButton("Close").onClick.AddListener(AnimateClose);
 
             Canvas.ForceUpdateCanvases();
         }
@@ -73,6 +73,8 @@ namespace Cardwheel
 
         public void AnimateClose()
         {
+            SoundManager.Instance.PlaySFXButtonOK();
+
             CommonVisual.AnimateClose(ref m_closeTimer, m_closeTime, m_animation, "Ball Screen Close");
         }
     }

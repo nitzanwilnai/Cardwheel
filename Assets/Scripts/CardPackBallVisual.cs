@@ -42,9 +42,15 @@ namespace Cardwheel
 
         GameObject[] m_ballStars;
 
+        RunData runData;
+        Balance balance;
+
         // Start is called before the first frame update
         public void Init(RunData runData, Balance balance, Camera camera)
         {
+            this.runData = runData;
+            this.balance = balance;
+
             m_UI = AssetManager.Instance.LoadCardPackBallUI();
             m_UI.GetComponent<Canvas>().worldCamera = camera;
             CommonVisual.ChangeCanvasScalerMatching(m_UI);
@@ -76,7 +82,7 @@ namespace Cardwheel
                 for (int j = 0; j < numCards; j++)
                 {
                     int localJ = j;
-                    m_cardPackCardGUIs[i][j].UseButton.onClick.AddListener(() => Game.Instance.UseCardPackOnBalls(localJ));
+                    m_cardPackCardGUIs[i][j].UseButton.onClick.AddListener(() => useCardPackOnBalls(localJ));
                 }
             }
 
@@ -180,8 +186,10 @@ namespace Cardwheel
             }
         }
 
-        public void UseCardPackOnBalls(RunData runData, Balance balance, int cardIdx)
+        void useCardPackOnBalls(int cardIdx)
         {
+            SoundManager.Instance.PlaySFXButtonOK();
+
             Logic.UseCardPackBallCard(runData, balance, cardIdx);
 
             for (int ballIdx = 0; ballIdx < runData.CardPackBallSelected.Length; ballIdx++)

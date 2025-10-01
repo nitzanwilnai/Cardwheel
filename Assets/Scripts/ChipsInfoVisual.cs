@@ -18,12 +18,9 @@ namespace Cardwheel
         Animation m_animation;
 
         GUIButtonData m_closeButtonData;
-        SettingsData settingsData;
 
-        public void Init(Camera camera, SettingsData settingsData)
+        public void Init(Camera camera)
         {
-            this.settingsData = settingsData;
-
             m_UI = AssetManager.Instance.LoadChipsInfoUI();
             m_UI.GetComponent<Canvas>().worldCamera = camera;
             CommonVisual.ChangeCanvasScalerMatching(m_UI);
@@ -67,7 +64,7 @@ namespace Cardwheel
 
         void animateClose()
         {
-            SoundManager.Instance.PlaySFXButtonOK(settingsData);
+            SoundManager.Instance.PlaySFXButtonOK();
 
             CommonVisual.AnimateClose(ref m_closeTimer, m_closeTime, m_animation, "Chips Info Close");
         }

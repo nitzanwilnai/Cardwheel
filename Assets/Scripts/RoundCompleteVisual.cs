@@ -44,13 +44,11 @@ namespace Cardwheel
 
         RunData runData;
         Balance balance;
-        SettingsData settingsData;
 
-        public void Init(RunData runData, SettingsData settingsData, Balance balance, Camera camera)
+        public void Init(RunData runData, Balance balance, Camera camera)
         {
             this.runData = runData;
             this.balance = balance;
-            this.settingsData = settingsData;
 
             m_UI = AssetManager.Instance.LoadRoundCompleteUI();
             CommonVisual.ChangeCanvasScalerMatching(m_UI);
@@ -223,7 +221,7 @@ namespace Cardwheel
 
         void claimRoundRewardAndGoToShop()
         {
-            SoundManager.Instance.PlaySFXMoney(settingsData);
+            SoundManager.Instance.PlaySFXMoney();
 
             Logic.ClaimRoundReward(runData, balance);
             Logic.PopulateShop(runData, balance);

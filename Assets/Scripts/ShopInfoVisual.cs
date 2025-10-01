@@ -28,9 +28,8 @@ namespace Cardwheel
 
         ShopRoundInfoGUI[] m_shopRoundInfoGUI;
 
-        public void Init(Camera camera, Balance balance)
+        public void Init(Camera camera)
         {
-
             m_UI = AssetManager.Instance.LoadShopInfoUI();
             m_UI.GetComponent<Canvas>().worldCamera = camera;
             CommonVisual.ChangeCanvasScalerMatching(m_UI);
@@ -44,7 +43,7 @@ namespace Cardwheel
                 m_shopRoundInfoGUI[i].Cover.SetActive(false);
             }
 
-            guiRef.GetButton("Close").onClick.AddListener(Game.Instance.CloseShopInfo);
+            guiRef.GetButton("Close").onClick.AddListener(animateClose);
             m_animation = guiRef.GetAnimation("Animation");
 
             m_baseChipsText = new TextMeshProUGUI[(int)SLOT_TYPE.LAST];
@@ -89,8 +88,10 @@ namespace Cardwheel
             m_UI.SetActive(false);
         }
 
-        public void AnimateClose()
+        void animateClose()
         {
+            SoundManager.Instance.PlaySFXButtonOK();
+
             CommonVisual.AnimateClose(ref m_closeTimer, m_closeTime, m_animation, "In Game Info Close");
         }
     }
