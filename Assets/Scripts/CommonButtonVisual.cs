@@ -7,6 +7,17 @@ using TMPro;
 namespace Cardwheel
 {
     public enum GAMEPAD_TYPE { NONE, STEAM, PS5, SWITCH, XBOX };
+    public enum COMMON_BUTTONS
+    {
+        SETTINGS = 10,
+        WHEEL = 11,
+        BALLS = 12,
+        JOKER_1 = 20,
+        JOKER_2 = 21,
+        JOKER_3 = 22,
+        JOKER_4 = 23,
+        JOKER_5 = 24,
+    }
 
     public static class CommonButtonVisual
     {
@@ -119,7 +130,104 @@ namespace Cardwheel
                     if (Gamepad.current.startButton.wasPressedThisFrame)
                         return true;
 
+            if (guiButtonData.GamepadButton == GAMEPAD_BUTTON.R1)
+                if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+                    if (Gamepad.current.rightTrigger.wasPressedThisFrame)
+                        return true;
+
+            if (guiButtonData.GamepadButton == GAMEPAD_BUTTON.L1)
+                if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+                    if (Gamepad.current.leftTrigger.wasPressedThisFrame)
+                        return true;
+
+            if (guiButtonData.GamepadButton == GAMEPAD_BUTTON.R2)
+                if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+                    if (Gamepad.current.rightShoulder.wasPressedThisFrame)
+                        return true;
+
+            if (guiButtonData.GamepadButton == GAMEPAD_BUTTON.L2)
+                if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+                    if (Gamepad.current.leftShoulder.wasPressedThisFrame)
+                        return true;
+
             return false;
+        }
+
+        public static void UpdateCommonButtonIcons(TopBarGUI topBarGUI, CardsBallsSpinWheelGUI cardsBallsSpinWheelGUI, GAMEPAD_TYPE gamepadType)
+        {
+            UpdateButtonIcons(topBarGUI.SettingsButtonData, gamepadType);
+            UpdateButtonIcons(cardsBallsSpinWheelGUI.BallsButtonData, gamepadType);
+            UpdateButtonIcons(cardsBallsSpinWheelGUI.SpinwheelButtonData, gamepadType);
+        }
+
+        public static bool CommonHandleInput(TopBarGUI topBarGUI, CardsBallsSpinWheelGUI cardsBallsSpinWheelGUI, int availableInputs, COMMON_BUTTONS selectedButton)
+        {
+            if (NavigateGamepadButton(topBarGUI.SettingsButtonData, availableInputs))
+            {
+                Game.Instance.GoToSettings();
+                return true;
+            }
+
+            if (NavigateGamepadButton(cardsBallsSpinWheelGUI.BallsButtonData, availableInputs))
+            {
+                Game.Instance.GoToBallScreen();
+                return true;
+            }
+
+            if (NavigateGamepadButton(cardsBallsSpinWheelGUI.SpinwheelButtonData, availableInputs))
+            {
+                Game.Instance.GoToChipsInfo();
+                return true;
+            }
+
+            if ((selectedButton >= COMMON_BUTTONS.JOKER_1 && selectedButton <= COMMON_BUTTONS.JOKER_5) && NavigateEnter(availableInputs))
+            {
+                Game.Instance.ShowJokerInfoPopup((int)selectedButton - (int)COMMON_BUTTONS.JOKER_1);
+                return true;
+            }
+
+            return false;
+        }
+
+        public static int CommonNavigation(int availableInputs, COMMON_BUTTONS selectedButton)
+        {
+            if (selectedButton == COMMON_BUTTONS.WHEEL && (CommonButtonVisual.NavigateUp(availableInputs)))
+                return (int)COMMON_BUTTONS.BALLS;
+
+            if (selectedButton == COMMON_BUTTONS.BALLS && CommonButtonVisual.NavigateDown(availableInputs))
+                return (int)COMMON_BUTTONS.WHEEL;
+
+            if (selectedButton == COMMON_BUTTONS.BALLS && CommonButtonVisual.NavigateUp(availableInputs))
+                return (int)COMMON_BUTTONS.JOKER_1;
+
+            if (selectedButton >= COMMON_BUTTONS.JOKER_1 && selectedButton <= COMMON_BUTTONS.JOKER_5 && NavigateDown(availableInputs))
+                return (int)COMMON_BUTTONS.BALLS;
+
+            if ((selectedButton >= COMMON_BUTTONS.JOKER_1 && selectedButton <= COMMON_BUTTONS.JOKER_4) && NavigateRight(availableInputs))
+                return ((int)selectedButton + 1);
+            if ((selectedButton >= COMMON_BUTTONS.JOKER_2 && selectedButton <= COMMON_BUTTONS.JOKER_5) && NavigateLeft(availableInputs))
+                return ((int)selectedButton - 1);
+            return -1;
+        }
+
+        public static void CommonSelectButton(TopBarGUI topBarGUI, CardsBallsSpinWheelGUI cardsBallsSpinWheelGUI, COMMON_BUTTONS m_selectedButton)
+        {
+            topBarGUI.SettingsButtonData.SelectedGO.SetActive(m_selectedButton == COMMON_BUTTONS.SETTINGS);
+
+            cardsBallsSpinWheelGUI.BallsButtonData.SelectedGO.SetActive(m_selectedButton == COMMON_BUTTONS.BALLS);
+            cardsBallsSpinWheelGUI.SpinwheelButtonData.SelectedGO.SetActive(m_selectedButton == COMMON_BUTTONS.WHEEL);
+
+            if (m_selectedButton >= COMMON_BUTTONS.JOKER_1 && m_selectedButton <= COMMON_BUTTONS.JOKER_5)
+                CommonVisual.SelectJoker((int)m_selectedButton - (int)COMMON_BUTTONS.JOKER_1);
+        }
+
+        public static void HideAllButtonSelections(TopBarGUI topBarGUI, CardsBallsSpinWheelGUI cardsBallsSpinWheelGUI)
+        {
+            topBarGUI.SettingsButtonData.SelectedGO.SetActive(false);
+            cardsBallsSpinWheelGUI.BallsButtonData.SelectedGO.SetActive(false);
+            cardsBallsSpinWheelGUI.SpinwheelButtonData.SelectedGO.SetActive(false);
+            CommonVisual.UnselectAllJokers();
+
         }
     }
 }

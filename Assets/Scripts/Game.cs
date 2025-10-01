@@ -200,8 +200,8 @@ namespace Cardwheel
             m_wheelSelectionVisual = AssetManager.Instance.LoadWheelSelectionVisual();
 
             m_mainMenuVisual.Init(Camera, m_balance);
-            m_roundSelectionVisual.Init(m_runData, m_balance, Camera);
-            m_roundCompleteVisual.Init(m_runData, m_balance, Camera);
+            m_roundSelectionVisual.Init(m_balance, Camera);
+            m_roundCompleteVisual.Init(m_runData, m_settingsData, m_balance, Camera);
             m_gameOverVisual.Init(Camera);
             m_shopVisual.Init(m_runData, m_balance, Camera);
             m_cardPackBallVisual.Init(m_runData, m_balance, Camera);
@@ -287,7 +287,7 @@ namespace Cardwheel
             else if (menuState == MENU_STATE.ROUND_SELECTION)
                 m_roundSelectionVisual.Show(m_runData, m_balance, m_gamepadType, m_availableInputs);
             else if (menuState == MENU_STATE.ROUND_COMPLETE)
-                m_roundCompleteVisual.Show(m_runData, m_balance);
+                m_roundCompleteVisual.Show(m_runData, m_balance, m_gamepadType, m_availableInputs);
             else if (menuState == MENU_STATE.GAME_OVER)
                 m_gameOverVisual.Show(m_runData);
             else if (menuState == MENU_STATE.SHOP)
@@ -392,7 +392,7 @@ namespace Cardwheel
             }
             else if (m_runData.MenuState == MENU_STATE.ROUND_COMPLETE)
             {
-                m_roundCompleteVisual.Tick(m_runData, m_balance, dt);
+                m_roundCompleteVisual.Tick(m_runData, m_balance, dt, m_availableInputs);
             }
             else if (m_runData.MenuState == MENU_STATE.IN_GAME_INFO)
             {
@@ -614,15 +614,6 @@ namespace Cardwheel
         public void SkipRound1()
         {
             m_runData.CurrentSpin = 3;
-            Logic.ClaimRoundReward(m_runData, m_balance);
-            Logic.PopulateShop(m_runData, m_balance);
-            SetMenuState(MENU_STATE.SHOP);
-        }
-
-        public void ClaimRoundRewardAndGoToShop()
-        {
-            SoundManager.Instance.PlaySFXMoney(m_settingsData);
-
             Logic.ClaimRoundReward(m_runData, m_balance);
             Logic.PopulateShop(m_runData, m_balance);
             SetMenuState(MENU_STATE.SHOP);

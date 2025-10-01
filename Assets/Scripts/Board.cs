@@ -31,7 +31,17 @@ namespace Cardwheel
 
     public class Board : MonoBehaviour
     {
-        public enum MENU_BUTTONS { DROP, INFO, SETTINGS, JOKER_1, JOKER_2, JOKER_3, JOKER_4, JOKER_5 };
+        public enum MENU_BUTTONS
+        {
+            DROP,
+            INFO,
+            SETTINGS = 10,
+            JOKER_1 = 20,
+            JOKER_2 = 21,
+            JOKER_3 = 22,
+            JOKER_4 = 23,
+            JOKER_5 = 24,
+        };
         MENU_BUTTONS m_selectedButton = MENU_BUTTONS.DROP;
 
         public GameObject GateGO;
@@ -317,6 +327,7 @@ namespace Cardwheel
             {
                 m_spinButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.DROP);
                 m_infoButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.INFO);
+
                 m_topBarGUI.SettingsButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.SETTINGS);
 
                 if (m_selectedButton >= MENU_BUTTONS.JOKER_1 && m_selectedButton <= MENU_BUTTONS.JOKER_5)
@@ -1285,17 +1296,9 @@ namespace Cardwheel
                     return;
                 }
 
-                if ((m_selectedButton >= MENU_BUTTONS.JOKER_1 && m_selectedButton <= MENU_BUTTONS.JOKER_4) && CommonButtonVisual.NavigateRight(availableInputs))
-                {
-                    selectButton(m_selectedButton + 1, availableInputs);
-                    return;
-                }
-                if ((m_selectedButton >= MENU_BUTTONS.JOKER_2 && m_selectedButton <= MENU_BUTTONS.JOKER_5) && CommonButtonVisual.NavigateLeft(availableInputs))
-                {
-                    selectButton(m_selectedButton - 1, availableInputs);
-                    return;
-                }
-
+                int selectedJokerButton = CommonButtonVisual.CommonNavigation(availableInputs, (COMMON_BUTTONS)m_selectedButton);
+                if (selectedJokerButton > -1)
+                    selectButton((MENU_BUTTONS)selectedJokerButton, availableInputs);
             }
 
 

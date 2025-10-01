@@ -2876,7 +2876,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 369d0e21d6d8847d491b0550299b148d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  yOffset: -100
+  yOffset: -150
 --- !u!111 &462749624724690612 stripped
 Animation:
   m_CorrespondingSourceObject: {fileID: 3951772072999312933, guid: c208a34ee4a6e458da548677b57f70df, type: 3}

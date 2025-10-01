@@ -212,6 +212,7 @@ GameObject:
   - component: {fileID: 374720704681806790}
   - component: {fileID: 6943497260373936012}
   - component: {fileID: 2276588429498869711}
+  - component: {fileID: 1789793399266549781}
   m_Layer: 5
   m_Name: UI - Round Complete
   m_TagString: Untagged
@@ -392,6 +393,24 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
+--- !u!114 &1789793399266549781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1840910280049383347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67e5b6a1a502544f795bb25d60791040, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Buttons:
+  - Key: Claim
+    Button: {fileID: 2911337553761052250}
+    GlyphImage: {fileID: 0}
+    GamepadButton: 0
+    SelectedGO: {fileID: 0}
 --- !u!1 &1910930539273088186
 GameObject:
   m_ObjectHideFlags: 0
@@ -440,7 +459,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c35a6a8a50c7444739f3d31d10b2a7fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Amount: 100
+  Amount: 120
 --- !u!1 &2525890910770751919
 GameObject:
   m_ObjectHideFlags: 0

@@ -227,11 +227,11 @@ public static class Logic
         // runData.SkipType[3] = 13;
         // runData.SkipType[1] = 7;
 
-        // AddJoker(runData, balance, 67);
-        // AddJoker(runData, balance, 70);
-        // AddJoker(runData, balance, 5);
-        // AddJoker(runData, balance, 24);
-        // AddJoker(runData, balance, 11);
+        AddJoker(runData, balance, 67);
+        AddJoker(runData, balance, 70);
+        AddJoker(runData, balance, 5);
+        AddJoker(runData, balance, 24);
+        AddJoker(runData, balance, 11);
 
         // for (int i = 0; i < runData.BallTypes.Length; i++)
         //     runData.BallTypes[i] = i;
@@ -873,17 +873,20 @@ public static class Logic
 
     public static void AddJoker(RunData runData, Balance balance, int jokerType)
     {
-        if (runData.JokerCount < balance.MaxJokersInHand)
-        {
-            int jkrIdx = runData.JokerCount;
+        int count = 0;
+        for (int jkrIdx = 0; jkrIdx < runData.AvailableJokerCount; jkrIdx++)
+            if (runData.AvailableJokerTypes[jkrIdx] != jokerType)
+                runData.AvailableJokerTypes[count++] = runData.AvailableJokerTypes[jkrIdx];
+        runData.AvailableJokerCount = count;
 
-            runData.JokerTypes[jkrIdx] = jokerType;
-            runData.JokerSellValues[jkrIdx] = balance.JokerBalance.Cost[jokerType] / 2;
-            runData.JokerChips[jkrIdx] = Mathf.RoundToInt(balance.JokerBalance.SubtractChipsPerSpin[jokerType].x);
-            runData.JokerMultiplierAdd[jkrIdx] = balance.JokerBalance.SubtractMultiplierAddPerRound[jokerType].x;
+        int jokerIdx = runData.JokerCount;
 
-            runData.JokerCount++;
-        }
+        runData.JokerTypes[jokerIdx] = jokerType;
+        runData.JokerSellValues[jokerIdx] = balance.JokerBalance.Cost[jokerType] / 2;
+        runData.JokerChips[jokerIdx] = Mathf.RoundToInt(balance.JokerBalance.SubtractChipsPerSpin[jokerType].x);
+        runData.JokerMultiplierAdd[jokerIdx] = balance.JokerBalance.SubtractMultiplierAddPerRound[jokerType].x;
+
+        runData.JokerCount++;
     }
 
     public static void RemoveJoker(RunData runData, int jokerRemovedIdx)
@@ -1680,18 +1683,13 @@ public static class Logic
 
     public static int BuyShopJoker(RunData runData, Balance balance, int shopJokerIdx)
     {
+        // no need to check because we already checked before calling this
+        
         int jokerType = runData.ShopJokerIdxs[shopJokerIdx];
         runData.ShopJokerIdxs[shopJokerIdx] = -1;
         runData.Money -= GetJokerShopCost(runData, balance, jokerType);
 
         Debug.Log("Logic.BuyShopJoker(shopJokerIdx + " + shopJokerIdx + ") jokerIdx" + jokerType);
-
-        int count = 0;
-        for (int jkrIdx = 0; jkrIdx < runData.AvailableJokerCount; jkrIdx++)
-            if (runData.AvailableJokerTypes[jkrIdx] != jokerType)
-                runData.AvailableJokerTypes[count++] = runData.AvailableJokerTypes[jkrIdx];
-        runData.AvailableJokerCount = count;
-
 
         AddJoker(runData, balance, jokerType);
         return jokerType;
