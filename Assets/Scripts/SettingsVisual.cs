@@ -8,7 +8,7 @@ namespace Cardwheel
 {
     public class SettingsVisual : MonoBehaviour
     {
-        enum MENU_BUTTONS { NONE, CLOSE, MAIN_MENU, NEW_RUN, RETRY, SFX, MUSIC, VIBRATE, SPEED, SKIP };
+        enum MENU_BUTTONS { NONE, RETRY, NEW_RUN, MAIN_MENU, CLOSE, SFX, MUSIC, VIBRATE, SPEED, SKIP };
         MENU_BUTTONS m_selectedButton = MENU_BUTTONS.NONE;
 
         GameObject m_UI;
@@ -37,7 +37,7 @@ namespace Cardwheel
         GUIButtonData m_musicButtonData;
         GUIButtonData m_vibrateButtonData;
         GUIButtonData m_speedButtonData;
-        GUIButtonData m_skipRound1ButtonData;        
+        GUIButtonData m_skipRound1ButtonData;
 
         public void Init(Camera camera, SettingsData settingsData)
         {
@@ -99,7 +99,7 @@ namespace Cardwheel
             selectButton(MENU_BUTTONS.NONE);
         }
 
-        public void Show(RunData runData, Balance balance, SettingsData settingsData)
+        public void Show(RunData runData, Balance balance, SettingsData settingsData, int availableInputs)
         {
             m_UI.SetActive(true);
 
@@ -110,6 +110,11 @@ namespace Cardwheel
             m_seedText.text = Logic.EncodeSeed(runData.StartSeed);
 
             updateToggles(settingsData);
+
+            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+                selectButton(MENU_BUTTONS.CLOSE);
+            else
+                selectButton(MENU_BUTTONS.NONE);
         }
 
         void selectButton(MENU_BUTTONS newSelectedButton)
@@ -141,10 +146,92 @@ namespace Cardwheel
         {
             if ((m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateEnter(availableInputs)) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, availableInputs))
             {
-                Hide();
+                closeSettings();
                 return;
             }
 
+            if (m_selectedButton == MENU_BUTTONS.MAIN_MENU && CommonButtonVisual.NavigateEnter(availableInputs))
+            {
+                Game.Instance.GoToMainMenu();
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.NEW_RUN && CommonButtonVisual.NavigateEnter(availableInputs))
+            {
+                Game.Instance.StartNewRunSameWheel();
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.RETRY && CommonButtonVisual.NavigateEnter(availableInputs))
+            {
+                Game.Instance.RetryRun();
+                return;
+            }
+
+
+            if (m_selectedButton == MENU_BUTTONS.SFX && CommonButtonVisual.NavigateEnter(availableInputs))
+            {
+                toggleSFX();
+                return;
+            }
+            if (m_selectedButton == MENU_BUTTONS.MUSIC && CommonButtonVisual.NavigateEnter(availableInputs))
+            {
+                toggleMusic();
+                return;
+            }
+            if (m_selectedButton == MENU_BUTTONS.VIBRATE && CommonButtonVisual.NavigateEnter(availableInputs))
+            {
+                toggleVibrate();
+                return;
+            }
+            if (m_selectedButton == MENU_BUTTONS.SPEED && CommonButtonVisual.NavigateEnter(availableInputs))
+            {
+                toggleSpeed();
+                return;
+            }
+            if (m_selectedButton == MENU_BUTTONS.SKIP && CommonButtonVisual.NavigateEnter(availableInputs))
+            {
+                toggleSkipRound1();
+                return;
+            }
+
+            if (m_selectedButton >= MENU_BUTTONS.SFX && m_selectedButton < MENU_BUTTONS.SKIP)
+                if (CommonButtonVisual.NavigateDown(availableInputs))
+                {
+                    selectButton(m_selectedButton + 1);
+                    return;
+                }
+
+            if (m_selectedButton > MENU_BUTTONS.SFX && m_selectedButton <= MENU_BUTTONS.SKIP)
+                if (CommonButtonVisual.NavigateUp(availableInputs))
+                {
+                    selectButton(m_selectedButton - 1);
+                    return;
+                }
+            if (m_selectedButton >= MENU_BUTTONS.RETRY && m_selectedButton < MENU_BUTTONS.CLOSE)
+                if (CommonButtonVisual.NavigateDown(availableInputs))
+                {
+                    selectButton(m_selectedButton + 1);
+                    return;
+                }
+            if (m_selectedButton > MENU_BUTTONS.RETRY && m_selectedButton <= MENU_BUTTONS.CLOSE)
+                if (CommonButtonVisual.NavigateUp(availableInputs))
+                {
+                    selectButton(m_selectedButton - 1);
+                    return;
+                }
+            if (m_selectedButton >= MENU_BUTTONS.RETRY && m_selectedButton <= MENU_BUTTONS.CLOSE)
+                if (CommonButtonVisual.NavigateRight(availableInputs))
+                {
+                    selectButton(MENU_BUTTONS.SFX);
+                    return;
+                }
+            if (m_selectedButton >= MENU_BUTTONS.SFX && m_selectedButton <= MENU_BUTTONS.SKIP)
+                if (CommonButtonVisual.NavigateLeft(availableInputs))
+                {
+                    selectButton(MENU_BUTTONS.CLOSE);
+                    return;
+                }
         }
 
         void updateToggles(SettingsData settingsData)

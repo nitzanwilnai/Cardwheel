@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using CommonTools;
 using TMPro;
+using UnityEditor.AnimatedValues;
 
 namespace Cardwheel
 {
@@ -29,9 +30,15 @@ namespace Cardwheel
         TextMeshProUGUI[] m_baseChipsText;
         Animation[] m_baseChipsAnimation;
 
+        RunData runData;
+        Balance balance;
+
         // Start is called before the first frame update
-        public void Init(Balance balance, Camera camera)
+        public void Init(RunData runData, Balance balance, Camera camera)
         {
+            this.runData = runData;
+            this.balance = balance;
+
             m_UI = AssetManager.Instance.LoadCardPackChipsUI();
             m_UI.GetComponent<Canvas>().worldCamera = camera;
             CommonVisual.ChangeCanvasScalerMatching(m_UI);
@@ -49,7 +56,7 @@ namespace Cardwheel
                 for (int j = 0; j < numCards; j++)
                 {
                     int localJ = j;
-                    m_cardPackCardGUIs[i][j].UseButton.onClick.AddListener(() => Game.Instance.UseCardPackOnChips(localJ));
+                    m_cardPackCardGUIs[i][j].UseButton.onClick.AddListener(() => useCardPackChips(localJ));
                     m_cardPackCardGUIs[i][j].UseButton.interactable = true;
                 }
             }
@@ -129,8 +136,10 @@ namespace Cardwheel
             }
         }
 
-        public void UseCardPackChips(RunData runData, Balance balance, int cardIdx)
+        void useCardPackChips(int cardIdx)
         {
+            SoundManager.Instance.PlaySFXButtonOK();
+
             Logic.UseCardPackChipsCard(runData, balance, cardIdx);
 
             m_abandonButton.gameObject.SetActive(false);

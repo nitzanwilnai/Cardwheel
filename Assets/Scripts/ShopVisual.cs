@@ -129,7 +129,7 @@ namespace Cardwheel
             m_rerollButtonImage = guiRef.GetImage("Reroll");
             guiRef.GetButton("Reroll").onClick.AddListener(Game.Instance.RerollShop);
             m_rerollCostText = guiRef.GetTextGUI("RerollCost");
-            guiRef.GetButton("NextRound").onClick.AddListener(Game.Instance.GoToRoundSelection);
+            guiRef.GetButton("NextRound").onClick.AddListener(goToRoundSelection);
             guiRef.GetButton("Info").onClick.AddListener(showShopInfo);
 
             m_jokerPopupAnimation = guiRef.GetAnimation("JokerPopup");
@@ -493,6 +493,14 @@ namespace Cardwheel
             SoundManager.Instance.PlaySFXButtonOK();
 
             Game.Instance.SetMenuState(MENU_STATE.SHOP_INFO);
+        }
+
+        void goToRoundSelection()
+        {
+            SoundManager.Instance.PlaySFXButtonOK();
+
+            Game.Instance.SetMenuState(MENU_STATE.ROUND_SELECTION);
+
         }
     }
 

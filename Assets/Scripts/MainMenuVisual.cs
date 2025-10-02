@@ -146,7 +146,7 @@ namespace Cardwheel
         public void Tick(Balance balance, float dt, int availableInputs)
         {
             if (CommonVisual.AnimateCloseTick(ref m_goToWheelSelectTimer, dt))
-                Game.Instance.GoToWheelSelection();
+                Game.Instance.SetMenuState(MENU_STATE.WHEEL_SELECTION);
             if (CommonVisual.AnimateCloseTick(ref m_continueGametTimer, dt))
                 Game.Instance.ContinueRun();
 
