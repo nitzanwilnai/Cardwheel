@@ -84,24 +84,24 @@ namespace Cardwheel
         public void Show(RunData runData, Balance balance, GAMEPAD_TYPE gamepadType, int avaiableInputs)
         {
             m_moneyText.text = runData.Money.ToString("N0");
-            m_rewardText.text = "$" + balance.RoundReward[runData.Round % 3].ToString("N0");
+            m_rewardText.text = "◇" + balance.RoundReward[runData.Round % 3].ToString("N0");
 
             int spins = Logic.GetRoundCompleteMoneyFromSpins(runData);
-            m_spinsText.text = "$" + spins.ToString("N0");
+            m_spinsText.text = "◇" + spins.ToString("N0");
             m_spinsGO.SetActive(spins > 0);
 
             int interest = Logic.GetInterestForRound(runData, balance);
-            m_interestText.text = "$" + interest.ToString("N0");
+            m_interestText.text = "◇" + interest.ToString("N0");
             m_interestGO.SetActive(interest > 0);
 
             int specialMoney = Logic.GetRoundCompleteMoneyFromJokers(runData, balance);
             if (Logic.InBossRound(runData))
                 specialMoney += runData.MoneyAfterBoss;
-            m_specialText.text = "$" + specialMoney.ToString("N0");
+            m_specialText.text = "◇" + specialMoney.ToString("N0");
             m_specialGO.SetActive(specialMoney > 0);
 
             int total = balance.RoundReward[runData.Round % 3] + interest + specialMoney + spins;
-            m_totalText.text = "Claim Reward $" + total.ToString("N0");
+            m_totalText.text = "Claim Reward ◇" + total.ToString("N0");
 
             m_UI.SetActive(true);
 

@@ -304,13 +304,13 @@ namespace Cardwheel
 
         public static void ShowTopBar(RunData runData, TopBarGUI topBarGUI, string title)
         {
-            topBarGUI.MoneyText.text = "$" + runData.Money.ToString("N0");
+            topBarGUI.MoneyText.text = "◇" + runData.Money.ToString("N0");
             topBarGUI.TitleText.text = title;
         }
 
         public static void UpdateTopBarMoney(RunData runData, TopBarGUI topBarGUI)
         {
-            topBarGUI.MoneyText.text = "$" + runData.Money.ToString("N0");
+            topBarGUI.MoneyText.text = "◇" + runData.Money.ToString("N0");
             topBarGUI.MoneyAnim.Play();
         }
 
@@ -420,13 +420,13 @@ namespace Cardwheel
         {
             string extra = "";
             if (balance.SkipBalance.DoubleMoney[skipType])
-                extra = " (Current $" + Logic.GetDoubleMoneyLimit20(runData).ToString("N0") + ")";
+                extra = " (Current ◇" + Logic.GetDoubleMoneyLimit20(runData).ToString("N0") + ")";
             if (balance.SkipBalance.Change2SlotsToPlayedColor[skipType])
                 extra = " (" + Logic.GetMostPlayedSlotType(runData).ToString() + ")";
             if (balance.SkipBalance.MoneyForSpinsUsed[skipType] > 0)
-                extra = "\n(Current $" + (runData.SpinsUsed * balance.SkipBalance.MoneyForSpinsUsed[skipType]).ToString("N0") + ")";
+                extra = "\n(Current ◇" + (runData.SpinsUsed * balance.SkipBalance.MoneyForSpinsUsed[skipType]).ToString("N0") + ")";
             if (balance.SkipBalance.MoneyForSpinsUnused[skipType] > 0)
-                extra = "\n(Current $" + (runData.SpinsUnused * balance.SkipBalance.MoneyForSpinsUnused[skipType]).ToString("N0") + ")";
+                extra = "\n(Current ◇" + (runData.SpinsUnused * balance.SkipBalance.MoneyForSpinsUnused[skipType]).ToString("N0") + ")";
             return extra;
         }
 

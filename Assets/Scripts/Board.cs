@@ -1474,7 +1474,7 @@ namespace Cardwheel
             Vector3 ballPos = BallsGO[ballIdx].transform.position;
             BallsMoneyGO.SetActive(true);
             BallsMoneyGO.transform.position = new Vector3(ballPos.x, ballPos.y, ballPos.z - 10.0f);
-            m_ballsMoneyText.text = "$" + money.ToString("N0");
+            m_ballsMoneyText.text = "◇" + money.ToString("N0");
 
             CommonVisual.UpdateTopBarMoney(runData, m_topBarGUI);
             SoundManager.Instance.PlaySFXMoney();

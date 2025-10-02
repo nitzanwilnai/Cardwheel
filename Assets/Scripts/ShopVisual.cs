@@ -249,7 +249,7 @@ namespace Cardwheel
                     m_jokers[i].JokerGO.GetComponent<Button>().onClick.RemoveAllListeners();
                     m_jokers[i].JokerGO.GetComponent<Button>().onClick.AddListener(() => showJokerBuyPopup(localI));
 
-                    m_jokers[i].CostText.text = "$" + Logic.GetJokerShopCost(runData, balance, jokerType).ToString();
+                    m_jokers[i].CostText.text = "◇" + Logic.GetJokerShopCost(runData, balance, jokerType).ToString();
                 }
             }
 
@@ -272,7 +272,7 @@ namespace Cardwheel
                     m_cardPacks[i].CardPackGO.GetComponent<Button>().onClick.RemoveAllListeners();
                     m_cardPacks[i].CardPackGO.GetComponent<Button>().onClick.AddListener(() => showCardBuyPopup(localI));
 
-                    m_cardPacks[i].CostText.text = "$" + Logic.GetCardPackShopCost(runData, balance, cardPackIdx);
+                    m_cardPacks[i].CostText.text = "◇" + Logic.GetCardPackShopCost(runData, balance, cardPackIdx);
                 }
             }
 
@@ -280,7 +280,7 @@ namespace Cardwheel
             m_voucher.CardImage.sprite = AssetManager.Instance.LoadVoucherSprite(balance.VoucherBalance.SpriteName[Logic.GetVoucherForRound(runData)]);
             m_voucher.CardPackGO.GetComponent<Button>().onClick.RemoveAllListeners();
             m_voucher.CardPackGO.GetComponent<Button>().onClick.AddListener(showVoucherBuyPopup);
-            m_voucher.CostText.text = "$" + Logic.GetVoucherCost(runData, balance);
+            m_voucher.CostText.text = "◇" + Logic.GetVoucherCost(runData, balance);
             m_voucher.GO.SetActive(!runData.VoucherPurchased);
 
             CommonVisual.ShowJokersBallsAndSpinWheel(runData, balance, m_cardsBallsSpinWheelGUI, runData.SlotType);
@@ -312,7 +312,7 @@ namespace Cardwheel
         public void UpdateRerollButton(RunData runData, Balance balance)
         {
             int cost = Logic.GetShopRerollCost(runData, balance);
-            m_rerollCostText.text = "$" + cost.ToString("N0");
+            m_rerollCostText.text = "◇" + cost.ToString("N0");
             m_rerollButtonImage.color = Logic.CanBuy(runData, balance, cost) ? balance.RerollColorEnabled : balance.ButtonColorDisabled;
 
         }
@@ -336,7 +336,7 @@ namespace Cardwheel
                 m_jokerBuyPopupGUI.BuyButton.onClick.AddListener(() => Game.Instance.BuyShopJoker(shopJokerIdx));
                 m_jokerBuyPopupGUI.BuyButton.interactable = Logic.RoomForJokerInHand(runData) && Logic.CanBuy(runData, balance, Logic.GetJokerShopCost(runData, balance, jokerType));
                 m_jokerBuyPopupGUI.BuyButtonImage.color = (Logic.RoomForJokerInHand(runData) && Logic.CanBuy(runData, balance, Logic.GetJokerShopCost(runData, balance, jokerType))) ? balance.ButtonColorEnabled : balance.ButtonColorDisabled;
-                m_jokerBuyPopupGUI.Cost.text = "$" + Logic.GetJokerShopCost(runData, balance, jokerType).ToString();
+                m_jokerBuyPopupGUI.Cost.text = "◇" + Logic.GetJokerShopCost(runData, balance, jokerType).ToString();
                 RARITY rarity = balance.JokerBalance.Rarity[jokerType];
                 m_jokerBuyPopupGUI.RarityText.text = rarity.ToString();
                 m_jokerBuyPopupGUI.Border.color = balance.RarityColors[(int)rarity];
@@ -365,7 +365,7 @@ namespace Cardwheel
             m_cardPackBuyPopupGUI.BuyButton.onClick.AddListener(() => Game.Instance.BuyShopCardPack(shopPackIdx));
             m_cardPackBuyPopupGUI.BuyButton.interactable = Logic.CanBuy(runData, balance, Logic.GetCardPackShopCost(runData, balance, cardPackIdx));
             m_cardPackBuyPopupGUI.BuyButtonImage.color = Logic.CanBuy(runData, balance, Logic.GetCardPackShopCost(runData, balance, cardPackIdx)) ? balance.ButtonColorEnabled : balance.ButtonColorDisabled;
-            m_cardPackBuyPopupGUI.Cost.text = "$" + Logic.GetCardPackShopCost(runData, balance, cardPackIdx);
+            m_cardPackBuyPopupGUI.Cost.text = "◇" + Logic.GetCardPackShopCost(runData, balance, cardPackIdx);
 
             if (balance.CardPackType[cardPackIdx] == CARD_PACK_TYPE.BALL)
                 m_cardPackBuyPopupGUI.ShopCard.sprite = AssetManager.Instance.LoadBallCardPackSprite();
@@ -389,7 +389,7 @@ namespace Cardwheel
 
             m_voucherBuyPopupGUI.BuyButton.interactable = Logic.CanBuy(runData, balance, Logic.GetVoucherCost(runData, balance));
             m_voucherBuyPopupGUI.BuyButtonImage.color = Logic.CanBuy(runData, balance, Logic.GetVoucherCost(runData, balance)) ? balance.ButtonColorEnabled : balance.ButtonColorDisabled;
-            m_voucherBuyPopupGUI.Cost.text = "$" + Logic.GetVoucherCost(runData, balance);
+            m_voucherBuyPopupGUI.Cost.text = "◇" + Logic.GetVoucherCost(runData, balance);
 
             m_voucherBuyPopupGUI.ShopCard.sprite = AssetManager.Instance.LoadVoucherSprite(balance.VoucherBalance.SpriteName[Logic.GetVoucherForRound(runData)]);
 

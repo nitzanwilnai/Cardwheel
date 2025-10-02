@@ -108,7 +108,7 @@ namespace Cardwheel
         {
             int cost = Logic.GetCardPackRerollCost(runData, balance);
             rerollButton.image.color = Logic.CanBuy(runData, balance, cost) ? balance.RerollColorEnabled : balance.ButtonColorDisabled;
-            rerollCostText.text = "$" + cost;
+            rerollCostText.text = "◇" + cost;
         }
     }
 }

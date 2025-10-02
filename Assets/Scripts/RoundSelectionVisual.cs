@@ -151,7 +151,7 @@ namespace Cardwheel
 
                 string goalText = i < smallRound ? "Complete" : Logic.GetRoundGoal(runData, balance, bigRound, i).ToString("N0");
                 m_roundGUIInfos[i].Goal.text = goalText;
-                m_roundGUIInfos[i].Reward.text = "$" + balance.RoundReward[i].ToString("N0");
+                m_roundGUIInfos[i].Reward.text = "◇" + balance.RoundReward[i].ToString("N0");
                 m_roundGUIInfos[i].Cover.SetActive(smallRound != i);
                 CommonButtonVisual.UpdateButtonIcons(m_roundGUIInfos[i].PlayButtonData, gamepadType);
 
