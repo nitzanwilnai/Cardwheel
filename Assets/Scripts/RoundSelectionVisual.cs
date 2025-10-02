@@ -429,7 +429,15 @@ namespace Cardwheel
 
             if (balance.SkipBalance.CardPackIdx[skipType] > -1)
             {
-                Game.Instance.OpenCardPack(balance.SkipBalance.CardPackIdx[skipType]);
+                int cardPackIdx = balance.SkipBalance.CardPackIdx[skipType];
+                Logic.OpenCardPack(runData, balance, cardPackIdx);
+
+                if (balance.CardPackType[runData.SelectedShopCardPackIdx] == CARD_PACK_TYPE.BALL)
+                    Game.Instance.SetMenuState(MENU_STATE.CARD_PACK_BALL);
+                if (balance.CardPackType[runData.SelectedShopCardPackIdx] == CARD_PACK_TYPE.SLOT)
+                    Game.Instance.SetMenuState(MENU_STATE.CARD_PACK_SLOT);
+                if (balance.CardPackType[runData.SelectedShopCardPackIdx] == CARD_PACK_TYPE.CHIPS)
+                    Game.Instance.SetMenuState(MENU_STATE.CARD_PACK_CHIPS);
             }
         }
 

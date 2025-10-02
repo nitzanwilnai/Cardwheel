@@ -96,27 +96,6 @@ namespace Cardwheel
                 Debug.Log("Steam Init Success");
 
 #endif
-
-            // InputSystem.onDeviceChange +=
-            //                 (device, change) =>
-            //                 {
-            //                     Debug.Log("onDeviceChange(" + device + ", " + change + ")");
-
-            //                     switch (change)
-            //                     {
-            //                         case InputDeviceChange.Added:
-            //                             Debug.Log("Device added: " + device);
-            //                             break;
-            //                         case InputDeviceChange.Removed:
-            //                             Debug.Log("Device removed: " + device);
-            //                             break;
-            //                         case InputDeviceChange.ConfigurationChanged:
-            //                             Debug.Log("Device configuration changed: " + device);
-            //                             break;
-            //                     }
-            //                 };
-            // InputSystem.onDeviceChange += onDeviceChange;
-
         }
 
         void gamepadCheck()
@@ -206,7 +185,7 @@ namespace Cardwheel
             m_shopVisual.Init(m_runData, m_balance, Camera);
             m_cardPackBallVisual.Init(m_runData, m_balance, Camera);
             m_cardPackSlotVisual.Init(m_runData, m_balance, Camera);
-            m_cardPackChipsVisual.Init(m_balance, Camera);
+            m_cardPackChipsVisual.Init(m_runData, m_balance, Camera);
             m_jokerInfoPopupVisual.Init(m_runData, Camera);
             m_ballScreenVisual.Init(m_balance, Camera);
             m_settingsVisual.Init(Camera, m_settingsData);
@@ -304,7 +283,7 @@ namespace Cardwheel
             else if (menuState == MENU_STATE.BALL_SCREEN)
                 m_ballScreenVisual.Show(m_runData, m_balance);
             else if (menuState == MENU_STATE.SETTINGS)
-                m_settingsVisual.Show(m_runData, m_balance, m_settingsData);
+                m_settingsVisual.Show(m_runData, m_balance, m_settingsData, m_availableInputs);
             else if (menuState == MENU_STATE.WIN_SCREEN)
                 m_winScreenVisual.Show(m_runData, m_balance);
             else if (menuState == MENU_STATE.CHIPS_INFO)
@@ -461,37 +440,10 @@ namespace Cardwheel
             if (Keyboard.current.pKey.wasPressedThisFrame)
                 EditorApplication.isPaused = true;
 
-            // if (Keyboard.current.sKey.wasPressedThisFrame)
-            // {
-            //     if (m_runData.MenuState == MENU_STATE.SHOP)
-            //         m_shopVisual.SortSlots(m_runData, m_balance);
-            // }
-
             if (Keyboard.current.dKey.wasPressedThisFrame)
             {
                 gamepadCheck();
             }
-
-            // if (Gamepad.current != null)
-            // {
-            //     Debug.Log("Gamepad.current.leftStick.value " + Gamepad.current.leftStick.value);
-            //     if (Gamepad.current.aButton.wasPressedThisFrame)
-            //     {
-            //         Debug.Log("Gamepad.current.aButton.value " + Gamepad.current.aButton.value);
-            //     }
-            //     if (Gamepad.current.bButton.value > 0.0f)
-            //     {
-            //         Debug.Log("Gamepad.current.bButton.value " + Gamepad.current.bButton.value);
-            //     }
-            //     if (Gamepad.current.xButton.value > 0.0f)
-            //     {
-            //         Debug.Log("Gamepad.current.xButton.value " + Gamepad.current.xButton.value);
-            //     }
-            //     if (Gamepad.current.yButton.value > 0.0f)
-            //     {
-            //         Debug.Log("Gamepad.current.yButton.value " + Gamepad.current.yButton.value);
-            //     }
-            // }
 #endif
         }
 
@@ -584,13 +536,6 @@ namespace Cardwheel
             GameDataIO.SaveGameData(m_gameData);
         }
 
-        public void GameOver()
-        {
-            SoundManager.Instance.PlaySFXGameOver();
-
-            SetMenuState(MENU_STATE.GAME_OVER);
-        }
-
         public void BallInSlot(int ballIdx, int slotIdx)
         {
             Board.BallInSlot(m_runData, m_balance, m_settingsData, ballIdx, slotIdx);
@@ -640,18 +585,6 @@ namespace Cardwheel
                 SetMenuState(MENU_STATE.CARD_PACK_CHIPS);
         }
 
-        public void OpenCardPack(int cardPackIdx)
-        {
-            Logic.OpenCardPack(m_runData, m_balance, cardPackIdx);
-
-            if (m_balance.CardPackType[m_runData.SelectedShopCardPackIdx] == CARD_PACK_TYPE.BALL)
-                SetMenuState(MENU_STATE.CARD_PACK_BALL);
-            if (m_balance.CardPackType[m_runData.SelectedShopCardPackIdx] == CARD_PACK_TYPE.SLOT)
-                SetMenuState(MENU_STATE.CARD_PACK_SLOT);
-            if (m_balance.CardPackType[m_runData.SelectedShopCardPackIdx] == CARD_PACK_TYPE.CHIPS)
-                SetMenuState(MENU_STATE.CARD_PACK_CHIPS);
-        }
-
         public void BuyVoucher()
         {
             SoundManager.Instance.PlaySFXMoney();
@@ -685,20 +618,6 @@ namespace Cardwheel
             SetMenuState(m_runData.PrevMenuState);
         }
 
-        public void UseCardPackOnSlots(int cardIdx)
-        {
-            SoundManager.Instance.PlaySFXButtonOK();
-
-            m_cardPackSlotVisual.UseCardPackOnSlots(m_runData, m_balance, cardIdx);
-        }
-
-        public void UseCardPackOnChips(int cardIdx)
-        {
-            SoundManager.Instance.PlaySFXButtonOK();
-
-            m_cardPackChipsVisual.UseCardPackChips(m_runData, m_balance, cardIdx);
-        }
-
         public void RerollCardPack()
         {
             SoundManager.Instance.PlaySFXMoney();
@@ -711,13 +630,6 @@ namespace Cardwheel
                 m_cardPackChipsVisual.Reroll(m_runData, m_balance);
 
             RunDataIO.SaveRun(m_runData, m_balance);
-        }
-
-        public void GoToRoundSelection()
-        {
-            SoundManager.Instance.PlaySFXButtonOK();
-
-            SetMenuState(MENU_STATE.ROUND_SELECTION);
         }
 
         public void GoToBallScreen()
@@ -758,13 +670,6 @@ namespace Cardwheel
             SoundManager.Instance.PlaySFXButtonOK();
 
             SetMenuState(MENU_STATE.CHIPS_INFO);
-        }
-
-        public void GoToWheelSelection()
-        {
-            SoundManager.Instance.PlaySFXButtonOK();
-
-            SetMenuState(MENU_STATE.WHEEL_SELECTION);
         }
 
         public void GoToPrivacyPolicy()

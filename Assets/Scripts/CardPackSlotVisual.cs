@@ -31,9 +31,15 @@ namespace Cardwheel
 
         SpinCircle m_spinCircle;
 
+        RunData runData;
+        Balance balance;
+
         // Start is called before the first frame update
         public void Init(RunData runData, Balance balance, Camera camera)
         {
+            this.runData = runData;
+            this.balance = balance;
+
             m_UI = AssetManager.Instance.LoadCardPackSlotUI();
             m_UI.GetComponent<Canvas>().worldCamera = camera;
             CommonVisual.ChangeCanvasScalerMatching(m_UI);
@@ -51,7 +57,7 @@ namespace Cardwheel
                 for (int j = 0; j < numCards; j++)
                 {
                     int localJ = j;
-                    m_cardPackCardGUIs[i][j].UseButton.onClick.AddListener(() => Game.Instance.UseCardPackOnSlots(localJ));
+                    m_cardPackCardGUIs[i][j].UseButton.onClick.AddListener(() => useCardPackOnSlots(localJ));
                     m_cardPackCardGUIs[i][j].UseButton.interactable = true;
                 }
             }
@@ -132,8 +138,10 @@ namespace Cardwheel
             }
         }
 
-        public void UseCardPackOnSlots(RunData runData, Balance balance, int cardIdx)
+        void useCardPackOnSlots(int cardIdx)
         {
+            SoundManager.Instance.PlaySFXButtonOK();
+            
             Logic.UseCardPackSlotCard(runData, balance, cardIdx, CommonSlotsVisual.AffectedSlotsIdxs, ref CommonSlotsVisual.AffectedSlotsCount);
 
             m_abandonButton.gameObject.SetActive(false);

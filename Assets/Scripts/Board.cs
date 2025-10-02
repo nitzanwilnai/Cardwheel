@@ -1179,7 +1179,11 @@ namespace Cardwheel
                     else if (Logic.CheckRoundComplete(runData, balance))
                         Game.Instance.RoundComplete();
                     else if (Logic.CheckGameOver(runData))
-                        Game.Instance.GameOver();
+                    {
+                        SoundManager.Instance.PlaySFXGameOver();
+
+                        Game.Instance.SetMenuState(MENU_STATE.GAME_OVER);
+                    }
                     else
                         startSpin(runData, balance);
                 }
