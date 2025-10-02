@@ -567,6 +567,7 @@ GameObject:
   - component: {fileID: 374720704681806790}
   - component: {fileID: 6943497260373936012}
   - component: {fileID: 3439125185264183786}
+  - component: {fileID: 6791105457213578374}
   m_Layer: 5
   m_Name: UI - Shop
   m_TagString: Untagged
@@ -733,13 +734,7 @@ MonoBehaviour:
   - Name: Reroll
     Value: {fileID: 5480273383572450569}
   GUIRefRawImages: []
-  GUIRefButtons:
-  - Name: NextRound
-    Value: {fileID: 2911337553761052250}
-  - Name: Reroll
-    Value: {fileID: 9089519277847765892}
-  - Name: Info
-    Value: {fileID: 5123099298760799695}
+  GUIRefButtons: []
   GUIRefSliders: []
   GUIRefAnimations:
   - Name: JokerPopup
@@ -764,6 +759,34 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
+--- !u!114 &6791105457213578374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1840910280049383347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67e5b6a1a502544f795bb25d60791040, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Buttons:
+  - Key: NextRound
+    Button: {fileID: 2911337553761052250}
+    GlyphImage: {fileID: 0}
+    GamepadButton: 0
+    SelectedGO: {fileID: 0}
+  - Key: Reroll
+    Button: {fileID: 9089519277847765892}
+    GlyphImage: {fileID: 0}
+    GamepadButton: 0
+    SelectedGO: {fileID: 0}
+  - Key: Info
+    Button: {fileID: 5123099298760799695}
+    GlyphImage: {fileID: 0}
+    GamepadButton: 0
+    SelectedGO: {fileID: 0}
 --- !u!1 &2052471389570535830
 GameObject:
   m_ObjectHideFlags: 0
