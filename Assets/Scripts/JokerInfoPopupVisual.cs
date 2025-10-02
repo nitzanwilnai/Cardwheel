@@ -90,7 +90,7 @@ namespace Cardwheel
             int jokerType = runData.JokerTypes[m_jokerIndex];
             m_sellButtonData.Button.onClick.RemoveAllListeners();
 
-            m_cost.text = "$" + runData.JokerSellValues[m_jokerIndex].ToString();
+            m_cost.text = "◇" + runData.JokerSellValues[m_jokerIndex].ToString();
 
             m_shopCard.sprite = AssetManager.Instance.LoadJokerSprite(balance.JokerBalance.JokerSpritesNames[jokerType]);
 
