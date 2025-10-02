@@ -99,6 +99,10 @@ namespace Cardwheel
         Animation m_jokerPopupAnimation;
         Animation m_cardpackPopupAnimation;
 
+        GUIButtonData m_infoButtonData;
+        GUIButtonData m_nextRoundButtonData;
+        GUIButtonData m_rerollButtonData;
+
         RunData runData;
         Balance balance;
 
@@ -127,10 +131,16 @@ namespace Cardwheel
                 m_cardPacks[i].GO.SetActive(false);
 
             m_rerollButtonImage = guiRef.GetImage("Reroll");
-            guiRef.GetButton("Reroll").onClick.AddListener(Game.Instance.RerollShop);
             m_rerollCostText = guiRef.GetTextGUI("RerollCost");
-            guiRef.GetButton("NextRound").onClick.AddListener(goToRoundSelection);
-            guiRef.GetButton("Info").onClick.AddListener(showShopInfo);
+
+            //TODO chnage to guirefbutton
+            GUIButtonRef guiButtonRef = m_UI.GetComponent<GUIButtonRef>();
+            m_rerollButtonData = guiButtonRef.GetButtonData("Reroll");
+            m_nextRoundButtonData = guiButtonRef.GetButtonData("NextRound");
+            m_infoButtonData = guiButtonRef.GetButtonData("Info");
+            m_rerollButtonData.Button.onClick.AddListener(Game.Instance.RerollShop);
+            m_nextRoundButtonData.Button.onClick.AddListener(goToRoundSelection);
+            m_infoButtonData.Button.onClick.AddListener(showShopInfo);
 
             m_jokerPopupAnimation = guiRef.GetAnimation("JokerPopup");
             m_cardpackPopupAnimation = guiRef.GetAnimation("CardpackPopup");
