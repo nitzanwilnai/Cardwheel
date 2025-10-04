@@ -506,6 +506,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Board
       objectReference: {fileID: 0}
+    - target: {fileID: 2646132462451246873, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9154548170960038479, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

@@ -8,5 +8,6 @@ namespace Cardwheel
     public class GameData
     {
         public int[] SpinWheelWinCount;
+        public int MenuTutorialFlags;
     }
 }

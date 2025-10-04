@@ -73,7 +73,7 @@ namespace Cardwheel
 
             PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARMv7 | AndroidArchitecture.ARM64;
 
-            Build(BuildTarget.Android, Application.dataPath + "/../../Build/Release " + dateTime + ".aab", BuildOptions.None, "Assets/Scenes/MainGameScene V.unity");
+            Build(BuildTarget.Android, Application.dataPath + "/../../Build/Release " + PlayerSettings.productName + " " + dateTime + ".aab", BuildOptions.None, "Assets/Scenes/MainGameScene V.unity");
 
             EditorUserBuildSettings.androidCreateSymbols = AndroidCreateSymbols.Disabled;
             EditorUserBuildSettings.buildAppBundle = false;

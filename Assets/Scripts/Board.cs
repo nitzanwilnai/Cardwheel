@@ -178,7 +178,7 @@ namespace Cardwheel
         public float DebugRotationSpeed;
 
         // Start is called before the first frame update
-        public void Init(Balance balance, GameInfoSO gameInfoSO, SettingsData settingsData)
+        public void Init(Balance balance, GameInfoSO gameInfoSO, SettingsData settingsData, Camera camera)
         {
             this.balance = balance;
             this.settingsData = settingsData;
@@ -216,6 +216,9 @@ namespace Cardwheel
             }
 
             m_UI = AssetManager.Instance.LoadInGameUI();
+            m_UI.GetComponent<Canvas>().worldCamera = camera;
+            CommonVisual.ChangeCanvasScalerMatching(m_UI);
+
             CommonVisual.ChangeCanvasScalerMatching(m_UI);
 
             GUIButtonRef guiButtonRef = m_UI.GetComponent<GUIButtonRef>();

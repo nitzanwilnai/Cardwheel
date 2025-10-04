@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 948ac66ddbacb4d59a151fccb0993aa8, type: 3}
+  m_Name: RoundSelection
+  m_EditorClassIdentifier: 
+  MenuState: 6
+  text: "* Each run has 8 worlds with 3 rounds each. \n* The 3rd round is always
+    a boss round with special rules.\n* You can skip a round to get a bonus, but
+    you won't earn the reward money.\n* You can't skip a boss round."

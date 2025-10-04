@@ -372,6 +372,28 @@ namespace Cardwheel
                         for (int i = 0; i < spinWheelSO.SlotType.Length; i++)
                             bw.Write((byte)spinWheelSO.SlotType[i]);
                     }
+
+                    objects.Clear();
+                    AddObjectsFromDirectory("Assets/Data/Tutorial", objects, typeof(TutorialSO));
+                    int numTutorialSteps = objects.Count;
+                    Debug.Log("numTutorialSteps " + numTutorialSteps);
+                    bw.Write((int)MENU_STATE.LAST);
+                    for (int menuIndex = 0; menuIndex < (int)MENU_STATE.LAST; menuIndex++)
+                    {
+                        bool stepFound = false;
+                        for (int t = 0; t < numTutorialSteps; t++)
+                        {
+                            TutorialSO tutorialSO = (TutorialSO)objects[t];
+                            if (tutorialSO.MenuState == (MENU_STATE)menuIndex)
+                            {
+                                bw.Write(tutorialSO.text);
+                                stepFound = true;
+                                break;
+                            }
+                        }
+                        if (!stepFound)
+                            bw.Write("");
+                    }
                 }
                 return stream.ToArray();
             }
