@@ -306,6 +306,11 @@ namespace Cardwheel
             return Instantiate(loadGameObject(m_commonBundle, "Selected", "Assets/Prefabs/Common/Selected.prefab"), parent);
         }
 
+        public GameObject LoadTutorialUI()
+        {
+            return Instantiate(loadGameObject(m_commonBundle, "UI - Tutorial", "Assets/Prefabs/common/UI - Tutorial.prefab"));
+        }
+
         public Sprite GetGamepadGlyph(GAMEPAD_TYPE gamepadType, GAMEPAD_BUTTON gamepadButton)
         {
             if (gamepadType == GAMEPAD_TYPE.PS5)

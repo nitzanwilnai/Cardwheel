@@ -38,6 +38,7 @@ namespace Cardwheel
         JOKER_INFO_POPUP,
         GAME_OVER,
         WIN_SCREEN,
+        LAST, // should always be last!
     };
 
     public enum INPUT_TYPES { KEYBOARD, GAMEPAD };
@@ -71,6 +72,7 @@ namespace Cardwheel
         GameInfoVisual m_gameInfoVisual;
         ShopInfoVisual m_shopInfoVisual;
         WheelSelectionVisual m_wheelSelectionVisual;
+        TutorialVisual m_tutorialVisual;
 
         RunData m_runData;
         SettingsData m_settingsData;
@@ -151,11 +153,15 @@ namespace Cardwheel
             m_balance = new Balance();
             m_balance.LoadBalance();
             Logic.AllocateRunData(m_runData, m_balance);
-            Board.Init(m_balance, GameInfoSO, m_settingsData);
+            Board.Init(m_balance, GameInfoSO, m_settingsData, Camera);
 
             m_gameData = new GameData();
             if (!GameDataIO.LoadGameData(m_gameData, m_balance))
                 Logic.AllocateGameData(m_gameData, m_balance);
+
+#if UNITY_EDITOR
+            m_gameData.MenuTutorialFlags = 0;
+#endif
 
             CommonVisual.InitJokers(m_balance);
             CommonVisual.InitBalls(m_balance);
@@ -177,6 +183,7 @@ namespace Cardwheel
             m_gameInfoVisual = AssetManager.Instance.LoadGameInfoVisual();
             m_shopInfoVisual = AssetManager.Instance.LoadShopInfoVisual();
             m_wheelSelectionVisual = AssetManager.Instance.LoadWheelSelectionVisual();
+            m_tutorialVisual = new TutorialVisual();
 
             m_mainMenuVisual.Init(Camera, m_balance);
             m_roundSelectionVisual.Init(m_balance, Camera);
@@ -194,6 +201,7 @@ namespace Cardwheel
             m_gameInfoVisual.Init(Camera, m_balance);
             m_shopInfoVisual.Init(Camera);
             m_wheelSelectionVisual.Init(Camera, m_gameData, m_balance);
+            m_tutorialVisual.Init(m_gameData, m_runData, m_balance, Camera);
 
             MusicManager.Instance.Init(m_settingsData);
             MusicManager.Instance.PlayMusic();
@@ -271,7 +279,7 @@ namespace Cardwheel
             else if (menuState == MENU_STATE.GAME_OVER)
                 m_gameOverVisual.Show(m_runData);
             else if (menuState == MENU_STATE.SHOP)
-                m_shopVisual.Show(m_runData, m_balance, m_gamepadType);
+                m_shopVisual.Show(m_gamepadType, m_availableInputs);
             else if (menuState == MENU_STATE.CARD_PACK_BALL)
                 m_cardPackBallVisual.Show(m_runData, m_balance);
             else if (menuState == MENU_STATE.CARD_PACK_SLOT)
@@ -298,6 +306,11 @@ namespace Cardwheel
             {
                 // has to be shown after setMenuState;
             }
+
+            if (!Logic.IsFlagSet(m_gameData.MenuTutorialFlags, (int)menuState) && m_balance.MenuTutorialText[(int)menuState].Length > 0)
+                m_tutorialVisual.Show(m_availableInputs);
+            else
+                m_tutorialVisual.Hide();
         }
 
         void OnEnable()
@@ -342,9 +355,17 @@ namespace Cardwheel
             SteamInput.RunFrame();
 #endif
 
+            int modifiedInput = m_availableInputs;
+            if (!Logic.IsFlagSet(m_gameData.MenuTutorialFlags, (int)m_runData.MenuState))
+            {
+                m_tutorialVisual.HandleInput(m_availableInputs);
+                modifiedInput = 0;
+            }
+
+
             if (m_runData.MenuState == MENU_STATE.IN_GAME)
             {
-                Board.Tick(m_runData, m_balance, m_settingsData, dt, m_availableInputs);
+                Board.Tick(m_runData, m_balance, m_settingsData, dt, modifiedInput);
             }
             else if (m_runData.MenuState == MENU_STATE.BALL_SCREEN)
             {
@@ -364,19 +385,19 @@ namespace Cardwheel
             }
             else if (m_runData.MenuState == MENU_STATE.SHOP)
             {
-                m_shopVisual.Tick(m_runData, m_balance, dt);
+                m_shopVisual.Tick(dt, modifiedInput);
             }
             else if (m_runData.MenuState == MENU_STATE.ROUND_SELECTION)
             {
-                m_roundSelectionVisual.Tick(m_runData, m_balance, dt, m_availableInputs);
+                m_roundSelectionVisual.Tick(m_runData, m_balance, dt, modifiedInput);
             }
             else if (m_runData.MenuState == MENU_STATE.ROUND_COMPLETE)
             {
-                m_roundCompleteVisual.Tick(m_runData, m_balance, dt, m_availableInputs);
+                m_roundCompleteVisual.Tick(m_runData, m_balance, dt, modifiedInput);
             }
             else if (m_runData.MenuState == MENU_STATE.IN_GAME_INFO)
             {
-                m_gameInfoVisual.Tick(m_runData, dt, m_availableInputs);
+                m_gameInfoVisual.Tick(m_runData, dt, modifiedInput);
             }
             else if (m_runData.MenuState == MENU_STATE.SHOP_INFO)
             {
@@ -384,24 +405,25 @@ namespace Cardwheel
             }
             else if (m_runData.MenuState == MENU_STATE.MAIN_MENU)
             {
-                m_mainMenuVisual.Tick(m_balance, dt, m_availableInputs);
+                m_mainMenuVisual.Tick(m_balance, dt, modifiedInput);
             }
             else if (m_runData.MenuState == MENU_STATE.SETTINGS)
             {
-                m_settingsVisual.Tick(m_runData, dt, m_availableInputs);
+                m_settingsVisual.Tick(m_runData, dt, modifiedInput);
             }
             else if (m_runData.MenuState == MENU_STATE.CHIPS_INFO)
             {
-                m_chipsInfoVisual.Tick(m_runData, dt, m_availableInputs);
+                m_chipsInfoVisual.Tick(m_runData, dt, modifiedInput);
             }
             else if (m_runData.MenuState == MENU_STATE.WHEEL_SELECTION)
             {
-                m_wheelSelectionVisual.Tick(dt, m_availableInputs);
+                m_wheelSelectionVisual.Tick(dt, modifiedInput);
             }
             else if (m_runData.MenuState == MENU_STATE.JOKER_INFO_POPUP)
             {
-                m_jokerInfoPopupVisual.Tick(m_availableInputs);
+                m_jokerInfoPopupVisual.Tick(modifiedInput);
             }
+
 
 #if UNITY_EDITOR
             if (Keyboard.current.sKey.wasPressedThisFrame)
@@ -553,11 +575,7 @@ namespace Cardwheel
 
         public void RerollShop()
         {
-            SoundManager.Instance.PlaySFXMoney();
-
-            m_shopVisual.RerollShop(m_runData, m_balance, m_gamepadType);
-
-            RunDataIO.SaveRun(m_runData, m_balance);
+            m_shopVisual.RerollShop(m_gamepadType, m_availableInputs);
         }
 
         public void BuyShopJoker(int shopJokerIdx)
@@ -565,7 +583,7 @@ namespace Cardwheel
             SoundManager.Instance.PlaySFXMoney();
 
             Debug.Log("Game.BuyShopJoker(shopJokerIdx " + shopJokerIdx + ")");
-            m_shopVisual.BuyShopJoker(m_runData, m_balance, shopJokerIdx);
+            m_shopVisual.BuyShopJoker(shopJokerIdx);
 
             RunDataIO.SaveRun(m_runData, m_balance);
         }
@@ -575,7 +593,7 @@ namespace Cardwheel
             SoundManager.Instance.PlaySFXMoney();
 
             Debug.Log("Game.BuyShopJoker(shopJokerIdx " + shopCardIdx + ")");
-            m_shopVisual.BuyShopCardPack(m_runData, m_balance, shopCardIdx);
+            m_shopVisual.BuyShopCardPack(shopCardIdx);
 
             if (m_balance.CardPackType[m_runData.SelectedShopCardPackIdx] == CARD_PACK_TYPE.BALL)
                 SetMenuState(MENU_STATE.CARD_PACK_BALL);
@@ -590,7 +608,7 @@ namespace Cardwheel
             SoundManager.Instance.PlaySFXMoney();
 
             if (!m_runData.VoucherPurchased)
-                m_shopVisual.BuyVoucher(m_runData, m_balance, m_gamepadType);
+                m_shopVisual.BuyVoucher(m_gamepadType, m_availableInputs);
 
             RunDataIO.SaveRun(m_runData, m_balance);
         }

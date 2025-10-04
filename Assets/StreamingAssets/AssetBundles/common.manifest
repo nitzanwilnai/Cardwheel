@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1125894404
+CRC: 2789334910
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 275188e216a62d911df5174156571235
+    Hash: 5e093542fae51b8f6966eb81b8f38f0a
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 169022b681896b30af4c9ec5e596f8ef
+    Hash: e02f720420c0adef4b253cc351d07470
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 275188e216a62d911df5174156571235
+    Hash: 5e093542fae51b8f6966eb81b8f38f0a
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -34,6 +34,8 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 111
   Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
 - Class: 114
@@ -87,6 +89,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: ce4fe6a26c1d74d48bc117737ea3e74b, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 67e5b6a1a502544f795bb25d60791040, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 6d361c7be1b1045d68393db32556cc66, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 69dad5500677a424b98dbef7e7b1c36b, type: 3}
@@ -109,6 +113,8 @@ ClassTypes:
 - Class: 224
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: CommonTools.GUIButtonData
 - AssemblyName: Assembly-CSharp
   ClassName: CommonTools.GUIRefAnimation
 - AssemblyName: Assembly-CSharp
@@ -264,6 +270,7 @@ Assets:
 - Assets/Prefabs/Descriptions/Joker 0040 increase chips +1 for every ball on red.prefab
 - Assets/Prefabs/Descriptions/Joker 0014 +50 Chips Only 4.prefab
 - Assets/Prefabs/Descriptions/Joker 0034 +100 Chips -5 Per Spin.prefab
+- Assets/Prefabs/Common/UI - Tutorial.prefab
 - Assets/Textures/Vouchers/0001 Voucher - Plus one spin.png
 - Assets/Textures/Vouchers/0010 Voucher - Slot modifiers affect most played color.png
 - Assets/Prefabs/Descriptions/Joker 0026 +3 Mult on Yellow or Blue.prefab

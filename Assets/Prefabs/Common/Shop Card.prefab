@@ -680,6 +680,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5575605283844090152, guid: 26a1f2e55e7dc4b8b92f2d8151357065, type: 3}
+      propertyPath: GUIRefButtons.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5575605283844090152, guid: 26a1f2e55e7dc4b8b92f2d8151357065, type: 3}
       propertyPath: GUIRefButtons.Array.data[0].Value
       value: 
       objectReference: {fileID: 0}
@@ -722,6 +726,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2213602464202765957, guid: 26a1f2e55e7dc4b8b92f2d8151357065, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6857300950214052355}
+    - targetCorrespondingSourceObject: {fileID: 2213602464202765957, guid: 26a1f2e55e7dc4b8b92f2d8151357065, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4831501159024386785}
   m_SourcePrefab: {fileID: 100100000, guid: 26a1f2e55e7dc4b8b92f2d8151357065, type: 3}
 --- !u!114 &2396758109679482898 stripped
 MonoBehaviour:
@@ -783,8 +790,31 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4831501159024386785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5080185952441244003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67e5b6a1a502544f795bb25d60791040, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Buttons:
+  - Key: Joker
+    Button: {fileID: 6857300950214052355}
+    GlyphImage: {fileID: 0}
+    GamepadButton: 0
+    SelectedGO: {fileID: 8753357941701837103}
 --- !u!224 &5112235758763106155 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2218716425807425677, guid: 26a1f2e55e7dc4b8b92f2d8151357065, type: 3}
+  m_PrefabInstance: {fileID: 6356894111933181926}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8753357941701837103 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2396501213432983241, guid: 26a1f2e55e7dc4b8b92f2d8151357065, type: 3}
   m_PrefabInstance: {fileID: 6356894111933181926}
   m_PrefabAsset: {fileID: 0}

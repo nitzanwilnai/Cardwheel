@@ -227,11 +227,11 @@ public static class Logic
         // runData.SkipType[3] = 13;
         // runData.SkipType[1] = 7;
 
-        AddJoker(runData, balance, 67);
-        AddJoker(runData, balance, 70);
-        AddJoker(runData, balance, 5);
-        AddJoker(runData, balance, 24);
-        AddJoker(runData, balance, 11);
+        // AddJoker(runData, balance, 67);
+        // AddJoker(runData, balance, 70);
+        // AddJoker(runData, balance, 5);
+        // AddJoker(runData, balance, 24);
+        // AddJoker(runData, balance, 11);
 
         // for (int i = 0; i < runData.BallTypes.Length; i++)
         //     runData.BallTypes[i] = i;

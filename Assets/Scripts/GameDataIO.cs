@@ -18,10 +18,12 @@ namespace Cardwheel
             using (FileStream fs = File.Create(fileName))
             using (BinaryWriter bw = new BinaryWriter(fs))
             {
-                bw.Write(1);
+                bw.Write(2);
                 bw.Write(gameData.SpinWheelWinCount.Length);
                 for (int i = 0; i < gameData.SpinWheelWinCount.Length; i++)
                     bw.Write(gameData.SpinWheelWinCount[i]);
+
+                bw.Write(gameData.MenuTutorialFlags);
             }
         }
 
@@ -44,6 +46,9 @@ namespace Cardwheel
                         gameData.SpinWheelWinCount = new int[balance.SpinWheelBalance.NumSpinWheels];
                         for (int i = 0; i < gameData.SpinWheelWinCount.Length && i < savedNumSpinWheels; i++)
                             gameData.SpinWheelWinCount[i] = tempArray[i];
+
+                        if (version > 1)
+                            gameData.MenuTutorialFlags = br.ReadInt32();
 
                         gameDataLoaded = true;
                     }

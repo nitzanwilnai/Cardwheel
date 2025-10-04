@@ -275,6 +275,9 @@ namespace Cardwheel
         public int[] CardPackCost;
         public int[] CardPackWeight;
 
+        [Header("Tutorial")]
+        public string[] MenuTutorialText;
+
         public JokerBalance JokerBalance = new JokerBalance();
         public BallBalance BallBalance = new BallBalance();
         public CardPackBallBalance CardPackBallBalance = new CardPackBallBalance();
@@ -663,6 +666,11 @@ namespace Cardwheel
                     for (int j = 0; j < SpinWheelBalance.SlotType[i].Length; j++)
                         SpinWheelBalance.SlotType[i][j] = (SLOT_TYPE)br.ReadByte();
                 }
+
+                int numTutorials = br.ReadInt32();
+                MenuTutorialText = new string[numTutorials];
+                for (int i = 0; i < numTutorials; i++)
+                    MenuTutorialText[i] = br.ReadString();
             }
         }
     }

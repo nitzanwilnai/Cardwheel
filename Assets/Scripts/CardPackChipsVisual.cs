@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using CommonTools;
 using TMPro;
-using UnityEditor.AnimatedValues;
 
 namespace Cardwheel
 {
