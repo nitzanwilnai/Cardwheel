@@ -258,6 +258,8 @@ public static class Logic
         // runData.Money = 0;
         // runData.VoucherShopDiscount *= 0.75f;
 
+        // runData.ShopJokerCount = balance.MaxShopJokers;
+
         // runData.BossRerolls = 99;
 #endif
     }
@@ -1684,7 +1686,7 @@ public static class Logic
     public static int BuyShopJoker(RunData runData, Balance balance, int shopJokerIdx)
     {
         // no need to check because we already checked before calling this
-        
+
         int jokerType = runData.ShopJokerIdxs[shopJokerIdx];
         runData.ShopJokerIdxs[shopJokerIdx] = -1;
         runData.Money -= GetJokerShopCost(runData, balance, jokerType);
