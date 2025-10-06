@@ -517,7 +517,7 @@ namespace Cardwheel
             if (CommonButtonVisual.CommonHandleInput(m_topBarGUI, m_cardsBallsSpinWheelGUI, availableInputs, (COMMON_BUTTONS)m_selectedButton))
                 return;
 
-            int newSelectedButton = CommonButtonVisual.CommonNavigation(availableInputs, (COMMON_BUTTONS)m_selectedButton);
+            int newSelectedButton = CommonButtonVisual.CommonNavigation(runData, availableInputs, (COMMON_BUTTONS)m_selectedButton);
             if (newSelectedButton > -1)
             {
                 selectButton((MENU_BUTTONS)newSelectedButton, availableInputs);
@@ -543,18 +543,70 @@ namespace Cardwheel
                 return;
             }
 
+            // navigate gamepad / enter jokers/cardpacks/voucher
 
-            // navigate left
+            // navigate up left column
+            if (m_selectedButton == MENU_BUTTONS.INFO && CommonButtonVisual.NavigateUp(availableInputs))
+            {
+                selectButton(MENU_BUTTONS.REROLL, availableInputs);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.REROLL && CommonButtonVisual.NavigateUp(availableInputs))
+            {
+                selectButton(MENU_BUTTONS.SETTINGS, availableInputs);
+                return;
+            }
+
+            // navigate down left column
+            if (m_selectedButton == MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateDown(availableInputs))
+            {
+                selectButton(MENU_BUTTONS.REROLL, availableInputs);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.REROLL && CommonButtonVisual.NavigateDown(availableInputs))
+            {
+                selectButton(MENU_BUTTONS.INFO, availableInputs);
+                return;
+            }
+
+            // navigate up right column
+            if (m_selectedButton == MENU_BUTTONS.NEXT_ROUND && CommonButtonVisual.NavigateUp(availableInputs))
+            {
+                selectButton(MENU_BUTTONS.WHEEL, availableInputs);
+                return;
+            }
+
+            // navigate up right column
+            if (m_selectedButton == MENU_BUTTONS.WHEEL && CommonButtonVisual.NavigateDown(availableInputs))
+            {
+                selectButton(MENU_BUTTONS.NEXT_ROUND, availableInputs);
+                return;
+            }
+
+            // navigate left bottom row
             if (m_selectedButton == MENU_BUTTONS.NEXT_ROUND && CommonButtonVisual.NavigateLeft(availableInputs))
             {
-                selectButton(MENU_BUTTONS.SHOP_CARDPACK_2, availableInputs);
+                if (runData.ShopCardPackIdxs[1] > -1)
+                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_2, availableInputs);
+                else if (runData.ShopCardPackIdxs[0] > -1)
+                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_1, availableInputs);
+                else if (!runData.VoucherPurchased)
+                    selectButton(MENU_BUTTONS.SHOP_VOUCHER, availableInputs);
+                else
+                    selectButton(MENU_BUTTONS.INFO, availableInputs);
                 return;
             }
 
             if (m_selectedButton == MENU_BUTTONS.SHOP_CARDPACK_2 && CommonButtonVisual.NavigateLeft(availableInputs))
             {
-                // todo check if cardpack 1 has been purchsaed
-                selectButton(MENU_BUTTONS.SHOP_CARDPACK_1, availableInputs);
+                if (runData.ShopCardPackIdxs[0] > -1)
+                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_1, availableInputs);
+                else if (!runData.VoucherPurchased)
+                    selectButton(MENU_BUTTONS.SHOP_VOUCHER, availableInputs);
+                else
+                    selectButton(MENU_BUTTONS.INFO, availableInputs);
                 return;
             }
 
@@ -573,20 +625,79 @@ namespace Cardwheel
                 return;
             }
 
-            if ((m_selectedButton > MENU_BUTTONS.SHOP_JOKER_1 && m_selectedButton <= MENU_BUTTONS.SHOP_JOKER_3) && CommonButtonVisual.NavigateLeft(availableInputs))
+            // navigate right bottom row
+            if (m_selectedButton == MENU_BUTTONS.INFO && CommonButtonVisual.NavigateRight(availableInputs))
             {
-                // todo handle purchased jokers
-                MENU_BUTTONS nextButton = m_selectedButton;
-                do
-                {
-                    nextButton--;
-                    int shopJokerIdx = nextButton - MENU_BUTTONS.SHOP_JOKER_1;
-                    if (shopJokerIdx > -1 && runData.ShopJokerIdxs[shopJokerIdx] > -1)
-                    {
-                        selectButton(nextButton, availableInputs);
-                        return;
-                    }
-                } while (nextButton > MENU_BUTTONS.SHOP_JOKER_1);
+                if (!runData.VoucherPurchased)
+                    selectButton(MENU_BUTTONS.SHOP_VOUCHER, availableInputs);
+                else if (runData.ShopCardPackIdxs[0] > -1)
+                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_1, availableInputs);
+                else if (runData.ShopCardPackIdxs[1] > -1)
+                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_2, availableInputs);
+                else
+                    selectButton(MENU_BUTTONS.NEXT_ROUND, availableInputs);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.SHOP_VOUCHER && CommonButtonVisual.NavigateRight(availableInputs))
+            {
+                if (runData.ShopCardPackIdxs[0] > -1)
+                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_1, availableInputs);
+                else if (runData.ShopCardPackIdxs[1] > -1)
+                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_2, availableInputs);
+                else
+                    selectButton(MENU_BUTTONS.NEXT_ROUND, availableInputs);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.SHOP_CARDPACK_1 && CommonButtonVisual.NavigateRight(availableInputs))
+            {
+                if (runData.ShopCardPackIdxs[1] > -1)
+                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_2, availableInputs);
+                else
+                    selectButton(MENU_BUTTONS.NEXT_ROUND, availableInputs);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.SHOP_CARDPACK_2 && CommonButtonVisual.NavigateRight(availableInputs))
+            {
+                selectButton(MENU_BUTTONS.NEXT_ROUND, availableInputs);
+                return;
+            }
+
+            // navigate left top row
+            if (((m_selectedButton >= MENU_BUTTONS.JOKER_1 && m_selectedButton <= MENU_BUTTONS.JOKER_5) || m_selectedButton == MENU_BUTTONS.BALLS || m_selectedButton == MENU_BUTTONS.WHEEL) &&
+            CommonButtonVisual.NavigateLeft(availableInputs))
+            {
+                if (runData.ShopJokerCount > 2 && runData.ShopJokerIdxs[2] > -1)
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_3, availableInputs);
+                else if (runData.ShopJokerIdxs[1] > -1)
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_2, availableInputs);
+                else if (runData.ShopJokerIdxs[0] > -1)
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_1, availableInputs);
+                else
+                    selectButton(MENU_BUTTONS.SETTINGS, availableInputs);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateLeft(availableInputs))
+            {
+                if (runData.ShopJokerIdxs[1] > -1)
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_2, availableInputs);
+                else if (runData.ShopJokerIdxs[0] > -1)
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_1, availableInputs);
+                else
+                    selectButton(MENU_BUTTONS.SETTINGS, availableInputs);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_2 && CommonButtonVisual.NavigateLeft(availableInputs))
+            {
+                if (runData.ShopJokerIdxs[0] > -1)
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_1, availableInputs);
+                else
+                    selectButton(MENU_BUTTONS.SETTINGS, availableInputs);
+                return;
             }
 
             if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_1 && CommonButtonVisual.NavigateLeft(availableInputs))
@@ -595,89 +706,131 @@ namespace Cardwheel
                 return;
             }
 
-            // navigate right
-            if (m_selectedButton == MENU_BUTTONS.SHOP_CARDPACK_2 && CommonButtonVisual.NavigateRight(availableInputs))
-            {
-                selectButton(MENU_BUTTONS.NEXT_ROUND, availableInputs);
-                return;
-            }
-
-            if (m_selectedButton == MENU_BUTTONS.SHOP_CARDPACK_1 && CommonButtonVisual.NavigateRight(availableInputs))
-            {
-                selectButton(MENU_BUTTONS.SHOP_CARDPACK_2, availableInputs);
-                return;
-            }
-
-            if (m_selectedButton == MENU_BUTTONS.SHOP_VOUCHER && CommonButtonVisual.NavigateRight(availableInputs))
-            {
-                selectButton(MENU_BUTTONS.SHOP_CARDPACK_1, availableInputs);
-                return;
-            }
-
-            if (m_selectedButton == MENU_BUTTONS.INFO && CommonButtonVisual.NavigateRight(availableInputs))
-            {
-                selectButton(MENU_BUTTONS.SHOP_VOUCHER, availableInputs);
-                return;
-            }
-
-            if ((m_selectedButton >= MENU_BUTTONS.SHOP_JOKER_1 && m_selectedButton < MENU_BUTTONS.SHOP_JOKER_3) && CommonButtonVisual.NavigateRight(availableInputs))
-            {
-                MENU_BUTTONS nextButton = m_selectedButton;
-                do
-                {
-                    nextButton++;
-                    int shopJokerIdx = nextButton - MENU_BUTTONS.SHOP_JOKER_1;
-                    if (shopJokerIdx > -1 && runData.ShopJokerIdxs[shopJokerIdx] > -1)
-                    {
-                        selectButton(nextButton, availableInputs);
-                        return;
-                    }
-                } while (nextButton < MENU_BUTTONS.SHOP_JOKER_3);
-            }
-
-            if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateLeft(availableInputs))
-            {
-                selectButton(MENU_BUTTONS.JOKER_1, availableInputs);
-                return;
-            }
-
+            // navigate right top row
             if (m_selectedButton == MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateRight(availableInputs))
             {
-                selectButton(MENU_BUTTONS.SHOP_JOKER_1, availableInputs);
-                return;
-            }
-
-            // navigate up
-            if (m_selectedButton == MENU_BUTTONS.NEXT_ROUND && CommonButtonVisual.NavigateUp(availableInputs))
-            {
-                selectButton(MENU_BUTTONS.WHEEL, availableInputs);
-                return;
-            }
-
-            if ((m_selectedButton == MENU_BUTTONS.SHOP_CARDPACK_1 || m_selectedButton == MENU_BUTTONS.SHOP_CARDPACK_2) && CommonButtonVisual.NavigateUp(availableInputs))
-            {
-                if (runData.ShopJokerCount > 2)
+                if (runData.ShopJokerIdxs[0] > -1)
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_1, availableInputs);
+                else if (runData.ShopJokerIdxs[1] > -1)
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_2, availableInputs);
+                else if (runData.ShopJokerCount > 2 && runData.ShopJokerIdxs[2] > -1)
                     selectButton(MENU_BUTTONS.SHOP_JOKER_3, availableInputs);
                 else
+                    selectButton(MENU_BUTTONS.JOKER_1, availableInputs);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_1 && CommonButtonVisual.NavigateRight(availableInputs))
+            {
+                if (runData.ShopJokerIdxs[1] > -1)
                     selectButton(MENU_BUTTONS.SHOP_JOKER_2, availableInputs);
+                else if (runData.ShopJokerCount > 2 && runData.ShopJokerIdxs[2] > -1)
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_3, availableInputs);
+                else
+                    selectButton(MENU_BUTTONS.JOKER_1, availableInputs);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.SHOP_VOUCHER && CommonButtonVisual.NavigateUp(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_2 && CommonButtonVisual.NavigateRight(availableInputs))
             {
-                selectButton(MENU_BUTTONS.SHOP_JOKER_1, availableInputs);
+                if (runData.ShopJokerCount > 2 && runData.ShopJokerIdxs[2] > -1)
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_3, availableInputs);
+                else
+                    selectButton(MENU_BUTTONS.JOKER_1, availableInputs);
                 return;
             }
 
-            // navigate down
-            if ((m_selectedButton >= MENU_BUTTONS.SHOP_JOKER_1 && m_selectedButton <= MENU_BUTTONS.SHOP_JOKER_3) && CommonButtonVisual.NavigateDown(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateRight(availableInputs))
             {
-                if (runData.ShopCardPackIdxs[0] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_1, availableInputs);
-                else if (runData.ShopCardPackIdxs[1] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_2, availableInputs);
+                if (runData.JokerCount > 0)
+                    selectButton(MENU_BUTTONS.JOKER_1, availableInputs);
                 return;
             }
+
+            /*
+                        // navigate left top row
+                        if ((m_selectedButton > MENU_BUTTONS.SHOP_JOKER_1 && m_selectedButton <= MENU_BUTTONS.SHOP_JOKER_3) && CommonButtonVisual.NavigateLeft(availableInputs))
+                        {
+                            // todo handle purchased jokers
+                            MENU_BUTTONS nextButton = m_selectedButton;
+                            do
+                            {
+                                nextButton--;
+                                int shopJokerIdx = nextButton - MENU_BUTTONS.SHOP_JOKER_1;
+                                if (shopJokerIdx > -1 && runData.ShopJokerIdxs[shopJokerIdx] > -1)
+                                {
+                                    selectButton(nextButton, availableInputs);
+                                    return;
+                                }
+                            } while (nextButton > MENU_BUTTONS.SHOP_JOKER_1);
+                        }
+
+                        if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_1 && CommonButtonVisual.NavigateLeft(availableInputs))
+                        {
+                            selectButton(MENU_BUTTONS.SETTINGS, availableInputs);
+                            return;
+                        }
+
+                        // navigate right top row
+                        if ((m_selectedButton >= MENU_BUTTONS.SHOP_JOKER_1 && m_selectedButton < MENU_BUTTONS.SHOP_JOKER_3) && CommonButtonVisual.NavigateRight(availableInputs))
+                        {
+                            MENU_BUTTONS nextButton = m_selectedButton;
+                            do
+                            {
+                                nextButton++;
+                                int shopJokerIdx = nextButton - MENU_BUTTONS.SHOP_JOKER_1;
+                                if (shopJokerIdx > -1 && runData.ShopJokerIdxs[shopJokerIdx] > -1)
+                                {
+                                    selectButton(nextButton, availableInputs);
+                                    return;
+                                }
+                            } while (nextButton < MENU_BUTTONS.SHOP_JOKER_3);
+                        }
+
+                        if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateLeft(availableInputs))
+                        {
+                            selectButton(MENU_BUTTONS.JOKER_1, availableInputs);
+                            return;
+                        }
+
+                        if (m_selectedButton == MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateRight(availableInputs))
+                        {
+                            selectButton(MENU_BUTTONS.SHOP_JOKER_1, availableInputs);
+                            return;
+                        }
+
+                        // navigate up
+                        if (m_selectedButton == MENU_BUTTONS.NEXT_ROUND && CommonButtonVisual.NavigateUp(availableInputs))
+                        {
+                            selectButton(MENU_BUTTONS.WHEEL, availableInputs);
+                            return;
+                        }
+
+                        if ((m_selectedButton == MENU_BUTTONS.SHOP_CARDPACK_1 || m_selectedButton == MENU_BUTTONS.SHOP_CARDPACK_2) && CommonButtonVisual.NavigateUp(availableInputs))
+                        {
+                            if (runData.ShopJokerCount > 2)
+                                selectButton(MENU_BUTTONS.SHOP_JOKER_3, availableInputs);
+                            else
+                                selectButton(MENU_BUTTONS.SHOP_JOKER_2, availableInputs);
+                            return;
+                        }
+
+                        if (m_selectedButton == MENU_BUTTONS.SHOP_VOUCHER && CommonButtonVisual.NavigateUp(availableInputs))
+                        {
+                            selectButton(MENU_BUTTONS.SHOP_JOKER_1, availableInputs);
+                            return;
+                        }
+
+                        // navigate down
+                        if ((m_selectedButton >= MENU_BUTTONS.SHOP_JOKER_1 && m_selectedButton <= MENU_BUTTONS.SHOP_JOKER_3) && CommonButtonVisual.NavigateDown(availableInputs))
+                        {
+                            if (runData.ShopCardPackIdxs[0] > -1)
+                                selectButton(MENU_BUTTONS.SHOP_CARDPACK_1, availableInputs);
+                            else if (runData.ShopCardPackIdxs[1] > -1)
+                                selectButton(MENU_BUTTONS.SHOP_CARDPACK_2, availableInputs);
+                            return;
+                        }
+            */
         }
 
         public void BuyShopJoker(int shopJokerIdx)

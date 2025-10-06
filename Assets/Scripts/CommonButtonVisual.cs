@@ -189,7 +189,7 @@ namespace Cardwheel
             return false;
         }
 
-        public static int CommonNavigation(int availableInputs, COMMON_BUTTONS selectedButton)
+        public static int CommonNavigation(RunData runData, int availableInputs, COMMON_BUTTONS selectedButton)
         {
             if (selectedButton == COMMON_BUTTONS.WHEEL && CommonButtonVisual.NavigateUp(availableInputs))
                 return (int)COMMON_BUTTONS.BALLS;
@@ -203,9 +203,9 @@ namespace Cardwheel
             if (selectedButton >= COMMON_BUTTONS.JOKER_1 && selectedButton <= COMMON_BUTTONS.JOKER_5 && NavigateDown(availableInputs))
                 return (int)COMMON_BUTTONS.BALLS;
 
-            if ((selectedButton >= COMMON_BUTTONS.JOKER_1 && selectedButton <= COMMON_BUTTONS.JOKER_4) && NavigateRight(availableInputs))
+            if ((selectedButton >= COMMON_BUTTONS.JOKER_1 && selectedButton < (COMMON_BUTTONS.JOKER_1 + runData.JokerCount-1)) && NavigateRight(availableInputs))
                 return ((int)selectedButton + 1);
-            if ((selectedButton >= COMMON_BUTTONS.JOKER_2 && selectedButton <= COMMON_BUTTONS.JOKER_5) && NavigateLeft(availableInputs))
+            if ((selectedButton >= COMMON_BUTTONS.JOKER_2 && selectedButton < (COMMON_BUTTONS.JOKER_1 + runData.JokerCount)) && NavigateLeft(availableInputs))
                 return ((int)selectedButton - 1);
             return -1;
         }

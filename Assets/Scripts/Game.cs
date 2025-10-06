@@ -153,14 +153,14 @@ namespace Cardwheel
             m_balance = new Balance();
             m_balance.LoadBalance();
             Logic.AllocateRunData(m_runData, m_balance);
-            Board.Init(m_balance, GameInfoSO, m_settingsData, Camera);
+            Board.Init(m_runData, m_balance, GameInfoSO, m_settingsData, Camera);
 
             m_gameData = new GameData();
             if (!GameDataIO.LoadGameData(m_gameData, m_balance))
                 Logic.AllocateGameData(m_gameData, m_balance);
 
 #if UNITY_EDITOR
-            m_gameData.MenuTutorialFlags = 0;
+            // m_gameData.MenuTutorialFlags = 0;
 #endif
 
             CommonVisual.InitJokers(m_balance);
@@ -287,7 +287,7 @@ namespace Cardwheel
             else if (menuState == MENU_STATE.CARD_PACK_CHIPS)
                 m_cardPackChipsVisual.Show(m_runData, m_balance);
             else if (menuState == MENU_STATE.IN_GAME)
-                Board.Show(m_runData, m_balance, m_gamepadType, m_availableInputs);
+                Board.Show(m_gamepadType, m_availableInputs);
             else if (menuState == MENU_STATE.BALL_SCREEN)
                 m_ballScreenVisual.Show(m_runData, m_balance);
             else if (menuState == MENU_STATE.SETTINGS)
@@ -365,7 +365,7 @@ namespace Cardwheel
 
             if (m_runData.MenuState == MENU_STATE.IN_GAME)
             {
-                Board.Tick(m_runData, m_balance, m_settingsData, dt, modifiedInput);
+                Board.Tick(dt, modifiedInput);
             }
             else if (m_runData.MenuState == MENU_STATE.BALL_SCREEN)
             {
