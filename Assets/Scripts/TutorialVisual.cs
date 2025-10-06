@@ -1,6 +1,7 @@
 using UnityEngine;
 using CommonTools;
 using TMPro;
+using UnityEngine.UI;
 
 namespace Cardwheel
 {
@@ -26,7 +27,11 @@ namespace Cardwheel
             m_UI = AssetManager.Instance.LoadTutorialUI();
             Canvas canvas = m_UI.GetComponent<Canvas>();
             canvas.worldCamera = camera;
-            CommonVisual.ChangeCanvasScalerMatching(m_UI);
+
+            if ((float)Screen.width / (float)Screen.height > 1.0f)
+                m_UI.GetComponent<CanvasScaler>().matchWidthOrHeight = 1.0f;
+            else
+                m_UI.GetComponent<CanvasScaler>().matchWidthOrHeight = 0.0f;
 
             GUIButtonRef guiButtonRef = m_UI.GetComponent<GUIButtonRef>();
             m_closeButtonData = guiButtonRef.GetButtonData("Close");

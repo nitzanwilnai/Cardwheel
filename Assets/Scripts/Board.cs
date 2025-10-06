@@ -172,14 +172,16 @@ namespace Cardwheel
 
         Balance balance;
         SettingsData settingsData;
+        RunData runData;
 
         [Header("Debug")]
         public bool ShowDebug;
         public float DebugRotationSpeed;
 
         // Start is called before the first frame update
-        public void Init(Balance balance, GameInfoSO gameInfoSO, SettingsData settingsData, Camera camera)
+        public void Init(RunData runData, Balance balance, GameInfoSO gameInfoSO, SettingsData settingsData, Camera camera)
         {
+            this.runData = runData;
             this.balance = balance;
             this.settingsData = settingsData;
 
@@ -265,7 +267,7 @@ namespace Cardwheel
             SpinWheelLights.Init();
         }
 
-        public void Show(RunData runData, Balance balance, GAMEPAD_TYPE gamepadType, int availableInputs)
+        public void Show(GAMEPAD_TYPE gamepadType, int availableInputs)
         {
             m_goalText.text = Logic.GetRoundGoal(runData, balance).ToString("N0");
             m_totalScoreText.text = runData.TotalChips.ToString("N0");
@@ -299,7 +301,7 @@ namespace Cardwheel
 
             CommonVisual.ShowJokersInGame(runData, balance, m_jokerParent);
 
-            showBalls(runData, balance, useBallSprite, ballsDebuffed);
+            showBalls(useBallSprite, ballsDebuffed);
 
             SpinWheelLights.StartAnimation();
 
@@ -338,7 +340,7 @@ namespace Cardwheel
             }
         }
 
-        public void showBalls(RunData runData, Balance balance, int useBallSprite, bool debuffed)
+        public void showBalls(int useBallSprite, bool debuffed)
         {
 
             for (int ballIdx = 0; ballIdx < BallsGO.Length; ballIdx++)
@@ -368,14 +370,14 @@ namespace Cardwheel
             m_jokerColorGO.SetActive(false);
         }
 
-        public void AnimateRoundChipsText(RunData runData, SettingsData settingsData)
+        void animateRoundChipsText()
         {
             m_roundChipsText.text = runData.SpinChips.ToString("N0");
             m_roundScoreAnimation.Play();
             SoundManager.Instance.PlaySFXScoring();
         }
 
-        public void AnimateRoundMultipierText(RunData runData, SettingsData settingsData)
+        void animateRoundMultipierText()
         {
             m_roundMultiplierText.text = "x" + CommonVisual.GetMultiplierString(runData.SpinMultiplier);
             m_roundMultiplierAnimation.Play();
@@ -415,7 +417,7 @@ namespace Cardwheel
             m_jokerMultText.text = text;
         }
 
-        public void ShowJokerColorPopup(RunData runData, Balance balance, int jokerIdx)
+        public void ShowJokerColorPopup(int jokerIdx)
         {
             m_jokerColorGO.SetActive(false);
             m_jokerColorGO.transform.position = CommonVisual.JokerPool[jokerIdx].transform.position;
@@ -425,7 +427,7 @@ namespace Cardwheel
             m_jokerColorText.color = balance.SlotColors[(int)leastPlayedColor];
         }
 
-        void setGameState(GAME_STATE newGamState, Balance balance)
+        void setGameState(GAME_STATE newGamState)
         {
             Debug.Log("setGameState(" + newGamState + ") m_scoringTimer " + m_scoringTimer);
             GameState = newGamState;
@@ -445,7 +447,7 @@ namespace Cardwheel
         }
 
         // Update is called once per frame
-        public void Tick(RunData runData, Balance balance, SettingsData settingsData, float dt, int availableInputs)
+        public void Tick(float dt, int availableInputs)
         {
             SpinWheelLights.Tick(dt);
 
@@ -469,7 +471,7 @@ namespace Cardwheel
                 Debug.Log(GameState.ToString() + " m_scoringTime " + m_scoringTimer);
                 if (m_scoringTimer > ScoringTime)
                 {
-                    setGameState(GAME_STATE.JOKER_PRE_ROUND, balance);
+                    setGameState(GAME_STATE.JOKER_PRE_ROUND);
                     return;
                 }
             }
@@ -486,7 +488,7 @@ namespace Cardwheel
 
                         if (balance.JokerBalance.MultiplierAddForLeastPlayedColor[jokerType] > 0.0f)
                         {
-                            ShowJokerColorPopup(runData, balance, jokerIdx);
+                            ShowJokerColorPopup(jokerIdx);
 
                             m_scoringTimer = 0.0f;
                             break;
@@ -525,7 +527,7 @@ namespace Cardwheel
                         runData.RotationSpeed = MaxSpin;
                         m_spinAnimTime = 0.0f;
                         SpinState = SPIN_STATE.SPIN_WAIT;
-                        setGameState(GAME_STATE.WAITING_FOR_INPUT, balance);
+                        setGameState(GAME_STATE.WAITING_FOR_INPUT);
                         m_waitingForInputTime = 0.0f;
                     }
                 }
@@ -632,7 +634,7 @@ namespace Cardwheel
 
                     if (m_scoringIdx >= balance.MaxBalls)
                     {
-                        setGameState(GAME_STATE.SCORING_SLOT_MULTIPLIER_ADD, balance);
+                        setGameState(GAME_STATE.SCORING_SLOT_MULTIPLIER_ADD);
                         m_scoringIdx = 0;
                     }
                     else
@@ -651,7 +653,7 @@ namespace Cardwheel
 
                                 ShowBallChipsPopup(ballIdx, chips);
 
-                                AnimateRoundChipsText(runData, settingsData);
+                                animateRoundChipsText();
                                 break;
                             }
                         }
@@ -667,7 +669,7 @@ namespace Cardwheel
 
                     if (m_scoringIdx >= balance.MaxBalls)
                     {
-                        setGameState(GAME_STATE.SCORING_SLOT_MONEY, balance);
+                        setGameState(GAME_STATE.SCORING_SLOT_MONEY);
                         m_scoringIdx = 0;
                     }
                     else
@@ -685,7 +687,7 @@ namespace Cardwheel
 
                                 ShowBallMultiplierPopup(ballIdx, "+" + CommonVisual.GetMultiplierString(multiplier) + "x");
 
-                                AnimateRoundMultipierText(runData, settingsData);
+                                animateRoundMultipierText();
                                 break;
                             }
                         }
@@ -701,7 +703,7 @@ namespace Cardwheel
 
                     if (m_scoringIdx >= balance.MaxBalls)
                     {
-                        setGameState(GAME_STATE.SCORING_BALL_CHIPS, balance);
+                        setGameState(GAME_STATE.SCORING_BALL_CHIPS);
                         m_scoringIdx = 0;
                     }
                     else
@@ -733,7 +735,7 @@ namespace Cardwheel
 
                     if (m_scoringIdx >= balance.MaxBalls)
                     {
-                        setGameState(GAME_STATE.SCORING_BALL_MULTIPLIER_ADD, balance);
+                        setGameState(GAME_STATE.SCORING_BALL_MULTIPLIER_ADD);
                         m_scoringIdx = 0;
                     }
                     else
@@ -752,7 +754,7 @@ namespace Cardwheel
 
                                 ShowBallChipsPopup(ballIdx, chips);
 
-                                AnimateRoundChipsText(runData, settingsData);
+                                animateRoundChipsText();
                                 break;
                             }
                         }
@@ -768,7 +770,7 @@ namespace Cardwheel
 
                     if (m_scoringIdx >= balance.MaxBalls)
                     {
-                        setGameState(GAME_STATE.SCORING_BALL_MONEY, balance);
+                        setGameState(GAME_STATE.SCORING_BALL_MONEY);
                         m_scoringIdx = 0;
                     }
                     else
@@ -786,7 +788,7 @@ namespace Cardwheel
 
                                 ShowBallMultiplierPopup(ballIdx, "+" + CommonVisual.GetMultiplierString(multiplier) + "x");
 
-                                AnimateRoundMultipierText(runData, settingsData);
+                                animateRoundMultipierText();
                                 break;
                             }
                         }
@@ -807,11 +809,11 @@ namespace Cardwheel
                         {
                             CommonVisual.JokerGUIs[jokerIdx].Animation.Play("ScoreGrow");
 
-                            setGameState(GAME_STATE.SCORING_SLOT_CHIPS, balance);
+                            setGameState(GAME_STATE.SCORING_SLOT_CHIPS);
                         }
                         else
                         {
-                            setGameState(GAME_STATE.SCORING_JOKER_CHIPS, balance);
+                            setGameState(GAME_STATE.SCORING_JOKER_CHIPS);
                         }
                         m_scoringIdx = 0;
                     }
@@ -847,7 +849,7 @@ namespace Cardwheel
                 {
                     if (m_scoringIdx >= runData.JokerCount)
                     {
-                        setGameState(GAME_STATE.SCORING_JOKER_MULTIPLIER_ADD, balance);
+                        setGameState(GAME_STATE.SCORING_JOKER_MULTIPLIER_ADD);
                         m_scoringIdx = 0;
                     }
                     else
@@ -870,7 +872,7 @@ namespace Cardwheel
 
                                     ShowJokerChipsPopup(jokerIdx, "+" + chips.ToString("N0"));
 
-                                    AnimateRoundChipsText(runData, settingsData);
+                                    animateRoundChipsText();
                                     break;
                                 }
                             }
@@ -885,7 +887,7 @@ namespace Cardwheel
                 {
                     if (m_scoringIdx >= runData.JokerCount)
                     {
-                        setGameState(GAME_STATE.SCORING_SLOT_MULTIPLIER_MULT, balance);
+                        setGameState(GAME_STATE.SCORING_SLOT_MULTIPLIER_MULT);
                         m_scoringIdx = 0;
                     }
                     else
@@ -908,7 +910,7 @@ namespace Cardwheel
 
                                     ShowJokerMultPopup(jokerIdx, "+" + CommonVisual.GetMultiplierString(mult) + "x");
 
-                                    AnimateRoundMultipierText(runData, settingsData);
+                                    animateRoundMultipierText();
                                     break;
                                 }
                             }
@@ -925,7 +927,7 @@ namespace Cardwheel
 
                     if (m_scoringIdx >= balance.MaxBalls)
                     {
-                        setGameState(GAME_STATE.SCORING_BALL_MULTIPLIER_MULT, balance);
+                        setGameState(GAME_STATE.SCORING_BALL_MULTIPLIER_MULT);
                         m_scoringIdx = 0;
                     }
                     else
@@ -943,7 +945,7 @@ namespace Cardwheel
 
                                 ShowBallMultiplierPopup(ballIdx, "x" + CommonVisual.GetMultiplierString(multiplier));
 
-                                AnimateRoundMultipierText(runData, settingsData);
+                                animateRoundMultipierText();
                                 break;
                             }
                         }
@@ -959,7 +961,7 @@ namespace Cardwheel
 
                     if (m_scoringIdx >= balance.MaxBalls)
                     {
-                        setGameState(GAME_STATE.SCORING_JOKER_MULTIPLIER_MULT, balance);
+                        setGameState(GAME_STATE.SCORING_JOKER_MULTIPLIER_MULT);
                         m_scoringIdx = 0;
                     }
                     else
@@ -977,7 +979,7 @@ namespace Cardwheel
 
                                 ShowBallMultiplierPopup(ballIdx, "x" + CommonVisual.GetMultiplierString(multiplier));
 
-                                AnimateRoundMultipierText(runData, settingsData);
+                                animateRoundMultipierText();
                                 break;
                             }
                         }
@@ -991,7 +993,7 @@ namespace Cardwheel
                 {
                     if (m_scoringIdx >= runData.JokerCount)
                     {
-                        setGameState(GAME_STATE.SCORING_ROUND_TOTAL, balance);
+                        setGameState(GAME_STATE.SCORING_ROUND_TOTAL);
                         m_scoringIdx = 0;
                     }
                     else
@@ -1012,7 +1014,7 @@ namespace Cardwheel
 
                                     ShowJokerMultPopup(jokerIdx, "x" + CommonVisual.GetMultiplierString(mult - 1));
 
-                                    AnimateRoundMultipierText(runData, settingsData);
+                                    animateRoundMultipierText();
                                     break;
                                 }
                             }
@@ -1037,7 +1039,7 @@ namespace Cardwheel
 
                     Logic.JokerPostSpin(runData, balance);
 
-                    setGameState(GAME_STATE.JOKER_POST_SPIN, balance);
+                    setGameState(GAME_STATE.JOKER_POST_SPIN);
                 }
             }
             if (GameState == GAME_STATE.JOKER_POST_SPIN)
@@ -1049,12 +1051,12 @@ namespace Cardwheel
                     {
                         if (Logic.CheckRoundComplete(runData, balance))
                         {
-                            setGameState(GAME_STATE.JOKER_POST_ROUND, balance);
+                            setGameState(GAME_STATE.JOKER_POST_ROUND);
                             m_scoringIdx = 0;
                         }
                         else
                         {
-                            setGameState(GAME_STATE.BOSS_POST_SPIN, balance);
+                            setGameState(GAME_STATE.BOSS_POST_SPIN);
                             m_scoringIdx = 0;
                         }
                     }
@@ -1099,7 +1101,7 @@ namespace Cardwheel
                 {
                     if (m_scoringIdx >= runData.JokerCount)
                     {
-                        setGameState(GAME_STATE.SPIN_OVER, balance);
+                        setGameState(GAME_STATE.SPIN_OVER);
                         m_nextSpinTimer = 0.0f;
                         m_scoringIdx = 0;
                     }
@@ -1147,7 +1149,7 @@ namespace Cardwheel
                         }
                     }
                     m_nextSpinTimer = 0.0f;
-                    setGameState(GAME_STATE.SPIN_OVER, balance);
+                    setGameState(GAME_STATE.SPIN_OVER);
                 }
             }
             if (GameState == GAME_STATE.SPIN_OVER)
@@ -1164,7 +1166,7 @@ namespace Cardwheel
                         if (runData.CurrentSpin == 1)
                         {
                             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.BALLS_DEBUFFED_FIRST_SPIN)
-                                showBalls(runData, balance, 1, false);
+                                showBalls(1, false);
                             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.SLOTS_DEBUFFED_FIRST_SPIN)
                                 CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotEffects, runData.UseSlotsSpecial == 0);
                         }
@@ -1303,7 +1305,7 @@ namespace Cardwheel
                     return;
                 }
 
-                int selectedJokerButton = CommonButtonVisual.CommonNavigation(availableInputs, (COMMON_BUTTONS)m_selectedButton);
+                int selectedJokerButton = CommonButtonVisual.CommonNavigation(runData, availableInputs, (COMMON_BUTTONS)m_selectedButton);
                 if (selectedJokerButton > -1)
                     selectButton((MENU_BUTTONS)selectedJokerButton, availableInputs);
             }
@@ -1323,7 +1325,7 @@ namespace Cardwheel
         private void startScoring(RunData runData, Balance balance)
         {
             Debug.Log("startScoring " + Time.realtimeSinceStartupAsDouble);
-            setGameState(GAME_STATE.SCORING_SLOT_CHIPS, balance);
+            setGameState(GAME_STATE.SCORING_SLOT_CHIPS);
             m_scoringIdx = 0;
             m_scoringTimer = ScoringTime;
 
@@ -1351,7 +1353,7 @@ namespace Cardwheel
 
             m_scoringTimer = ScoringTime;
             m_scoringIdx = 0;
-            setGameState(GAME_STATE.START_ROUND, balance);
+            setGameState(GAME_STATE.START_ROUND);
             resetSpin(runData, balance);
 
             m_roundChipsText.text = "0";
@@ -1394,7 +1396,7 @@ namespace Cardwheel
         {
             resetSpin(runData, balance);
 
-            setGameState(GAME_STATE.SPIN_UP, balance);
+            setGameState(GAME_STATE.SPIN_UP);
             SpinState = SPIN_STATE.SPIN_UP;
 
             Logic.StartSpin(runData, balance);
@@ -1412,7 +1414,7 @@ namespace Cardwheel
                 if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.JUMBLE_BALLS)
                 {
                     Logic.JumbleBalls(runData, balance);
-                    showBalls(runData, balance, 1, false);
+                    showBalls(1, false);
                 }
                 if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.RANDOM_JOKE_DEBUFFED_PER_SPIN)
                 {
@@ -1437,7 +1439,7 @@ namespace Cardwheel
                 m_droppedAngle = SpinCircle.transform.rotation.eulerAngles.z;
 #endif
                 GateGO.SetActive(false);
-                setGameState(GAME_STATE.BALLS_DROPPED, balance);
+                setGameState(GAME_STATE.BALLS_DROPPED);
                 SpinState = SPIN_STATE.SPIN_BALLS;
             }
         }
