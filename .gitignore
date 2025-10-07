@@ -99,5 +99,5 @@ InitTestScene*.unity*
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
 
 /[Ss]creenshots/
-/[Aa]ssets/SFX/
-/[Aa]ssets/Music/
+/[Aa]ssets/SFX/*
+/[Aa]ssets/Music/*
