@@ -47,9 +47,12 @@ namespace Cardwheel
         // // clipIdnex -1 means random clip
         public void PlayMusic()
         {
-            m_audioSource.clip = MusicClip;
-            m_audioSource.Play();
-            MusicStartTime = Time.realtimeSinceStartupAsDouble;
+            if (MusicClip != null)
+            {
+                m_audioSource.clip = MusicClip;
+                m_audioSource.Play();
+                MusicStartTime = Time.realtimeSinceStartupAsDouble;
+            }
         }
     }
 }

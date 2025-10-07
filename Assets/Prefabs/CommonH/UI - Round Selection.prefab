@@ -614,7 +614,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5430175916298004434, guid: a9346baaa6aef42c0af10ee9233eefdb, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -540
+      value: -66
       objectReference: {fileID: 0}
     - target: {fileID: 5430175916298004434, guid: a9346baaa6aef42c0af10ee9233eefdb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -973,7 +973,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8881321758857459935, guid: a36a456e4cb504d49b472971f9d36d57, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -540
+      value: -66
       objectReference: {fileID: 0}
     - target: {fileID: 8881321758857459935, guid: a36a456e4cb504d49b472971f9d36d57, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1391,7 +1391,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8881321758857459935, guid: a36a456e4cb504d49b472971f9d36d57, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -540
+      value: -66
       objectReference: {fileID: 0}
     - target: {fileID: 8881321758857459935, guid: a36a456e4cb504d49b472971f9d36d57, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3595,17 +3595,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &290762594530482285 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8391646655773214376, guid: 314d3229303df4f718fa09f0a76c6210, type: 3}
-  m_PrefabInstance: {fileID: 8105882458282581701}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &1199865168260576190 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6979213989130136955, guid: 314d3229303df4f718fa09f0a76c6210, type: 3}
@@ -3647,25 +3636,14 @@ MonoBehaviour:
   Buttons:
   - Key: BallScreen
     Button: {fileID: 65210971074851393}
-    GlyphImage: {fileID: 5546028180118527903}
+    GlyphImage: {fileID: 0}
     GamepadButton: 8
     SelectedGO: {fileID: 0}
   - Key: SpinWheel
     Button: {fileID: 1664822663607609935}
-    GlyphImage: {fileID: 290762594530482285}
+    GlyphImage: {fileID: 0}
     GamepadButton: 10
     SelectedGO: {fileID: 1331163776937394225}
---- !u!114 &5546028180118527903 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4362459824114729306, guid: 314d3229303df4f718fa09f0a76c6210, type: 3}
-  m_PrefabInstance: {fileID: 8105882458282581701}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7262296030506460745 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1492163607118608524, guid: 314d3229303df4f718fa09f0a76c6210, type: 3}

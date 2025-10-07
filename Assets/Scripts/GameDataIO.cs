@@ -54,6 +54,10 @@ namespace Cardwheel
                     }
                 }
             }
+#if UNITY_EDITOR
+            // gameData.MenuTutorialFlags = 0;
+#endif
+
             return gameDataLoaded;
         }
 

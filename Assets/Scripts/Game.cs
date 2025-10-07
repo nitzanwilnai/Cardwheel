@@ -51,8 +51,6 @@ namespace Cardwheel
 
         public GameObject UIDebug;
 
-        public AudioClip MusicClip;
-
         public string CommonBundle;
         public GameInfoSO GameInfoSO;
 
@@ -194,7 +192,7 @@ namespace Cardwheel
             m_cardPackSlotVisual.Init(m_runData, m_balance, Camera);
             m_cardPackChipsVisual.Init(m_runData, m_balance, Camera);
             m_jokerInfoPopupVisual.Init(m_runData, Camera);
-            m_ballScreenVisual.Init(m_balance, Camera);
+            m_ballScreenVisual.Init(m_runData, m_balance, Camera);
             m_settingsVisual.Init(Camera, m_settingsData);
             m_winScreenVisual.Init(m_runData, m_balance, Camera);
             m_chipsInfoVisual.Init(Camera);
@@ -289,7 +287,7 @@ namespace Cardwheel
             else if (menuState == MENU_STATE.IN_GAME)
                 Board.Show(m_gamepadType, m_availableInputs);
             else if (menuState == MENU_STATE.BALL_SCREEN)
-                m_ballScreenVisual.Show(m_runData, m_balance);
+                m_ballScreenVisual.Show(m_availableInputs);
             else if (menuState == MENU_STATE.SETTINGS)
                 m_settingsVisual.Show(m_runData, m_balance, m_settingsData, m_availableInputs);
             else if (menuState == MENU_STATE.WIN_SCREEN)
@@ -369,11 +367,11 @@ namespace Cardwheel
             }
             else if (m_runData.MenuState == MENU_STATE.BALL_SCREEN)
             {
-                m_ballScreenVisual.Tick(m_runData, Camera, dt);
+                m_ballScreenVisual.Tick(dt, m_availableInputs);
             }
             else if (m_runData.MenuState == MENU_STATE.CARD_PACK_BALL)
             {
-                m_cardPackBallVisual.Tick(m_runData, m_balance, Camera, dt);
+                m_cardPackBallVisual.Tick(m_runData, m_balance, Camera, dt, m_availableInputs);
             }
             else if (m_runData.MenuState == MENU_STATE.CARD_PACK_SLOT)
             {

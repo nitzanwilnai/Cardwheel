@@ -19,6 +19,7 @@ namespace Cardwheel
         public Vector3[] BallTargetPosition;
         public int BallIdx;
         public GameObject[] BallGO;
+        public GameObject[] BallSelectedGO;
         public Transform BallParent;
 
         public float MouseDownTime;
@@ -44,12 +45,14 @@ namespace Cardwheel
             uiBallMoveData.BallCurrentPosition = new Vector3[uiBallMoveData.NumBalls];
             uiBallMoveData.BallTargetPosition = new Vector3[uiBallMoveData.NumBalls];
             uiBallMoveData.BallGO = new GameObject[uiBallMoveData.NumBalls];
+            uiBallMoveData.BallSelectedGO = new GameObject[uiBallMoveData.NumBalls];
 
             uiBallMoveData.BallParent = guiRef.GetGameObject("BallParent").transform;
             for (int i = 0; i < uiBallMoveData.NumBalls; i++)
             {
-                GameObject go = guiRef.GetGameObject("Ball" + (i + 1).ToString());
-                uiBallMoveData.BallGO[i] = go;
+                uiBallMoveData.BallGO[i] = guiRef.GetGameObject("Ball" + (i + 1).ToString());
+                uiBallMoveData.BallSelectedGO[i] = guiRef.GetGameObject("Selected" + (i + 1).ToString());
+                uiBallMoveData.BallSelectedGO[i].SetActive(false);
             }
 
         }
@@ -73,6 +76,12 @@ namespace Cardwheel
                 uiBallVisualData.BallImage[ballIdx].sprite = AssetManager.Instance.LoadBallSprite(balance.BallBalance.BallSprite[ballType]);
                 uiBallVisualData.BallDescription[ballIdx].text = balance.BallBalance.BallDescription[ballType];
             }
+        }
+
+        public static void HideBallSelected(UIBallMoveData uiBallMoveData)
+        {
+            for (int i = 0; i < uiBallMoveData.NumBalls; i++)
+                uiBallMoveData.BallSelectedGO[i].SetActive(false);
         }
 
         public static void PositionBalls(RunData runData, Balance balance, UIBallMoveData uiBallMoveData)
@@ -132,11 +141,37 @@ namespace Cardwheel
             uiBallVisualData.BallDescription[idx1].text = text2;
             uiBallVisualData.BallDescription[idx2].text = text1;
 
+            bool active1 = uiBallMoveData.BallSelectedGO[idx1].activeSelf;
+            bool active2 = uiBallMoveData.BallSelectedGO[idx2].activeSelf;
+            uiBallMoveData.BallSelectedGO[idx1].SetActive(active2);
+            uiBallMoveData.BallSelectedGO[idx2].SetActive(active1);
+
             uiBallMoveData.BallIdx = idx2;
         }
 
+        public static COMMON_BUTTONS HandleInputGamepadKeyboard(RunData runData, UIBallMoveData uiBallMoveData, UIBallVisualData uiBallVisualData, COMMON_BUTTONS selectedButton, bool allowSelection, int availableInputs)
+        {
+            if (allowSelection && selectedButton >= COMMON_BUTTONS.BALL_1 && selectedButton < COMMON_BUTTONS.BALL_6 && CommonButtonVisual.NavigateEnter(availableInputs))
+            {
+                Logic.ToggleCardPackBallSelection(runData, uiBallMoveData.BallIdx);
+                for (int ballIdx = 0; ballIdx < uiBallMoveData.BallTargetPosition.Length; ballIdx++)
+                    uiBallMoveData.BallTargetPosition[ballIdx] = getBallStartPosWithSelection(runData, uiBallMoveData, ballIdx, allowSelection);
+            }
+            // if (selectedButton == COMMON_BUTTONS.BALL_1 && CommonButtonVisual.NavigateLeft(availableInputs))
+            // {
+            //     return selectedButton + 1;
+            // }
+            if (selectedButton >= COMMON_BUTTONS.BALL_1 && selectedButton < COMMON_BUTTONS.BALL_6 && CommonButtonVisual.NavigateEnterHold(availableInputs) && CommonButtonVisual.NavigateLeft(availableInputs))
+            {
+                int idx1 = selectedButton - COMMON_BUTTONS.BALL_1;
+                int idx2 = idx1 + 1;
+                swapBalls(runData, uiBallMoveData, uiBallVisualData, idx1, idx2);
+            }
 
-        public static void HanleInput(RunData runData, UIBallMoveData uiBallMoveData, Camera camera, bool allowSelection)
+            return selectedButton;
+        }
+
+        public static void HanleInputTouchMove(RunData runData, UIBallMoveData uiBallMoveData, Camera camera, bool allowSelection, int availableInputs)
         {
 #if UNITY_EDITOR
             bool mouseDown = Mouse.current.leftButton.wasPressedThisFrame;
@@ -183,6 +218,8 @@ namespace Cardwheel
                 {
                     uiBallMoveData.BallIdx = worldIdx;
                     uiBallMoveData.MouseDiff = worldPosition - uiBallMoveData.BallCurrentPosition[uiBallMoveData.BallIdx];
+                    if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+                        uiBallMoveData.BallSelectedGO[uiBallMoveData.BallIdx].SetActive(true);
                 }
 
                 uiBallMoveData.MouseMoved = false;
@@ -212,6 +249,7 @@ namespace Cardwheel
                     }
                     else
                         uiBallMoveData.BallTargetPosition[uiBallMoveData.BallIdx] = getBallStartPosWithSelection(runData, uiBallMoveData, uiBallMoveData.BallIdx, allowSelection);
+                    HideBallSelected(uiBallMoveData);
                 }
 
                 uiBallMoveData.BallIdx = -1;
