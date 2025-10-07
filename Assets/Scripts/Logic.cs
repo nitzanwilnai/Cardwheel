@@ -237,10 +237,10 @@ public static class Logic
         //     runData.BallTypes[i] = i;
         // runData.BallTypes[0] = 1;
         // runData.BallTypes[1] = 2;
-        // runData.BallTypes[2] = 8;
-        // runData.BallTypes[3] = 8;
-        // runData.BallTypes[4] = 8;
-        // runData.BallTypes[5] = 8;
+        // runData.BallTypes[2] = 3;
+        // runData.BallTypes[3] = 4;
+        // runData.BallTypes[4] = 5;
+        // runData.BallTypes[5] = 6;
 
         // int cnt = 0;
         // for (int i = 0; i < runData.SlotModType.Length; i++)

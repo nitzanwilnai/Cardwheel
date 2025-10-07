@@ -17,6 +17,12 @@ namespace Cardwheel
         JOKER_3 = 22,
         JOKER_4 = 23,
         JOKER_5 = 24,
+        BALL_1 = 30,
+        BALL_2 = 31,
+        BALL_3 = 32,
+        BALL_4 = 33,
+        BALL_5 = 34,
+        BALL_6 = 35,
     }
 
     public static class CommonButtonVisual
@@ -45,6 +51,21 @@ namespace Cardwheel
 
             if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
                 if (Keyboard.current.enterKey.wasPressedThisFrame)
+                    return true;
+
+            return false;
+        }
+
+
+        public static bool NavigateEnterHold(int availableInputs)
+        {
+            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+                if (Gamepad.current.buttonSouth.isPressed)
+                    return true;
+
+
+            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+                if (Keyboard.current.enterKey.isPressed)
                     return true;
 
             return false;
@@ -203,7 +224,7 @@ namespace Cardwheel
             if (selectedButton >= COMMON_BUTTONS.JOKER_1 && selectedButton <= COMMON_BUTTONS.JOKER_5 && NavigateDown(availableInputs))
                 return (int)COMMON_BUTTONS.BALLS;
 
-            if ((selectedButton >= COMMON_BUTTONS.JOKER_1 && selectedButton < (COMMON_BUTTONS.JOKER_1 + runData.JokerCount-1)) && NavigateRight(availableInputs))
+            if ((selectedButton >= COMMON_BUTTONS.JOKER_1 && selectedButton < (COMMON_BUTTONS.JOKER_1 + runData.JokerCount - 1)) && NavigateRight(availableInputs))
                 return ((int)selectedButton + 1);
             if ((selectedButton >= COMMON_BUTTONS.JOKER_2 && selectedButton < (COMMON_BUTTONS.JOKER_1 + runData.JokerCount)) && NavigateLeft(availableInputs))
                 return ((int)selectedButton - 1);
