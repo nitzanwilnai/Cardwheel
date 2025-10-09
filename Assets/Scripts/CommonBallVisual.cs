@@ -70,10 +70,12 @@ namespace Cardwheel
 
         public static void ShowBalls(int[] ballTypes, Balance balance, UIBallVisualData uiBallVisualData)
         {
+            Debug.Log("showBalls() ");
             for (int ballIdx = 0; ballIdx < balance.MaxBalls; ballIdx++)
             {
                 int ballType = ballTypes[ballIdx];
                 uiBallVisualData.BallImage[ballIdx].sprite = AssetManager.Instance.LoadBallSprite(balance.BallBalance.BallSprite[ballType]);
+                Debug.Log("CommonBallVisual showBalls ballType " + ballType + " sprite " + uiBallVisualData.BallImage[ballIdx].sprite.name);
                 uiBallVisualData.BallDescription[ballIdx].text = balance.BallBalance.BallDescription[ballType];
             }
         }
@@ -84,7 +86,7 @@ namespace Cardwheel
                 uiBallMoveData.BallSelectedGO[i].SetActive(false);
         }
 
-        public static void PositionBalls(RunData runData, Balance balance, UIBallMoveData uiBallMoveData)
+        public static void PositionBalls(Balance balance, UIBallMoveData uiBallMoveData)
         {
             uiBallMoveData.BallIdx = -1;
             for (int ballIdx = 0; ballIdx < balance.MaxBalls; ballIdx++)
@@ -94,14 +96,17 @@ namespace Cardwheel
         public static void HideBalls(Balance balance, UIBallMoveData uiBallMoveData)
         {
             for (int ballIdx = 0; ballIdx < balance.MaxBalls; ballIdx++)
+            {
                 uiBallMoveData.BallGO[ballIdx].transform.position = uiBallMoveData.BallStartPosition[ballIdx];
+                uiBallMoveData.BallTargetPosition[ballIdx] = uiBallMoveData.BallCurrentPosition[ballIdx] = uiBallMoveData.BallStartPosition[ballIdx];
+            }
         }
 
         public static void TickCheckSwapBalls(RunData runData, UIBallMoveData uiBallMoveData, UIBallVisualData uiBallVisualData, bool allowSelection)
         {
             if (uiBallMoveData.BallIdx > -1 && uiBallMoveData.BallIdx < uiBallMoveData.NumBalls - 1 && uiBallMoveData.BallCurrentPosition[uiBallMoveData.BallIdx].x < uiBallMoveData.BallCurrentPosition[uiBallMoveData.BallIdx + 1].x)
             {
-                Debug.Log("swap balls " + uiBallMoveData.BallIdx + " and " + (uiBallMoveData.BallIdx + 1));
+                Debug.Log("TickCheckSwapBalls " + uiBallMoveData.BallIdx + " and " + (uiBallMoveData.BallIdx + 1));
 
                 int idx1 = uiBallMoveData.BallIdx;
                 int idx2 = uiBallMoveData.BallIdx + 1;
@@ -124,6 +129,7 @@ namespace Cardwheel
 
         private static void swapBalls(RunData runData, UIBallMoveData uiBallMoveData, UIBallVisualData uiBallVisualData, int idx1, int idx2)
         {
+            Debug.Log("swapBalls " + idx1 + " and " + idx2);
             Logic.SwapBalls(runData, idx1, idx2);
 
             Vector3 pos1 = uiBallMoveData.BallCurrentPosition[idx1];
@@ -149,23 +155,72 @@ namespace Cardwheel
             uiBallMoveData.BallIdx = idx2;
         }
 
+        private static void swapBallsImages(RunData runData, UIBallMoveData uiBallMoveData, UIBallVisualData uiBallVisualData, int idx1, int idx2)
+        {
+            Debug.Log("swapBallsImages " + idx1 + " and " + idx2);
+            Logic.SwapBalls(runData, idx1, idx2);
+
+            Sprite sprite1 = uiBallVisualData.BallImage[idx1].sprite;
+            Sprite sprite2 = uiBallVisualData.BallImage[idx2].sprite;
+            uiBallVisualData.BallImage[idx1].sprite = sprite2;
+            uiBallVisualData.BallImage[idx2].sprite = sprite1;
+
+            string text1 = uiBallVisualData.BallDescription[idx1].text;
+            string text2 = uiBallVisualData.BallDescription[idx2].text;
+            uiBallVisualData.BallDescription[idx1].text = text2;
+            uiBallVisualData.BallDescription[idx2].text = text1;
+
+            bool active1 = uiBallMoveData.BallSelectedGO[idx1].activeSelf;
+            bool active2 = uiBallMoveData.BallSelectedGO[idx2].activeSelf;
+            uiBallMoveData.BallSelectedGO[idx1].SetActive(active2);
+            uiBallMoveData.BallSelectedGO[idx2].SetActive(active1);
+        }
+
         public static COMMON_BUTTONS HandleInputGamepadKeyboard(RunData runData, UIBallMoveData uiBallMoveData, UIBallVisualData uiBallVisualData, COMMON_BUTTONS selectedButton, bool allowSelection, int availableInputs)
         {
             if (allowSelection && selectedButton >= COMMON_BUTTONS.BALL_1 && selectedButton < COMMON_BUTTONS.BALL_6 && CommonButtonVisual.NavigateEnter(availableInputs))
             {
                 Logic.ToggleCardPackBallSelection(runData, uiBallMoveData.BallIdx);
-                for (int ballIdx = 0; ballIdx < uiBallMoveData.BallTargetPosition.Length; ballIdx++)
-                    uiBallMoveData.BallTargetPosition[ballIdx] = getBallStartPosWithSelection(runData, uiBallMoveData, ballIdx, allowSelection);
             }
-            // if (selectedButton == COMMON_BUTTONS.BALL_1 && CommonButtonVisual.NavigateLeft(availableInputs))
-            // {
-            //     return selectedButton + 1;
-            // }
+
             if (selectedButton >= COMMON_BUTTONS.BALL_1 && selectedButton < COMMON_BUTTONS.BALL_6 && CommonButtonVisual.NavigateEnterHold(availableInputs) && CommonButtonVisual.NavigateLeft(availableInputs))
             {
                 int idx1 = selectedButton - COMMON_BUTTONS.BALL_1;
                 int idx2 = idx1 + 1;
-                swapBalls(runData, uiBallMoveData, uiBallVisualData, idx1, idx2);
+
+                uiBallMoveData.BallCurrentPosition[idx1] = getBallStartPosWithSelection(runData, uiBallMoveData, idx2, allowSelection);
+                uiBallMoveData.BallCurrentPosition[idx2] = getBallStartPosWithSelection(runData, uiBallMoveData, idx1, allowSelection);
+
+                swapBallsImages(runData, uiBallMoveData, uiBallVisualData, idx1, idx2);
+
+                uiBallMoveData.BallIdx = -1;
+                return selectedButton + 1;
+            }
+
+            if (selectedButton > COMMON_BUTTONS.BALL_1 && selectedButton <= COMMON_BUTTONS.BALL_6 && CommonButtonVisual.NavigateEnterHold(availableInputs) && CommonButtonVisual.NavigateRight(availableInputs))
+            {
+                int idx1 = selectedButton - COMMON_BUTTONS.BALL_1;
+                int idx2 = idx1 - 1;
+
+                uiBallMoveData.BallCurrentPosition[idx1] = getBallStartPosWithSelection(runData, uiBallMoveData, idx2, allowSelection);
+                uiBallMoveData.BallCurrentPosition[idx2] = getBallStartPosWithSelection(runData, uiBallMoveData, idx1, allowSelection);
+
+                swapBallsImages(runData, uiBallMoveData, uiBallVisualData, idx1, idx2);
+
+                uiBallMoveData.BallIdx = -1;
+                return selectedButton - 1;
+            }
+
+            if (selectedButton >= COMMON_BUTTONS.BALL_1 && selectedButton < COMMON_BUTTONS.BALL_6 && CommonButtonVisual.NavigateLeft(availableInputs))
+            {
+                // m_uiBallMoveData.BallIdx = m_selectedButton - MENU_BUTTONS.BALL_1;
+                return selectedButton + 1;
+            }
+
+            if (selectedButton > COMMON_BUTTONS.BALL_1 && selectedButton <= COMMON_BUTTONS.BALL_6 && CommonButtonVisual.NavigateRight(availableInputs))
+            {
+                // m_uiBallMoveData.BallIdx = m_selectedButton - MENU_BUTTONS.BALL_1;
+                return selectedButton - 1;
             }
 
             return selectedButton;

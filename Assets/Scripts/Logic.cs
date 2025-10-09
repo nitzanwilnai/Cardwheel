@@ -235,12 +235,12 @@ public static class Logic
 
         // for (int i = 0; i < runData.BallTypes.Length; i++)
         //     runData.BallTypes[i] = i;
-        // runData.BallTypes[0] = 1;
-        // runData.BallTypes[1] = 2;
-        // runData.BallTypes[2] = 3;
-        // runData.BallTypes[3] = 4;
-        // runData.BallTypes[4] = 5;
-        // runData.BallTypes[5] = 6;
+        runData.BallTypes[0] = 1;
+        runData.BallTypes[1] = 2;
+        runData.BallTypes[2] = 3;
+        runData.BallTypes[3] = 4;
+        runData.BallTypes[4] = 5;
+        runData.BallTypes[5] = 6;
 
         // int cnt = 0;
         // for (int i = 0; i < runData.SlotModType.Length; i++)
@@ -2078,7 +2078,6 @@ public static class Logic
 
     public static int SetBit(int array, int bit)
     {
-        Debug.Log("set bit " + bit);
         return (array |= 1 << bit);
     }
 
@@ -2094,7 +2093,6 @@ public static class Logic
 
     public static int RemoveBit(int array, int bit)
     {
-        Debug.Log("remove bit " + bit);
         return (array &= ~bit);
     }
 

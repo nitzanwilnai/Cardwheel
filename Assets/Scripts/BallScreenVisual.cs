@@ -30,6 +30,10 @@ namespace Cardwheel
 
         GUIButtonData m_closeButtonData;
 
+        GameObject m_descriptionTouch;
+        GameObject m_descriptionKeyboard;
+        GameObject m_descriptionGamepad;
+
         RunData runData;
         Balance balance;
         Camera mainCamera;
@@ -46,6 +50,10 @@ namespace Cardwheel
 
             GUIRef guiRef = m_UI.GetComponent<GUIRef>();
             CommonVisual.InitTopBarGUI(guiRef.GetGameObject("TopBar"), ref m_topBarGUI);
+
+            m_descriptionTouch = guiRef.GetGameObject("TextTouch");
+            m_descriptionKeyboard = guiRef.GetGameObject("TextKeyboard");
+            m_descriptionGamepad = guiRef.GetGameObject("TextGamepad");
 
             m_animation = guiRef.GetAnimation("Animation");
 
@@ -65,9 +73,9 @@ namespace Cardwheel
 
             m_UI.SetActive(true);
 
-            CommonVisual.ShowTopBar(runData, m_topBarGUI, "Balls");
+            CommonVisual.ShowTopBarNoSettings(runData, m_topBarGUI, "Balls");
 
-            CommonBallVisual.PositionBalls(runData, balance, m_uiBallMoveData);
+            CommonBallVisual.PositionBalls(balance, m_uiBallMoveData);
             CommonBallVisual.ShowBalls(runData.BallTypes, balance, m_uiBallVisualData);
 
             if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
@@ -76,6 +84,16 @@ namespace Cardwheel
             m_closeButtonData.SelectedGO.SetActive(Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD));
             m_selectedButton = MENU_BUTTONS.CLOSE;
 
+            m_descriptionTouch.SetActive(false);
+            m_descriptionKeyboard.SetActive(false);
+            m_descriptionGamepad.SetActive(false);
+            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+                m_descriptionGamepad.SetActive(true);
+            else if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+                m_descriptionKeyboard.SetActive(true);
+            else
+                m_descriptionTouch.SetActive(true);
+
             Canvas.ForceUpdateCanvases();
 
         }
@@ -83,6 +101,7 @@ namespace Cardwheel
         public void Hide()
         {
             m_UI.SetActive(false);
+            CommonBallVisual.HideBalls(balance, m_uiBallMoveData);
         }
 
         public void Tick(float dt, int availableInputs)
@@ -91,8 +110,8 @@ namespace Cardwheel
 
             handleInput(dt, availableInputs);
 
-            // Debug.Log("m_ballIdx " + m_ballIdx + " m_ballIdx + 1" + (m_ballIdx + 1));
-            CommonBallVisual.TickCheckSwapBalls(runData, m_uiBallMoveData, m_uiBallVisualData, false);
+            if (m_uiBallMoveData.BallIdx > -1)
+                CommonBallVisual.TickCheckSwapBalls(runData, m_uiBallMoveData, m_uiBallVisualData, false);
 
             if (CommonVisual.AnimateCloseTick(ref m_closeTimer, dt))
                 Game.Instance.SetMenuState(runData.PrevMenuState);
@@ -111,12 +130,21 @@ namespace Cardwheel
         void handleInput(float dt, int availableInputs)
         {
             if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
-            CommonBallVisual.HandleInputGamepadKeyboard(runData, m_uiBallMoveData, m_uiBallVisualData, (COMMON_BUTTONS)m_selectedButton, false, availableInputs);
+            {
+                MENU_BUTTONS newSelectedButton = (MENU_BUTTONS)CommonBallVisual.HandleInputGamepadKeyboard(runData, m_uiBallMoveData, m_uiBallVisualData, (COMMON_BUTTONS)m_selectedButton, false, availableInputs);
+                selectButton(newSelectedButton);
+            }
             else
-            CommonBallVisual.HanleInputTouchMove(runData, m_uiBallMoveData, mainCamera, false, availableInputs);
+                CommonBallVisual.HanleInputTouchMove(runData, m_uiBallMoveData, mainCamera, false, availableInputs);
 
             if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
             {
+                if (m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateEnter(availableInputs))
+                {
+                    animateClose();
+                    return;
+                }
+
                 if (m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateUp(availableInputs))
                 {
                     selectButton(MENU_BUTTONS.BALL_1);
@@ -125,19 +153,8 @@ namespace Cardwheel
 
                 if (m_selectedButton >= MENU_BUTTONS.BALL_1 && m_selectedButton <= MENU_BUTTONS.BALL_6 && CommonButtonVisual.NavigateDown(availableInputs))
                 {
+                    m_uiBallMoveData.BallIdx = -1;
                     selectButton(MENU_BUTTONS.CLOSE);
-                    return;
-                }
-
-                if (m_selectedButton >= MENU_BUTTONS.BALL_1 && m_selectedButton < MENU_BUTTONS.BALL_6 && CommonButtonVisual.NavigateLeft(availableInputs))
-                {
-                    selectButton(m_selectedButton + 1);
-                    return;
-                }
-
-                if (m_selectedButton > MENU_BUTTONS.BALL_1 && m_selectedButton <= MENU_BUTTONS.BALL_6 && CommonButtonVisual.NavigateRight(availableInputs))
-                {
-                    selectButton(m_selectedButton - 1);
                     return;
                 }
             }

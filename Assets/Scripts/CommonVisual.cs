@@ -279,6 +279,7 @@ namespace Cardwheel
             {
                 int ballType = runData.BallTypes[ballIdx];
                 cardsBallsSpinWheelGUI.Balls[ballIdx].sprite = AssetManager.Instance.LoadBallSprite(balance.BallBalance.BallSprite[ballType]);
+                Debug.Log("CommonVisual showBalls ballType " + ballType + " sprite " + cardsBallsSpinWheelGUI.Balls[ballIdx].sprite.name);
             }
         }
 
