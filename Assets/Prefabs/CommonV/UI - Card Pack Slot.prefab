@@ -376,6 +376,7 @@ GameObject:
   - component: {fileID: 3935674357468150834}
   - component: {fileID: 7240400708430650674}
   - component: {fileID: 6943497260373936012}
+  - component: {fileID: 6538694515030705256}
   m_Layer: 5
   m_Name: UI - Card Pack Slot
   m_TagString: Untagged
@@ -515,13 +516,32 @@ MonoBehaviour:
   - Name: CardPack
     Value: {fileID: 5664560551511411628}
   GUIRefRawImages: []
-  GUIRefButtons:
-  - Name: Abandon
-    Value: {fileID: 9089519277847765892}
-  - Name: Reroll
-    Value: {fileID: 6221726628691356000}
+  GUIRefButtons: []
   GUIRefSliders: []
   GUIRefAnimations: []
+--- !u!114 &6538694515030705256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1840910280049383347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67e5b6a1a502544f795bb25d60791040, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Buttons:
+  - Key: Abandon
+    Button: {fileID: 9089519277847765892}
+    GlyphImage: {fileID: 0}
+    GamepadButton: 0
+    SelectedGO: {fileID: 0}
+  - Key: Reroll
+    Button: {fileID: 6221726628691356000}
+    GlyphImage: {fileID: 0}
+    GamepadButton: 0
+    SelectedGO: {fileID: 0}
 --- !u!1 &3358516627920777428
 GameObject:
   m_ObjectHideFlags: 0

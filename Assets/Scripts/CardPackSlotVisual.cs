@@ -14,7 +14,7 @@ namespace Cardwheel
         TopBarGUI m_topBarGUI;
 
         CardPackCardGUI[][] m_cardPackCardGUIs;
-        Button m_rerollButton;
+        GUIButtonData m_rerollButtonData;
         TextMeshProUGUI m_rerollCostText;
 
         GameObject[] m_descriptionGOs;
@@ -25,7 +25,7 @@ namespace Cardwheel
         float m_slotChangedTimer = 0.0f;
         float m_slotAnimTimer = 0.0f;
 
-        Button m_abandonButton;
+        GUIButtonData m_abandonButtonData;
 
         ScoringSlot[] m_scoringSlots;
 
@@ -45,8 +45,9 @@ namespace Cardwheel
             CommonVisual.ChangeCanvasScalerMatching(m_UI);
 
             GUIRef guiRef = m_UI.GetComponent<GUIRef>();
+            GUIButtonRef guiButtonRef = m_UI.GetComponent<GUIButtonRef>();
 
-            CardPackCommonVisual.InitRerollButton(guiRef, ref m_rerollButton, ref m_rerollCostText);
+            CardPackCommonVisual.InitRerollButton(guiRef, guiButtonRef, ref m_rerollButtonData, ref m_rerollCostText);
 
             m_cardPackCardGUIs = new CardPackCardGUI[3][];
             m_descriptionGOs = new GameObject[balance.MaxShopCardPackCards];
@@ -57,15 +58,15 @@ namespace Cardwheel
                 for (int j = 0; j < numCards; j++)
                 {
                     int localJ = j;
-                    m_cardPackCardGUIs[i][j].UseButton.onClick.AddListener(() => useCardPackOnSlots(localJ));
-                    m_cardPackCardGUIs[i][j].UseButton.interactable = true;
+                    m_cardPackCardGUIs[i][j].UseButtonData.Button.onClick.AddListener(() => useCardPackOnSlots(localJ));
+                    m_cardPackCardGUIs[i][j].UseButtonData.Button.interactable = true;
                 }
             }
 
             CommonVisual.InitTopBarGUI(guiRef.GetGameObject("TopBar"), ref m_topBarGUI);
 
-            m_abandonButton = guiRef.GetButton("Abandon");
-            m_abandonButton.onClick.AddListener(Game.Instance.CloseCardPack);
+            m_abandonButtonData = guiButtonRef.GetButtonData("Abandon");
+            m_abandonButtonData.Button.onClick.AddListener(Game.Instance.CloseCardPack);
 
             SpinWheelRef spinWheelRef = guiRef.GetGameObject("SpinWheel").GetComponent<SpinWheelRef>();
             spinWheelRef.SortingPopup.SetActive(false);
@@ -96,10 +97,10 @@ namespace Cardwheel
 
             CardPackCommonVisual.ShowCards(runData, balance, m_cardPackCardGUIs, m_descriptionGOs, balance.CardPackSlotBalance.DescriptionName, balance.CardPackSlotBalance.Weights, balance.CardPackSlotBalance.AffectedSlotType);
 
-            CardPackCommonVisual.ShowRerollButton(runData, balance, m_rerollButton, m_rerollCostText);
+            CardPackCommonVisual.ShowRerollButton(runData, balance, m_rerollButtonData.Button, m_rerollCostText);
 
-            m_abandonButton.gameObject.SetActive(false);
-            m_rerollButton.gameObject.SetActive(false);
+            m_abandonButtonData.Button.gameObject.SetActive(false);
+            m_rerollButtonData.Button.gameObject.SetActive(false);
 
             for (int i = 0; i < m_cardPackCardGUIs.Length; i++)
                 for (int j = 0; j < m_cardPackCardGUIs[i].Length; j++)
@@ -117,7 +118,7 @@ namespace Cardwheel
 
         public void Tick(RunData runData, Balance balance, float dt)
         {
-            CardPackCommonVisual.TickCardPackAnimation(runData, balance, dt, ref m_packAnimationTimer, m_packAnimationTime, m_cardPackCardGUIs, m_descriptionGOs, m_abandonButton, m_rerollButton);
+            CardPackCommonVisual.TickCardPackAnimation(runData, balance, dt, ref m_packAnimationTimer, m_packAnimationTime, m_cardPackCardGUIs, m_descriptionGOs, m_abandonButtonData.Button, m_rerollButtonData.Button);
 
             runData.SpinWheelAngle += balance.UISpinWheelSpeed * dt;
             m_spinCircle.Angle = runData.SpinWheelAngle;
@@ -144,8 +145,8 @@ namespace Cardwheel
             
             Logic.UseCardPackSlotCard(runData, balance, cardIdx, CommonSlotsVisual.AffectedSlotsIdxs, ref CommonSlotsVisual.AffectedSlotsCount);
 
-            m_abandonButton.gameObject.SetActive(false);
-            m_rerollButton.gameObject.SetActive(false);
+            m_abandonButtonData.Button.gameObject.SetActive(false);
+            m_rerollButtonData.Button.gameObject.SetActive(false);
 
             m_slotChangedTimer = m_slotChangedTime;
             m_slotAnimTimer = 0.0f;
@@ -162,7 +163,7 @@ namespace Cardwheel
             {
                 if (i != cardIdx)
                     m_cardPackCardGUIs[index][i].GO.SetActive(false);
-                m_cardPackCardGUIs[index][i].UseButton.gameObject.SetActive(false);
+                m_cardPackCardGUIs[index][i].UseButtonData.Button.gameObject.SetActive(false);
                 m_cardPackCardGUIs[index][i].UseButtonImage.color = balance.ButtonColorDisabled;
             }
 
