@@ -105,7 +105,7 @@ namespace Cardwheel
 
             CommonVisual.ShowTopBarNoSettings(runData, m_topBarGUI, "Card Pack - Balls");
 
-            CommonBallVisual.PositionBalls(runData, balance, m_uiBallMoveData);
+            CommonBallVisual.PositionBalls(balance, m_uiBallMoveData);
             CommonBallVisual.ShowBalls(runData.BallTypes, balance, m_uiBallVisualData);
 
             for (int i = 0; i < m_ballStars.Length; i++)
