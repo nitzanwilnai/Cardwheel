@@ -1387,6 +1387,7 @@ GameObject:
   - component: {fileID: 3935674357468150834}
   - component: {fileID: 7240400708430650674}
   - component: {fileID: 6943497260373936012}
+  - component: {fileID: 6970525602356183258}
   m_Layer: 5
   m_Name: UI - Card Pack Balls
   m_TagString: Untagged
@@ -1592,13 +1593,32 @@ MonoBehaviour:
   - Name: Ball6
     Value: {fileID: 8142646577175859552}
   GUIRefRawImages: []
-  GUIRefButtons:
-  - Name: Abandon
-    Value: {fileID: 9089519277847765892}
-  - Name: Reroll
-    Value: {fileID: 4365208177707938062}
+  GUIRefButtons: []
   GUIRefSliders: []
   GUIRefAnimations: []
+--- !u!114 &6970525602356183258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1840910280049383347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67e5b6a1a502544f795bb25d60791040, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Buttons:
+  - Key: Abandon
+    Button: {fileID: 9089519277847765892}
+    GlyphImage: {fileID: 0}
+    GamepadButton: 0
+    SelectedGO: {fileID: 0}
+  - Key: Reroll
+    Button: {fileID: 4365208177707938062}
+    GlyphImage: {fileID: 0}
+    GamepadButton: 0
+    SelectedGO: {fileID: 0}
 --- !u!1 &1881312009619232938
 GameObject:
   m_ObjectHideFlags: 0

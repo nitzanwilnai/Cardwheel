@@ -9,6 +9,14 @@ namespace Cardwheel
 {
     public static class CardPackCommonVisual
     {
+        public enum COMMON_BUTTONS
+        {
+            CARDPACK_1 = 50,
+            CARDPACK_2 = 51,
+            CARDPACk_3 = 52,
+            CARDPACK_4 = 53,
+        }
+
         public static void InitCards(GUIRef guiRef, ref CardPackCardGUI[] cardPackCardGUIs, int numCards, int index)
         {
             cardPackCardGUIs = new CardPackCardGUI[numCards];
@@ -19,8 +27,11 @@ namespace Cardwheel
                 cardPackCardGUIs[i].GO = go;
                 cardPackCardGUIs[i].DescriptionParent = cardGUIRef.GetGameObject("Description").transform;
                 cardPackCardGUIs[i].CardImage = cardGUIRef.GetImage("Card");
-                cardPackCardGUIs[i].UseButton = cardGUIRef.GetButton("Use");
                 cardPackCardGUIs[i].UseButtonImage = cardGUIRef.GetImage("Use");
+
+                GUIButtonRef cardGUIButtonRef = go.GetComponent<GUIButtonRef>();
+                cardPackCardGUIs[i].UseButtonData = cardGUIButtonRef.GetButtonData("Use");
+                CommonButtonVisual.AddSelectedBorder(cardPackCardGUIs[i].UseButtonData);
             }
         }
 
@@ -53,7 +64,7 @@ namespace Cardwheel
                 descriptionGOs[i] = descriptionGO;
 
                 descriptionGOs[i].SetActive(false);
-                cardPackCardGUIs[index][i].UseButton.gameObject.SetActive(false);
+                cardPackCardGUIs[index][i].UseButtonData.Button.gameObject.SetActive(false);
             }
             for (int i = 0; i < descriptionGOs.Length; i++)
             {
@@ -78,7 +89,7 @@ namespace Cardwheel
                     for (int i = 0; i < cardPackCardGUIs[index].Length; i++)
                     {
                         descriptionGOs[i].SetActive(true);
-                        cardPackCardGUIs[index][i].UseButton.gameObject.SetActive(true);
+                        cardPackCardGUIs[index][i].UseButtonData.Button.gameObject.SetActive(true);
                     }
 
                     for (int i = 0; i < descriptionGOs.Length; i++)
@@ -97,11 +108,11 @@ namespace Cardwheel
             }
         }
 
-        public static void InitRerollButton(GUIRef guiRef, ref Button rerollButton, ref TextMeshProUGUI rerollCostText)
+        public static void InitRerollButton(GUIRef guiRef, GUIButtonRef guiButtonRef, ref GUIButtonData rerollButtonData, ref TextMeshProUGUI rerollCostText)
         {
-            rerollButton = guiRef.GetButton("Reroll");
+            rerollButtonData = guiButtonRef.GetButtonData("Reroll");
             rerollCostText = guiRef.GetTextGUI("Reroll");
-            rerollButton.onClick.AddListener(Game.Instance.RerollCardPack);
+            rerollButtonData.Button.onClick.AddListener(Game.Instance.RerollCardPack);
         }
 
         public static void ShowRerollButton(RunData runData, Balance balance, Button rerollButton, TextMeshProUGUI rerollCostText)
