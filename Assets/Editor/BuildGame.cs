@@ -107,7 +107,7 @@ namespace Cardwheel
 
             PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.iOS, "");
 
-            Build(BuildTarget.iOS, Application.dataPath + "/../../Build/iOSBuild", BuildOptions.AutoRunPlayer, "Assets/Scenes/MainGameScene V.unity");
+            Build(BuildTarget.iOS, Application.dataPath + "/../../Build/" + PlayerSettings.productName + "_iOSBuild", BuildOptions.AutoRunPlayer, "Assets/Scenes/MainGameScene V.unity");
 
             PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.iOS, "");
         }
@@ -119,7 +119,7 @@ namespace Cardwheel
 
             PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.iOS, "RELEASE");
 
-            Build(BuildTarget.iOS, Application.dataPath + "/../../Build/iOSBuild", BuildOptions.AutoRunPlayer, "Assets/Scenes/MainGameScene V.unity");
+            Build(BuildTarget.iOS, Application.dataPath + "/../../Build/" + PlayerSettings.productName + "_iOSBuild", BuildOptions.AutoRunPlayer, "Assets/Scenes/MainGameScene V.unity");
 
             PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.iOS, "");
         }
@@ -177,6 +177,24 @@ namespace Cardwheel
                 copyPodfile(path);
                 modifyXcodeFrameworks(path);
                 modifyXCodePList(path);
+
+                //     string schemeDir = Path.Combine(path, "Unity-iPhone.xcodeproj", "xcshareddata", "xcschemes");
+                //     if (Directory.Exists(schemeDir))
+                //     {
+                //         string oldScheme = Path.Combine(schemeDir, "Unity-iPhone.xcscheme");
+                //         string newScheme = Path.Combine(schemeDir, PlayerSettings.productName + ".xcscheme");
+                //         if (File.Exists(oldScheme))
+                //             File.Move(oldScheme, newScheme);
+                //     }
+
+                //     string oldProjectPath = Path.Combine(path, "Unity-iPhone.xcodeproj");
+                //     string newProjectPath = Path.Combine(path,  PlayerSettings.productName + ".xcodeproj");
+                //     if (Directory.Exists(oldProjectPath))
+                //     {
+                //         Directory.Move(oldProjectPath, newProjectPath);
+                //         UnityEngine.Debug.Log($"Renamed Xcode project to: {newProjectPath}");
+                //     }
+
             }
         }
 

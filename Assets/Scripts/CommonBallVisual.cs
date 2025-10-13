@@ -4,6 +4,7 @@ using CommonTools;
 using TMPro;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
+using UnityEditor;
 
 namespace Cardwheel
 {
@@ -228,18 +229,29 @@ namespace Cardwheel
 
         public static void HanleInputTouchMove(RunData runData, UIBallMoveData uiBallMoveData, Camera camera, bool allowSelection, int availableInputs)
         {
-#if UNITY_EDITOR
-            bool mouseDown = Mouse.current.leftButton.wasPressedThisFrame;
-            bool mouseMove = Mouse.current.leftButton.isPressed;
-            bool mouseUp = Mouse.current.leftButton.wasReleasedThisFrame;
-            Vector3 mousePosition = Mouse.current.position.ReadValue();
-#else
-            bool mouseDown = Touchscreen.current.touches[0].press.wasPressedThisFrame;
-            bool mouseMove = Touchscreen.current.touches[0].press.isPressed;
-            bool mouseUp = Touchscreen.current.touches[0].press.wasReleasedThisFrame;
+            bool mouseDown = false;
+            bool mouseMove = false;
+            bool mouseUp = false;
             Vector3 mousePosition = Vector3.zero;
-            if (Touchscreen.current.touches.Count > 0)
-                mousePosition = Touchscreen.current.touches[0].position.ReadValue();
+
+#if UNITY_EDITOR
+            if (Mouse.current != null)
+            {
+                mouseDown = Mouse.current.leftButton.wasPressedThisFrame;
+                mouseMove = Mouse.current.leftButton.isPressed;
+                mouseUp = Mouse.current.leftButton.wasReleasedThisFrame;
+                mousePosition = Mouse.current.position.ReadValue();
+            }
+#else
+            if (Touchscreen.current != null)
+            {
+                mouseDown = Touchscreen.current.touches[0].press.wasPressedThisFrame;
+                mouseMove = Touchscreen.current.touches[0].press.isPressed;
+                mouseUp = Touchscreen.current.touches[0].press.wasReleasedThisFrame;
+                mousePosition = Vector3.zero;
+                if (Touchscreen.current.touches.Count > 0)
+                    mousePosition = Touchscreen.current.touches[0].position.ReadValue();
+            }
 #endif
 
             Vector3 worldPosition = camera.ScreenToWorldPoint(mousePosition);
