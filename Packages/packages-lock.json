@@ -5,7 +5,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "50022f691c93561abae7a5940e99495c078455ad"
+      "hash": "96cc6635c21ea412808092aa6bb86b739d632023"
     },
     "com.unity.2d.animation": {
       "version": "9.2.0",
@@ -160,11 +160,11 @@
       }
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.23",
+      "version": "2.0.25",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.test-framework": "1.1.9"
+        "com.unity.test-framework": "1.1.31"
       },
       "url": "https://packages.unity.com"
     },
