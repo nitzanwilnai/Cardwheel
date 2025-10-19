@@ -342,7 +342,7 @@ public static class Logic
         if (runData.BossType[round - 1] > -1)
             Debug.Log("Prev boss runData.BossType[" + (round - 1) + "] " + balance.BossBalance.Description[runData.BossType[round - 1]]);
 
-        Span<int> bossesForRound = new int[balance.BossBalance.NumBosses];
+        Span<int> bossesForRound = stackalloc int[balance.BossBalance.NumBosses];
         int bossesForRoundCount = 0;
         for (int i = 0; i < balance.BossBalance.NumBosses; i++)
             if (round >= balance.BossBalance.LevelRange[i].x && round <= balance.BossBalance.LevelRange[i].y)
@@ -708,7 +708,7 @@ public static class Logic
         if (balance.JokerBalance.StartRoundChangeSlotID[jokerType] > -1)
         {
             int availableSlotCount = 0;
-            Span<int> avaiableSlots = new int[balance.NumSlots];
+            Span<int> avaiableSlots = stackalloc int[balance.NumSlots];
 
             for (int j = 0; j < balance.NumSlots; j++)
                 if (runData.SlotModType[j] == -1)
@@ -790,12 +790,8 @@ public static class Logic
 
         int ballCount = 0;
         for (int i = runData.SlotScored.Length - 1; i >= 0; i--)
-        {
             if (runData.SlotScored[i] > -1)
-            {
                 runData.BallScoreIdxs[ballCount++] = runData.SlotScored[i];
-            }
-        }
     }
 
     public static int CalculateSlotBallChips(RunData runData, Balance balance, int ballIdx)
@@ -1026,7 +1022,7 @@ public static class Logic
     {
         if (InBossRound(runData))
         {
-            Span<int> slotTypeCount = new int[4];
+            Span<int> slotTypeCount = stackalloc int[4];
             CountNumBallsOnSlotType(runData, balance.MaxBalls, slotTypeCount);
 
             int bossType = GetBossTypeForRound(runData);
@@ -1060,7 +1056,7 @@ public static class Logic
 
     static bool jokerBaseCheck(RunData runData, Balance balance, int jokerIdx, int jokerType)
     {
-        Span<int> slotTypeCount = new int[4];
+        Span<int> slotTypeCount = stackalloc int[4];
         CountNumBallsOnSlotType(runData, balance.MaxBalls, slotTypeCount);
 
         bool useBaseType = checkTypeReqs(runData, balance, jokerType, slotTypeCount);
@@ -1090,7 +1086,7 @@ public static class Logic
     {
         int chips = 0;
 
-        Span<int> slotTypeCount = new int[4];
+        Span<int> slotTypeCount = stackalloc int[4];
         CountNumBallsOnSlotType(runData, balance.MaxBalls, slotTypeCount);
 
         if (jokerBaseCheck(runData, balance, jokerIdx, jokerType))
@@ -1494,9 +1490,9 @@ public static class Logic
 
     public static void GetJokersForShop(RunData runData, Balance balance)
     {
-        Span<int> commonJokerTypes = new int[runData.AvailableJokerCount];
-        Span<int> uncommonJokerTypes = new int[runData.AvailableJokerCount];
-        Span<int> rareJokerTypes = new int[runData.AvailableJokerCount];
+        Span<int> commonJokerTypes = stackalloc int[runData.AvailableJokerCount];
+        Span<int> uncommonJokerTypes = stackalloc int[runData.AvailableJokerCount];
+        Span<int> rareJokerTypes = stackalloc int[runData.AvailableJokerCount];
         int commonJokerCount = 0;
         int uncommonJokerCount = 0;
         int rareJokerCount = 0;
@@ -1612,7 +1608,7 @@ public static class Logic
         int maxCards = balance.CardPackMaxCards[runData.SelectedShopCardPackIdx];
 
         int availableCardCount = weights.Length;
-        Span<int> availableCardIdxs = new int[availableCardCount];
+        Span<int> availableCardIdxs = stackalloc int[availableCardCount];
         for (int i = 0; i < availableCardCount; i++)
             availableCardIdxs[i] = i;
 
@@ -1785,10 +1781,10 @@ public static class Logic
         affectedSlotsCount = 0;
 
         int cardType = runData.CardPackCardIdxs[cardIdx];
+        Span<int> avaiableSlots = stackalloc int[balance.NumSlots];
         for (int i = 0; i < balance.CardPackSlotBalance.NumSlots[cardType]; i++)
         {
             int availableSlotCount = 0;
-            Span<int> avaiableSlots = new int[balance.NumSlots];
 
             if (balance.CardPackSlotBalance.SlotChangeType[cardType] == SLOT_CHANGE_TYPE.NONE)
             {
