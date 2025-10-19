@@ -819,9 +819,9 @@ namespace Cardwheel
                     }
                     else
                     {
+                        Span<int> jokerIdxs = stackalloc int[runData.JokerCount];
                         while (m_scoringIdx < balance.MaxBalls)
                         {
-                            Span<int> jokerIdxs = new int[runData.JokerCount];
                             int jokerCount = 0;
                             int ballIdx = runData.BallScoreIdxs[m_scoringIdx];
                             m_scoringIdx++;
@@ -1508,7 +1508,7 @@ namespace Cardwheel
         float m_increaseSize;
         void doSpinTest(RunData runData, Balance balance)
         {
-            Span<int> slotTypeCount = new int[4];
+            Span<int> slotTypeCount = stackalloc int[4];
             Logic.CountNumBallsOnSlotType(runData, balance.MaxBalls, slotTypeCount);
 
             bool dropped6 = false;

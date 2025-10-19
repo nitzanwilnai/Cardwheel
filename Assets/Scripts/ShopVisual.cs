@@ -334,7 +334,7 @@ namespace Cardwheel
                 m_verticalLayoutGroup.enabled = true;
             }
 
-            Span<int> jokerIdxs = new int[balance.MaxJokersInHand];
+            Span<int> jokerIdxs = stackalloc int[balance.MaxJokersInHand];
             int jokerCount = 0;
 
             if (Logic.CheckForSortSlotsJoker(runData, balance, jokerIdxs, ref jokerCount))
@@ -861,11 +861,11 @@ namespace Cardwheel
 
             if (m_selectedButton == MENU_BUTTONS.SHOP_CARDPACK_1 && CommonButtonVisual.NavigateUp(availableInputs))
             {
-                if(runData.ShopJokerIdxs[1] > -1)
+                if (runData.ShopJokerIdxs[1] > -1)
                     selectButton(MENU_BUTTONS.SHOP_JOKER_2, availableInputs);
-                else if(runData.ShopJokerIdxs[0] > -1)
+                else if (runData.ShopJokerIdxs[0] > -1)
                     selectButton(MENU_BUTTONS.SHOP_JOKER_1, availableInputs);
-                else if(runData.ShopJokerIdxs[2] > -1)
+                else if (runData.ShopJokerIdxs[2] > -1)
                     selectButton(MENU_BUTTONS.SHOP_JOKER_3, availableInputs);
             }
 

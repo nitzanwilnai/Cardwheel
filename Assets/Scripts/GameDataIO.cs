@@ -39,7 +39,7 @@ namespace Cardwheel
                     {
                         int version = br.ReadInt32();
                         int savedNumSpinWheels = br.ReadInt32();
-                        Span<int> tempArray = new int[savedNumSpinWheels];
+                        Span<int> tempArray = stackalloc int[savedNumSpinWheels];
                         for (int i = 0; i < savedNumSpinWheels; i++)
                             tempArray[i] = br.ReadInt32();
 
