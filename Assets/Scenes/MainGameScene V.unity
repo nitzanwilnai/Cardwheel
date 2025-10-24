@@ -510,6 +510,26 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4072154811109636285, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4730729846408639163, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6638826757461630101, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6878048658971693395, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7074447944681563893, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9154548170960038479, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -554,6 +574,21 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4730729846408639163, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 7074447944681563893, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 6878048658971693395, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 6638826757461630101, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 4072154811109636285, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
     - targetCorrespondingSourceObject: {fileID: 8498468222371090587, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
@@ -651,7 +686,6 @@ MonoBehaviour:
   Board: {fileID: 551517368}
   Camera: {fileID: 519420031}
   UIDebug: {fileID: 315485192}
-  MusicClip: {fileID: 8300000, guid: 40a97273c08eb47ddb41624616051b56, type: 3}
   CommonBundle: common
   GameInfoSO: {fileID: 11400000, guid: 9d25ef7a2653d4d07ae5ff249d5d3c28, type: 2}
   StartSeed: 0

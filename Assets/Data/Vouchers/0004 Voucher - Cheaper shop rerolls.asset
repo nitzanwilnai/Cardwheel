@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: 0004 Voucher - Cheaper shop rerolls
   m_EditorClassIdentifier: 
   VoucherType: 3
-  Description: Shop rerolls start at $3
+  Description: "Shop rerolls start at \u25C73"
   VoucherSprite: {fileID: 21300000, guid: bb96744ebdca94ec4b765b8f4d4aac02, type: 3}
   Repeatable: 0

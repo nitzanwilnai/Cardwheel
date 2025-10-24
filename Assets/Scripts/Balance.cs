@@ -168,7 +168,7 @@ namespace Cardwheel
         public float[] LastSpinMultiplierAdd;
 
         public int[] BallIncMultRemoveSlotMod;
-        public float[] AddMultipierMultRemoveAllSlotMod;
+        public float[] AddMultipierMultRemoveAllSlotMod; // not used?
         public int[] ChipsAddForEveryNonSlotMod;
         public float[] MultiplierAddForEverySlotMod;
         public float[] BallMultiplierAddForSlotMod;

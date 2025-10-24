@@ -173,6 +173,16 @@ namespace Cardwheel
                 int chips = (int)balance.JokerBalance.PerNoJokerMultiplierAdd[jokerType];
                 go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current +" + (numNoJokers * chips) + "x)";
             }
+            if (balance.JokerBalance.BallIncMultRemoveSlotMod[jokerType] > 0)
+            {
+                float multIncrease = jokerIdx > -1 ? runData.JokerMultiplierAdd[jokerIdx] : 0;
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current +" + multIncrease + ")";
+            }
+            if(balance.JokerBalance.IncreaseSellValueEveryRound[jokerType] > 0)
+            {
+                int sellValue = runData.JokerSellValues[jokerIdx];
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current ◇" + sellValue + ")";
+            }
         }
 
         public static void ShowJokerDescriptionShop(RunData runData, Balance balance, GameObject go, int jokerType)
