@@ -27,6 +27,13 @@ namespace Cardwheel
         public GameObject ShinyGO;
         public GameObject MetalGO;
         public GameObject SelectedGO;
+
+        public GameObject JokerChips;
+        public GameObject JokerMult;
+        public GameObject JokerColor;
+        public TextMeshProUGUI JokerChipsText;
+        public TextMeshProUGUI JokerMultText;
+        public TextMeshProUGUI JokerColorText;
     }
 
     public class Board : MonoBehaviour

@@ -175,6 +175,9 @@ namespace Cardwheel
                         for (int i = 0; i < 6; i++)
                             bw.Write(jokerSO.SizeExists[i]);
 
+                        for (int i = 0; i < 6; i++)
+                            bw.Write(jokerSO.SizeNotExists[i]);
+
                         bw.Write(jokerSO.ChipsPerBall);
                         bw.Write(jokerSO.ChipsIncreasePerBall);
                         bw.Write(jokerSO.MultIncreaseForSize);
@@ -213,6 +216,10 @@ namespace Cardwheel
 
                         bw.Write(jokerSO.AddSpin);
                         bw.Write(jokerSO.LastSpinMultiplierAdd);
+
+                        bw.Write(jokerSO.RoundSkippedChipsAdd);
+                        bw.Write(jokerSO.RoundSkippedMultiplierAdd);
+                        bw.Write(jokerSO.RoundSkippedMultiplierMult);
 
                         bw.Write(jokerSO.BallIncreaseMultRemoveSlotMod);
                         bw.Write(jokerSO.AddMultipierMultRemoveAllSlotMod);

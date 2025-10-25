@@ -2867,6 +2867,10 @@ PrefabInstance:
       propertyPath: m_SortingLayer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8473728024378138625, guid: fc34b08531df547d9b6c73cefdc820e8, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 8480858789120307368, guid: fc34b08531df547d9b6c73cefdc820e8, type: 3}
       propertyPath: m_SortingLayer
       value: 0

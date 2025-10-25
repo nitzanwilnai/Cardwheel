@@ -227,21 +227,21 @@ public static class Logic
         // runData.SkipType[3] = 13;
         // runData.SkipType[1] = 7;
 
-        AddJoker(runData, balance, 20);
-        AddJoker(runData, balance, 59);
-        AddJoker(runData, balance, 38);
+        AddJoker(runData, balance, 75);
+        AddJoker(runData, balance, 76);
+        AddJoker(runData, balance, 77);
         // AddJoker(runData, balance, 5);
         // AddJoker(runData, balance, 24);
         // AddJoker(runData, balance, 11);
 
         // for (int i = 0; i < runData.BallTypes.Length; i++)
         //     runData.BallTypes[i] = i;
-        runData.BallTypes[0] = 1;
-        runData.BallTypes[1] = 2;
-        runData.BallTypes[2] = 3;
-        runData.BallTypes[3] = 4;
-        runData.BallTypes[4] = 5;
-        runData.BallTypes[5] = 6;
+        // runData.BallTypes[0] = 1;
+        // runData.BallTypes[1] = 2;
+        // runData.BallTypes[2] = 3;
+        // runData.BallTypes[3] = 4;
+        // runData.BallTypes[4] = 5;
+        // runData.BallTypes[5] = 6;
 
         // int cnt = 0;
         // for (int i = 0; i < runData.SlotModType.Length; i++)
@@ -1106,7 +1106,9 @@ public static class Logic
         chips += runData.JokerChips[jokerIdx];
 
         int numNonSlotMods = GetNumNonModedSlots(runData, balance);
-        chips += (numNonSlotMods * balance.JokerBalance.ChipsAddForEveryNonSlotMod[jokerType]);
+        chips += numNonSlotMods * balance.JokerBalance.ChipsAddForEveryNonSlotMod[jokerType];
+
+        chips += runData.SkipCount * balance.JokerBalance.RoundSkippedChipsAdd[jokerType];
 
         chips *= runData.UseJoker[jokerIdx];
 
@@ -1133,14 +1135,14 @@ public static class Logic
         {
             mult += balance.JokerBalance.BaseMultiplierAdd[jokerType];
             runData.JokerMultiplierAdd[jokerIdx] += balance.JokerBalance.MultIncreaseForSize[jokerType];
+
+        if (runData.CurrentSpin == runData.MaxSpinsThisRound)
+            mult += balance.JokerBalance.LastSpinMultiplierAdd[jokerType];
         }
 
         int numNoJokers = runData.MaxJokersInHand - runData.JokerCount;
         mult += balance.JokerBalance.PerJokerMultiplierAdd[jokerType] * runData.JokerCount;
         mult += balance.JokerBalance.PerNoJokerMultiplierAdd[jokerType] * numNoJokers;
-
-        if (runData.CurrentSpin == runData.MaxSpinsThisRound)
-            mult += balance.JokerBalance.LastSpinMultiplierAdd[jokerType];
 
         // runData.JokerMultiplierAdd[jokerIdx] += (int)balance.JokerBalance.ChipsIncreasePerSpin[jokerType];
         mult += runData.JokerMultiplierAdd[jokerIdx];
@@ -1149,7 +1151,9 @@ public static class Logic
         mult += Mathf.Floor(randomValue);
 
         int numSlotMods = GetNumModedSlots(runData, balance);
-        mult += (numSlotMods * balance.JokerBalance.MultiplierAddForEverySlotMod[jokerType]);
+        mult += numSlotMods * balance.JokerBalance.MultiplierAddForEverySlotMod[jokerType];
+
+        mult += runData.SkipCount * balance.JokerBalance.RoundSkippedMultiplierAdd[jokerType];
 
         int numBallsInModedSlots = 0;
         for (int ballIdx = 0; ballIdx < balance.MaxBalls; ballIdx++)
@@ -1201,6 +1205,8 @@ public static class Logic
         mult += balance.JokerBalance.MultiplierMultEveryShopReroll[jokerType] * runData.ShopRerollTotal;
         mult += balance.JokerBalance.MultiplierMultEveryCardPackReroll[jokerType] * runData.CardPackRerollTotal;
 
+        mult += runData.SkipCount * balance.JokerBalance.RoundSkippedMultiplierMult[jokerType];
+
         mult *= runData.UseJoker[jokerIdx];
 
         mult += 1.0f;
@@ -1246,6 +1252,16 @@ public static class Logic
                     if (runData.UseSlotType[slotType] == 1 && slotTypeCount[slotType] == (size + 1))
                         sizeFound = true;
                 if (!sizeFound)
+                    use = false;
+            }
+
+            if(IsFlagSet(balance.JokerBalance.SizeNotExists[jokerType], size))
+            {
+                bool sizeFound = false;
+                for (int slotType = 0; slotType < 4; slotType++)
+                    if (runData.UseSlotType[slotType] == 1 && slotTypeCount[slotType] == (size + 1))
+                        sizeFound = true;
+                if (sizeFound)
                     use = false;
             }
         }
@@ -1947,6 +1963,8 @@ public static class Logic
         runData.Money += balance.SkipBalance.MoneyNow[skipType];
 
         runData.MoneyAfterBoss += balance.SkipBalance.MoneyAfterBoss[skipType];
+
+        runData.SkipCount++;
 
         runData.Round++;
     }

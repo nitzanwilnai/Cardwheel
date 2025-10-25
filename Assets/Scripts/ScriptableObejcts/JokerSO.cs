@@ -20,6 +20,7 @@ namespace Cardwheel
         public bool[] TypeExists = new bool[4];
         public bool[] TypeNotExists = new bool[4];
         public bool[] SizeExists = new bool[6];
+        public bool[] SizeNotExists = new bool[6];
 
         public float MultIncreaseForSize;
         public int MinTypes = 1;
@@ -68,6 +69,11 @@ namespace Cardwheel
         [Header("SPINS")]
         public int AddSpin;
         public float LastSpinMultiplierAdd = 0.0f;
+
+        [Header("ROUND SKIPPED")]
+        public int RoundSkippedChipsAdd = 0;
+        public float RoundSkippedMultiplierAdd = 0.0f;
+        public float RoundSkippedMultiplierMult = 0.0f;
 
         [Header("SLOTS")]
         public int BallIncreaseMultRemoveSlotMod = 0; // works
