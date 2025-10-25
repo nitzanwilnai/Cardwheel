@@ -15,7 +15,7 @@ namespace CommonTools
             {
                 if (instance == null)
                 {
-                    instance = FindObjectOfType<T>();
+                    instance = FindFirstObjectByType<T>();
                     if (instance == null)
                         Debug.LogErrorFormat("Trying to access an uninitialized MonoBehaviourSingleton!!!");
                 }

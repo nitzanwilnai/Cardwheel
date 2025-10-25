@@ -427,6 +427,27 @@ namespace Cardwheel
                 if (balance.CardPackType[runData.SelectedShopCardPackIdx] == CARD_PACK_TYPE.CHIPS)
                     Game.Instance.SetMenuState(MENU_STATE.CARD_PACK_CHIPS);
             }
+            for (int jkrIdx = 0; jkrIdx < runData.JokerCount; jkrIdx++)
+            {
+                int jokerType = runData.JokerTypes[jkrIdx];
+                {
+                    if (balance.JokerBalance.RoundSkippedChipsAdd[jokerType] > 0)
+                    {
+                        CommonVisual.JokerGUIs[jkrIdx].JokerChipsText.text = "+" + balance.JokerBalance.RoundSkippedChipsAdd[jokerType];
+                        CommonVisual.JokerGUIs[jkrIdx].JokerChips.SetActive(true);
+                    }
+                    if (balance.JokerBalance.RoundSkippedMultiplierAdd[jokerType] > 0)
+                    {
+                        CommonVisual.JokerGUIs[jkrIdx].JokerMultText.text = "+" + balance.JokerBalance.RoundSkippedMultiplierAdd[jokerType] + "x";
+                        CommonVisual.JokerGUIs[jkrIdx].JokerMult.SetActive(true);
+                    }
+                    if (balance.JokerBalance.RoundSkippedMultiplierMult[jokerType] > 0)
+                    {
+                        CommonVisual.JokerGUIs[jkrIdx].JokerMultText.text = "+x" + balance.JokerBalance.RoundSkippedMultiplierMult[jokerType];
+                        CommonVisual.JokerGUIs[jkrIdx].JokerMult.SetActive(true);
+                    }
+                }
+            }
         }
 
         public void TryUseBossReroll(RunData runData, Balance balance, GAMEPAD_TYPE gamepadType, int avaiableInputs)

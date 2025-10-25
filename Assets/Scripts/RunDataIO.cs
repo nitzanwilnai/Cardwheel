@@ -6,7 +6,7 @@ namespace Cardwheel
 {
     public class RunDataIO : MonoBehaviour
     {
-        public static int VERSION = 2;
+        public static int VERSION = 3;
 
         public static void SaveRun(RunData runData, Balance balance)
         {
@@ -117,6 +117,7 @@ namespace Cardwheel
                 bw.Write(runData.VoucherSlotMostPlayedColor);
 
                 bw.Write(runData.AvailableJokerCount);
+                bw.Write(balance.JokerBalance.NumJokers);
                 for (int i = 0; i < balance.JokerBalance.NumJokers; i++)
                     bw.Write(runData.AvailableJokerTypes[i]);
 
@@ -129,19 +130,24 @@ namespace Cardwheel
                 for (int i = 0; i < balance.MaxShopCardPackCards; i++)
                     bw.Write(runData.CardPackCardIdxs[i]);
 
+                bw.Write(balance.VoucherBalance.NumVouchers);
                 for (int i = 0; i < balance.VoucherBalance.NumVouchers; i++)
                     bw.Write(runData.VoucherIdxs[i]);
 
+                bw.Write(balance.SkipBalance.NumSkips);
                 for (int i = 0; i < balance.SkipBalance.NumSkips; i++)
                     bw.Write(runData.SkipType[i]);
                 bw.Write(runData.SkipShopUncommonJoker);
                 bw.Write(runData.SkipShopRareJoker);
 
+                bw.Write(balance.BossBalance.NumBosses);
                 for (int i = 0; i < balance.BossBalance.NumBosses; i++)
                     bw.Write(runData.BossType[i]);
                 bw.Write(runData.UseBallsSpecial);
                 bw.Write(runData.UseSlotsSpecial);
                 bw.Write(runData.UseBaseChips);
+
+                bw.Write(runData.SkipCount);
 
                 bw.Write((int)123456);
             }
@@ -177,7 +183,7 @@ namespace Cardwheel
                     using (BinaryReader br = new BinaryReader(stream))
                     {
                         int version = br.ReadInt32();
-                        if (version >= 2)
+                        if (version >= 3)
                         {
                             runData.MenuState = (MENU_STATE)br.ReadByte();
                             runData.PrevMenuState = (MENU_STATE)br.ReadByte();
@@ -275,7 +281,8 @@ namespace Cardwheel
                             runData.VoucherSlotMostPlayedColor = br.ReadBoolean();
 
                             runData.AvailableJokerCount = br.ReadInt32();
-                            for (int i = 0; i < balance.JokerBalance.NumJokers; i++)
+                            int numSavedJokers = br.ReadInt32();
+                            for (int i = 0; i < numSavedJokers; i++)
                                 runData.AvailableJokerTypes[i] = br.ReadInt32();
 
                             for (int i = 0; i < balance.MaxShopJokers; i++)
@@ -287,19 +294,27 @@ namespace Cardwheel
                             for (int i = 0; i < balance.MaxShopCardPackCards; i++)
                                 runData.CardPackCardIdxs[i] = br.ReadInt32();
 
-                            for (int i = 0; i < balance.VoucherBalance.NumVouchers; i++)
+                            int numVouchers = balance.VoucherBalance.NumVouchers;
+                            for (int i = 0; i < numVouchers; i++)
                                 runData.VoucherIdxs[i] = br.ReadInt32();
 
-                            for (int i = 0; i < balance.SkipBalance.NumSkips; i++)
+                            int numSkips = balance.SkipBalance.NumSkips;
+                            for (int i = 0; i < numSkips; i++)
                                 runData.SkipType[i] = br.ReadInt32();
                             runData.SkipShopUncommonJoker = br.ReadInt32();
                             runData.SkipShopRareJoker = br.ReadInt32();
 
-                            for (int i = 0; i < balance.BossBalance.NumBosses; i++)
+                            int numBosses = br.ReadInt32();
+                            for (int i = 0; i < numBosses; i++)
                                 runData.BossType[i] = br.ReadInt32();
                             runData.UseBallsSpecial = br.ReadInt32();
                             runData.UseSlotsSpecial = br.ReadInt32();
                             runData.UseBaseChips = br.ReadInt32();
+
+                            if(version >= 3)
+                            {
+                                runData.SkipCount = br.ReadInt32();
+                            }
 
                             Debug.Log("RunDataIO.LoadRun " + br.ReadInt32());
                         }

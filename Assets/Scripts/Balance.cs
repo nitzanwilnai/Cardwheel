@@ -131,6 +131,7 @@ namespace Cardwheel
         public int[] TypeExists;
         public int[] TypeNotExists;
         public int[] SizeExists;
+        public int[] SizeNotExists;
 
         public int[] ChipsPerBall;
         public int[] ChipsIncreasePerBall;
@@ -166,6 +167,10 @@ namespace Cardwheel
 
         public int[] AddSpin;
         public float[] LastSpinMultiplierAdd;
+
+        public int[] RoundSkippedChipsAdd;
+        public float[] RoundSkippedMultiplierAdd;
+        public float[] RoundSkippedMultiplierMult;
 
         public int[] BallIncMultRemoveSlotMod;
         public float[] AddMultipierMultRemoveAllSlotMod; // not used?
@@ -380,6 +385,7 @@ namespace Cardwheel
                 JokerBalance.TypeExists = new int[numJokers];
                 JokerBalance.TypeNotExists = new int[numJokers];
                 JokerBalance.SizeExists = new int[numJokers];
+                JokerBalance.SizeNotExists = new int[numJokers];
 
                 JokerBalance.ChipsPerBall = new int[numJokers];
                 JokerBalance.ChipsIncreasePerBall = new int[numJokers];
@@ -415,6 +421,10 @@ namespace Cardwheel
 
                 JokerBalance.AddSpin = new int[numJokers];
                 JokerBalance.LastSpinMultiplierAdd = new float[numJokers];
+
+                JokerBalance.RoundSkippedChipsAdd = new int[numJokers];
+                JokerBalance.RoundSkippedMultiplierAdd = new float[numJokers];
+                JokerBalance.RoundSkippedMultiplierMult = new float[numJokers];
 
                 JokerBalance.BallIncMultRemoveSlotMod = new int[numJokers];
                 JokerBalance.AddMultipierMultRemoveAllSlotMod = new float[numJokers];
@@ -456,6 +466,9 @@ namespace Cardwheel
                     for (int i = 0; i < 6; i++)
                         if (br.ReadBoolean())
                             Logic.SetFlag(ref JokerBalance.SizeExists[jkrIdx], i);
+                    for (int i = 0; i < 6; i++)
+                        if (br.ReadBoolean())
+                            Logic.SetFlag(ref JokerBalance.SizeNotExists[jkrIdx], i);
 
                     JokerBalance.ChipsPerBall[jkrIdx] = br.ReadInt32();
                     JokerBalance.ChipsIncreasePerBall[jkrIdx] = br.ReadInt32();
@@ -493,6 +506,10 @@ namespace Cardwheel
 
                     JokerBalance.AddSpin[jkrIdx] = br.ReadInt32();
                     JokerBalance.LastSpinMultiplierAdd[jkrIdx] = br.ReadSingle();
+
+                    JokerBalance.RoundSkippedChipsAdd[jkrIdx] = br.ReadInt32();
+                    JokerBalance.RoundSkippedMultiplierAdd[jkrIdx] = br.ReadSingle();
+                    JokerBalance.RoundSkippedMultiplierMult[jkrIdx] = br.ReadSingle();
 
                     JokerBalance.BallIncMultRemoveSlotMod[jkrIdx] = br.ReadInt32();
                     JokerBalance.AddMultipierMultRemoveAllSlotMod[jkrIdx] = br.ReadSingle();

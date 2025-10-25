@@ -50,11 +50,22 @@ namespace Cardwheel
                 JokerGUIs[i].ShinyGO = guiRef.GetGameObject("Shiny");
                 JokerGUIs[i].SelectedGO = guiRef.GetGameObject("Selected");
 
+                JokerGUIs[i].JokerChips = guiRef.GetGameObject("JokerChips");
+                JokerGUIs[i].JokerMult = guiRef.GetGameObject("JokerMult");
+                JokerGUIs[i].JokerColor = guiRef.GetGameObject("JokerColor");
+                JokerGUIs[i].JokerChipsText = guiRef.GetTextGUI("JokerChips");
+                JokerGUIs[i].JokerMultText = guiRef.GetTextGUI("JokerMult");
+                JokerGUIs[i].JokerColorText = guiRef.GetTextGUI("JokerColor");
+
                 JokerGUIs[i].DebuffGO.SetActive(false);
                 JokerGUIs[i].RainbowGO.SetActive(false);
                 JokerGUIs[i].MetalGO.SetActive(false);
                 JokerGUIs[i].ShinyGO.SetActive(false);
                 JokerGUIs[i].SelectedGO.SetActive(false);
+
+                JokerGUIs[i].JokerChips.SetActive(false);
+                JokerGUIs[i].JokerMult.SetActive(false);
+                JokerGUIs[i].JokerColor.SetActive(false);
 
                 JokerPool[i] = go;
             }
@@ -96,6 +107,10 @@ namespace Cardwheel
                 JokerGUIs[jkrIdx].MetalGO.SetActive(false);
                 JokerGUIs[jkrIdx].ShinyGO.SetActive(false);
                 JokerGUIs[jkrIdx].SelectedGO.SetActive(false);
+
+                JokerGUIs[jkrIdx].JokerChips.SetActive(false);
+                JokerGUIs[jkrIdx].JokerMult.SetActive(false);
+                JokerGUIs[jkrIdx].JokerColor.SetActive(false);
             }
 
             for (int jkrIdx = 0; jkrIdx < runData.JokerCount; jkrIdx++)
@@ -135,53 +150,68 @@ namespace Cardwheel
             if (balance.JokerBalance.ChipsIncreasePerSpin[jokerType] > 0)
             {
                 int chipIncrease = jokerIdx > -1 ? runData.JokerChips[jokerIdx] : 0;
-                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current +" + chipIncrease + ")";
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + chipIncrease + ")";
             }
 
             if (balance.JokerBalance.MultIncreasePerUnusedSpin[jokerType] != 0 ||
                 balance.JokerBalance.MultIncreasePerUsedSpin[jokerType] != 0)
             {
                 float multiplierAdd = jokerIdx > -1 ? runData.JokerMultiplierAdd[jokerIdx] : 0.0f;
-                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current +" + multiplierAdd.ToString("N0") + "x)";
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + multiplierAdd.ToString("N0") + "x)";
             }
 
             if (balance.JokerBalance.SubtractChipsPerSpin[jokerType].x > 0.0f)
             {
                 int chipIncrease = jokerIdx > -1 ? runData.JokerChips[jokerIdx] : 0;
-                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current +" + chipIncrease + ")";
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + chipIncrease + ")";
             }
             if (balance.JokerBalance.SubtractMultiplierAddPerRound[jokerType].x > 0.0f)
             {
                 float multiplierAdd = jokerIdx > -1 ? runData.JokerMultiplierAdd[jokerIdx] : 0.0f;
-                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current +" + multiplierAdd.ToString("N0") + "x)";
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + multiplierAdd.ToString("N0") + "x)";
             }
 
             if (balance.JokerBalance.ChipsIncreasePerBall[jokerType] > 0)
             {
                 int chipIncrease = jokerIdx > -1 ? runData.JokerChips[jokerIdx] : 0;
-                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current +" + chipIncrease + ")";
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + chipIncrease + ")";
             }
 
             if (balance.JokerBalance.MultIncreaseForSize[jokerType] > 0.0f)
             {
                 float multiplierAdd = jokerIdx > -1 ? runData.JokerMultiplierAdd[jokerIdx] : 0.0f;
-                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current +" + multiplierAdd.ToString("N0") + "x)";
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + multiplierAdd.ToString("N0") + "x)";
             }
             if (balance.JokerBalance.PerNoJokerMultiplierAdd[jokerType] > 0)
             {
                 int numNoJokers = balance.MaxJokersInHand - runData.JokerCount;
                 int chips = (int)balance.JokerBalance.PerNoJokerMultiplierAdd[jokerType];
-                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current +" + (numNoJokers * chips) + "x)";
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + (numNoJokers * chips) + "x)";
             }
             if (balance.JokerBalance.BallIncMultRemoveSlotMod[jokerType] > 0)
             {
                 float multIncrease = jokerIdx > -1 ? runData.JokerMultiplierAdd[jokerIdx] : 0;
-                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current +" + multIncrease + ")";
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + multIncrease + ")";
             }
-            if(balance.JokerBalance.IncreaseSellValueEveryRound[jokerType] > 0)
+            if (balance.JokerBalance.IncreaseSellValueEveryRound[jokerType] > 0)
             {
                 int sellValue = runData.JokerSellValues[jokerIdx];
                 go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current ◇" + sellValue + ")";
+            }
+            if (balance.JokerBalance.RoundSkippedChipsAdd[jokerType] > 0)
+            {
+                int value = runData.SkipCount * balance.JokerBalance.RoundSkippedChipsAdd[jokerType];
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + value + ")";
+            }
+            if (balance.JokerBalance.RoundSkippedMultiplierAdd[jokerType] > 0)
+            {
+                float value = runData.SkipCount * balance.JokerBalance.RoundSkippedMultiplierAdd[jokerType];
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + value + "x)";
+            }
+            if (balance.JokerBalance.RoundSkippedMultiplierMult[jokerType] > 0)
+            {
+                float value = runData.SkipCount * balance.JokerBalance.RoundSkippedMultiplierMult[jokerType];
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current x" + value + ")";
             }
         }
 

@@ -107,6 +107,7 @@ namespace Cardwheel
         public int[] SkipType;
         public int SkipShopUncommonJoker;
         public int SkipShopRareJoker;
+        public int SkipCount;
 
         // bosses
         public int[] BossType;
