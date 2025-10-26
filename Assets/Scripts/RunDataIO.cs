@@ -103,6 +103,7 @@ namespace Cardwheel
                 bw.Write(runData.CardPackRerollCount);
                 bw.Write(runData.ShopRerollTotal);
                 bw.Write(runData.CardPackRerollTotal);
+                bw.Write(runData.CardPackAbandonTotal);
 
                 bw.Write(runData.SelectedShopCardPackIdx);
 
@@ -267,6 +268,7 @@ namespace Cardwheel
                             runData.CardPackRerollCount = br.ReadInt32();
                             runData.ShopRerollTotal = br.ReadInt32();
                             runData.CardPackRerollTotal = br.ReadInt32();
+                            runData.CardPackAbandonTotal = br.ReadInt32();
 
                             runData.SelectedShopCardPackIdx = br.ReadInt32();
 

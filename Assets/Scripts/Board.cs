@@ -308,7 +308,7 @@ namespace Cardwheel
 
             CommonVisual.ShowJokersInGame(runData, balance, m_jokerParent);
 
-            showBallsInGame(useBallSprite, ballsDebuffed);
+            showBallsInGame(useBallSprite, runData.UseBallsSpecial == 0);
 
             SpinWheelLights.StartAnimation();
 
@@ -1173,7 +1173,7 @@ namespace Cardwheel
                         if (runData.CurrentSpin == 1)
                         {
                             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.BALLS_DEBUFFED_FIRST_SPIN)
-                                showBallsInGame(1, false);
+                                showBallsInGame(1, runData.UseBallsSpecial == 0);
                             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.SLOTS_DEBUFFED_FIRST_SPIN)
                                 CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotEffects, runData.UseSlotsSpecial == 0);
                         }
@@ -1421,7 +1421,7 @@ namespace Cardwheel
                 if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.JUMBLE_BALLS)
                 {
                     Logic.JumbleBalls(runData, balance);
-                    showBallsInGame(1, false);
+                    showBallsInGame(1, runData.UseBallsSpecial == 0);
                 }
                 if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.RANDOM_JOKE_DEBUFFED_PER_SPIN)
                 {

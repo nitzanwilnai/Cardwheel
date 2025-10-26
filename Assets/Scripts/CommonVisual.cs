@@ -213,6 +213,16 @@ namespace Cardwheel
                 float value = runData.SkipCount * balance.JokerBalance.RoundSkippedMultiplierMult[jokerType];
                 go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current x" + value + ")";
             }
+            if(balance.JokerBalance.ChipsAddForCardPackAbandon[jokerType] > 0)
+            {
+                int value = runData.CardPackAbandonTotal * balance.JokerBalance.ChipsAddForCardPackAbandon[jokerType];
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + value + ")";
+            }
+            if (balance.JokerBalance.MultiplierMultForCardPackAbandon[jokerType] > 0)
+            {
+                float value = runData.CardPackAbandonTotal * balance.JokerBalance.MultiplierMultForCardPackAbandon[jokerType];
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current x" + value + ")";
+            }
         }
 
         public static void ShowJokerDescriptionShop(RunData runData, Balance balance, GameObject go, int jokerType)
@@ -382,10 +392,10 @@ namespace Cardwheel
 
         public static string GetMultiplierString(float value)
         {
-            if (value - Mathf.Round(value) > 0.0f)
+            if (value - Mathf.Floor(value) > 0.0f)
                 return value.ToString("N2");
             else
-                return value.ToString("N0");
+                return value.ToString("N1");
         }
 
         public static string ColorText(Balance balance, string title)

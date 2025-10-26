@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: JokerSO 0077 Gains +x0.25 mult when round is skipped
   m_EditorClassIdentifier: 
   JokerSprite: {fileID: 21300000, guid: bab09917abd5a458aae4445d5bd9a852, type: 3}
-  Cost: 3
-  Rarity: 0
+  Cost: 11
+  Rarity: 2
   DescriptionGO: {fileID: 7630852811119300315, guid: 2fcfa6251ccee4852a49c485d275e826, type: 3}
   BaseChipsAdd: 0
   BaseMultiplierAdd: 0
@@ -44,8 +44,10 @@ MonoBehaviour:
   ChanceBallGivesMoney: 0
   MoneyPerSpin: 0
   ChipsPerDollar: 0
+  MoneyForSpecialBallOnColor: 00000000000000000000000000000000
   MultiplierMultForSpecialBall: 0
   MultiplierMultForNonSpecialBall: 0
+  MultMultButBallsDisabled: 0
   SortSlots: 0
   FirstBallConvertSlot: {fileID: 0}
   AddSpin: 0
@@ -62,5 +64,6 @@ MonoBehaviour:
   MultiplierAddForLeastPlayedColor: 0
   MultiplierMultEveryShopReroll: 0
   MultiplierMultEveryCardPackReroll: 0
-  MultiplierAddForCardpackAbandon: 0
+  ChipsAddForCardpackAbandon: 0
+  MultiplierMultForCardpackAbandon: 0
   TriggerEveryXSpins: 1

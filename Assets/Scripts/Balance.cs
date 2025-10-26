@@ -158,9 +158,11 @@ namespace Cardwheel
         public int[] MoneyPerSpin;
 
         public int[] ChipsPerDollar;
+        public int[][] MoneyForSpecialBallOnColor;
 
         public float[] MultiplierMultForSpecialBall;
         public float[] MultiplierMultForNonSpecialBall;
+        public float[] MultMultButBallsDisabled;
 
         public bool[] SortSlots;
         public int[] FirstBallConvertSlotToID;
@@ -188,7 +190,8 @@ namespace Cardwheel
         public float[] MultiplierMultEveryShopReroll;
         public float[] MultiplierMultEveryCardPackReroll;
 
-        public float[] MultiplierAddForCardPackAbandon;
+        public int[] ChipsAddForCardPackAbandon;
+        public float[] MultiplierMultForCardPackAbandon;
 
         public int[] TriggerEveryXSpins;
     }
@@ -412,9 +415,11 @@ namespace Cardwheel
                 JokerBalance.MoneyPerSpin = new int[numJokers];
 
                 JokerBalance.ChipsPerDollar = new int[numJokers];
+                JokerBalance.MoneyForSpecialBallOnColor = new int[numJokers][];
 
                 JokerBalance.MultiplierMultForSpecialBall = new float[numJokers];
                 JokerBalance.MultiplierMultForNonSpecialBall = new float[numJokers];
+                JokerBalance.MultMultButBallsDisabled = new float[numJokers];
 
                 JokerBalance.SortSlots = new bool[numJokers];
                 JokerBalance.FirstBallConvertSlotToID = new int[numJokers];
@@ -442,7 +447,8 @@ namespace Cardwheel
                 JokerBalance.MultiplierMultEveryShopReroll = new float[numJokers];
                 JokerBalance.MultiplierMultEveryCardPackReroll = new float[numJokers];
 
-                JokerBalance.MultiplierAddForCardPackAbandon = new float[numJokers];
+                JokerBalance.ChipsAddForCardPackAbandon = new int[numJokers];
+                JokerBalance.MultiplierMultForCardPackAbandon = new float[numJokers];
 
                 JokerBalance.TriggerEveryXSpins = new int[numJokers];
 
@@ -497,9 +503,13 @@ namespace Cardwheel
                     JokerBalance.MoneyPerSpin[jkrIdx] = br.ReadInt32();
 
                     JokerBalance.ChipsPerDollar[jkrIdx] = br.ReadInt32();
+                    JokerBalance.MoneyForSpecialBallOnColor[jkrIdx] = new int[4];
+                    for (int i = 0; i < 4; i++)
+                        JokerBalance.MoneyForSpecialBallOnColor[jkrIdx][i] = br.ReadInt32();
 
                     JokerBalance.MultiplierMultForSpecialBall[jkrIdx] = br.ReadSingle();
                     JokerBalance.MultiplierMultForNonSpecialBall[jkrIdx] = br.ReadSingle();
+                    JokerBalance.MultMultButBallsDisabled[jkrIdx] = br.ReadSingle();
 
                     JokerBalance.SortSlots[jkrIdx] = br.ReadBoolean();
                     JokerBalance.FirstBallConvertSlotToID[jkrIdx] = br.ReadInt32();
@@ -527,7 +537,8 @@ namespace Cardwheel
                     JokerBalance.MultiplierMultEveryShopReroll[jkrIdx] = br.ReadSingle();
                     JokerBalance.MultiplierMultEveryCardPackReroll[jkrIdx] = br.ReadSingle();
 
-                    JokerBalance.MultiplierAddForCardPackAbandon[jkrIdx] = br.ReadSingle();
+                    JokerBalance.ChipsAddForCardPackAbandon[jkrIdx] = br.ReadInt32();
+                    JokerBalance.MultiplierMultForCardPackAbandon[jkrIdx] = br.ReadSingle();
 
                     JokerBalance.TriggerEveryXSpins[jkrIdx] = br.ReadInt32();
                 }

@@ -57,10 +57,12 @@ namespace Cardwheel
 
         [Header("MONEY2")]
         public int ChipsPerDollar = 0;
+        public int[] MoneyForSpecialBallOnColor;
 
         [Header("BALLS")]
         public float MultiplierMultForSpecialBall = 0.0f;
         public float MultiplierMultForNonSpecialBall = 0.0f;
+        public float MultMultButBallsDisabled;
 
         [Header("SLOTS")]
         public bool SortSlots = false;
@@ -90,9 +92,12 @@ namespace Cardwheel
         public float MultiplierMultEveryShopReroll = 0.0f;
         public float MultiplierMultEveryCardPackReroll = 0.0f;
 
+        [Header("ABANDON")]
+        public int ChipsAddForCardpackAbandon = 0; // todo
+        public float MultiplierMultForCardpackAbandon = 0.0f; // todo
+
         [Header("TODO")]
 
-        public float MultiplierAddForCardpackAbandon = 0.0f; // todo
 
         public int TriggerEveryXSpins = 1; // todo
     }
