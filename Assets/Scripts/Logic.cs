@@ -216,6 +216,7 @@ public static class Logic
 
         runData.ShopRerollTotal = 0;
         runData.CardPackRerollTotal = 0;
+        runData.CardPackAbandonTotal = 0;
 
 
         // TEST
@@ -227,9 +228,10 @@ public static class Logic
         // runData.SkipType[3] = 13;
         // runData.SkipType[1] = 7;
 
-        AddJoker(runData, balance, 75);
-        AddJoker(runData, balance, 76);
-        AddJoker(runData, balance, 77);
+        // AddJoker(runData, balance, 82);
+        // AddJoker(runData, balance, 83);
+        // AddJoker(runData, balance, 84);
+        // AddJoker(runData, balance, 81);
         // AddJoker(runData, balance, 5);
         // AddJoker(runData, balance, 24);
         // AddJoker(runData, balance, 11);
@@ -547,6 +549,13 @@ public static class Logic
         runData.UseBaseChips = 1;
         runData.UseBallsSpecial = 1;
         runData.UseSlotsSpecial = 1;
+
+        for (int jkrIdx = 0; jkrIdx < runData.JokerCount; jkrIdx++)
+        {
+            int jokerType = runData.JokerTypes[jkrIdx];
+            if (balance.JokerBalance.MultMultButBallsDisabled[jokerType] > 0)
+                runData.UseBallsSpecial = 0;
+        }
 
         runData.LeastPlayedColorAtRoundStart = GetLeastPlayedSlotType(runData);
 
@@ -974,6 +983,12 @@ public static class Logic
                 jokerIdxs[jokerCount++] = jkrIdx;
                 money++;
             }
+
+            if (ballType > 0 && runData.UseSlotType[slotType] > 0 && balance.JokerBalance.MoneyForSpecialBallOnColor[jokerType][slotType] > 0)
+            {
+                jokerIdxs[jokerCount++] = jkrIdx;
+                money += balance.JokerBalance.MoneyForSpecialBallOnColor[jokerType][slotType];
+            }
         }
 
         if (!scoringBossCheck(runData, balance))
@@ -1110,6 +1125,8 @@ public static class Logic
 
         chips += runData.SkipCount * balance.JokerBalance.RoundSkippedChipsAdd[jokerType];
 
+        chips += balance.JokerBalance.ChipsAddForCardPackAbandon[jokerType] * runData.CardPackAbandonTotal;
+
         chips *= runData.UseJoker[jokerIdx];
 
         // add chips per ball
@@ -1136,8 +1153,8 @@ public static class Logic
             mult += balance.JokerBalance.BaseMultiplierAdd[jokerType];
             runData.JokerMultiplierAdd[jokerIdx] += balance.JokerBalance.MultIncreaseForSize[jokerType];
 
-        if (runData.CurrentSpin == runData.MaxSpinsThisRound)
-            mult += balance.JokerBalance.LastSpinMultiplierAdd[jokerType];
+            if (runData.CurrentSpin == runData.MaxSpinsThisRound)
+                mult += balance.JokerBalance.LastSpinMultiplierAdd[jokerType];
         }
 
         int numNoJokers = runData.MaxJokersInHand - runData.JokerCount;
@@ -1204,6 +1221,8 @@ public static class Logic
         mult += balance.JokerBalance.MultiplierMultForNonSpecialBall[jokerType] * (balance.MaxBalls - numSpecialBalls);
         mult += balance.JokerBalance.MultiplierMultEveryShopReroll[jokerType] * runData.ShopRerollTotal;
         mult += balance.JokerBalance.MultiplierMultEveryCardPackReroll[jokerType] * runData.CardPackRerollTotal;
+        mult += balance.JokerBalance.MultMultButBallsDisabled[jokerType];
+        mult += balance.JokerBalance.MultiplierMultForCardPackAbandon[jokerType] * runData.CardPackAbandonTotal;
 
         mult += runData.SkipCount * balance.JokerBalance.RoundSkippedMultiplierMult[jokerType];
 
@@ -1255,7 +1274,7 @@ public static class Logic
                     use = false;
             }
 
-            if(IsFlagSet(balance.JokerBalance.SizeNotExists[jokerType], size))
+            if (IsFlagSet(balance.JokerBalance.SizeNotExists[jokerType], size))
             {
                 bool sizeFound = false;
                 for (int slotType = 0; slotType < 4; slotType++)
@@ -1738,6 +1757,11 @@ public static class Logic
             return true;
         }
         return false;
+    }
+
+    public static void AbandonCardPack(RunData runData)
+    {
+        runData.CardPackAbandonTotal++;
     }
 
     public static bool RoomForJokerInHand(RunData runData)

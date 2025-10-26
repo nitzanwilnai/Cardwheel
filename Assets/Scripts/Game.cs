@@ -630,6 +630,8 @@ namespace Cardwheel
         public void CloseCardPack()
         {
             SoundManager.Instance.PlaySFXButtonOK();
+            
+            Logic.AbandonCardPack(m_runData);
 
             SetMenuState(m_runData.PrevMenuState);
         }

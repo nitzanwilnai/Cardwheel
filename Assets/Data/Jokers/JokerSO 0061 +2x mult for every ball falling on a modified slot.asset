@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   JokerSprite: {fileID: 21300000, guid: a1d68177cd2f948328ca61b85b72f181, type: 3}
   Cost: 6
-  SellValue: 3
   Rarity: 0
   DescriptionGO: {fileID: 7630852811119300315, guid: cce9bcb3a755e4f23b66c065fb1135f1, type: 3}
   BaseChipsAdd: 0
@@ -23,7 +22,9 @@ MonoBehaviour:
   TypeExists: 00000000
   TypeNotExists: 00000000
   SizeExists: 000000000000
+  SizeNotExists: 000000000000
   MultIncreaseForSize: 0
+  MinTypes: 1
   ChipsPerBall: 0
   ChipsIncreasePerBall: 0
   SubtractMultiplierAddPerRound: {x: 0, y: 0}
@@ -33,6 +34,8 @@ MonoBehaviour:
   ChipsIncreasePerSpin: 0
   MultIncreasePerUnusedSpin: 0
   MultIncreasePerUsedSpin: 0
+  RetriggerBallsEverySpin: 0
+  RetriggerBallsLastSpin: 0
   MultiplierAddRandomRange: {x: 0, y: 0}
   EarnMoneyEveryRound: 0
   IncreaseSellValueEveryRound: 0
@@ -41,21 +44,24 @@ MonoBehaviour:
   ChanceBallGivesMoney: 0
   MoneyPerSpin: 0
   ChipsPerDollar: 0
+  MoneyForSpecialBallOnColor: 00000000000000000000000000000000
   MultiplierMultForSpecialBall: 0
   MultiplierMultForNonSpecialBall: 0
   SortSlots: 0
   FirstBallConvertSlot: {fileID: 0}
   AddSpin: 0
   LastSpinMultiplierAdd: 0
-  BallGiveMoneyRemoveSlotMod: 0
+  RoundSkippedChipsAdd: 0
+  RoundSkippedMultiplierAdd: 0
+  RoundSkippedMultiplierMult: 0
+  BallIncreaseMultRemoveSlotMod: 0
   AddMultipierMultRemoveAllSlotMod: 0
   ChipsAddForEveryNonSlotMod: 0
   MultiplierAddForEverySlotMod: 0
   BallMultiplierAddForSlotMod: 2
+  StartRoundChangeSlotID: {fileID: 0}
   MultiplierAddForLeastPlayedColor: 0
-  LessMoneyChangeSlot: 0
-  LessMoneyChangeSlotID: {fileID: 0}
-  RetriggerBallsEveryXSpins: 0
-  RetriggerBallsLastSpin: 0
+  MultiplierMultEveryShopReroll: 0
+  MultiplierMultEveryCardPackReroll: 0
   MultiplierAddForCardpackAbandon: 0
   TriggerEveryXSpins: 1

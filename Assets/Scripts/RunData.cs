@@ -86,6 +86,7 @@ namespace Cardwheel
         public int CardPackRerollCount;
         public int ShopRerollTotal;
         public int CardPackRerollTotal;
+        public int CardPackAbandonTotal;
 
         // vouchers
         public bool VoucherPurchased;

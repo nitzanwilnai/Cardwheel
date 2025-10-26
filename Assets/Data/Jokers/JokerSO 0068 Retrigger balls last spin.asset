@@ -22,6 +22,7 @@ MonoBehaviour:
   TypeExists: 00000000
   TypeNotExists: 00000000
   SizeExists: 000000000000
+  SizeNotExists: 000000000000
   MultIncreaseForSize: 0
   MinTypes: 1
   ChipsPerBall: 0
@@ -33,6 +34,8 @@ MonoBehaviour:
   ChipsIncreasePerSpin: 0
   MultIncreasePerUnusedSpin: 0
   MultIncreasePerUsedSpin: 0
+  RetriggerBallsEverySpin: 0
+  RetriggerBallsLastSpin: 1
   MultiplierAddRandomRange: {x: 0, y: 0}
   EarnMoneyEveryRound: 0
   IncreaseSellValueEveryRound: 0
@@ -41,12 +44,16 @@ MonoBehaviour:
   ChanceBallGivesMoney: 0
   MoneyPerSpin: 0
   ChipsPerDollar: 0
+  MoneyForSpecialBallOnColor: 00000000000000000000000000000000
   MultiplierMultForSpecialBall: 0
   MultiplierMultForNonSpecialBall: 0
   SortSlots: 0
   FirstBallConvertSlot: {fileID: 0}
   AddSpin: 0
   LastSpinMultiplierAdd: 0
+  RoundSkippedChipsAdd: 0
+  RoundSkippedMultiplierAdd: 0
+  RoundSkippedMultiplierMult: 0
   BallIncreaseMultRemoveSlotMod: 0
   AddMultipierMultRemoveAllSlotMod: 0
   ChipsAddForEveryNonSlotMod: 0
@@ -54,7 +61,7 @@ MonoBehaviour:
   BallMultiplierAddForSlotMod: 0
   StartRoundChangeSlotID: {fileID: 0}
   MultiplierAddForLeastPlayedColor: 0
-  RetriggerBallsEverySpin: 0
-  RetriggerBallsLastSpin: 1
+  MultiplierMultEveryShopReroll: 0
+  MultiplierMultEveryCardPackReroll: 0
   MultiplierAddForCardpackAbandon: 0
   TriggerEveryXSpins: 1

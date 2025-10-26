@@ -206,9 +206,12 @@ namespace Cardwheel
                         bw.Write(jokerSO.MoneyPerSpin);
 
                         bw.Write(jokerSO.ChipsPerDollar);
+                        for (int i = 0; i < 4; i++)
+                            bw.Write(jokerSO.MoneyForSpecialBallOnColor[i]);
 
                         bw.Write(jokerSO.MultiplierMultForSpecialBall);
                         bw.Write(jokerSO.MultiplierMultForNonSpecialBall);
+                        bw.Write(jokerSO.MultMultButBallsDisabled);
 
                         bw.Write(jokerSO.SortSlots);
                         int slotID = jokerSO.FirstBallConvertSlot == null ? -1 : jokerSO.FirstBallConvertSlot.ID;
@@ -238,7 +241,8 @@ namespace Cardwheel
                         bw.Write(jokerSO.MultiplierMultEveryShopReroll);
                         bw.Write(jokerSO.MultiplierMultEveryCardPackReroll);
 
-                        bw.Write(jokerSO.MultiplierAddForCardpackAbandon);
+                        bw.Write(jokerSO.ChipsAddForCardpackAbandon);
+                        bw.Write(jokerSO.MultiplierMultForCardpackAbandon);
 
                         bw.Write(jokerSO.TriggerEveryXSpins);
 

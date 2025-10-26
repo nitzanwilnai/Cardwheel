@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e6c979e1b3e42ffbd40e4083beb777, type: 3}
   m_Name: Skip - 0001 - Money after Boss
   m_EditorClassIdentifier: 
-  SkipDescription: Earn $25 after defeating boss
+  SkipDescription: "Earn \u25C725 after defeating boss"
   MoneyNow: 0
   MoneyAfterBoss: 25
   JokerRarity: 0
