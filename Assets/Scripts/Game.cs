@@ -501,7 +501,12 @@ namespace Cardwheel
         public void ContinueRun()
         {
             hideMenuState(m_runData.MenuState);
-            RunDataIO.LoadRun(m_runData, m_balance);
+
+            int version = RunDataIO.LoadVersionOnly();
+            if (version == 2)
+                RunDataIOV2.LoadRun(m_runData, m_balance);
+            else
+                RunDataIO.LoadRun(m_runData);
             showMenuState(m_runData.MenuState);
         }
 
@@ -630,7 +635,7 @@ namespace Cardwheel
         public void CloseCardPack()
         {
             SoundManager.Instance.PlaySFXButtonOK();
-            
+
             Logic.AbandonCardPack(m_runData);
 
             SetMenuState(m_runData.PrevMenuState);
