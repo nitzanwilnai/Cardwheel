@@ -93,6 +93,8 @@ namespace Cardwheel
                     bw.Write(runData.JokerChips[i]);
                     bw.Write(runData.JokerMultiplierAdd[i]);
                     bw.Write(runData.UseJoker[i]);
+                    bw.Write(runData.JokerSpins[i]);
+                    bw.Write(runData.JokerRounds[i]);
                 }
 
                 bw.Write(runData.JokerCount);
@@ -258,6 +260,8 @@ namespace Cardwheel
                                 runData.JokerChips[i] = br.ReadInt32();
                                 runData.JokerMultiplierAdd[i] = br.ReadSingle();
                                 runData.UseJoker[i] = br.ReadInt32();
+                                runData.JokerSpins[i] = br.ReadInt32();
+                                runData.JokerRounds[i] = br.ReadInt32();
                             }
 
                             runData.JokerCount = br.ReadInt32();

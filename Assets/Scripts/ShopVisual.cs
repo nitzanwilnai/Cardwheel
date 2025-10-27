@@ -420,7 +420,7 @@ namespace Cardwheel
                 descriptionGO.transform.localScale = Vector3.one;
                 m_descriptionGO = descriptionGO;
 
-                CommonVisual.ShowJokerDescriptionShop(runData, balance, m_descriptionGO, jokerType);
+                CommonVisual.ShowJokerDescriptionCommon(runData, balance, m_descriptionGO, jokerType, -1);
 
                 m_jokerBuyPopupGUI.GO.SetActive(true);
             }

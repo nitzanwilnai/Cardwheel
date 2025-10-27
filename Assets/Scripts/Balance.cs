@@ -159,6 +159,7 @@ namespace Cardwheel
 
         public int[] ChipsPerDollar;
         public int[][] MoneyForSpecialBallOnColor;
+        public bool[] AddAllSellValueToMult;
 
         public float[] MultiplierMultForSpecialBall;
         public float[] MultiplierMultForNonSpecialBall;
@@ -416,6 +417,7 @@ namespace Cardwheel
 
                 JokerBalance.ChipsPerDollar = new int[numJokers];
                 JokerBalance.MoneyForSpecialBallOnColor = new int[numJokers][];
+                JokerBalance.AddAllSellValueToMult = new bool[numJokers];
 
                 JokerBalance.MultiplierMultForSpecialBall = new float[numJokers];
                 JokerBalance.MultiplierMultForNonSpecialBall = new float[numJokers];
@@ -506,6 +508,7 @@ namespace Cardwheel
                     JokerBalance.MoneyForSpecialBallOnColor[jkrIdx] = new int[4];
                     for (int i = 0; i < 4; i++)
                         JokerBalance.MoneyForSpecialBallOnColor[jkrIdx][i] = br.ReadInt32();
+                    JokerBalance.AddAllSellValueToMult[jkrIdx] = br.ReadBoolean();
 
                     JokerBalance.MultiplierMultForSpecialBall[jkrIdx] = br.ReadSingle();
                     JokerBalance.MultiplierMultForNonSpecialBall[jkrIdx] = br.ReadSingle();

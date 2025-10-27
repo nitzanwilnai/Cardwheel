@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f7a4dcac336914f5b94e423814720945, type: 3}
-  m_Name: JokerSO 0084 Gains x0.1 every abandoned cardpack
+  m_Name: JokerSO 0085 Add sell value of all jokers to mult
   m_EditorClassIdentifier: 
-  JokerSprite: {fileID: 21300000, guid: 6aec1a1cbdd7e425880a3fa7b79baada, type: 3}
-  Cost: 12
-  Rarity: 2
-  DescriptionGO: {fileID: 7630852811119300315, guid: d1dfe0d1e72f14ce3aa444422464523e, type: 3}
+  JokerSprite: {fileID: 21300000, guid: c1e5e7cef66ff491ab4c05e765564472, type: 3}
+  Cost: 5
+  Rarity: 0
+  DescriptionGO: {fileID: 7630852811119300315, guid: 7caad34ff61ca41438b2a7f31bc0c6be, type: 3}
   BaseChipsAdd: 0
   BaseMultiplierAdd: 0
   BaseMultiplierMult: 0
@@ -45,7 +45,7 @@ MonoBehaviour:
   MoneyPerSpin: 0
   ChipsPerDollar: 0
   MoneyForSpecialBallOnColor: 00000000000000000000000000000000
-  AddAllSellValueToMult: 0
+  AddAllSellValueToMult: 1
   MultiplierMultForSpecialBall: 0
   MultiplierMultForNonSpecialBall: 0
   MultMultButBallsDisabled: 0
@@ -66,5 +66,5 @@ MonoBehaviour:
   MultiplierMultEveryShopReroll: 0
   MultiplierMultEveryCardPackReroll: 0
   ChipsAddForCardpackAbandon: 0
-  MultiplierMultForCardpackAbandon: 0.1
+  MultiplierMultForCardpackAbandon: 0
   TriggerEveryXSpins: 1
