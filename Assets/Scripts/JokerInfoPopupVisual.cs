@@ -104,7 +104,7 @@ namespace Cardwheel
             m_border.color = balance.RarityColors[(int)rarity];
             m_borderRarity.color = balance.RarityColors[(int)rarity];
 
-            CommonVisual.ShowJokerDescriptionInHand(runData, balance, m_descriptionGO, m_jokerIndex);
+            CommonVisual.ShowJokerDescriptionCommon(runData, balance, m_descriptionGO, jokerType, m_jokerIndex);
 
             m_sellButtonData.SelectedGO.SetActive(false);
             m_closeButtonData.SelectedGO.SetActive(false);

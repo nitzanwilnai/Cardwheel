@@ -208,6 +208,7 @@ namespace Cardwheel
                         bw.Write(jokerSO.ChipsPerDollar);
                         for (int i = 0; i < 4; i++)
                             bw.Write(jokerSO.MoneyForSpecialBallOnColor[i]);
+                        bw.Write(jokerSO.AddAllSellValueToMult);
 
                         bw.Write(jokerSO.MultiplierMultForSpecialBall);
                         bw.Write(jokerSO.MultiplierMultForNonSpecialBall);

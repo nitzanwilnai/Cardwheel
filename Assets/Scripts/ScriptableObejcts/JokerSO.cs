@@ -58,6 +58,7 @@ namespace Cardwheel
         [Header("MONEY2")]
         public int ChipsPerDollar = 0;
         public int[] MoneyForSpecialBallOnColor;
+        public bool AddAllSellValueToMult;
 
         [Header("BALLS")]
         public float MultiplierMultForSpecialBall = 0.0f;

@@ -46,6 +46,9 @@ public static class Logic
         runData.JokerSellValues = new int[balance.MaxJokersInHand];
         runData.JokerChips = new int[balance.MaxJokersInHand];
         runData.JokerMultiplierAdd = new float[balance.MaxJokersInHand];
+        runData.JokerSpins = new int[balance.MaxJokersInHand];
+        runData.JokerRounds = new int[balance.MaxJokersInHand];
+
 
         runData.BallTypes = new int[balance.MaxBalls];
         runData.BallTypesInGame = new int[balance.MaxBalls];
@@ -228,13 +231,11 @@ public static class Logic
         // runData.SkipType[3] = 13;
         // runData.SkipType[1] = 7;
 
-        // AddJoker(runData, balance, 82);
+        // AddJoker(runData, balance, 78);
         // AddJoker(runData, balance, 83);
         // AddJoker(runData, balance, 84);
         // AddJoker(runData, balance, 81);
         // AddJoker(runData, balance, 5);
-        // AddJoker(runData, balance, 24);
-        // AddJoker(runData, balance, 11);
 
         // for (int i = 0; i < runData.BallTypes.Length; i++)
         //     runData.BallTypes[i] = i;
@@ -1188,6 +1189,15 @@ public static class Logic
             if (leastPlayedSlotType == runData.SlotType[slotIdx])
                 mult += balance.JokerBalance.MultiplierAddForLeastPlayedColor[jokerType];
         }
+
+        if (balance.JokerBalance.AddAllSellValueToMult[jokerType])
+        {
+            int totalSellValue = 0;
+            for (int jkrIdx = 0; jkrIdx < runData.JokerCount; jkrIdx++)
+                totalSellValue += runData.JokerSellValues[jkrIdx];
+            mult += totalSellValue;
+        }
+
 
         // branchless use or don't use
         mult *= runData.UseJoker[jokerIdx];
