@@ -290,17 +290,12 @@ namespace Cardwheel
             CommonSlotsVisual.CheckSpinWheelDebuffForNewRound(runData, balance, runData.Round, out m_showSlotEffects, out m_slotsDebuffed);
 
             int useBallSprite = 1;
-            bool ballsDebuffed = false;
             if (Logic.InBossRound(runData))
             {
                 int bossType = Logic.GetBossTypeForRound(runData);
 
                 if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.BALL_EFFECTS_HIDDEN)
                     useBallSprite = 0;
-
-                if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.BALLS_DEBUFFED ||
-                    balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.BALLS_DEBUFFED_FIRST_SPIN)
-                    ballsDebuffed = true;
             }
 
 
