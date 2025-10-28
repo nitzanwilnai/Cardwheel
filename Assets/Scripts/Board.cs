@@ -149,6 +149,7 @@ namespace Cardwheel
         TextMeshProUGUI m_spinsText;
         Image m_spinButtonImage;
         GUIButtonData m_spinButtonData;
+        GUIButtonData m_spinButtonData2;
         GUIButtonData m_infoButtonData;
 
         [Header("Jokers")]
@@ -234,6 +235,9 @@ namespace Cardwheel
             m_spinButtonData = guiButtonRef.GetButtonData("Spin");
             m_spinButtonData.Button.onClick.AddListener(dropBalls);
             CommonButtonVisual.AddSelectedBorder(m_spinButtonData);
+
+            m_spinButtonData2 = guiButtonRef.GetButtonData("Spin2");
+            m_spinButtonData2.Button.onClick.AddListener(dropBalls);
 
             m_infoButtonData = guiButtonRef.GetButtonData("Info");
             m_infoButtonData.Button.onClick.AddListener(showGameInfo);
@@ -439,11 +443,13 @@ namespace Cardwheel
             if (GameState == GAME_STATE.WAITING_FOR_INPUT)
             {
                 m_spinButtonData.Button.interactable = true;
+                m_spinButtonData2.Button.interactable = true;
                 m_spinButtonImage.color = balance.ButtonColorEnabled;
             }
             else
             {
                 m_spinButtonData.Button.interactable = false;
+                m_spinButtonData2.Button.interactable = false;
                 m_spinButtonImage.color = balance.ButtonColorDisabled;
             }
         }
@@ -1310,6 +1316,11 @@ namespace Cardwheel
                 int selectedJokerButton = CommonButtonVisual.CommonNavigation(runData, availableInputs, (COMMON_BUTTONS)m_selectedButton);
                 if (selectedJokerButton > -1)
                     selectButton((MENU_BUTTONS)selectedJokerButton, availableInputs);
+
+#if UNITY_EDITOR
+                if (Keyboard.current.spaceKey.wasPressedThisFrame)
+                    dropBalls();
+#endif
             }
 
 

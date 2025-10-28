@@ -38,7 +38,7 @@ namespace Cardwheel
         {
             setAndroidBuildNumber();
 
-            PlayerSettings.Android.useCustomKeystore = false;
+            // PlayerSettings.Android.useCustomKeystore = false;
 
             PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Android, "RELEASE");
             DateTime theTime = DateTime.Now;
@@ -57,10 +57,10 @@ namespace Cardwheel
             setAndroidBuildNumber();
 
             PlayerSettings.Android.useCustomKeystore = true;
-            // string path = Application.dataPath + "/../Keys/cardwheel.keystore";
-            // PlayerSettings.Android.keystoreName = path;
+            string path = Application.dataPath + "/../../Keys/cardwheel.keystore";
+            PlayerSettings.Android.keystoreName = path;
             // PlayerSettings.Android.keystorePass = "";
-            // PlayerSettings.Android.keyaliasName = "";
+            // PlayerSettings.Android.keyaliasName = "cardwheel";
             // PlayerSettings.Android.keyaliasPass = "";
 
             //PlayerSettings.Android.minifyRelease = true;
@@ -79,7 +79,7 @@ namespace Cardwheel
             EditorUserBuildSettings.buildAppBundle = false;
             PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Android, "");
 
-            PlayerSettings.Android.useCustomKeystore = false;
+            // PlayerSettings.Android.useCustomKeystore = false;
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
