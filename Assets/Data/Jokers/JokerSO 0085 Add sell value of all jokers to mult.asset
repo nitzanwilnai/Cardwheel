@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   JokerSprite: {fileID: 21300000, guid: c1e5e7cef66ff491ab4c05e765564472, type: 3}
   Cost: 5
-  Rarity: 0
+  Rarity: 2
   DescriptionGO: {fileID: 7630852811119300315, guid: 7caad34ff61ca41438b2a7f31bc0c6be, type: 3}
   BaseChipsAdd: 0
   BaseMultiplierAdd: 0

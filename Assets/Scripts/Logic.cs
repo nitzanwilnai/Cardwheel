@@ -48,6 +48,7 @@ public static class Logic
         runData.JokerMultiplierAdd = new float[balance.MaxJokersInHand];
         runData.JokerSpins = new int[balance.MaxJokersInHand];
         runData.JokerRounds = new int[balance.MaxJokersInHand];
+        runData.JokerSkipCount = new int[balance.MaxJokersInHand];
 
 
         runData.BallTypes = new int[balance.MaxBalls];
@@ -231,8 +232,8 @@ public static class Logic
         // runData.SkipType[3] = 13;
         // runData.SkipType[1] = 7;
 
-        // AddJoker(runData, balance, 78);
-        // AddJoker(runData, balance, 83);
+        AddJoker(runData, balance, 20);
+        // AddJoker(runData, balance, 35);
         // AddJoker(runData, balance, 84);
         // AddJoker(runData, balance, 81);
         // AddJoker(runData, balance, 5);
@@ -556,6 +557,8 @@ public static class Logic
             int jokerType = runData.JokerTypes[jkrIdx];
             if (balance.JokerBalance.MultMultButBallsDisabled[jokerType] > 0)
                 runData.UseBallsSpecial = 0;
+
+            runData.JokerRounds[jkrIdx]++;
         }
 
         runData.LeastPlayedColorAtRoundStart = GetLeastPlayedSlotType(runData);
@@ -627,6 +630,9 @@ public static class Logic
             runData.BallSnapVelocity[i] = 0.0f;
             runData.BallSnapTime[i] = 0.0f;
         }
+
+        for (int jkrIdx = 0; jkrIdx < runData.JokerCount; jkrIdx++)
+            runData.JokerSpins[jkrIdx]++;
 
         runData.JokerBallTriggerIdx = 0;
 
@@ -894,6 +900,9 @@ public static class Logic
         runData.JokerSellValues[jokerIdx] = balance.JokerBalance.Cost[jokerType] / 2;
         runData.JokerChips[jokerIdx] = Mathf.RoundToInt(balance.JokerBalance.SubtractChipsPerSpin[jokerType].x);
         runData.JokerMultiplierAdd[jokerIdx] = balance.JokerBalance.SubtractMultiplierAddPerRound[jokerType].x;
+        runData.JokerRounds[jokerIdx] = 0;
+        runData.JokerSpins[jokerIdx] = 0;
+        runData.JokerSkipCount[jokerIdx] = 0;
 
         runData.JokerCount++;
     }
@@ -1124,7 +1133,7 @@ public static class Logic
         int numNonSlotMods = GetNumNonModedSlots(runData, balance);
         chips += numNonSlotMods * balance.JokerBalance.ChipsAddForEveryNonSlotMod[jokerType];
 
-        chips += runData.SkipCount * balance.JokerBalance.RoundSkippedChipsAdd[jokerType];
+        chips += runData.JokerSkipCount[jokerIdx] * balance.JokerBalance.RoundSkippedChipsAdd[jokerType];
 
         chips += balance.JokerBalance.ChipsAddForCardPackAbandon[jokerType] * runData.CardPackAbandonTotal;
 
@@ -1999,6 +2008,8 @@ public static class Logic
         runData.MoneyAfterBoss += balance.SkipBalance.MoneyAfterBoss[skipType];
 
         runData.SkipCount++;
+        for (int jokerIdx = 0; jokerIdx < runData.JokerCount; jokerIdx++)
+            runData.JokerSkipCount[jokerIdx] = 0;
 
         runData.Round++;
     }

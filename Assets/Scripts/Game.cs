@@ -129,6 +129,8 @@ namespace Cardwheel
         {
             base.Awake();
 
+            Application.targetFrameRate = 60;
+
             gamepadInit();
 
             UIDebug.SetActive(false);

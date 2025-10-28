@@ -75,6 +75,7 @@ namespace Cardwheel
         public float[] JokerMultiplierAdd;
         public int[] JokerSpins;
         public int[] JokerRounds;
+        public int[] JokerSkipCount;
 
         public int[] AvailableJokerTypes;
         public int AvailableJokerCount;
