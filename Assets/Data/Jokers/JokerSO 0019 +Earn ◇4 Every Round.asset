@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "JokerSO 0019 +Earn \u25C74 Every Round"
   m_EditorClassIdentifier: 
   JokerSprite: {fileID: 21300000, guid: 0a9cd0d9e746f4b0b85e239e678dd8bc, type: 3}
-  Cost: 7
+  Cost: 6
   Rarity: 0
   DescriptionGO: {fileID: 7630852811119300315, guid: 71e7f5d2009fe43dc89e45ba08b4442e, type: 3}
   BaseChipsAdd: 0
@@ -45,8 +45,10 @@ MonoBehaviour:
   MoneyPerSpin: 0
   ChipsPerDollar: 0
   MoneyForSpecialBallOnColor: 00000000000000000000000000000000
+  AddAllSellValueToMult: 0
   MultiplierMultForSpecialBall: 0
   MultiplierMultForNonSpecialBall: 0
+  MultMultButBallsDisabled: 0
   SortSlots: 0
   FirstBallConvertSlot: {fileID: 0}
   AddSpin: 0
@@ -63,5 +65,6 @@ MonoBehaviour:
   MultiplierAddForLeastPlayedColor: 0
   MultiplierMultEveryShopReroll: 0
   MultiplierMultEveryCardPackReroll: 0
-  MultiplierAddForCardpackAbandon: 0
+  ChipsAddForCardpackAbandon: 0
+  MultiplierMultForCardpackAbandon: 0
   TriggerEveryXSpins: 1
