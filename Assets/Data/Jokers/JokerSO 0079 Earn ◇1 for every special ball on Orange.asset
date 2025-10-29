@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: "JokerSO 0079 Earn \u25C71 for every special ball on Orange"
   m_EditorClassIdentifier: 
   JokerSprite: {fileID: 21300000, guid: ed3d0d4856e5945e7abf9ef256391f6a, type: 3}
-  Cost: 5
-  Rarity: 0
+  Cost: 8
+  Rarity: 1
   DescriptionGO: {fileID: 7630852811119300315, guid: cf4e38899d30048799c46bc341f57589, type: 3}
   BaseChipsAdd: 0
   BaseMultiplierAdd: 0
@@ -45,6 +45,7 @@ MonoBehaviour:
   MoneyPerSpin: 0
   ChipsPerDollar: 0
   MoneyForSpecialBallOnColor: 00000000010000000000000000000000
+  AddAllSellValueToMult: 0
   MultiplierMultForSpecialBall: 0
   MultiplierMultForNonSpecialBall: 0
   MultMultButBallsDisabled: 0

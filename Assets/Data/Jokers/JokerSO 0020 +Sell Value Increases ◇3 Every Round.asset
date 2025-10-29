@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   JokerSprite: {fileID: 21300000, guid: 3a041bfd3c1fc4d308c64d49b39d91ed, type: 3}
   Cost: 5
-  Rarity: 1
+  Rarity: 0
   DescriptionGO: {fileID: 7630852811119300315, guid: 9f13ea3f452bd4264b3a81eef066759f, type: 3}
   BaseChipsAdd: 0
   BaseMultiplierAdd: 0
@@ -45,8 +45,10 @@ MonoBehaviour:
   MoneyPerSpin: 0
   ChipsPerDollar: 0
   MoneyForSpecialBallOnColor: 00000000000000000000000000000000
+  AddAllSellValueToMult: 0
   MultiplierMultForSpecialBall: 0
   MultiplierMultForNonSpecialBall: 0
+  MultMultButBallsDisabled: 0
   SortSlots: 0
   FirstBallConvertSlot: {fileID: 0}
   AddSpin: 0
@@ -63,5 +65,6 @@ MonoBehaviour:
   MultiplierAddForLeastPlayedColor: 0
   MultiplierMultEveryShopReroll: 0
   MultiplierMultEveryCardPackReroll: 0
-  MultiplierAddForCardpackAbandon: 0
+  ChipsAddForCardpackAbandon: 0
+  MultiplierMultForCardpackAbandon: 0
   TriggerEveryXSpins: 1
