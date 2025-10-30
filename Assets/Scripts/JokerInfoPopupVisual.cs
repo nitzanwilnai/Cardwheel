@@ -65,10 +65,10 @@ namespace Cardwheel
             Hide();
         }
 
-        public void Show(RunData runData, Balance balance, int jokerIdx, int availableInputs)
+        public void Show(RunData runData, Balance balance, int jokerIdx)
         {
             m_jokerIndex = jokerIdx;
-            ShowCommon(runData, balance, availableInputs);
+            ShowCommon(runData, balance);
 
             m_sellButtonData.Button.interactable = true;
             m_sellButtonData.Button.image.color = balance.ButtonColorEnabled;
@@ -76,16 +76,16 @@ namespace Cardwheel
 
         }
 
-        public void ShowInGame(RunData runData, Balance balance, int jokerIdx, int availableInputs)
+        public void ShowInGame(RunData runData, Balance balance, int jokerIdx)
         {
             m_jokerIndex = jokerIdx;
             m_sellButtonData.Button.interactable = false;
             m_sellButtonData.Button.image.color = balance.ButtonColorDisabled;
 
-            ShowCommon(runData, balance, availableInputs);
+            ShowCommon(runData, balance);
         }
 
-        void ShowCommon(RunData runData, Balance balance, int availableInputs)
+        void ShowCommon(RunData runData, Balance balance)
         {
             int jokerType = runData.JokerTypes[m_jokerIndex];
             m_sellButtonData.Button.onClick.RemoveAllListeners();
@@ -109,7 +109,7 @@ namespace Cardwheel
             m_sellButtonData.SelectedGO.SetActive(false);
             m_closeButtonData.SelectedGO.SetActive(false);
 
-            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+            if (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
             {
                 m_selectedButton = MENU_BUTTONS.CLOSE;
                 m_closeButtonData.SelectedGO.SetActive(true);
@@ -126,27 +126,27 @@ namespace Cardwheel
             m_UI.SetActive(false);
         }
 
-        public void Tick(int availableInputs)
+        public void Tick()
         {
-            handleInput(availableInputs);
+            handleInput();
         }
 
-        void handleInput(int availableInputs)
+        void handleInput()
         {
-            if ((m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateEnter(availableInputs)) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, availableInputs))
+            if ((m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs())) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, Game.Instance.GetTickAvailableInputs()))
             {
                 hideJokerInfoPopup();
                 return;
             }
 
             if (m_sellButtonData.Button.interactable)
-                if ((m_selectedButton == MENU_BUTTONS.SELL && CommonButtonVisual.NavigateEnter(availableInputs)) || CommonButtonVisual.NavigateGamepadButton(m_sellButtonData, availableInputs))
+                if ((m_selectedButton == MENU_BUTTONS.SELL && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs())) || CommonButtonVisual.NavigateGamepadButton(m_sellButtonData, Game.Instance.GetTickAvailableInputs()))
                 {
                     sellJoker();
                     return;
                 }
 
-            if (m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateUp(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateUp(Game.Instance.GetTickAvailableInputs()))
             {
                 m_selectedButton = MENU_BUTTONS.SELL;
                 m_sellButtonData.SelectedGO.SetActive(true);
@@ -154,7 +154,7 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.SELL && CommonButtonVisual.NavigateDown(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.SELL && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
             {
                 m_selectedButton = MENU_BUTTONS.CLOSE;
                 m_sellButtonData.SelectedGO.SetActive(false);

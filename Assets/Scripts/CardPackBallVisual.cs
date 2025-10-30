@@ -160,11 +160,11 @@ namespace Cardwheel
             CommonBallVisual.HideBalls(balance, m_uiBallMoveData);
         }
 
-        public void Tick(RunData runData, Balance balance, Camera camera, float dt, int availableInputs)
+        public void Tick(RunData runData, Balance balance, Camera camera, float dt)
         {
             CommonBallVisual.TickMoveBalls(dt, m_uiBallMoveData);
 
-            CommonBallVisual.HanleInputTouchMove(runData, m_uiBallMoveData, camera, true, availableInputs);
+            CommonBallVisual.HanleInputTouchMove(runData, m_uiBallMoveData, camera, true, Game.Instance.GetTickAvailableInputs());
 
             // Debug.Log("m_ballIdx " + m_ballIdx + " m_ballIdx + 1" + (m_ballIdx + 1));
             CommonBallVisual.TickCheckSwapBalls(runData, m_uiBallMoveData, m_uiBallVisualData, true);

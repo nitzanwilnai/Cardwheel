@@ -104,11 +104,11 @@ namespace Cardwheel
             CommonBallVisual.HideBalls(balance, m_uiBallMoveData);
         }
 
-        public void Tick(float dt, int availableInputs)
+        public void Tick(float dt)
         {
             CommonBallVisual.TickMoveBalls(dt, m_uiBallMoveData);
 
-            handleInput(dt, availableInputs);
+            handleInput(dt);
 
             if (m_uiBallMoveData.BallIdx > -1)
                 CommonBallVisual.TickCheckSwapBalls(runData, m_uiBallMoveData, m_uiBallVisualData, false);
@@ -127,31 +127,31 @@ namespace Cardwheel
                 m_uiBallMoveData.BallSelectedGO[i].SetActive(m_selectedButton == MENU_BUTTONS.BALL_1 + i);
         }
 
-        void handleInput(float dt, int availableInputs)
+        void handleInput(float dt)
         {
-            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+            if (Logic.IsBitSet(Game.Instance.GetTickAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetTickAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
             {
-                MENU_BUTTONS newSelectedButton = (MENU_BUTTONS)CommonBallVisual.HandleInputGamepadKeyboard(runData, m_uiBallMoveData, m_uiBallVisualData, (COMMON_BUTTONS)m_selectedButton, false, availableInputs);
+                MENU_BUTTONS newSelectedButton = (MENU_BUTTONS)CommonBallVisual.HandleInputGamepadKeyboard(runData, m_uiBallMoveData, m_uiBallVisualData, (COMMON_BUTTONS)m_selectedButton, false, Game.Instance.GetTickAvailableInputs());
                 selectButton(newSelectedButton);
             }
             else
-                CommonBallVisual.HanleInputTouchMove(runData, m_uiBallMoveData, mainCamera, false, availableInputs);
+                CommonBallVisual.HanleInputTouchMove(runData, m_uiBallMoveData, mainCamera, false, Game.Instance.GetTickAvailableInputs());
 
-            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+            if (Logic.IsBitSet(Game.Instance.GetTickAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetTickAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
             {
-                if (m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateEnter(availableInputs))
+                if (m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
                 {
                     animateClose();
                     return;
                 }
 
-                if (m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateUp(availableInputs))
+                if (m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateUp(Game.Instance.GetTickAvailableInputs()))
                 {
                     selectButton(MENU_BUTTONS.BALL_1);
                     return;
                 }
 
-                if (m_selectedButton >= MENU_BUTTONS.BALL_1 && m_selectedButton <= MENU_BUTTONS.BALL_6 && CommonButtonVisual.NavigateDown(availableInputs))
+                if (m_selectedButton >= MENU_BUTTONS.BALL_1 && m_selectedButton <= MENU_BUTTONS.BALL_6 && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
                 {
                     m_uiBallMoveData.BallIdx = -1;
                     selectButton(MENU_BUTTONS.CLOSE);

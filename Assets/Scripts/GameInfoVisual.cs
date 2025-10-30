@@ -46,7 +46,7 @@ namespace Cardwheel
             m_UI.SetActive(false);
         }
 
-        public void Show(RunData runData, Balance balance, int availableInputs)
+        public void Show(RunData runData, Balance balance)
         {
             m_UI.SetActive(true);
 
@@ -54,15 +54,15 @@ namespace Cardwheel
 
             CommonBallVisual.ShowBalls(runData.BallTypesInGame, balance, m_uiBallVisualData);
 
-            m_closeButtonData.SelectedGO.SetActive(Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD));
+            m_closeButtonData.SelectedGO.SetActive(Logic.IsBitSet(Game.Instance.GetTickAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetTickAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD));
         }
 
-        public void Tick(RunData runData, float dt, int availableInputs)
+        public void Tick(RunData runData, float dt)
         {
             if (CommonVisual.AnimateCloseTick(ref m_closeTimer, dt))
                 Game.Instance.SetMenuState(runData.PrevMenuState);
 
-            if (CommonButtonVisual.NavigateEnter(availableInputs) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, availableInputs))
+            if (CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, Game.Instance.GetTickAvailableInputs()))
                 animateClose();
         }
 

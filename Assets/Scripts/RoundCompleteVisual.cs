@@ -81,7 +81,7 @@ namespace Cardwheel
             Hide();
         }
 
-        public void Show(RunData runData, Balance balance, GAMEPAD_TYPE gamepadType, int avaiableInputs)
+        public void Show(RunData runData, Balance balance)
         {
             m_moneyText.text = runData.Money.ToString("N0");
             m_rewardText.text = "◇" + balance.RoundReward[runData.Round % 3].ToString("N0");
@@ -108,10 +108,10 @@ namespace Cardwheel
             CommonVisual.ShowTopBar(runData, m_topBarGUI, "Round Complete");
             CommonVisual.ShowJokersBallsAndSpinWheel(runData, balance, m_cardsBallsSpinWheelGUI, runData.SlotTypeInGame);
 
-            CommonButtonVisual.UpdateCommonButtonIcons(m_topBarGUI, m_cardsBallsSpinWheelGUI, gamepadType);
-            CommonButtonVisual.UpdateButtonIcons(m_claimRewardData, gamepadType);
+            CommonButtonVisual.UpdateCommonButtonIcons(m_topBarGUI, m_cardsBallsSpinWheelGUI, Game.Instance.GetGamepadType());
+            CommonButtonVisual.UpdateButtonIcons(m_claimRewardData, Game.Instance.GetGamepadType());
 
-            selectButton(MENU_BUTTONS.CLAIM_REWARD, avaiableInputs);
+            selectButton(MENU_BUTTONS.CLAIM_REWARD);
 
             Canvas.ForceUpdateCanvases();
 
@@ -129,13 +129,13 @@ namespace Cardwheel
             CommonButtonVisual.HideAllButtonSelections(m_topBarGUI, m_cardsBallsSpinWheelGUI);
         }
 
-        void selectButton(MENU_BUTTONS selectedButton, int availableInputs)
+        void selectButton(MENU_BUTTONS selectedButton)
         {
             m_selectedButton = selectedButton;
 
             hideAllButtonSelections();
 
-            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+            if (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
             {
                 m_claimRewardData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.CLAIM_REWARD);
 
@@ -143,78 +143,78 @@ namespace Cardwheel
             }
         }
 
-        public void Tick(RunData runData, Balance balance, float dt, int avaiableInputs)
+        public void Tick(RunData runData, Balance balance, float dt)
         {
             CommonSlotsVisual.TickSpinWheelUI(runData, balance.UISpinWheelSpeed, dt, m_cardsBallsSpinWheelGUI);
 
-            handleInput(avaiableInputs);
+            handleInput();
         }
 
-        void handleInput(int availableInputs)
+        void handleInput()
         {
             // common input (settings, balls, spinwheel and jokers)
-            if (CommonButtonVisual.CommonHandleInput(m_topBarGUI, m_cardsBallsSpinWheelGUI, availableInputs, (COMMON_BUTTONS)m_selectedButton))
+            if (CommonButtonVisual.CommonHandleInput(m_topBarGUI, m_cardsBallsSpinWheelGUI, Game.Instance.GetTickAvailableInputs(), (COMMON_BUTTONS)m_selectedButton))
                 return;
 
-            int newSelectedButton = CommonButtonVisual.CommonNavigation(runData, availableInputs, (COMMON_BUTTONS)m_selectedButton);
+            int newSelectedButton = CommonButtonVisual.CommonNavigation(runData, Game.Instance.GetTickAvailableInputs(), (COMMON_BUTTONS)m_selectedButton);
             if (newSelectedButton > -1)
             {
-                selectButton((MENU_BUTTONS)newSelectedButton, availableInputs);
+                selectButton((MENU_BUTTONS)newSelectedButton);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.CLAIM_REWARD && CommonButtonVisual.NavigateEnter(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.CLAIM_REWARD && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
             {
                 claimRoundRewardAndGoToShop();
                 return;
             }
 
 
-            if (m_selectedButton == MENU_BUTTONS.CLAIM_REWARD && CommonButtonVisual.NavigateRight(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.CLAIM_REWARD && CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
             {
-                selectButton(MENU_BUTTONS.WHEEL, availableInputs);
+                selectButton(MENU_BUTTONS.WHEEL);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.CLAIM_REWARD && CommonButtonVisual.NavigateLeft(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.CLAIM_REWARD && CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()))
             {
-                selectButton(MENU_BUTTONS.SETTINGS, availableInputs);
+                selectButton(MENU_BUTTONS.SETTINGS);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.SETTINGS && (CommonButtonVisual.NavigateRight(availableInputs) || CommonButtonVisual.NavigateDown(availableInputs)))
+            if (m_selectedButton == MENU_BUTTONS.SETTINGS && (CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()) || CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs())))
             {
-                selectButton(MENU_BUTTONS.CLAIM_REWARD, availableInputs);
+                selectButton(MENU_BUTTONS.CLAIM_REWARD);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.WHEEL && (CommonButtonVisual.NavigateLeft(availableInputs) || CommonButtonVisual.NavigateDown(availableInputs)))
+            if (m_selectedButton == MENU_BUTTONS.WHEEL && (CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()) || CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs())))
             {
-                selectButton(MENU_BUTTONS.CLAIM_REWARD, availableInputs);
+                selectButton(MENU_BUTTONS.CLAIM_REWARD);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.JOKER_1 && CommonButtonVisual.NavigateLeft(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.JOKER_1 && CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()))
             {
-                selectButton(MENU_BUTTONS.CLAIM_REWARD, availableInputs);
+                selectButton(MENU_BUTTONS.CLAIM_REWARD);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.BALLS && CommonButtonVisual.NavigateLeft(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.BALLS && CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()))
             {
-                selectButton(MENU_BUTTONS.CLAIM_REWARD, availableInputs);
+                selectButton(MENU_BUTTONS.CLAIM_REWARD);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.WHEEL && CommonButtonVisual.NavigateUp(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.WHEEL && CommonButtonVisual.NavigateUp(Game.Instance.GetTickAvailableInputs()))
             {
-                selectButton(MENU_BUTTONS.BALLS, availableInputs);
+                selectButton(MENU_BUTTONS.BALLS);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.BALLS && CommonButtonVisual.NavigateDown(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.BALLS && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
             {
-                selectButton(MENU_BUTTONS.WHEEL, availableInputs);
+                selectButton(MENU_BUTTONS.WHEEL);
                 return;
             }
         }
