@@ -12,9 +12,9 @@ namespace Cardwheel
         public Image ShopCard;
         public Transform DescriptionParent;
         public TextMeshProUGUI Cost;
-        public Button BuyButton;
+        public GUIButtonData BuyButtonData;
+        public GUIButtonData CancelButtonData;
         public Image BuyButtonImage;
-        public Button CancelButton;
         public TextMeshProUGUI RarityText;
         public Image Border;
         public Image BorderRarity;
@@ -26,9 +26,9 @@ namespace Cardwheel
         public Image ShopCard;
         public TextMeshProUGUI Description;
         public TextMeshProUGUI Cost;
-        public Button BuyButton;
+        public GUIButtonData BuyButtonData;
+        public GUIButtonData CancelButtonData;
         public Image BuyButtonImage;
-        public Button CancelButton;
     }
 
     public struct VoucherBuyPopupGUI
@@ -37,9 +37,9 @@ namespace Cardwheel
         public Image ShopCard;
         public TextMeshProUGUI Description;
         public TextMeshProUGUI Cost;
-        public Button BuyButton;
+        public GUIButtonData BuyButtonData;
+        public GUIButtonData CancelButtonData;
         public Image BuyButtonImage;
-        public Button CancelButton;
     }
 
     public struct ShopCardGUI
@@ -182,31 +182,42 @@ namespace Cardwheel
             m_jokerBuyPopupGUI.ShopCard = jokerBuyPopupGUIRef.GetImage("Card");
             m_jokerBuyPopupGUI.DescriptionParent = jokerBuyPopupGUIRef.GetGameObject("Description").transform;
             m_jokerBuyPopupGUI.Cost = jokerBuyPopupGUIRef.GetTextGUI("Cost");
-            m_jokerBuyPopupGUI.BuyButton = jokerBuyPopupGUIRef.GetButton("Buy");
             m_jokerBuyPopupGUI.BuyButtonImage = jokerBuyPopupGUIRef.GetImage("Buy");
             m_jokerBuyPopupGUI.RarityText = jokerBuyPopupGUIRef.GetTextGUI("Rarity");
             m_jokerBuyPopupGUI.Border = jokerBuyPopupGUIRef.GetImage("Border");
             m_jokerBuyPopupGUI.BorderRarity = jokerBuyPopupGUIRef.GetImage("BorderRarity");
-
-            jokerBuyPopupGUIRef.GetButton("Cancel").onClick.AddListener(HideJokerBuyPopup);
+            GUIButtonRef jokerBuyPopupButtonRef = m_jokerBuyPopupGUI.GO.GetComponent<GUIButtonRef>();
+            m_jokerBuyPopupGUI.BuyButtonData = jokerBuyPopupButtonRef.GetButtonData("Buy");
+            m_jokerBuyPopupGUI.CancelButtonData = jokerBuyPopupButtonRef.GetButtonData("Cancel");
+            CommonButtonVisual.AddSelectedBorder(m_jokerBuyPopupGUI.BuyButtonData);
+            CommonButtonVisual.AddSelectedBorder(m_jokerBuyPopupGUI.CancelButtonData);
+            m_jokerBuyPopupGUI.CancelButtonData.Button.onClick.AddListener(HideJokerBuyPopup);
 
             m_cardPackBuyPopupGUI.GO = guiRef.GetGameObject("CardPackBuyPopup");
             GUIRef cardPackBuyPopupGUIRef = m_cardPackBuyPopupGUI.GO.GetComponent<GUIRef>();
             m_cardPackBuyPopupGUI.ShopCard = cardPackBuyPopupGUIRef.GetImage("Card");
             m_cardPackBuyPopupGUI.Description = cardPackBuyPopupGUIRef.GetTextGUI("Description");
             m_cardPackBuyPopupGUI.Cost = cardPackBuyPopupGUIRef.GetTextGUI("Cost");
-            m_cardPackBuyPopupGUI.BuyButton = cardPackBuyPopupGUIRef.GetButton("Buy");
             m_cardPackBuyPopupGUI.BuyButtonImage = cardPackBuyPopupGUIRef.GetImage("Buy");
-            cardPackBuyPopupGUIRef.GetButton("Cancel").onClick.AddListener(HideCardpackBuyPopup);
+            GUIButtonRef cardPackBuyPopupButtonRef = m_cardPackBuyPopupGUI.GO.GetComponent<GUIButtonRef>();
+            m_cardPackBuyPopupGUI.BuyButtonData = cardPackBuyPopupButtonRef.GetButtonData("Buy");
+            m_cardPackBuyPopupGUI.CancelButtonData = cardPackBuyPopupButtonRef.GetButtonData("Cancel");
+            CommonButtonVisual.AddSelectedBorder(m_cardPackBuyPopupGUI.BuyButtonData);
+            CommonButtonVisual.AddSelectedBorder(m_cardPackBuyPopupGUI.CancelButtonData);
+            m_cardPackBuyPopupGUI.CancelButtonData.Button.onClick.AddListener(HideCardpackBuyPopup);
 
             m_voucherBuyPopupGUI.GO = guiRef.GetGameObject("VoucherBuyPopup");
             GUIRef voucherBuyPopupGUIRef = m_voucherBuyPopupGUI.GO.GetComponent<GUIRef>();
             m_voucherBuyPopupGUI.ShopCard = voucherBuyPopupGUIRef.GetImage("Card");
             m_voucherBuyPopupGUI.Description = voucherBuyPopupGUIRef.GetTextGUI("Description");
             m_voucherBuyPopupGUI.Cost = voucherBuyPopupGUIRef.GetTextGUI("Cost");
-            m_voucherBuyPopupGUI.BuyButton = voucherBuyPopupGUIRef.GetButton("Buy");
             m_voucherBuyPopupGUI.BuyButtonImage = voucherBuyPopupGUIRef.GetImage("Buy");
-            voucherBuyPopupGUIRef.GetButton("Cancel").onClick.AddListener(HideVoucherBuyPopup);
+            GUIButtonRef voucherBuyPopupButtonRef = m_voucherBuyPopupGUI.GO.GetComponent<GUIButtonRef>();
+            m_voucherBuyPopupGUI.BuyButtonData = voucherBuyPopupButtonRef.GetButtonData("Buy");
+            m_voucherBuyPopupGUI.CancelButtonData = voucherBuyPopupButtonRef.GetButtonData("Cancel");
+            CommonButtonVisual.AddSelectedBorder(m_voucherBuyPopupGUI.BuyButtonData);
+            CommonButtonVisual.AddSelectedBorder(m_voucherBuyPopupGUI.CancelButtonData);
+            m_voucherBuyPopupGUI.CancelButtonData.Button.onClick.AddListener(HideVoucherBuyPopup);
 
             m_verticalLayoutGroup = m_UI.GetComponent<VerticalLayoutGroup>();
 
@@ -284,7 +295,7 @@ namespace Cardwheel
 
                     int localI = i;
                     m_jokers[i].JokerButtonData.Button.onClick.RemoveAllListeners();
-                    m_jokers[i].JokerButtonData.Button.onClick.AddListener(() => showJokerBuyPopup(localI));
+                    m_jokers[i].JokerButtonData.Button.onClick.AddListener(() => showJokerBuyPopup(localI, gamepadType));
                     m_jokers[i].JokerButtonData.SelectedGO.SetActive(false);
 
                     m_jokers[i].CostText.text = "◇" + Logic.GetJokerShopCost(runData, balance, jokerType).ToString();
@@ -308,7 +319,7 @@ namespace Cardwheel
 
                     int localI = i;
                     m_cardPacks[i].CardPackButtonData.Button.onClick.RemoveAllListeners();
-                    m_cardPacks[i].CardPackButtonData.Button.onClick.AddListener(() => showCardBuyPopup(localI));
+                    m_cardPacks[i].CardPackButtonData.Button.onClick.AddListener(() => showCardBuyPopup(localI, gamepadType));
                     m_cardPacks[i].CardPackButtonData.SelectedGO.SetActive(false);
 
                     m_cardPacks[i].CostText.text = "◇" + Logic.GetCardPackShopCost(runData, balance, cardPackIdx);
@@ -318,7 +329,7 @@ namespace Cardwheel
             // show voucher
             m_voucher.CardImage.sprite = AssetManager.Instance.LoadVoucherSprite(balance.VoucherBalance.SpriteName[Logic.GetVoucherForRound(runData)]);
             m_voucher.VoucherButtonData.Button.onClick.RemoveAllListeners();
-            m_voucher.VoucherButtonData.Button.onClick.AddListener(showVoucherBuyPopup);
+            m_voucher.VoucherButtonData.Button.onClick.AddListener(() => showVoucherBuyPopup(gamepadType));
             m_voucher.VoucherButtonData.SelectedGO.SetActive(false);
             m_voucher.CostText.text = "◇" + Logic.GetVoucherCost(runData, balance);
             m_voucher.GO.SetActive(!runData.VoucherPurchased);
@@ -394,7 +405,7 @@ namespace Cardwheel
             CommonVisual.HideJokers();
         }
 
-        void showJokerBuyPopup(int shopJokerIdx)
+        void showJokerBuyPopup(int shopJokerIdx, GAMEPAD_TYPE gamepadType)
         {
             SoundManager.Instance.PlaySFXButtonOK();
 
@@ -403,9 +414,9 @@ namespace Cardwheel
             if (jokerType > -1)
             {
                 Debug.Log("ShopVisual.ShowBuyPopup(shopJokerIdx " + shopJokerIdx + ")");
-                m_jokerBuyPopupGUI.BuyButton.onClick.RemoveAllListeners();
-                m_jokerBuyPopupGUI.BuyButton.onClick.AddListener(() => Game.Instance.BuyShopJoker(shopJokerIdx));
-                m_jokerBuyPopupGUI.BuyButton.interactable = Logic.RoomForJokerInHand(runData) && Logic.CanBuy(runData, balance, Logic.GetJokerShopCost(runData, balance, jokerType));
+                m_jokerBuyPopupGUI.BuyButtonData.Button.onClick.RemoveAllListeners();
+                m_jokerBuyPopupGUI.BuyButtonData.Button.onClick.AddListener(() => Game.Instance.BuyShopJoker(shopJokerIdx));
+                m_jokerBuyPopupGUI.BuyButtonData.Button.interactable = Logic.RoomForJokerInHand(runData) && Logic.CanBuy(runData, balance, Logic.GetJokerShopCost(runData, balance, jokerType));
                 m_jokerBuyPopupGUI.BuyButtonImage.color = (Logic.RoomForJokerInHand(runData) && Logic.CanBuy(runData, balance, Logic.GetJokerShopCost(runData, balance, jokerType))) ? balance.ButtonColorEnabled : balance.ButtonColorDisabled;
                 m_jokerBuyPopupGUI.Cost.text = "◇" + Logic.GetJokerShopCost(runData, balance, jokerType).ToString();
                 RARITY rarity = balance.JokerBalance.Rarity[jokerType];
@@ -423,18 +434,24 @@ namespace Cardwheel
                 CommonVisual.ShowJokerDescriptionCommon(runData, balance, m_descriptionGO, jokerType, -1);
 
                 m_jokerBuyPopupGUI.GO.SetActive(true);
+
+                CommonButtonVisual.UpdateButtonIcons(m_jokerBuyPopupGUI.BuyButtonData, gamepadType);
+                CommonButtonVisual.UpdateButtonIcons(m_jokerBuyPopupGUI.CancelButtonData, gamepadType);
+
+                m_jokerBuyPopupGUI.BuyButtonData.SelectedGO.SetActive(gamepadType != GAMEPAD_TYPE.NONE);
+                m_jokerBuyPopupGUI.CancelButtonData.SelectedGO.SetActive(false);
             }
         }
 
-        void showCardBuyPopup(int shopPackIdx)
+        void showCardBuyPopup(int shopPackIdx, GAMEPAD_TYPE gamepadType)
         {
             SoundManager.Instance.PlaySFXButtonOK();
 
             int cardPackIdx = runData.ShopCardPackIdxs[shopPackIdx];
 
-            m_cardPackBuyPopupGUI.BuyButton.onClick.RemoveAllListeners();
-            m_cardPackBuyPopupGUI.BuyButton.onClick.AddListener(() => Game.Instance.BuyShopCardPack(shopPackIdx));
-            m_cardPackBuyPopupGUI.BuyButton.interactable = Logic.CanBuy(runData, balance, Logic.GetCardPackShopCost(runData, balance, cardPackIdx));
+            m_cardPackBuyPopupGUI.BuyButtonData.Button.onClick.RemoveAllListeners();
+            m_cardPackBuyPopupGUI.BuyButtonData.Button.onClick.AddListener(() => Game.Instance.BuyShopCardPack(shopPackIdx));
+            m_cardPackBuyPopupGUI.BuyButtonData.Button.interactable = Logic.CanBuy(runData, balance, Logic.GetCardPackShopCost(runData, balance, cardPackIdx));
             m_cardPackBuyPopupGUI.BuyButtonImage.color = Logic.CanBuy(runData, balance, Logic.GetCardPackShopCost(runData, balance, cardPackIdx)) ? balance.ButtonColorEnabled : balance.ButtonColorDisabled;
             m_cardPackBuyPopupGUI.Cost.text = "◇" + Logic.GetCardPackShopCost(runData, balance, cardPackIdx);
 
@@ -449,16 +466,22 @@ namespace Cardwheel
             m_cardPackBuyPopupGUI.Description.text = "Pick " + balance.CardPackPickCards[cardPackIdx] + " of " + balance.CardPackMaxCards[cardPackIdx] + " " + typeString + " Upgrades";
 
             m_cardPackBuyPopupGUI.GO.SetActive(true);
+
+            CommonButtonVisual.UpdateButtonIcons(m_jokerBuyPopupGUI.BuyButtonData, gamepadType);
+            CommonButtonVisual.UpdateButtonIcons(m_jokerBuyPopupGUI.CancelButtonData, gamepadType);
+
+            m_cardPackBuyPopupGUI.BuyButtonData.SelectedGO.SetActive(gamepadType != GAMEPAD_TYPE.NONE);
+            m_cardPackBuyPopupGUI.CancelButtonData.SelectedGO.SetActive(false);
         }
 
-        void showVoucherBuyPopup()
+        void showVoucherBuyPopup(GAMEPAD_TYPE gamepadType)
         {
             SoundManager.Instance.PlaySFXButtonOK();
 
-            m_voucherBuyPopupGUI.BuyButton.onClick.RemoveAllListeners();
-            m_voucherBuyPopupGUI.BuyButton.onClick.AddListener(Game.Instance.BuyVoucher);
+            m_voucherBuyPopupGUI.BuyButtonData.Button.onClick.RemoveAllListeners();
+            m_voucherBuyPopupGUI.BuyButtonData.Button.onClick.AddListener(Game.Instance.BuyVoucher);
 
-            m_voucherBuyPopupGUI.BuyButton.interactable = Logic.CanBuy(runData, balance, Logic.GetVoucherCost(runData, balance));
+            m_voucherBuyPopupGUI.BuyButtonData.Button.interactable = Logic.CanBuy(runData, balance, Logic.GetVoucherCost(runData, balance));
             m_voucherBuyPopupGUI.BuyButtonImage.color = Logic.CanBuy(runData, balance, Logic.GetVoucherCost(runData, balance)) ? balance.ButtonColorEnabled : balance.ButtonColorDisabled;
             m_voucherBuyPopupGUI.Cost.text = "◇" + Logic.GetVoucherCost(runData, balance);
 
@@ -467,6 +490,12 @@ namespace Cardwheel
             m_voucherBuyPopupGUI.Description.text = balance.VoucherBalance.Description[Logic.GetVoucherForRound(runData)];
 
             m_voucherBuyPopupGUI.GO.SetActive(true);
+
+            CommonButtonVisual.UpdateButtonIcons(m_jokerBuyPopupGUI.BuyButtonData, gamepadType);
+            CommonButtonVisual.UpdateButtonIcons(m_jokerBuyPopupGUI.CancelButtonData, gamepadType);
+
+            m_voucherBuyPopupGUI.BuyButtonData.SelectedGO.SetActive(gamepadType != GAMEPAD_TYPE.NONE);
+            m_voucherBuyPopupGUI.CancelButtonData.SelectedGO.SetActive(false);
         }
 
         public void HideJokerBuyPopup()
@@ -497,7 +526,7 @@ namespace Cardwheel
                 GameObject.Destroy(m_descriptionGO);
         }
 
-        public void Tick(float dt, int availableInputs)
+        public void Tick(float dt, int availableInputs, GAMEPAD_TYPE gamepadType)
         {
             CommonSlotsVisual.TickSpinWheelUI(runData, balance.UISpinWheelSpeed, dt, m_cardsBallsSpinWheelGUI);
             CommonSlotsVisual.TickSortingPopup(dt, m_cardsBallsSpinWheelGUI);
@@ -509,10 +538,10 @@ namespace Cardwheel
                     HideBuyPopupCommon();
             }
 
-            handleInput(availableInputs);
+            handleInput(availableInputs, gamepadType);
         }
 
-        void handleInput(int availableInputs)
+        void handleInput(int availableInputs, GAMEPAD_TYPE gamepadType)
         {
             if (CommonButtonVisual.CommonHandleInput(m_topBarGUI, m_cardsBallsSpinWheelGUI, availableInputs, (COMMON_BUTTONS)m_selectedButton))
                 return;
@@ -541,6 +570,11 @@ namespace Cardwheel
             {
                 goToRoundSelection();
                 return;
+            }
+
+            if (m_selectedButton >= MENU_BUTTONS.SHOP_JOKER_1 && m_selectedButton <= MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateEnter(availableInputs))
+            {
+                showJokerBuyPopup(m_selectedButton - MENU_BUTTONS.SHOP_JOKER_1, gamepadType);
             }
 
             // navigate gamepad / enter jokers/cardpacks/voucher
@@ -855,7 +889,7 @@ namespace Cardwheel
                     selectButton(MENU_BUTTONS.SHOP_JOKER_1, availableInputs);
                 else if (runData.ShopJokerIdxs[1] > -1)
                     selectButton(MENU_BUTTONS.SHOP_JOKER_2, availableInputs);
-                else if (runData.ShopJokerIdxs[2] > -1)
+                else if (runData.ShopJokerCount == 3 && runData.ShopJokerIdxs[2] > -1)
                     selectButton(MENU_BUTTONS.SHOP_JOKER_3, availableInputs);
             }
 
@@ -865,13 +899,13 @@ namespace Cardwheel
                     selectButton(MENU_BUTTONS.SHOP_JOKER_2, availableInputs);
                 else if (runData.ShopJokerIdxs[0] > -1)
                     selectButton(MENU_BUTTONS.SHOP_JOKER_1, availableInputs);
-                else if (runData.ShopJokerIdxs[2] > -1)
+                else if (runData.ShopJokerCount == 3 && runData.ShopJokerIdxs[2] > -1)
                     selectButton(MENU_BUTTONS.SHOP_JOKER_3, availableInputs);
             }
 
             if (m_selectedButton == MENU_BUTTONS.SHOP_CARDPACK_2 && CommonButtonVisual.NavigateUp(availableInputs))
             {
-                if (runData.ShopJokerIdxs[2] > -1)
+                if (runData.ShopJokerCount == 3 && runData.ShopJokerIdxs[2] > -1)
                     selectButton(MENU_BUTTONS.SHOP_JOKER_3, availableInputs);
                 else if (runData.ShopJokerIdxs[1] > -1)
                     selectButton(MENU_BUTTONS.SHOP_JOKER_2, availableInputs);

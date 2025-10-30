@@ -1257,71 +1257,85 @@ namespace Cardwheel
                     dropBalls();
                     return;
                 }
+            }
+            if (m_selectedButton == MENU_BUTTONS.INFO && CommonButtonVisual.NavigateEnter(availableInputs))
+            {
+                showGameInfo();
+                return;
+            }
 
-                if (m_selectedButton == MENU_BUTTONS.INFO && CommonButtonVisual.NavigateEnter(availableInputs))
-                {
-                    showGameInfo();
-                    return;
-                }
+            if (m_selectedButton == MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateEnter(availableInputs))
+            {
+                Game.Instance.GoToSettings();
+                return;
+            }
 
-                if (m_selectedButton == MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateEnter(availableInputs))
-                {
-                    Game.Instance.GoToSettings();
-                    return;
-                }
+            if ((m_selectedButton >= MENU_BUTTONS.JOKER_1 && m_selectedButton <= MENU_BUTTONS.JOKER_5) && CommonButtonVisual.NavigateEnter(availableInputs))
+            {
+                Game.Instance.ShowJokerInfoPopupInGame((int)m_selectedButton - (int)MENU_BUTTONS.JOKER_1);
+                return;
+            }
 
-                if ((m_selectedButton >= MENU_BUTTONS.JOKER_1 && m_selectedButton <= MENU_BUTTONS.JOKER_5) && CommonButtonVisual.NavigateEnter(availableInputs))
-                {
-                    Game.Instance.ShowJokerInfoPopupInGame((int)m_selectedButton - (int)MENU_BUTTONS.JOKER_1);
-                    return;
-                }
+            // navigation
+            if (m_selectedButton == MENU_BUTTONS.DROP && CommonButtonVisual.NavigateLeft(availableInputs))
+            {
+                selectButton(MENU_BUTTONS.INFO, availableInputs);
+                return;
+            }
 
-                // navigation
-                if (m_selectedButton == MENU_BUTTONS.DROP && CommonButtonVisual.NavigateLeft(availableInputs))
-                {
-                    selectButton(MENU_BUTTONS.INFO, availableInputs);
-                    return;
-                }
+            if (m_selectedButton == MENU_BUTTONS.DROP && CommonButtonVisual.NavigateUp(availableInputs))
+            {
+                selectButton(MENU_BUTTONS.JOKER_1, availableInputs);
+                return;
+            }
 
-                if (m_selectedButton == MENU_BUTTONS.DROP && CommonButtonVisual.NavigateUp(availableInputs))
-                {
+            if (m_selectedButton == MENU_BUTTONS.INFO && CommonButtonVisual.NavigateRight(availableInputs))
+            {
+                selectButton(MENU_BUTTONS.DROP, availableInputs);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.INFO && CommonButtonVisual.NavigateUp(availableInputs))
+            {
+                selectButton(MENU_BUTTONS.SETTINGS, availableInputs);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateDown(availableInputs))
+            {
+                selectButton(MENU_BUTTONS.INFO, availableInputs);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateRight(availableInputs))
+            {
+                if (runData.JokerCount > 0)
                     selectButton(MENU_BUTTONS.JOKER_1, availableInputs);
-                    return;
-                }
-
-                if (m_selectedButton == MENU_BUTTONS.INFO && CommonButtonVisual.NavigateRight(availableInputs))
-                {
+                else
                     selectButton(MENU_BUTTONS.DROP, availableInputs);
-                    return;
-                }
+                return;
+            }
 
-                if (m_selectedButton == MENU_BUTTONS.INFO && CommonButtonVisual.NavigateUp(availableInputs))
-                {
-                    selectButton(MENU_BUTTONS.SETTINGS, availableInputs);
-                    return;
-                }
+            if ((m_selectedButton >= MENU_BUTTONS.JOKER_1 && m_selectedButton <= MENU_BUTTONS.JOKER_5) && CommonButtonVisual.NavigateDown(availableInputs))
+            {
+                selectButton(MENU_BUTTONS.DROP, availableInputs);
+                return;
+            }
 
-                if (m_selectedButton == MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateDown(availableInputs))
-                {
-                    selectButton(MENU_BUTTONS.INFO, availableInputs);
-                    return;
-                }
+            if ((m_selectedButton >= MENU_BUTTONS.JOKER_1 && m_selectedButton <= MENU_BUTTONS.JOKER_5) && CommonButtonVisual.NavigateLeft(availableInputs))
+            {
+                selectButton(MENU_BUTTONS.SETTINGS, availableInputs);
+                return;
+            }
 
-                if ((m_selectedButton >= MENU_BUTTONS.JOKER_1 && m_selectedButton <= MENU_BUTTONS.JOKER_5) && CommonButtonVisual.NavigateDown(availableInputs))
-                {
-                    selectButton(MENU_BUTTONS.DROP, availableInputs);
-                    return;
-                }
-
-                int selectedJokerButton = CommonButtonVisual.CommonNavigation(runData, availableInputs, (COMMON_BUTTONS)m_selectedButton);
-                if (selectedJokerButton > -1)
-                    selectButton((MENU_BUTTONS)selectedJokerButton, availableInputs);
+            int selectedJokerButton = CommonButtonVisual.CommonNavigation(runData, availableInputs, (COMMON_BUTTONS)m_selectedButton);
+            if (selectedJokerButton > -1)
+                selectButton((MENU_BUTTONS)selectedJokerButton, availableInputs);
 
 #if UNITY_EDITOR
-                if (Keyboard.current.spaceKey.wasPressedThisFrame)
-                    dropBalls();
+            if (Keyboard.current.spaceKey.wasPressedThisFrame)
+                dropBalls();
 #endif
-            }
 
 
         }
