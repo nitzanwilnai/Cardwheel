@@ -125,6 +125,27 @@ namespace Cardwheel
             Debug.Log("m_availableInputs " + m_availableInputs);
         }
 
+        public int GetAvailableInputs()
+        {
+            return m_availableInputs;
+        }
+
+        public int GetTickAvailableInputs()
+        {
+            int modifiedInputs = m_availableInputs;
+            if (!Logic.IsFlagSet(m_gameData.MenuTutorialFlags, (int)m_runData.MenuState))
+            {
+                m_tutorialVisual.HandleInput(m_availableInputs);
+                modifiedInputs = 0;
+            }
+            return modifiedInputs;
+        }
+
+        public GAMEPAD_TYPE GetGamepadType()
+        {
+            return m_gamepadType;
+        }
+
         override protected void Awake()
         {
             base.Awake();
@@ -271,15 +292,15 @@ namespace Cardwheel
             gamepadCheck();
 
             if (menuState == MENU_STATE.MAIN_MENU)
-                m_mainMenuVisual.Show(m_balance, m_gamepadType, m_availableInputs);
+                m_mainMenuVisual.Show(m_balance);
             else if (menuState == MENU_STATE.ROUND_SELECTION)
-                m_roundSelectionVisual.Show(m_runData, m_balance, m_gamepadType, m_availableInputs);
+                m_roundSelectionVisual.Show(m_runData, m_balance);
             else if (menuState == MENU_STATE.ROUND_COMPLETE)
-                m_roundCompleteVisual.Show(m_runData, m_balance, m_gamepadType, m_availableInputs);
+                m_roundCompleteVisual.Show(m_runData, m_balance);
             else if (menuState == MENU_STATE.GAME_OVER)
                 m_gameOverVisual.Show(m_runData);
             else if (menuState == MENU_STATE.SHOP)
-                m_shopVisual.Show(m_gamepadType, m_availableInputs);
+                m_shopVisual.Show();
             else if (menuState == MENU_STATE.CARD_PACK_BALL)
                 m_cardPackBallVisual.Show(m_runData, m_balance);
             else if (menuState == MENU_STATE.CARD_PACK_SLOT)
@@ -287,21 +308,21 @@ namespace Cardwheel
             else if (menuState == MENU_STATE.CARD_PACK_CHIPS)
                 m_cardPackChipsVisual.Show(m_runData, m_balance);
             else if (menuState == MENU_STATE.IN_GAME)
-                Board.Show(m_gamepadType, m_availableInputs);
+                Board.Show();
             else if (menuState == MENU_STATE.BALL_SCREEN)
                 m_ballScreenVisual.Show(m_availableInputs);
             else if (menuState == MENU_STATE.SETTINGS)
-                m_settingsVisual.Show(m_runData, m_balance, m_settingsData, m_availableInputs);
+                m_settingsVisual.Show(m_runData, m_balance, m_settingsData);
             else if (menuState == MENU_STATE.WIN_SCREEN)
                 m_winScreenVisual.Show(m_runData, m_balance);
             else if (menuState == MENU_STATE.CHIPS_INFO)
-                m_chipsInfoVisual.Show(m_runData, m_availableInputs);
+                m_chipsInfoVisual.Show(m_runData);
             else if (menuState == MENU_STATE.IN_GAME_INFO)
-                m_gameInfoVisual.Show(m_runData, m_balance, m_availableInputs);
+                m_gameInfoVisual.Show(m_runData, m_balance);
             else if (menuState == MENU_STATE.SHOP_INFO)
                 m_shopInfoVisual.Show(m_runData, m_balance);
             else if (menuState == MENU_STATE.WHEEL_SELECTION)
-                m_wheelSelectionVisual.Show(m_gamepadType, m_availableInputs);
+                m_wheelSelectionVisual.Show();
             else if (menuState == MENU_STATE.JOKER_INFO_POPUP)
             {
                 // has to be shown after setMenuState;
@@ -346,17 +367,6 @@ namespace Cardwheel
             }
         }
 
-        public int GetAvailableInputs()
-        {
-            int modifiedInputs = m_availableInputs;
-            if (!Logic.IsFlagSet(m_gameData.MenuTutorialFlags, (int)m_runData.MenuState))
-            {
-                m_tutorialVisual.HandleInput(m_availableInputs);
-                modifiedInputs = 0;
-            }
-            return modifiedInputs;
-        }
-
         // Update is called once per frame
         void Update()
         {
@@ -366,25 +376,17 @@ namespace Cardwheel
             SteamInput.RunFrame();
 #endif
 
-            int modifiedInputs = m_availableInputs;
-            if (!Logic.IsFlagSet(m_gameData.MenuTutorialFlags, (int)m_runData.MenuState))
-            {
-                m_tutorialVisual.HandleInput(m_availableInputs);
-                modifiedInputs = 0;
-            }
-
-
             if (m_runData.MenuState == MENU_STATE.IN_GAME)
             {
-                Board.Tick(dt, modifiedInputs);
+                Board.Tick(dt);
             }
             else if (m_runData.MenuState == MENU_STATE.BALL_SCREEN)
             {
-                m_ballScreenVisual.Tick(dt, m_availableInputs);
+                m_ballScreenVisual.Tick(dt);
             }
             else if (m_runData.MenuState == MENU_STATE.CARD_PACK_BALL)
             {
-                m_cardPackBallVisual.Tick(m_runData, m_balance, Camera, dt, m_availableInputs);
+                m_cardPackBallVisual.Tick(m_runData, m_balance, Camera, dt);
             }
             else if (m_runData.MenuState == MENU_STATE.CARD_PACK_SLOT)
             {
@@ -396,19 +398,19 @@ namespace Cardwheel
             }
             else if (m_runData.MenuState == MENU_STATE.SHOP)
             {
-                m_shopVisual.Tick(dt, modifiedInputs, m_gamepadType);
+                m_shopVisual.Tick(dt);
             }
             else if (m_runData.MenuState == MENU_STATE.ROUND_SELECTION)
             {
-                m_roundSelectionVisual.Tick(m_runData, m_balance, dt, modifiedInputs);
+                m_roundSelectionVisual.Tick(m_runData, m_balance, dt);
             }
             else if (m_runData.MenuState == MENU_STATE.ROUND_COMPLETE)
             {
-                m_roundCompleteVisual.Tick(m_runData, m_balance, dt, modifiedInputs);
+                m_roundCompleteVisual.Tick(m_runData, m_balance, dt);
             }
             else if (m_runData.MenuState == MENU_STATE.IN_GAME_INFO)
             {
-                m_gameInfoVisual.Tick(m_runData, dt, modifiedInputs);
+                m_gameInfoVisual.Tick(m_runData, dt);
             }
             else if (m_runData.MenuState == MENU_STATE.SHOP_INFO)
             {
@@ -416,23 +418,23 @@ namespace Cardwheel
             }
             else if (m_runData.MenuState == MENU_STATE.MAIN_MENU)
             {
-                m_mainMenuVisual.Tick(m_balance, dt, modifiedInputs);
+                m_mainMenuVisual.Tick(m_balance, dt);
             }
             else if (m_runData.MenuState == MENU_STATE.SETTINGS)
             {
-                m_settingsVisual.Tick(m_runData, dt, modifiedInputs);
+                m_settingsVisual.Tick(m_runData, dt);
             }
             else if (m_runData.MenuState == MENU_STATE.CHIPS_INFO)
             {
-                m_chipsInfoVisual.Tick(m_runData, dt, modifiedInputs);
+                m_chipsInfoVisual.Tick(m_runData, dt);
             }
             else if (m_runData.MenuState == MENU_STATE.WHEEL_SELECTION)
             {
-                m_wheelSelectionVisual.Tick(dt, modifiedInputs);
+                m_wheelSelectionVisual.Tick(dt);
             }
             else if (m_runData.MenuState == MENU_STATE.JOKER_INFO_POPUP)
             {
-                m_jokerInfoPopupVisual.Tick(modifiedInputs);
+                m_jokerInfoPopupVisual.Tick();
             }
 
 
@@ -544,12 +546,12 @@ namespace Cardwheel
         {
             SoundManager.Instance.PlaySFXButtonOK();
 
-            m_roundSelectionVisual.Skip(m_runData, m_balance, m_gamepadType, m_availableInputs);
+            m_roundSelectionVisual.Skip(m_runData, m_balance);
         }
 
         public void UseBossReroll()
         {
-            m_roundSelectionVisual.TryUseBossReroll(m_runData, m_balance, m_gamepadType, m_availableInputs);
+            m_roundSelectionVisual.TryUseBossReroll(m_runData, m_balance);
 
             RunDataIO.SaveRun(m_runData, m_balance);
         }
@@ -591,7 +593,7 @@ namespace Cardwheel
 
         public void RerollShop()
         {
-            m_shopVisual.RerollShop(m_gamepadType, m_availableInputs);
+            m_shopVisual.RerollShop();
         }
 
         public void BuyShopJoker(int shopJokerIdx)
@@ -624,7 +626,7 @@ namespace Cardwheel
             SoundManager.Instance.PlaySFXMoney();
 
             if (!m_runData.VoucherPurchased)
-                m_shopVisual.BuyVoucher(m_gamepadType, m_availableInputs);
+                m_shopVisual.BuyVoucher();
 
             RunDataIO.SaveRun(m_runData, m_balance);
         }
@@ -634,7 +636,7 @@ namespace Cardwheel
             SoundManager.Instance.PlaySFXButtonOK();
 
             SetMenuState(MENU_STATE.JOKER_INFO_POPUP);
-            m_jokerInfoPopupVisual.Show(m_runData, m_balance, jokerIdx, m_availableInputs);
+            m_jokerInfoPopupVisual.Show(m_runData, m_balance, jokerIdx);
         }
 
         public void ShowJokerInfoPopupInGame(int jokerIdx)
@@ -642,7 +644,7 @@ namespace Cardwheel
             SoundManager.Instance.PlaySFXButtonOK();
 
             SetMenuState(MENU_STATE.JOKER_INFO_POPUP);
-            m_jokerInfoPopupVisual.ShowInGame(m_runData, m_balance, jokerIdx, m_availableInputs);
+            m_jokerInfoPopupVisual.ShowInGame(m_runData, m_balance, jokerIdx);
         }
 
         public void CloseCardPack()

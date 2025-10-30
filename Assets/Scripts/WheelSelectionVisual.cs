@@ -110,16 +110,16 @@ namespace Cardwheel
             Hide();
         }
 
-        public void Show(GAMEPAD_TYPE gamepadType, int availableInputs)
+        public void Show()
         {
             updateText();
             updateButton();
 
-            CommonButtonVisual.UpdateButtonIcons(m_playButtonData, gamepadType);
-            CommonButtonVisual.UpdateButtonIcons(m_nextButtonData, gamepadType);
-            CommonButtonVisual.UpdateButtonIcons(m_prevButtonData, gamepadType);
+            CommonButtonVisual.UpdateButtonIcons(m_playButtonData, Game.Instance.GetGamepadType());
+            CommonButtonVisual.UpdateButtonIcons(m_nextButtonData, Game.Instance.GetGamepadType());
+            CommonButtonVisual.UpdateButtonIcons(m_prevButtonData, Game.Instance.GetGamepadType());
 
-            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+            if (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
                 m_playButtonData.SelectedGO.SetActive(true);
             else
                 m_playButtonData.SelectedGO.SetActive(false);
@@ -162,7 +162,7 @@ namespace Cardwheel
             m_UI.SetActive(false);
         }
 
-        public void Tick(float dt, int availableInputs)
+        public void Tick(float dt)
         {
             spinWheelAngle += dt * WheelSpeed;
             for (int i = 0; i < m_wheelSelectionSpinWheels.Length; i++)
@@ -195,22 +195,22 @@ namespace Cardwheel
                 m_spinWheelParent.localPosition = pos;
             }
 
-            handleInput(availableInputs);
+            handleInput();
         }
 
-        void handleInput(int availableInputs)
+        void handleInput()
         {
 
-            if (CommonButtonVisual.NavigateLeft(availableInputs))
+            if (CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()))
                 prev();
 
-            if (CommonButtonVisual.NavigateRight(availableInputs))
+            if (CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
                 next();
 
-            if (CommonButtonVisual.NavigateGamepadButton(m_playButtonData, availableInputs))
+            if (CommonButtonVisual.NavigateGamepadButton(m_playButtonData, Game.Instance.GetTickAvailableInputs()))
                 animateClose();
 
-            if (CommonButtonVisual.NavigateEnter(availableInputs))
+            if (CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
                 animateClose();
         }
 

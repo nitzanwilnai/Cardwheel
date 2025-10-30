@@ -274,7 +274,7 @@ namespace Cardwheel
             shopCardGUI.JokerButtonData = guiButtonRef.GetButtonData("Joker");
         }
 
-        public void Show(GAMEPAD_TYPE gamepadType, int availableInputs)
+        public void Show()
         {
             m_UI.SetActive(true);
 
@@ -295,7 +295,7 @@ namespace Cardwheel
 
                     int localI = i;
                     m_jokers[i].JokerButtonData.Button.onClick.RemoveAllListeners();
-                    m_jokers[i].JokerButtonData.Button.onClick.AddListener(() => showJokerBuyPopup(localI, gamepadType));
+                    m_jokers[i].JokerButtonData.Button.onClick.AddListener(() => showJokerBuyPopup(localI));
                     m_jokers[i].JokerButtonData.SelectedGO.SetActive(false);
 
                     m_jokers[i].CostText.text = "◇" + Logic.GetJokerShopCost(runData, balance, jokerType).ToString();
@@ -319,7 +319,7 @@ namespace Cardwheel
 
                     int localI = i;
                     m_cardPacks[i].CardPackButtonData.Button.onClick.RemoveAllListeners();
-                    m_cardPacks[i].CardPackButtonData.Button.onClick.AddListener(() => showCardBuyPopup(localI, gamepadType));
+                    m_cardPacks[i].CardPackButtonData.Button.onClick.AddListener(() => showCardBuyPopup(localI));
                     m_cardPacks[i].CardPackButtonData.SelectedGO.SetActive(false);
 
                     m_cardPacks[i].CostText.text = "◇" + Logic.GetCardPackShopCost(runData, balance, cardPackIdx);
@@ -329,7 +329,7 @@ namespace Cardwheel
             // show voucher
             m_voucher.CardImage.sprite = AssetManager.Instance.LoadVoucherSprite(balance.VoucherBalance.SpriteName[Logic.GetVoucherForRound(runData)]);
             m_voucher.VoucherButtonData.Button.onClick.RemoveAllListeners();
-            m_voucher.VoucherButtonData.Button.onClick.AddListener(() => showVoucherBuyPopup(gamepadType));
+            m_voucher.VoucherButtonData.Button.onClick.AddListener(showVoucherBuyPopup);
             m_voucher.VoucherButtonData.SelectedGO.SetActive(false);
             m_voucher.CostText.text = "◇" + Logic.GetVoucherCost(runData, balance);
             m_voucher.GO.SetActive(!runData.VoucherPurchased);
@@ -357,17 +357,17 @@ namespace Cardwheel
 
             UpdateRerollButton();
 
-            CommonButtonVisual.UpdateButtonIcons(m_topBarGUI.SettingsButtonData, gamepadType);
+            CommonButtonVisual.UpdateButtonIcons(m_topBarGUI.SettingsButtonData, Game.Instance.GetGamepadType());
 
-            selectButton(MENU_BUTTONS.NEXT_ROUND, availableInputs);
+            selectButton(MENU_BUTTONS.NEXT_ROUND);
         }
 
-        void selectButton(MENU_BUTTONS selectedButton, int availableInputs)
+        void selectButton(MENU_BUTTONS selectedButton)
         {
             hideAllButtonSelections();
 
             m_selectedButton = selectedButton;
-            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+            if (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
             {
                 m_nextRoundButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.NEXT_ROUND);
                 m_rerollButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.REROLL);
@@ -405,7 +405,7 @@ namespace Cardwheel
             CommonVisual.HideJokers();
         }
 
-        void showJokerBuyPopup(int shopJokerIdx, GAMEPAD_TYPE gamepadType)
+        void showJokerBuyPopup(int shopJokerIdx)
         {
             SoundManager.Instance.PlaySFXButtonOK();
 
@@ -435,15 +435,15 @@ namespace Cardwheel
 
                 m_jokerBuyPopupGUI.GO.SetActive(true);
 
-                CommonButtonVisual.UpdateButtonIcons(m_jokerBuyPopupGUI.BuyButtonData, gamepadType);
-                CommonButtonVisual.UpdateButtonIcons(m_jokerBuyPopupGUI.CancelButtonData, gamepadType);
+                CommonButtonVisual.UpdateButtonIcons(m_jokerBuyPopupGUI.BuyButtonData, Game.Instance.GetGamepadType());
+                CommonButtonVisual.UpdateButtonIcons(m_jokerBuyPopupGUI.CancelButtonData, Game.Instance.GetGamepadType());
 
-                m_jokerBuyPopupGUI.BuyButtonData.SelectedGO.SetActive(gamepadType != GAMEPAD_TYPE.NONE);
+                m_jokerBuyPopupGUI.BuyButtonData.SelectedGO.SetActive(Game.Instance.GetGamepadType() != GAMEPAD_TYPE.NONE);
                 m_jokerBuyPopupGUI.CancelButtonData.SelectedGO.SetActive(false);
             }
         }
 
-        void showCardBuyPopup(int shopPackIdx, GAMEPAD_TYPE gamepadType)
+        void showCardBuyPopup(int shopPackIdx)
         {
             SoundManager.Instance.PlaySFXButtonOK();
 
@@ -467,14 +467,14 @@ namespace Cardwheel
 
             m_cardPackBuyPopupGUI.GO.SetActive(true);
 
-            CommonButtonVisual.UpdateButtonIcons(m_jokerBuyPopupGUI.BuyButtonData, gamepadType);
-            CommonButtonVisual.UpdateButtonIcons(m_jokerBuyPopupGUI.CancelButtonData, gamepadType);
+            CommonButtonVisual.UpdateButtonIcons(m_jokerBuyPopupGUI.BuyButtonData, Game.Instance.GetGamepadType());
+            CommonButtonVisual.UpdateButtonIcons(m_jokerBuyPopupGUI.CancelButtonData, Game.Instance.GetGamepadType());
 
-            m_cardPackBuyPopupGUI.BuyButtonData.SelectedGO.SetActive(gamepadType != GAMEPAD_TYPE.NONE);
+            m_cardPackBuyPopupGUI.BuyButtonData.SelectedGO.SetActive(Game.Instance.GetGamepadType() != GAMEPAD_TYPE.NONE);
             m_cardPackBuyPopupGUI.CancelButtonData.SelectedGO.SetActive(false);
         }
 
-        void showVoucherBuyPopup(GAMEPAD_TYPE gamepadType)
+        void showVoucherBuyPopup()
         {
             SoundManager.Instance.PlaySFXButtonOK();
 
@@ -491,10 +491,10 @@ namespace Cardwheel
 
             m_voucherBuyPopupGUI.GO.SetActive(true);
 
-            CommonButtonVisual.UpdateButtonIcons(m_jokerBuyPopupGUI.BuyButtonData, gamepadType);
-            CommonButtonVisual.UpdateButtonIcons(m_jokerBuyPopupGUI.CancelButtonData, gamepadType);
+            CommonButtonVisual.UpdateButtonIcons(m_jokerBuyPopupGUI.BuyButtonData, Game.Instance.GetGamepadType());
+            CommonButtonVisual.UpdateButtonIcons(m_jokerBuyPopupGUI.CancelButtonData, Game.Instance.GetGamepadType());
 
-            m_voucherBuyPopupGUI.BuyButtonData.SelectedGO.SetActive(gamepadType != GAMEPAD_TYPE.NONE);
+            m_voucherBuyPopupGUI.BuyButtonData.SelectedGO.SetActive(Game.Instance.GetGamepadType() != GAMEPAD_TYPE.NONE);
             m_voucherBuyPopupGUI.CancelButtonData.SelectedGO.SetActive(false);
         }
 
@@ -526,7 +526,7 @@ namespace Cardwheel
                 GameObject.Destroy(m_descriptionGO);
         }
 
-        public void Tick(float dt, int availableInputs, GAMEPAD_TYPE gamepadType)
+        public void Tick(float dt)
         {
             CommonSlotsVisual.TickSpinWheelUI(runData, balance.UISpinWheelSpeed, dt, m_cardsBallsSpinWheelGUI);
             CommonSlotsVisual.TickSortingPopup(dt, m_cardsBallsSpinWheelGUI);
@@ -538,254 +538,254 @@ namespace Cardwheel
                     HideBuyPopupCommon();
             }
 
-            handleInput(availableInputs, gamepadType);
+            handleInput();
         }
 
-        void handleInput(int availableInputs, GAMEPAD_TYPE gamepadType)
+        void handleInput()
         {
-            if (CommonButtonVisual.CommonHandleInput(m_topBarGUI, m_cardsBallsSpinWheelGUI, availableInputs, (COMMON_BUTTONS)m_selectedButton))
+            if (CommonButtonVisual.CommonHandleInput(m_topBarGUI, m_cardsBallsSpinWheelGUI, Game.Instance.GetTickAvailableInputs(), (COMMON_BUTTONS)m_selectedButton))
                 return;
 
-            int newSelectedButton = CommonButtonVisual.CommonNavigation(runData, availableInputs, (COMMON_BUTTONS)m_selectedButton);
+            int newSelectedButton = CommonButtonVisual.CommonNavigation(runData, Game.Instance.GetTickAvailableInputs(), (COMMON_BUTTONS)m_selectedButton);
             if (newSelectedButton > -1)
             {
-                selectButton((MENU_BUTTONS)newSelectedButton, availableInputs);
+                selectButton((MENU_BUTTONS)newSelectedButton);
                 return;
             }
 
-            if (CommonButtonVisual.NavigateGamepadButton(m_infoButtonData, availableInputs) ||
-            m_selectedButton == MENU_BUTTONS.INFO && CommonButtonVisual.NavigateEnter(availableInputs))
+            if (CommonButtonVisual.NavigateGamepadButton(m_infoButtonData, Game.Instance.GetTickAvailableInputs()) ||
+            m_selectedButton == MENU_BUTTONS.INFO && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
             {
                 showShopInfo();
                 return;
             }
-            if (CommonButtonVisual.NavigateGamepadButton(m_rerollButtonData, availableInputs) ||
-            m_selectedButton == MENU_BUTTONS.REROLL && CommonButtonVisual.NavigateEnter(availableInputs))
+            if (CommonButtonVisual.NavigateGamepadButton(m_rerollButtonData, Game.Instance.GetTickAvailableInputs()) ||
+            m_selectedButton == MENU_BUTTONS.REROLL && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
             {
                 Game.Instance.RerollShop();
                 return;
             }
-            if (CommonButtonVisual.NavigateGamepadButton(m_nextRoundButtonData, availableInputs) ||
-            m_selectedButton == MENU_BUTTONS.NEXT_ROUND && CommonButtonVisual.NavigateEnter(availableInputs))
+            if (CommonButtonVisual.NavigateGamepadButton(m_nextRoundButtonData, Game.Instance.GetTickAvailableInputs()) ||
+            m_selectedButton == MENU_BUTTONS.NEXT_ROUND && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
             {
                 goToRoundSelection();
                 return;
             }
 
-            if (m_selectedButton >= MENU_BUTTONS.SHOP_JOKER_1 && m_selectedButton <= MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateEnter(availableInputs))
+            if (m_selectedButton >= MENU_BUTTONS.SHOP_JOKER_1 && m_selectedButton <= MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
             {
-                showJokerBuyPopup(m_selectedButton - MENU_BUTTONS.SHOP_JOKER_1, gamepadType);
+                showJokerBuyPopup(m_selectedButton - MENU_BUTTONS.SHOP_JOKER_1);
             }
 
             // navigate gamepad / enter jokers/cardpacks/voucher
 
             // navigate up left column
-            if (m_selectedButton == MENU_BUTTONS.INFO && CommonButtonVisual.NavigateUp(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.INFO && CommonButtonVisual.NavigateUp(Game.Instance.GetTickAvailableInputs()))
             {
-                selectButton(MENU_BUTTONS.REROLL, availableInputs);
+                selectButton(MENU_BUTTONS.REROLL);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.REROLL && CommonButtonVisual.NavigateUp(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.REROLL && CommonButtonVisual.NavigateUp(Game.Instance.GetTickAvailableInputs()))
             {
-                selectButton(MENU_BUTTONS.SETTINGS, availableInputs);
+                selectButton(MENU_BUTTONS.SETTINGS);
                 return;
             }
 
             // navigate down left column
-            if (m_selectedButton == MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateDown(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
             {
-                selectButton(MENU_BUTTONS.REROLL, availableInputs);
+                selectButton(MENU_BUTTONS.REROLL);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.REROLL && CommonButtonVisual.NavigateDown(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.REROLL && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
             {
-                selectButton(MENU_BUTTONS.INFO, availableInputs);
-                return;
-            }
-
-            // navigate up right column
-            if (m_selectedButton == MENU_BUTTONS.NEXT_ROUND && CommonButtonVisual.NavigateUp(availableInputs))
-            {
-                selectButton(MENU_BUTTONS.WHEEL, availableInputs);
+                selectButton(MENU_BUTTONS.INFO);
                 return;
             }
 
             // navigate up right column
-            if (m_selectedButton == MENU_BUTTONS.WHEEL && CommonButtonVisual.NavigateDown(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.NEXT_ROUND && CommonButtonVisual.NavigateUp(Game.Instance.GetTickAvailableInputs()))
             {
-                selectButton(MENU_BUTTONS.NEXT_ROUND, availableInputs);
+                selectButton(MENU_BUTTONS.WHEEL);
+                return;
+            }
+
+            // navigate up right column
+            if (m_selectedButton == MENU_BUTTONS.WHEEL && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
+            {
+                selectButton(MENU_BUTTONS.NEXT_ROUND);
                 return;
             }
 
             // navigate left bottom row
-            if (m_selectedButton == MENU_BUTTONS.NEXT_ROUND && CommonButtonVisual.NavigateLeft(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.NEXT_ROUND && CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()))
             {
                 if (runData.ShopCardPackIdxs[1] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_2, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_2);
                 else if (runData.ShopCardPackIdxs[0] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_1, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_1);
                 else if (!runData.VoucherPurchased)
-                    selectButton(MENU_BUTTONS.SHOP_VOUCHER, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_VOUCHER);
                 else
-                    selectButton(MENU_BUTTONS.INFO, availableInputs);
+                    selectButton(MENU_BUTTONS.INFO);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.SHOP_CARDPACK_2 && CommonButtonVisual.NavigateLeft(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.SHOP_CARDPACK_2 && CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()))
             {
                 if (runData.ShopCardPackIdxs[0] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_1, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_1);
                 else if (!runData.VoucherPurchased)
-                    selectButton(MENU_BUTTONS.SHOP_VOUCHER, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_VOUCHER);
                 else
-                    selectButton(MENU_BUTTONS.INFO, availableInputs);
+                    selectButton(MENU_BUTTONS.INFO);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.SHOP_CARDPACK_1 && CommonButtonVisual.NavigateLeft(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.SHOP_CARDPACK_1 && CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()))
             {
                 if (!runData.VoucherPurchased)
-                    selectButton(MENU_BUTTONS.SHOP_VOUCHER, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_VOUCHER);
                 else
-                    selectButton(MENU_BUTTONS.INFO, availableInputs);
+                    selectButton(MENU_BUTTONS.INFO);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.SHOP_VOUCHER && CommonButtonVisual.NavigateLeft(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.SHOP_VOUCHER && CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()))
             {
-                selectButton(MENU_BUTTONS.INFO, availableInputs);
+                selectButton(MENU_BUTTONS.INFO);
                 return;
             }
 
             // navigate right bottom row
-            if ((m_selectedButton == MENU_BUTTONS.INFO || m_selectedButton == MENU_BUTTONS.REROLL) && CommonButtonVisual.NavigateRight(availableInputs))
+            if ((m_selectedButton == MENU_BUTTONS.INFO || m_selectedButton == MENU_BUTTONS.REROLL) && CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
             {
                 if (!runData.VoucherPurchased)
-                    selectButton(MENU_BUTTONS.SHOP_VOUCHER, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_VOUCHER);
                 else if (runData.ShopCardPackIdxs[0] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_1, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_1);
                 else if (runData.ShopCardPackIdxs[1] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_2, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_2);
                 else
-                    selectButton(MENU_BUTTONS.NEXT_ROUND, availableInputs);
+                    selectButton(MENU_BUTTONS.NEXT_ROUND);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.SHOP_VOUCHER && CommonButtonVisual.NavigateRight(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.SHOP_VOUCHER && CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
             {
                 if (runData.ShopCardPackIdxs[0] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_1, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_1);
                 else if (runData.ShopCardPackIdxs[1] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_2, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_2);
                 else
-                    selectButton(MENU_BUTTONS.NEXT_ROUND, availableInputs);
+                    selectButton(MENU_BUTTONS.NEXT_ROUND);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.SHOP_CARDPACK_1 && CommonButtonVisual.NavigateRight(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.SHOP_CARDPACK_1 && CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
             {
                 if (runData.ShopCardPackIdxs[1] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_2, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_2);
                 else
-                    selectButton(MENU_BUTTONS.NEXT_ROUND, availableInputs);
+                    selectButton(MENU_BUTTONS.NEXT_ROUND);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.SHOP_CARDPACK_2 && CommonButtonVisual.NavigateRight(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.SHOP_CARDPACK_2 && CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
             {
-                selectButton(MENU_BUTTONS.NEXT_ROUND, availableInputs);
+                selectButton(MENU_BUTTONS.NEXT_ROUND);
                 return;
             }
 
             // navigate left top row
             if (((m_selectedButton >= MENU_BUTTONS.JOKER_1 && m_selectedButton <= MENU_BUTTONS.JOKER_5) || m_selectedButton == MENU_BUTTONS.BALLS || m_selectedButton == MENU_BUTTONS.WHEEL) &&
-            CommonButtonVisual.NavigateLeft(availableInputs))
+            CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()))
             {
                 if (runData.ShopJokerCount > 2 && runData.ShopJokerIdxs[2] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_JOKER_3, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_3);
                 else if (runData.ShopJokerIdxs[1] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_JOKER_2, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_2);
                 else if (runData.ShopJokerIdxs[0] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_JOKER_1, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_1);
                 else
-                    selectButton(MENU_BUTTONS.SETTINGS, availableInputs);
+                    selectButton(MENU_BUTTONS.SETTINGS);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateLeft(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()))
             {
                 if (runData.ShopJokerIdxs[1] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_JOKER_2, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_2);
                 else if (runData.ShopJokerIdxs[0] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_JOKER_1, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_1);
                 else
-                    selectButton(MENU_BUTTONS.SETTINGS, availableInputs);
+                    selectButton(MENU_BUTTONS.SETTINGS);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_2 && CommonButtonVisual.NavigateLeft(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_2 && CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()))
             {
                 if (runData.ShopJokerIdxs[0] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_JOKER_1, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_1);
                 else
-                    selectButton(MENU_BUTTONS.SETTINGS, availableInputs);
+                    selectButton(MENU_BUTTONS.SETTINGS);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_1 && CommonButtonVisual.NavigateLeft(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_1 && CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()))
             {
-                selectButton(MENU_BUTTONS.SETTINGS, availableInputs);
+                selectButton(MENU_BUTTONS.SETTINGS);
                 return;
             }
 
             // navigate right top row
-            if (m_selectedButton == MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateRight(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
             {
                 if (runData.ShopJokerIdxs[0] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_JOKER_1, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_1);
                 else if (runData.ShopJokerIdxs[1] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_JOKER_2, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_2);
                 else if (runData.ShopJokerCount > 2 && runData.ShopJokerIdxs[2] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_JOKER_3, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_3);
                 else if (runData.JokerCount > 0)
-                    selectButton(MENU_BUTTONS.JOKER_1, availableInputs);
+                    selectButton(MENU_BUTTONS.JOKER_1);
                 else
-                    selectButton(MENU_BUTTONS.BALLS, availableInputs);
+                    selectButton(MENU_BUTTONS.BALLS);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_1 && CommonButtonVisual.NavigateRight(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_1 && CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
             {
                 if (runData.ShopJokerIdxs[1] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_JOKER_2, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_2);
                 else if (runData.ShopJokerCount > 2 && runData.ShopJokerIdxs[2] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_JOKER_3, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_3);
                 else if (runData.JokerCount > 0)
-                    selectButton(MENU_BUTTONS.JOKER_1, availableInputs);
+                    selectButton(MENU_BUTTONS.JOKER_1);
                 else
-                    selectButton(MENU_BUTTONS.BALLS, availableInputs);
+                    selectButton(MENU_BUTTONS.BALLS);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_2 && CommonButtonVisual.NavigateRight(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_2 && CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
             {
                 if (runData.ShopJokerCount > 2 && runData.ShopJokerIdxs[2] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_JOKER_3, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_3);
                 else if (runData.JokerCount > 0)
-                    selectButton(MENU_BUTTONS.JOKER_1, availableInputs);
+                    selectButton(MENU_BUTTONS.JOKER_1);
                 else
-                    selectButton(MENU_BUTTONS.BALLS, availableInputs);
+                    selectButton(MENU_BUTTONS.BALLS);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateRight(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
             {
                 if (runData.JokerCount > 0)
-                    selectButton(MENU_BUTTONS.JOKER_1, availableInputs);
+                    selectButton(MENU_BUTTONS.JOKER_1);
                 else
-                    selectButton(MENU_BUTTONS.BALLS, availableInputs);
+                    selectButton(MENU_BUTTONS.BALLS);
                 return;
             }
 
@@ -805,38 +805,38 @@ namespace Cardwheel
             if (availableJokerCount > 2)
             {
                 // if only 2 jokers, left joker should go to voucher first, then cardpack 1, then card pack 2
-                if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_1 && CommonButtonVisual.NavigateDown(availableInputs))
+                if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_1 && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
                 {
                     if (!runData.VoucherPurchased)
-                        selectButton(MENU_BUTTONS.SHOP_VOUCHER, availableInputs);
+                        selectButton(MENU_BUTTONS.SHOP_VOUCHER);
                     else if (runData.ShopCardPackIdxs[0] > -1)
-                        selectButton(MENU_BUTTONS.SHOP_CARDPACK_1, availableInputs);
+                        selectButton(MENU_BUTTONS.SHOP_CARDPACK_1);
                     else if (runData.ShopCardPackIdxs[1] > -1)
-                        selectButton(MENU_BUTTONS.SHOP_CARDPACK_2, availableInputs);
+                        selectButton(MENU_BUTTONS.SHOP_CARDPACK_2);
                     return;
                 }
 
                 // if more than 2 jokers, center joker should go to cardpack 1, then cardpack 2, then voucher
-                if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_2 && CommonButtonVisual.NavigateDown(availableInputs))
+                if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_2 && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
                 {
                     if (runData.ShopCardPackIdxs[0] > -1)
-                        selectButton(MENU_BUTTONS.SHOP_CARDPACK_1, availableInputs);
+                        selectButton(MENU_BUTTONS.SHOP_CARDPACK_1);
                     else if (runData.ShopCardPackIdxs[1] > -1)
-                        selectButton(MENU_BUTTONS.SHOP_CARDPACK_2, availableInputs);
+                        selectButton(MENU_BUTTONS.SHOP_CARDPACK_2);
                     else if (!runData.VoucherPurchased)
-                        selectButton(MENU_BUTTONS.SHOP_VOUCHER, availableInputs);
+                        selectButton(MENU_BUTTONS.SHOP_VOUCHER);
                     return;
                 }
 
                 // if more than 2 jokers, right joker should go to cardpack 2, then cardpack 1, then voucher
-                if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateDown(availableInputs))
+                if (m_selectedButton == MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
                 {
                     if (runData.ShopCardPackIdxs[1] > -1)
-                        selectButton(MENU_BUTTONS.SHOP_CARDPACK_2, availableInputs);
+                        selectButton(MENU_BUTTONS.SHOP_CARDPACK_2);
                     else if (runData.ShopCardPackIdxs[0] > -1)
-                        selectButton(MENU_BUTTONS.SHOP_CARDPACK_1, availableInputs);
+                        selectButton(MENU_BUTTONS.SHOP_CARDPACK_1);
                     else if (!runData.VoucherPurchased)
-                        selectButton(MENU_BUTTONS.SHOP_VOUCHER, availableInputs);
+                        selectButton(MENU_BUTTONS.SHOP_VOUCHER);
                     return;
                 }
             }
@@ -847,70 +847,70 @@ namespace Cardwheel
                 MENU_BUTTONS rightJoker = runData.ShopJokerIdxs[1] > -1 ? MENU_BUTTONS.SHOP_JOKER_2 : MENU_BUTTONS.SHOP_JOKER_3;
 
                 // if more than 2 jokers, left most joker should go to voucher, then cardpack 1, then card pack 2
-                if (m_selectedButton == leftJoker && CommonButtonVisual.NavigateDown(availableInputs))
+                if (m_selectedButton == leftJoker && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
                 {
                     if (!runData.VoucherPurchased)
-                        selectButton(MENU_BUTTONS.SHOP_VOUCHER, availableInputs);
+                        selectButton(MENU_BUTTONS.SHOP_VOUCHER);
                     else if (runData.ShopCardPackIdxs[0] > -1)
-                        selectButton(MENU_BUTTONS.SHOP_CARDPACK_1, availableInputs);
+                        selectButton(MENU_BUTTONS.SHOP_CARDPACK_1);
                     else if (runData.ShopCardPackIdxs[1] > -1)
-                        selectButton(MENU_BUTTONS.SHOP_CARDPACK_2, availableInputs);
+                        selectButton(MENU_BUTTONS.SHOP_CARDPACK_2);
                     return;
                 }
 
-                if (m_selectedButton == rightJoker && CommonButtonVisual.NavigateDown(availableInputs))
+                if (m_selectedButton == rightJoker && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
                 {
                     if (runData.ShopCardPackIdxs[1] > -1)
-                        selectButton(MENU_BUTTONS.SHOP_CARDPACK_2, availableInputs);
+                        selectButton(MENU_BUTTONS.SHOP_CARDPACK_2);
                     else if (runData.ShopCardPackIdxs[0] > -1)
-                        selectButton(MENU_BUTTONS.SHOP_CARDPACK_1, availableInputs);
+                        selectButton(MENU_BUTTONS.SHOP_CARDPACK_1);
                     else if (!runData.VoucherPurchased)
-                        selectButton(MENU_BUTTONS.SHOP_VOUCHER, availableInputs);
+                        selectButton(MENU_BUTTONS.SHOP_VOUCHER);
                     return;
                 }
             }
 
-            if (availableJokerCount == 1 && m_selectedButton >= MENU_BUTTONS.SHOP_JOKER_1 && m_selectedButton <= MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateDown(availableInputs))
+            if (availableJokerCount == 1 && m_selectedButton >= MENU_BUTTONS.SHOP_JOKER_1 && m_selectedButton <= MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
             {
                 if (runData.ShopCardPackIdxs[0] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_1, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_1);
                 else if (runData.ShopCardPackIdxs[1] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_2, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_CARDPACK_2);
                 else if (!runData.VoucherPurchased)
-                    selectButton(MENU_BUTTONS.SHOP_VOUCHER, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_VOUCHER);
                 return;
 
             }
 
             // navigate up from voucher/cardpacks
-            if (m_selectedButton == MENU_BUTTONS.SHOP_VOUCHER && CommonButtonVisual.NavigateUp(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.SHOP_VOUCHER && CommonButtonVisual.NavigateUp(Game.Instance.GetTickAvailableInputs()))
             {
                 if (runData.ShopJokerIdxs[0] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_JOKER_1, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_1);
                 else if (runData.ShopJokerIdxs[1] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_JOKER_2, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_2);
                 else if (runData.ShopJokerCount == 3 && runData.ShopJokerIdxs[2] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_JOKER_3, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_3);
             }
 
-            if (m_selectedButton == MENU_BUTTONS.SHOP_CARDPACK_1 && CommonButtonVisual.NavigateUp(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.SHOP_CARDPACK_1 && CommonButtonVisual.NavigateUp(Game.Instance.GetTickAvailableInputs()))
             {
                 if (runData.ShopJokerIdxs[1] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_JOKER_2, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_2);
                 else if (runData.ShopJokerIdxs[0] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_JOKER_1, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_1);
                 else if (runData.ShopJokerCount == 3 && runData.ShopJokerIdxs[2] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_JOKER_3, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_3);
             }
 
-            if (m_selectedButton == MENU_BUTTONS.SHOP_CARDPACK_2 && CommonButtonVisual.NavigateUp(availableInputs))
+            if (m_selectedButton == MENU_BUTTONS.SHOP_CARDPACK_2 && CommonButtonVisual.NavigateUp(Game.Instance.GetTickAvailableInputs()))
             {
                 if (runData.ShopJokerCount == 3 && runData.ShopJokerIdxs[2] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_JOKER_3, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_3);
                 else if (runData.ShopJokerIdxs[1] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_JOKER_2, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_2);
                 else if (runData.ShopJokerIdxs[0] > -1)
-                    selectButton(MENU_BUTTONS.SHOP_JOKER_1, availableInputs);
+                    selectButton(MENU_BUTTONS.SHOP_JOKER_1);
             }
 
         }
@@ -947,13 +947,13 @@ namespace Cardwheel
             HideCardpackBuyPopup();
         }
 
-        public void BuyVoucher(GAMEPAD_TYPE gamepadType, int availableInputs)
+        public void BuyVoucher()
         {
             Logic.BuyVoucher(runData, balance);
 
             HideVoucherBuyPopup();
 
-            Show(gamepadType, availableInputs);
+            Show();
         }
 
         public void SortSlots()
@@ -961,12 +961,12 @@ namespace Cardwheel
             CommonSlotsVisual.TrySortSlots(runData, balance, m_cardsBallsSpinWheelGUI);
         }
 
-        public void RerollShop(GAMEPAD_TYPE gamepadType, int avaiableInputs)
+        public void RerollShop()
         {
             SoundManager.Instance.PlaySFXMoney();
 
             if (Logic.TryRerollShop(runData, balance))
-                Show(gamepadType, avaiableInputs);
+                Show();
 
             RunDataIO.SaveRun(runData, balance);
         }

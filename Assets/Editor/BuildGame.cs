@@ -20,7 +20,7 @@ namespace Cardwheel
         {
             setAndroidBuildNumber();
 
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Android, "");
+            PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Android, "");
 
             DateTime theTime = DateTime.Now;
             string dateTime = theTime.ToString("yyyy-MM-dd HH.mm.ss");
@@ -40,12 +40,12 @@ namespace Cardwheel
 
             // PlayerSettings.Android.useCustomKeystore = false;
 
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Android, "RELEASE");
+            PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Android, "RELEASE");
             DateTime theTime = DateTime.Now;
             string dateTime = theTime.ToString("yyyy-MM-dd HH.mm.ss");
             EditorUserBuildSettings.buildAppBundle = false;
             Build(BuildTarget.Android, Application.dataPath + "/../../Build/ReleaseTest " + dateTime + ".apk", BuildOptions.None, "Assets/Scenes/MainGameScene V.unity");
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Android, "");
+            PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Android, "");
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -65,19 +65,19 @@ namespace Cardwheel
 
             //PlayerSettings.Android.minifyRelease = true;
 
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Android, "RELEASE");
+            PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Android, "RELEASE");
             DateTime theTime = DateTime.Now;
             string dateTime = theTime.ToString("yyyy-MM-dd HH.mm.ss");
             EditorUserBuildSettings.buildAppBundle = true;
-            EditorUserBuildSettings.androidCreateSymbols = AndroidCreateSymbols.Public;
+            UnityEditor.Android.UserBuildSettings.DebugSymbols.level = Unity.Android.Types.DebugSymbolLevel.Full;
 
             PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARMv7 | AndroidArchitecture.ARM64;
 
             Build(BuildTarget.Android, Application.dataPath + "/../../Build/Release " + PlayerSettings.productName + " " + dateTime + ".aab", BuildOptions.None, "Assets/Scenes/MainGameScene V.unity");
 
-            EditorUserBuildSettings.androidCreateSymbols = AndroidCreateSymbols.Disabled;
+            UnityEditor.Android.UserBuildSettings.DebugSymbols.level = Unity.Android.Types.DebugSymbolLevel.None;
             EditorUserBuildSettings.buildAppBundle = false;
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Android, "");
+            PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Android, "");
 
             // PlayerSettings.Android.useCustomKeystore = false;
 
@@ -105,11 +105,11 @@ namespace Cardwheel
         {
             setiOSBuildNumber();
 
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.iOS, "");
+            PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.iOS, "");
 
             Build(BuildTarget.iOS, Application.dataPath + "/../../Build/" + PlayerSettings.productName + "_iOSBuild", BuildOptions.AutoRunPlayer, "Assets/Scenes/MainGameScene V.unity");
 
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.iOS, "");
+            PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.iOS, "");
         }
 
         [MenuItem("Cardwheel/Build/iOS Release")]
@@ -117,11 +117,11 @@ namespace Cardwheel
         {
             setiOSBuildNumber();
 
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.iOS, "RELEASE");
+            PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.iOS, "RELEASE");
 
             Build(BuildTarget.iOS, Application.dataPath + "/../../Build/" + PlayerSettings.productName + "_iOSBuild", BuildOptions.AutoRunPlayer, "Assets/Scenes/MainGameScene V.unity");
 
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.iOS, "");
+            PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.iOS, "");
         }
 
         static void setiOSBuildNumber()
