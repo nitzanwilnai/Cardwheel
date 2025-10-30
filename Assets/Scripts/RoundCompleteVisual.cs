@@ -194,6 +194,12 @@ namespace Cardwheel
                 return;
             }
 
+            if (m_selectedButton == MENU_BUTTONS.JOKER_1 && CommonButtonVisual.NavigateLeft(availableInputs))
+            {
+                selectButton(MENU_BUTTONS.CLAIM_REWARD, availableInputs);
+                return;
+            }
+
             if (m_selectedButton == MENU_BUTTONS.BALLS && CommonButtonVisual.NavigateLeft(availableInputs))
             {
                 selectButton(MENU_BUTTONS.CLAIM_REWARD, availableInputs);
