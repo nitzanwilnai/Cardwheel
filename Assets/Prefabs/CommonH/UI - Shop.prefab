@@ -706,11 +706,11 @@ MonoBehaviour:
   GUIRefSliders: []
   GUIRefAnimations:
   - Name: JokerPopup
-    Value: {fileID: 1652751327896987936}
+    Value: {fileID: 950925809537713175}
   - Name: CardpackPopup
-    Value: {fileID: 7063871954047761659}
+    Value: {fileID: 8205778160470137168}
   - Name: VoucherPopup
-    Value: {fileID: 2462175417611058850}
+    Value: {fileID: 5123915294426839522}
 --- !u!111 &3439125185264183786
 Animation:
   m_ObjectHideFlags: 0
@@ -3067,6 +3067,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 516846644538387604}
     m_Modifications:
+    - target: {fileID: 2275164065635701496, guid: cc479ee69cccd45e9acc77d628cd98a7, type: 3}
+      propertyPath: m_fontSize
+      value: 40.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2812712738529918937, guid: cc479ee69cccd45e9acc77d628cd98a7, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3201,9 +3205,9 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4925019916941643648, guid: cc479ee69cccd45e9acc77d628cd98a7, type: 3}
   m_PrefabInstance: {fileID: 5222838294936838798}
   m_PrefabAsset: {fileID: 0}
---- !u!111 &2462175417611058850 stripped
+--- !u!111 &5123915294426839522 stripped
 Animation:
-  m_CorrespondingSourceObject: {fileID: 7660720542116453420, guid: cc479ee69cccd45e9acc77d628cd98a7, type: 3}
+  m_CorrespondingSourceObject: {fileID: 1108151667163192172, guid: cc479ee69cccd45e9acc77d628cd98a7, type: 3}
   m_PrefabInstance: {fileID: 5222838294936838798}
   m_PrefabAsset: {fileID: 0}
 --- !u!224 &8031040276242816343 stripped
@@ -3344,9 +3348,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9e1b47becf6f24c0999ca7eff788c806, type: 3}
---- !u!111 &1652751327896987936 stripped
+--- !u!111 &950925809537713175 stripped
 Animation:
-  m_CorrespondingSourceObject: {fileID: 5113771631076664971, guid: 9e1b47becf6f24c0999ca7eff788c806, type: 3}
+  m_CorrespondingSourceObject: {fileID: 6713276443682311100, guid: 9e1b47becf6f24c0999ca7eff788c806, type: 3}
   m_PrefabInstance: {fileID: 5771368038411636651}
   m_PrefabAsset: {fileID: 0}
 --- !u!224 &4271107687799678725 stripped
@@ -5629,9 +5633,9 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4705237677625642637, guid: 6b19765f406024dd9b5bec547363fe2f, type: 3}
   m_PrefabInstance: {fileID: 6192239989171252716}
   m_PrefabAsset: {fileID: 0}
---- !u!111 &7063871954047761659 stripped
+--- !u!111 &8205778160470137168 stripped
 Animation:
-  m_CorrespondingSourceObject: {fileID: 4028658346647687447, guid: 6b19765f406024dd9b5bec547363fe2f, type: 3}
+  m_CorrespondingSourceObject: {fileID: 2598443620335776956, guid: 6b19765f406024dd9b5bec547363fe2f, type: 3}
   m_PrefabInstance: {fileID: 6192239989171252716}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7416929567846974551
