@@ -591,46 +591,6 @@ namespace Cardwheel
             SetMenuState(MENU_STATE.SHOP);
         }
 
-        public void RerollShop()
-        {
-            m_shopVisual.RerollShop();
-        }
-
-        public void BuyShopJoker(int shopJokerIdx)
-        {
-            SoundManager.Instance.PlaySFXMoney();
-
-            Debug.Log("Game.BuyShopJoker(shopJokerIdx " + shopJokerIdx + ")");
-            m_shopVisual.BuyShopJoker(shopJokerIdx);
-
-            RunDataIO.SaveRun(m_runData, m_balance);
-        }
-
-        public void BuyShopCardPack(int shopCardIdx)
-        {
-            SoundManager.Instance.PlaySFXMoney();
-
-            Debug.Log("Game.BuyShopJoker(shopJokerIdx " + shopCardIdx + ")");
-            m_shopVisual.BuyShopCardPack(shopCardIdx);
-
-            if (m_balance.CardPackType[m_runData.SelectedShopCardPackIdx] == CARD_PACK_TYPE.BALL)
-                SetMenuState(MENU_STATE.CARD_PACK_BALL);
-            if (m_balance.CardPackType[m_runData.SelectedShopCardPackIdx] == CARD_PACK_TYPE.SLOT)
-                SetMenuState(MENU_STATE.CARD_PACK_SLOT);
-            if (m_balance.CardPackType[m_runData.SelectedShopCardPackIdx] == CARD_PACK_TYPE.CHIPS)
-                SetMenuState(MENU_STATE.CARD_PACK_CHIPS);
-        }
-
-        public void BuyVoucher()
-        {
-            SoundManager.Instance.PlaySFXMoney();
-
-            if (!m_runData.VoucherPurchased)
-                m_shopVisual.BuyVoucher();
-
-            RunDataIO.SaveRun(m_runData, m_balance);
-        }
-
         public void ShowJokerInfoPopup(int jokerIdx)
         {
             SoundManager.Instance.PlaySFXButtonOK();

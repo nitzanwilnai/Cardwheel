@@ -232,8 +232,8 @@ public static class Logic
         // runData.SkipType[3] = 13;
         // runData.SkipType[1] = 7;
 
-        AddJoker(runData, balance, 20);
-        // AddJoker(runData, balance, 35);
+        // AddJoker(runData, balance, 75);
+        // AddJoker(runData, balance, 76);
         // AddJoker(runData, balance, 84);
         // AddJoker(runData, balance, 81);
         // AddJoker(runData, balance, 5);
@@ -256,9 +256,11 @@ public static class Logic
         // runData.SlotModType[9] = 0;
         // runData.SlotModType[10] = 0;
 
-        // for (int i = 0; i < balance.BossBalance.NumBosses; i++)
-        //     if (balance.BossBalance.BossEffect[i] == BOSS_EFFECT.JUMBLE_BALLS)
-        //         runData.BossType[0] = i;
+        for (int i = 0; i < balance.BossBalance.NumBosses; i++)
+            if (balance.BossBalance.BossEffect[i] == BOSS_EFFECT.MOST_PLAYED_BASE_CHIPS_TO_FIVE)
+                runData.BossType[0] = i;
+
+        runData.VoucherSlotMostPlayedColor = true;
 
         // runData.Money = 0;
         // runData.VoucherShopDiscount *= 0.75f;
@@ -1180,7 +1182,7 @@ public static class Logic
         int numSlotMods = GetNumModedSlots(runData, balance);
         mult += numSlotMods * balance.JokerBalance.MultiplierAddForEverySlotMod[jokerType];
 
-        mult += runData.SkipCount * balance.JokerBalance.RoundSkippedMultiplierAdd[jokerType];
+        mult += runData.JokerSkipCount[jokerIdx] * balance.JokerBalance.RoundSkippedMultiplierAdd[jokerType];
 
         int numBallsInModedSlots = 0;
         for (int ballIdx = 0; ballIdx < balance.MaxBalls; ballIdx++)
@@ -1243,7 +1245,7 @@ public static class Logic
         mult += balance.JokerBalance.MultMultButBallsDisabled[jokerType];
         mult += balance.JokerBalance.MultiplierMultForCardPackAbandon[jokerType] * runData.CardPackAbandonTotal;
 
-        mult += runData.SkipCount * balance.JokerBalance.RoundSkippedMultiplierMult[jokerType];
+        mult += runData.JokerSkipCount[jokerIdx] * balance.JokerBalance.RoundSkippedMultiplierMult[jokerType];
 
         mult *= runData.UseJoker[jokerIdx];
 
@@ -1864,19 +1866,31 @@ public static class Logic
             else
             {
                 for (int j = 0; j < balance.NumSlots; j++)
-                    if (runData.SlotType[j] != (SLOT_TYPE)balance.CardPackSlotBalance.SlotChangeType[cardType] && runData.SlotModType[j] == -1)
+                {
+                    bool okToChangeSlot = false;
+                    if (balance.CardPackSlotBalance.AffectedSlotType[cardType] < SLOT_TYPE.LAST && runData.SlotType[j] != (SLOT_TYPE)balance.CardPackSlotBalance.SlotChangeType[cardType])
+                        okToChangeSlot = true;
+                    else if (balance.CardPackSlotBalance.AffectedSlotType[cardType] == SLOT_TYPE.NONE && runData.SlotModType[j] == -1)
+                        okToChangeSlot = true;
+
+                    if (okToChangeSlot)
                         avaiableSlots[availableSlotCount++] = j;
+                }
+
             }
-            int randomIdx = CustomRandInt(ref runData.ShopSeed) % availableSlotCount;
-            int randomSlotIdx = avaiableSlots[randomIdx];
-            affectedSlotsIdxs[affectedSlotsCount++] = randomSlotIdx;
+            if (availableSlotCount > 0)
+            {
+                int randomIdx = CustomRandInt(ref runData.ShopSeed) % availableSlotCount;
+                int randomSlotIdx = avaiableSlots[randomIdx];
+                affectedSlotsIdxs[affectedSlotsCount++] = randomSlotIdx;
 
-            Debug.Log("availableSlotCount " + availableSlotCount + " runData.SlotType[" + randomSlotIdx + "] " + runData.SlotType[randomSlotIdx] + " (int) " + (int)runData.SlotType[randomSlotIdx] + " chagnging to " + (SLOT_TYPE)balance.CardPackSlotBalance.SlotChangeType[cardType] + " (int) " + (int)(SLOT_TYPE)balance.CardPackSlotBalance.SlotChangeType[cardType]);
+                Debug.Log("availableSlotCount " + availableSlotCount + " runData.SlotType[" + randomSlotIdx + "] " + runData.SlotType[randomSlotIdx] + " (int) " + (int)runData.SlotType[randomSlotIdx] + " chagnging to " + (SLOT_TYPE)balance.CardPackSlotBalance.SlotChangeType[cardType] + " (int) " + (int)(SLOT_TYPE)balance.CardPackSlotBalance.SlotChangeType[cardType]);
 
-            if (balance.CardPackSlotBalance.SlotChangeType[cardType] == SLOT_CHANGE_TYPE.NONE)
-                runData.SlotModType[randomSlotIdx] = cardType;
-            else
-                runData.SlotTypeInGame[randomSlotIdx] = runData.SlotType[randomSlotIdx] = (SLOT_TYPE)balance.CardPackSlotBalance.SlotChangeType[cardType];
+                if (balance.CardPackSlotBalance.SlotChangeType[cardType] == SLOT_CHANGE_TYPE.NONE)
+                    runData.SlotModType[randomSlotIdx] = cardType;
+                else
+                    runData.SlotTypeInGame[randomSlotIdx] = runData.SlotType[randomSlotIdx] = (SLOT_TYPE)balance.CardPackSlotBalance.SlotChangeType[cardType];
+            }
         }
     }
 
@@ -2009,7 +2023,7 @@ public static class Logic
 
         runData.SkipCount++;
         for (int jokerIdx = 0; jokerIdx < runData.JokerCount; jokerIdx++)
-            runData.JokerSkipCount[jokerIdx] = 0;
+            runData.JokerSkipCount[jokerIdx]++;
 
         runData.Round++;
     }
