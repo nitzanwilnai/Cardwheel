@@ -26,7 +26,7 @@ namespace Cardwheel
         public float MouseDownTime;
         public Vector3 MouseDownPos;
         public Vector3 MouseDiff;
-        public bool MouseMoved;
+        public bool BallMoved;
     }
 
     public class UIBallVisualData
@@ -181,7 +181,15 @@ namespace Cardwheel
         {
             if (allowSelection && selectedButton >= COMMON_BUTTONS.BALL_1 && selectedButton < COMMON_BUTTONS.BALL_6 && CommonButtonVisual.NavigateEnter(availableInputs))
             {
-                Logic.ToggleCardPackBallSelection(runData, uiBallMoveData.BallIdx);
+                uiBallMoveData.BallIdx = selectedButton - COMMON_BUTTONS.BALL_1;
+                if (!uiBallMoveData.BallMoved)
+                {
+                    Logic.ToggleCardPackBallSelection(runData, uiBallMoveData.BallIdx);
+                    for (int ballIdx = 0; ballIdx < uiBallMoveData.BallTargetPosition.Length; ballIdx++)
+                        uiBallMoveData.BallTargetPosition[ballIdx] = getBallStartPosWithSelection(runData, uiBallMoveData, ballIdx, allowSelection);
+                }
+                uiBallMoveData.BallMoved = false;
+                return selectedButton;
             }
 
             if (selectedButton >= COMMON_BUTTONS.BALL_1 && selectedButton < COMMON_BUTTONS.BALL_6 && CommonButtonVisual.NavigateEnterHold(availableInputs) && CommonButtonVisual.NavigateLeft(availableInputs))
@@ -192,9 +200,15 @@ namespace Cardwheel
                 uiBallMoveData.BallCurrentPosition[idx1] = getBallStartPosWithSelection(runData, uiBallMoveData, idx2, allowSelection);
                 uiBallMoveData.BallCurrentPosition[idx2] = getBallStartPosWithSelection(runData, uiBallMoveData, idx1, allowSelection);
 
+                float y1 = uiBallMoveData.BallTargetPosition[idx1].y;
+                float y2 = uiBallMoveData.BallTargetPosition[idx2].y;
+                uiBallMoveData.BallTargetPosition[idx1].y = y2;
+                uiBallMoveData.BallTargetPosition[idx2].y = y1;
+
                 swapBallsImages(runData, uiBallMoveData, uiBallVisualData, idx1, idx2);
 
                 uiBallMoveData.BallIdx = -1;
+                uiBallMoveData.BallMoved = true;
                 return selectedButton + 1;
             }
 
@@ -206,9 +220,15 @@ namespace Cardwheel
                 uiBallMoveData.BallCurrentPosition[idx1] = getBallStartPosWithSelection(runData, uiBallMoveData, idx2, allowSelection);
                 uiBallMoveData.BallCurrentPosition[idx2] = getBallStartPosWithSelection(runData, uiBallMoveData, idx1, allowSelection);
 
+                float y1 = uiBallMoveData.BallTargetPosition[idx1].y;
+                float y2 = uiBallMoveData.BallTargetPosition[idx2].y;
+                uiBallMoveData.BallTargetPosition[idx1].y = y2;
+                uiBallMoveData.BallTargetPosition[idx2].y = y1;
+
                 swapBallsImages(runData, uiBallMoveData, uiBallVisualData, idx1, idx2);
 
                 uiBallMoveData.BallIdx = -1;
+                uiBallMoveData.BallMoved = true;
                 return selectedButton - 1;
             }
 
@@ -265,7 +285,7 @@ namespace Cardwheel
 
                 uiBallMoveData.MouseDownPos = worldPosition;
                 uiBallMoveData.MouseDownTime = Time.realtimeSinceStartup;
-                uiBallMoveData.MouseMoved = false;
+                uiBallMoveData.BallMoved = false;
 
                 float worldDistance = float.MaxValue;
                 int worldIdx = -1;
@@ -289,13 +309,13 @@ namespace Cardwheel
                         uiBallMoveData.BallSelectedGO[uiBallMoveData.BallIdx].SetActive(true);
                 }
 
-                uiBallMoveData.MouseMoved = false;
+                uiBallMoveData.BallMoved = false;
             }
 
             if (mouseMove)
             {
                 if (Vector3.Distance(worldPosition, uiBallMoveData.MouseDownPos) > 0.5f)
-                    uiBallMoveData.MouseMoved = true;
+                    uiBallMoveData.BallMoved = true;
 
                 if (uiBallMoveData.BallIdx > -1)
                     uiBallMoveData.BallTargetPosition[uiBallMoveData.BallIdx] = worldPosition - uiBallMoveData.MouseDiff;
@@ -308,7 +328,7 @@ namespace Cardwheel
                 if (uiBallMoveData.BallIdx > -1)
                 {
                     Debug.Log("mouse down time " + (Time.realtimeSinceStartup - uiBallMoveData.MouseDownTime));
-                    if (allowSelection && !uiBallMoveData.MouseMoved && Time.realtimeSinceStartup - uiBallMoveData.MouseDownTime < 0.5f)
+                    if (allowSelection && !uiBallMoveData.BallMoved && Time.realtimeSinceStartup - uiBallMoveData.MouseDownTime < 0.5f)
                     {
                         Logic.ToggleCardPackBallSelection(runData, uiBallMoveData.BallIdx);
                         for (int ballIdx = 0; ballIdx < uiBallMoveData.BallTargetPosition.Length; ballIdx++)
@@ -320,7 +340,7 @@ namespace Cardwheel
                 }
 
                 uiBallMoveData.BallIdx = -1;
-                uiBallMoveData.MouseMoved = false;
+                uiBallMoveData.BallMoved = false;
             }
         }
 

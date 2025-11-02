@@ -681,15 +681,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -853,15 +855,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -1007,15 +1011,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -1100,8 +1106,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 236609044929904971}
   - {fileID: 7074452051132628588}
+  - {fileID: 236609044929904971}
   m_Father: {fileID: 516846644538387604}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1362,13 +1368,14 @@ Animation:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6561302643157579821}
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Animation: {fileID: 7400000, guid: d6ef44f42d718430492a4a89b0206782, type: 2}
   m_Animations:
   - {fileID: 7400000, guid: d6ef44f42d718430492a4a89b0206782, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
+  m_UpdateMode: 0
   m_CullingType: 0
 --- !u!114 &3692876257416708030
 MonoBehaviour:
@@ -1603,15 +1610,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -1637,6 +1646,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7971131926189679948}
     m_Modifications:
+    - target: {fileID: 3884669526788887577, guid: 350dcc13907514cd0a84f6cace666a9e, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 4233586138491379836, guid: 350dcc13907514cd0a84f6cace666a9e, type: 3}
       propertyPath: m_Name
       value: Card Pack Card 3
@@ -1744,6 +1757,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6212272203052996158}
     m_Modifications:
+    - target: {fileID: 3884669526788887577, guid: 350dcc13907514cd0a84f6cace666a9e, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 4233586138491379836, guid: 350dcc13907514cd0a84f6cace666a9e, type: 3}
       propertyPath: m_Name
       value: Card Pack Card 4
@@ -1851,6 +1868,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6212272203052996158}
     m_Modifications:
+    - target: {fileID: 3884669526788887577, guid: 350dcc13907514cd0a84f6cace666a9e, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 4233586138491379836, guid: 350dcc13907514cd0a84f6cace666a9e, type: 3}
       propertyPath: m_Name
       value: Card Pack Card 3
@@ -1958,6 +1979,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6212272203052996158}
     m_Modifications:
+    - target: {fileID: 3884669526788887577, guid: 350dcc13907514cd0a84f6cace666a9e, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 4233586138491379836, guid: 350dcc13907514cd0a84f6cace666a9e, type: 3}
       propertyPath: m_Name
       value: Card Pack Card 2
@@ -2065,6 +2090,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2206304770929224135}
     m_Modifications:
+    - target: {fileID: 3884669526788887577, guid: 350dcc13907514cd0a84f6cace666a9e, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 4233586138491379836, guid: 350dcc13907514cd0a84f6cace666a9e, type: 3}
       propertyPath: m_Name
       value: Card Pack Card 2
@@ -2176,6 +2205,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7971131926189679948}
     m_Modifications:
+    - target: {fileID: 3884669526788887577, guid: 350dcc13907514cd0a84f6cace666a9e, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 4233586138491379836, guid: 350dcc13907514cd0a84f6cace666a9e, type: 3}
       propertyPath: m_Name
       value: Card Pack Card 1
@@ -2283,6 +2316,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7971131926189679948}
     m_Modifications:
+    - target: {fileID: 3884669526788887577, guid: 350dcc13907514cd0a84f6cace666a9e, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 4233586138491379836, guid: 350dcc13907514cd0a84f6cace666a9e, type: 3}
       propertyPath: m_Name
       value: Card Pack Card 2
@@ -2390,6 +2427,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6212272203052996158}
     m_Modifications:
+    - target: {fileID: 3884669526788887577, guid: 350dcc13907514cd0a84f6cace666a9e, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 4233586138491379836, guid: 350dcc13907514cd0a84f6cace666a9e, type: 3}
       propertyPath: m_Name
       value: Card Pack Card 1
@@ -4592,6 +4633,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 516846644538387604}
     m_Modifications:
+    - target: {fileID: 559505624123941475, guid: b24cb9f4faa7e4bd3a9b93f5f6ad83c7, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 1678143091288246993, guid: b24cb9f4faa7e4bd3a9b93f5f6ad83c7, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -4700,6 +4745,10 @@ PrefabInstance:
       propertyPath: m_fontSize
       value: 46.35
       objectReference: {fileID: 0}
+    - target: {fileID: 6211026159284875877, guid: b24cb9f4faa7e4bd3a9b93f5f6ad83c7, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 7548976632474185913, guid: b24cb9f4faa7e4bd3a9b93f5f6ad83c7, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -4739,6 +4788,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2206304770929224135}
     m_Modifications:
+    - target: {fileID: 3884669526788887577, guid: 350dcc13907514cd0a84f6cace666a9e, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 4233586138491379836, guid: 350dcc13907514cd0a84f6cace666a9e, type: 3}
       propertyPath: m_Name
       value: Card Pack Card 1

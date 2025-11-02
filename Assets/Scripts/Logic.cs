@@ -90,6 +90,7 @@ public static class Logic
 
     public static void AllocateGameData(GameData gameData, Balance balance)
     {
+        gameData.InitialVersion = GameDataIO.VERSION;
         gameData.SpinWheelWinCount = new int[balance.SpinWheelBalance.NumSpinWheels];
     }
 
@@ -890,11 +891,12 @@ public static class Logic
 
     public static void AddJoker(RunData runData, Balance balance, int jokerType)
     {
-        int count = 0;
-        for (int jkrIdx = 0; jkrIdx < runData.AvailableJokerCount; jkrIdx++)
-            if (runData.AvailableJokerTypes[jkrIdx] != jokerType)
-                runData.AvailableJokerTypes[count++] = runData.AvailableJokerTypes[jkrIdx];
-        runData.AvailableJokerCount = count;
+        // why did we have this?
+        // int count = 0;
+        // for (int jkrIdx = 0; jkrIdx < runData.AvailableJokerCount; jkrIdx++)
+        //     if (runData.AvailableJokerTypes[jkrIdx] != jokerType)
+        //         runData.AvailableJokerTypes[count++] = runData.AvailableJokerTypes[jkrIdx];
+        // runData.AvailableJokerCount = count;
 
         int jokerIdx = runData.JokerCount;
 
@@ -1492,7 +1494,8 @@ public static class Logic
             runData.VoucherPurchased = false;
         }
 
-        setRoundSeeds(runData);
+        if (runData.Round < balance.MaxRounds)
+            setRoundSeeds(runData);
 
         // reset slots
         ResetSlots(runData, balance);

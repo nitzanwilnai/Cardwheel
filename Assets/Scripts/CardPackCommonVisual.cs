@@ -7,16 +7,18 @@ using TMPro;
 
 namespace Cardwheel
 {
+    public enum COMMON_CARDPACK_BUTTONS
+    {
+        CARD_PACK_CARD_1 = 50,
+        CARD_PACK_CARD_2 = 51,
+        CARD_PACK_CARD_3 = 52,
+        CARD_PACK_CARD_4 = 53,
+        REROLL = 60,
+        ABANDON = 61,
+    }
+
     public static class CardPackCommonVisual
     {
-        public enum COMMON_BUTTONS
-        {
-            CARDPACK_1 = 50,
-            CARDPACK_2 = 51,
-            CARDPACk_3 = 52,
-            CARDPACK_4 = 53,
-        }
-
         public static void InitCards(GUIRef guiRef, ref CardPackCardGUI[] cardPackCardGUIs, int numCards, int index)
         {
             cardPackCardGUIs = new CardPackCardGUI[numCards];
@@ -120,6 +122,83 @@ namespace Cardwheel
             int cost = Logic.GetCardPackRerollCost(runData, balance);
             rerollButton.image.color = Logic.CanBuy(runData, balance, cost) ? balance.RerollColorEnabled : balance.ButtonColorDisabled;
             rerollCostText.text = "◇" + cost;
+        }
+
+        public static void SelectButton(RunData runData, Balance balance, CardPackCardGUI[][] cardPackCardGUIs, COMMON_CARDPACK_BUTTONS cardPackButton)
+        {
+            int numCards = balance.CardPackMaxCards[runData.SelectedShopCardPackIdx];
+            int index = numCards - 2;
+            for (int i = 0; i < numCards; i++)
+                cardPackCardGUIs[index][i].UseButtonData.SelectedGO.SetActive(cardPackButton == COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1 + i);
+
+        }
+
+        public static bool HandleEnter(GUIButtonData abandonButtonData, GUIButtonData rerollButtonData, COMMON_CARDPACK_BUTTONS cardPackButton)
+        {
+            if (CommonButtonVisual.NavigateGamepadButton(abandonButtonData, Game.Instance.GetTickAvailableInputs()) ||
+            cardPackButton == COMMON_CARDPACK_BUTTONS.ABANDON && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
+            {
+                Game.Instance.CloseCardPack();
+                return true;
+            }
+
+            if (CommonButtonVisual.NavigateGamepadButton(rerollButtonData, Game.Instance.GetTickAvailableInputs()) ||
+            cardPackButton == COMMON_CARDPACK_BUTTONS.REROLL && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
+            {
+                Game.Instance.RerollCardPack();
+                return true;
+            }
+
+            return false;
+        }
+
+        public static COMMON_CARDPACK_BUTTONS HandleNavigation(COMMON_CARDPACK_BUTTONS m_cardPackButton, int maxCards)
+        {
+            // navigation
+            if (m_cardPackButton >= COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1 && m_cardPackButton < COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_4 && CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
+            {
+                return (m_cardPackButton - COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1) < maxCards - 1 ? m_cardPackButton + 1 : m_cardPackButton;
+            }
+
+            if (m_cardPackButton > COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1 && m_cardPackButton <= COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_4 && CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()))
+                return m_cardPackButton - 1;
+
+            if (m_cardPackButton == COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1 && CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()))
+                return COMMON_CARDPACK_BUTTONS.ABANDON;
+
+            if (m_cardPackButton == COMMON_CARDPACK_BUTTONS.ABANDON && CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
+                return COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1;
+
+            if (m_cardPackButton == COMMON_CARDPACK_BUTTONS.ABANDON && CommonButtonVisual.NavigateUp(Game.Instance.GetTickAvailableInputs()))
+                return COMMON_CARDPACK_BUTTONS.REROLL;
+
+            if (m_cardPackButton == COMMON_CARDPACK_BUTTONS.REROLL && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
+                return COMMON_CARDPACK_BUTTONS.ABANDON;
+
+            if (m_cardPackButton == COMMON_CARDPACK_BUTTONS.REROLL && CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
+                return COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1;
+
+            return m_cardPackButton;
+        }
+
+        public static void SelectButton(
+            RunData runData,
+            Balance balance,
+            COMMON_CARDPACK_BUTTONS newSelectedButton,
+            ref COMMON_CARDPACK_BUTTONS m_cardPackButton,
+            CardPackCardGUI[][] m_cardPackCardGUIs,
+            GUIButtonData m_abandonButtonData,
+            GUIButtonData m_rerollButtonData)
+        {
+            m_cardPackButton = newSelectedButton;
+
+            if (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
+            {
+                m_abandonButtonData.SelectedGO.SetActive(m_cardPackButton == COMMON_CARDPACK_BUTTONS.ABANDON);
+                m_rerollButtonData.SelectedGO.SetActive(m_cardPackButton == COMMON_CARDPACK_BUTTONS.REROLL);
+
+                CardPackCommonVisual.SelectButton(runData, balance, m_cardPackCardGUIs, (COMMON_CARDPACK_BUTTONS)m_cardPackButton);
+            }
         }
     }
 }

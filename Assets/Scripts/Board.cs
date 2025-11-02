@@ -195,6 +195,7 @@ namespace Cardwheel
 
             transform.localPosition = gameInfoSO.Position;
             transform.localScale = gameInfoSO.Scale;
+            Physics2D.gravity = new Vector3(0.0f, gameInfoSO.Gravity, 0.0f);
 
             m_numBalls = BallsGO.Length;
             if (m_numBalls != balance.MaxBalls)

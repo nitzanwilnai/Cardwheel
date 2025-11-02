@@ -177,8 +177,8 @@ namespace Cardwheel
             Board.Init(m_runData, m_balance, GameInfoSO, m_settingsData, Camera);
 
             m_gameData = new GameData();
-            if (!GameDataIO.LoadGameData(m_gameData, m_balance))
-                Logic.AllocateGameData(m_gameData, m_balance);
+
+            tryLoadGameData();
 
 #if UNITY_EDITOR
             // m_gameData.MenuTutorialFlags = 0;
@@ -230,6 +230,18 @@ namespace Cardwheel
             SetMenuState(MENU_STATE.MAIN_MENU);
         }
 
+        private void tryLoadGameData()
+        {
+            bool gameDataLoaded = false;
+            int gameDataVersion = GameDataIO.LoadVersionOnly();
+            if (gameDataVersion < 3)
+                gameDataLoaded = GameDataIOV2.LoadGameData(m_gameData, m_balance);
+            else
+                gameDataLoaded = GameDataIO.LoadGameData(m_gameData, m_balance);
+            if (!gameDataLoaded)
+                Logic.AllocateGameData(m_gameData, m_balance);
+        }
+
         public void Start()
         {
             SoundManager.Instance.Init(m_settingsData);
@@ -237,6 +249,7 @@ namespace Cardwheel
 
         public void SetMenuState(MENU_STATE newMenuState)
         {
+            Debug.Log("SetMenuState(" + newMenuState.ToString() + ")");
             m_runData.PrevMenuState = m_runData.MenuState;
             m_runData.MenuState = newMenuState;
 
@@ -386,7 +399,7 @@ namespace Cardwheel
             }
             else if (m_runData.MenuState == MENU_STATE.CARD_PACK_BALL)
             {
-                m_cardPackBallVisual.Tick(m_runData, m_balance, Camera, dt);
+                m_cardPackBallVisual.Tick(dt);
             }
             else if (m_runData.MenuState == MENU_STATE.CARD_PACK_SLOT)
             {
@@ -520,6 +533,8 @@ namespace Cardwheel
             int version = RunDataIO.LoadVersionOnly();
             if (version == 2)
                 RunDataIOV2.LoadRun(m_runData, m_balance);
+            else if (version == 3)
+                RunDataIOV3.LoadRun(m_runData, m_balance);
             else
                 RunDataIO.LoadRun(m_runData);
             showMenuState(m_runData.MenuState);
