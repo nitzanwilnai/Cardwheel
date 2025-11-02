@@ -7,6 +7,7 @@ namespace Cardwheel
 {
     public class GameData
     {
+        public int InitialVersion;
         public int[] SpinWheelWinCount;
         public int MenuTutorialFlags;
     }

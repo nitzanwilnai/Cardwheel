@@ -368,6 +368,8 @@ namespace Cardwheel
             UpdateRerollButton();
 
             CommonButtonVisual.UpdateButtonIcons(m_topBarGUI.SettingsButtonData, Game.Instance.GetGamepadType());
+            CommonButtonVisual.UpdateButtonIcons(m_nextRoundButtonData, Game.Instance.GetGamepadType());
+            CommonButtonVisual.UpdateButtonIcons(m_infoButtonData, Game.Instance.GetGamepadType());
 
             selectButton(SHOP_MENU_BUTTONS.NEXT_ROUND);
         }
@@ -572,17 +574,21 @@ namespace Cardwheel
             {
                 if (m_popupState == POPUP_STATE.JOKER)
                 {
-                    int shopJokerIndex = m_selectedShopButton - SHOP_MENU_BUTTONS.SHOP_JOKER_1;
-                    buyShopJoker(shopJokerIndex);
+                    int shopJokerIdx = m_selectedShopButton - SHOP_MENU_BUTTONS.SHOP_JOKER_1;
+                    int jokerType = runData.ShopJokerIdxs[shopJokerIdx];
+                    if (Logic.RoomForJokerInHand(runData) && Logic.CanBuy(runData, balance, Logic.GetJokerShopCost(runData, balance, jokerType)))
+                        buyShopJoker(shopJokerIdx);
                 }
                 else if (m_popupState == POPUP_STATE.CARDPACK)
                 {
-                    int cardPackIndex = m_selectedShopButton - SHOP_MENU_BUTTONS.SHOP_CARDPACK_1;
-                    buyShopCardPack(cardPackIndex);
+                    int cardPackIdx = m_selectedShopButton - SHOP_MENU_BUTTONS.SHOP_CARDPACK_1;
+                    if (Logic.CanBuy(runData, balance, Logic.GetCardPackShopCost(runData, balance, cardPackIdx)))
+                        buyShopCardPack(cardPackIdx);
                 }
                 else if (m_popupState == POPUP_STATE.VOUCHER)
                 {
-                    buyVoucher();
+                    if (Logic.CanBuy(runData, balance, Logic.GetVoucherCost(runData, balance)))
+                        buyVoucher();
                 }
                 return;
             }
@@ -666,6 +672,7 @@ namespace Cardwheel
             m_selectedShopButton == SHOP_MENU_BUTTONS.REROLL && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
             {
                 rerollShop();
+                selectButton(SHOP_MENU_BUTTONS.REROLL);
                 return;
             }
             if (CommonButtonVisual.NavigateGamepadButton(m_nextRoundButtonData, Game.Instance.GetTickAvailableInputs()) ||

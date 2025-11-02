@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Cardwheel
 {
-    public static class RunDataIOV2
+    public static class RunDataIOV3
     {
         public static void LoadRun(RunData runData, Balance balance)
         {
@@ -44,7 +44,8 @@ namespace Cardwheel
                         runData.RotationSpeed = br.ReadSingle();
                         runData.SpinWheelAngle = br.ReadSingle();
 
-                        for (int i = 0; i < 24; i++)
+                        int numSlots = br.ReadInt32();
+                        for (int i = 0; i < numSlots; i++)
                         {
                             runData.SlotScored[i] = br.ReadInt32();
                             runData.SlotType[i] = (SLOT_TYPE)br.ReadByte();
@@ -52,7 +53,8 @@ namespace Cardwheel
                             runData.SlotModType[i] = br.ReadInt32();
                         }
 
-                        for (int i = 0; i < 6; i++)
+                        int maxBalls = br.ReadInt32();
+                        for (int i = 0; i < maxBalls; i++)
                         {
                             runData.BallTypes[i] = br.ReadInt32();
                             runData.BallTypesInGame[i] = br.ReadInt32();
@@ -82,13 +84,17 @@ namespace Cardwheel
 
                         runData.JokerBallTriggerIdx = br.ReadInt32();
 
-                        for (int i = 0; i < 5; i++)
+                        int maxJokersInHand = br.ReadInt32();
+                        for (int i = 0; i < maxJokersInHand; i++)
                         {
                             runData.JokerTypes[i] = br.ReadInt32();
                             runData.JokerSellValues[i] = br.ReadInt32();
                             runData.JokerChips[i] = br.ReadInt32();
                             runData.JokerMultiplierAdd[i] = br.ReadSingle();
                             runData.UseJoker[i] = br.ReadInt32();
+                            runData.JokerSpins[i] = br.ReadInt32();
+                            runData.JokerRounds[i] = br.ReadInt32();
+                            runData.JokerSkipCount[i] = br.ReadInt32();
                         }
 
                         runData.JokerCount = br.ReadInt32();
@@ -99,6 +105,7 @@ namespace Cardwheel
                         runData.CardPackRerollCount = br.ReadInt32();
                         runData.ShopRerollTotal = br.ReadInt32();
                         runData.CardPackRerollTotal = br.ReadInt32();
+                        runData.CardPackAbandonTotal = br.ReadInt32();
 
                         runData.SelectedShopCardPackIdx = br.ReadInt32();
 
@@ -113,31 +120,43 @@ namespace Cardwheel
                         runData.VoucherSlotMostPlayedColor = br.ReadBoolean();
 
                         runData.AvailableJokerCount = br.ReadInt32();
-                        for (int i = 0; i < 71; i++)
+                        int numSavedJokers = br.ReadInt32();
+                        for (int i = 0; i < numSavedJokers; i++)
                             runData.AvailableJokerTypes[i] = br.ReadInt32();
 
-                        for (int i = 0; i < 3; i++)
+                        int maxShopJokers = br.ReadInt32();
+                        for (int i = 0; i < maxShopJokers; i++)
                             runData.ShopJokerIdxs[i] = br.ReadInt32();
 
-                        for (int i = 0; i < 2; i++)
+                        int maxShopCardPacks = br.ReadInt32();
+                        for (int i = 0; i < maxShopCardPacks; i++)
                             runData.ShopCardPackIdxs[i] = br.ReadInt32();
 
-                        for (int i = 0; i < 4; i++)
+                        int maxShopCardPackCards = br.ReadInt32();
+                        for (int i = 0; i < maxShopCardPackCards; i++)
                             runData.CardPackCardIdxs[i] = br.ReadInt32();
 
-                        for (int i = 0; i < 10; i++)
+                        int numVouchers = br.ReadInt32();
+                        for (int i = 0; i < numVouchers; i++)
                             runData.VoucherIdxs[i] = br.ReadInt32();
 
-                        for (int i = 0; i < 14; i++)
+                        int numSkips = br.ReadInt32();
+                        for (int i = 0; i < numSkips; i++)
                             runData.SkipType[i] = br.ReadInt32();
                         runData.SkipShopUncommonJoker = br.ReadInt32();
                         runData.SkipShopRareJoker = br.ReadInt32();
 
-                        for (int i = 0; i < 37; i++)
+                        int numBosses = br.ReadInt32();
+                        for (int i = 0; i < numBosses; i++)
                             runData.BossType[i] = br.ReadInt32();
                         runData.UseBallsSpecial = br.ReadInt32();
                         runData.UseSlotsSpecial = br.ReadInt32();
                         runData.UseBaseChips = br.ReadInt32();
+
+                        if (version >= 3)
+                        {
+                            runData.SkipCount = br.ReadInt32();
+                        }
 
                         Debug.Log("RunDataIO.LoadRun " + br.ReadInt32());
 

@@ -7,6 +7,8 @@ namespace Cardwheel
 {
     public class CardPackSlotVisual : MonoBehaviour
     {
+        COMMON_CARDPACK_BUTTONS m_cardPackButton;
+
         public AnimationCurve SlotScaleCurve;
 
         GameObject m_UI;
@@ -78,6 +80,8 @@ namespace Cardwheel
                 m_scoringSlots[i].Index = i;
             }
 
+            CommonButtonVisual.AddSelectedBorder(m_rerollButtonData);
+            CommonButtonVisual.AddSelectedBorder(m_abandonButtonData);
 
             m_UI.SetActive(false);
         }
@@ -101,10 +105,21 @@ namespace Cardwheel
 
             m_abandonButtonData.Button.gameObject.SetActive(false);
             m_rerollButtonData.Button.gameObject.SetActive(false);
+            m_abandonButtonData.SelectedGO.SetActive(false);
+            m_rerollButtonData.SelectedGO.SetActive(false);
 
             for (int i = 0; i < m_cardPackCardGUIs.Length; i++)
                 for (int j = 0; j < m_cardPackCardGUIs[i].Length; j++)
                     m_cardPackCardGUIs[i][j].UseButtonImage.color = balance.ButtonColorEnabled;
+
+            CardPackCommonVisual.SelectButton(
+                runData,
+                balance,
+                COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1,
+                ref m_cardPackButton,
+                m_cardPackCardGUIs,
+                m_abandonButtonData,
+                m_rerollButtonData);
         }
 
         public void Hide()
@@ -137,12 +152,55 @@ namespace Cardwheel
                     Game.Instance.SetMenuState(runData.PrevMenuState);
                 }
             }
+
+            handleInput();
+        }
+
+        void handleInput()
+        {
+            COMMON_CARDPACK_BUTTONS currentButton = m_cardPackButton;
+            if (CardPackCommonVisual.HandleEnter(m_abandonButtonData, m_rerollButtonData, currentButton))
+            {
+                if (currentButton == COMMON_CARDPACK_BUTTONS.REROLL)
+                    CardPackCommonVisual.SelectButton(
+                        runData,
+                        balance,
+                        currentButton,
+                        ref m_cardPackButton,
+                        m_cardPackCardGUIs,
+                        m_abandonButtonData,
+                        m_rerollButtonData);
+
+                return;
+            }
+
+            if (m_cardPackButton >= COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1 && m_cardPackButton <= COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_4 && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
+            {
+                // use card
+                useCardPackOnSlots(m_cardPackButton - COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1);
+                return;
+            }
+
+            COMMON_CARDPACK_BUTTONS newCardPackButton = CardPackCommonVisual.HandleNavigation(m_cardPackButton, balance.CardPackMaxCards[runData.SelectedShopCardPackIdx]);
+            if (newCardPackButton != m_cardPackButton)
+            {
+                CardPackCommonVisual.SelectButton(
+                    runData,
+                    balance,
+                    newCardPackButton,
+                    ref m_cardPackButton,
+                    m_cardPackCardGUIs,
+                    m_abandonButtonData,
+                    m_rerollButtonData);
+                return;
+            }
+
         }
 
         void useCardPackOnSlots(int cardIdx)
         {
             SoundManager.Instance.PlaySFXButtonOK();
-            
+
             Logic.UseCardPackSlotCard(runData, balance, cardIdx, CommonSlotsVisual.AffectedSlotsIdxs, ref CommonSlotsVisual.AffectedSlotsCount);
 
             m_abandonButtonData.Button.gameObject.SetActive(false);

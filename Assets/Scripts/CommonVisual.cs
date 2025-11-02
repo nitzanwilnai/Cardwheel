@@ -196,6 +196,8 @@ namespace Cardwheel
                 int numNoJokers = balance.MaxJokersInHand - runData.JokerCount;
                 if (jokerIdx == -1)
                     numNoJokers--; // subtract us if we are added
+                if (numNoJokers < 0)
+                    numNoJokers = 0;
                 int chips = (int)balance.JokerBalance.PerNoJokerMultiplierAdd[jokerType];
                 go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + (numNoJokers * chips) + "x)";
             }

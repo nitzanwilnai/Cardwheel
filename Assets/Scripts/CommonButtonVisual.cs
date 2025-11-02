@@ -45,17 +45,16 @@ namespace Cardwheel
         public static bool NavigateEnter(int availableInputs)
         {
             if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
-                if (Gamepad.current.buttonSouth.wasPressedThisFrame)
+                if (Gamepad.current.buttonSouth.wasReleasedThisFrame)
                     return true;
 
 
             if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
-                if (Keyboard.current.enterKey.wasPressedThisFrame)
+                if (Keyboard.current.enterKey.wasReleasedThisFrame)
                     return true;
 
             return false;
         }
-
 
         public static bool NavigateEnterHold(int availableInputs)
         {

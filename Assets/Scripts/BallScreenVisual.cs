@@ -108,7 +108,7 @@ namespace Cardwheel
         {
             CommonBallVisual.TickMoveBalls(dt, m_uiBallMoveData);
 
-            handleInput(dt);
+            handleInput();
 
             if (m_uiBallMoveData.BallIdx > -1)
                 CommonBallVisual.TickCheckSwapBalls(runData, m_uiBallMoveData, m_uiBallVisualData, false);
@@ -127,7 +127,7 @@ namespace Cardwheel
                 m_uiBallMoveData.BallSelectedGO[i].SetActive(m_selectedButton == MENU_BUTTONS.BALL_1 + i);
         }
 
-        void handleInput(float dt)
+        void handleInput()
         {
             if (Logic.IsBitSet(Game.Instance.GetTickAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetTickAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
             {

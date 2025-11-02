@@ -7,6 +7,8 @@ namespace Cardwheel
 {
     public class CardPackChipsVisual : MonoBehaviour
     {
+        COMMON_CARDPACK_BUTTONS m_cardPackButton;
+
         GameObject m_UI;
 
         TopBarGUI m_topBarGUI;
@@ -75,6 +77,9 @@ namespace Cardwheel
             for (int i = 0; i < m_baseChipsAnimation.Length; i++)
                 m_baseChipsAnimation[i] = chipsGUIRef.GetAnimation("Chips" + (i + 1));
 
+            CommonButtonVisual.AddSelectedBorder(m_rerollButtonData);
+            CommonButtonVisual.AddSelectedBorder(m_abandonButtonData);
+
             m_UI.SetActive(false);
         }
 
@@ -92,10 +97,16 @@ namespace Cardwheel
 
             m_abandonButtonData.Button.gameObject.SetActive(false);
             m_rerollButtonData.Button.gameObject.SetActive(false);
+            m_abandonButtonData.SelectedGO.SetActive(false);
+            m_rerollButtonData.SelectedGO.SetActive(false);
 
             for (int i = 0; i < m_cardPackCardGUIs.Length; i++)
                 for (int j = 0; j < m_cardPackCardGUIs[i].Length; j++)
                     m_cardPackCardGUIs[i][j].UseButtonImage.color = balance.ButtonColorEnabled;
+
+            for (int i = 0; i < m_cardPackCardGUIs.Length; i++)
+                for (int j = 0; j < m_cardPackCardGUIs[i].Length; j++)
+                    m_cardPackCardGUIs[i][j].UseButtonData.SelectedGO.SetActive(false);
 
             for (int i = 0; i < balance.CardPackMaxCards[runData.SelectedShopCardPackIdx]; i++)
             {
@@ -105,6 +116,15 @@ namespace Cardwheel
 
             for (int i = 0; i < m_baseChipsText.Length; i++)
                 m_baseChipsText[i].text = "+" + runData.BaseChips[i].ToString("N0");
+
+            CardPackCommonVisual.SelectButton(
+                runData,
+                balance,
+                COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1,
+                ref m_cardPackButton,
+                m_cardPackCardGUIs,
+                m_abandonButtonData,
+                m_rerollButtonData);
         }
 
         public void Hide()
@@ -133,6 +153,48 @@ namespace Cardwheel
                     Hide();
                     Game.Instance.SetMenuState(runData.PrevMenuState);
                 }
+            }
+
+            handleInput();
+        }
+
+        void handleInput()
+        {
+            COMMON_CARDPACK_BUTTONS currentButton = m_cardPackButton;
+            if (CardPackCommonVisual.HandleEnter(m_abandonButtonData, m_rerollButtonData, currentButton))
+            {
+                if (currentButton == COMMON_CARDPACK_BUTTONS.REROLL)
+                    CardPackCommonVisual.SelectButton(
+                        runData,
+                        balance,
+                        currentButton,
+                        ref m_cardPackButton,
+                        m_cardPackCardGUIs,
+                        m_abandonButtonData,
+                        m_rerollButtonData);
+
+                return;
+            }
+
+            if (m_cardPackButton >= COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1 && m_cardPackButton <= COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_4 && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
+            {
+                // use card
+                useCardPackChips(m_cardPackButton - COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1);
+                return;
+            }
+
+            COMMON_CARDPACK_BUTTONS newCardPackButton = CardPackCommonVisual.HandleNavigation(m_cardPackButton, balance.CardPackMaxCards[runData.SelectedShopCardPackIdx]);
+            if (newCardPackButton != m_cardPackButton)
+            {
+                    CardPackCommonVisual.SelectButton(
+                        runData,
+                        balance,
+                        newCardPackButton,
+                        ref m_cardPackButton,
+                        m_cardPackCardGUIs,
+                        m_abandonButtonData,
+                        m_rerollButtonData);
+                return;
             }
         }
 
