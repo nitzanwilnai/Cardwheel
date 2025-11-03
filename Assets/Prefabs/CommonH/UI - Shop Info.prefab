@@ -3960,7 +3960,7 @@ MonoBehaviour:
   - Key: Close
     Button: {fileID: 2113669976958471862}
     GlyphImage: {fileID: 6825861918158803492}
-    GamepadButton: 0
+    GamepadButton: 4
     SelectedGO: {fileID: 0}
 --- !u!1 &9209377475599924807
 GameObject:

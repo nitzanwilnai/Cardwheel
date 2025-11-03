@@ -129,7 +129,7 @@ namespace Cardwheel
             int numCards = balance.CardPackMaxCards[runData.SelectedShopCardPackIdx];
             int index = numCards - 2;
             for (int i = 0; i < numCards; i++)
-                cardPackCardGUIs[index][i].UseButtonData.SelectedGO.SetActive(cardPackButton == COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1 + i);
+                cardPackCardGUIs[index][i].UseButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && cardPackButton == COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1 + i);
 
         }
 
@@ -192,13 +192,10 @@ namespace Cardwheel
         {
             m_cardPackButton = newSelectedButton;
 
-            if (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
-            {
-                m_abandonButtonData.SelectedGO.SetActive(m_cardPackButton == COMMON_CARDPACK_BUTTONS.ABANDON);
-                m_rerollButtonData.SelectedGO.SetActive(m_cardPackButton == COMMON_CARDPACK_BUTTONS.REROLL);
+                m_abandonButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_cardPackButton == COMMON_CARDPACK_BUTTONS.ABANDON);
+                m_rerollButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_cardPackButton == COMMON_CARDPACK_BUTTONS.REROLL);
 
-                CardPackCommonVisual.SelectButton(runData, balance, m_cardPackCardGUIs, (COMMON_CARDPACK_BUTTONS)m_cardPackButton);
-            }
+                SelectButton(runData, balance, m_cardPackCardGUIs, (COMMON_CARDPACK_BUTTONS)m_cardPackButton);
         }
     }
 }

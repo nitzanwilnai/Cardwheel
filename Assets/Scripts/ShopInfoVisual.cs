@@ -81,7 +81,7 @@ namespace Cardwheel
                 CommonVisual.ShowRoundShopInfo(runData, balance, bigRound, i, m_shopRoundInfoGUI[i].Description);
             }
 
-            m_closeButtonData.SelectedGO.SetActive(Logic.IsBitSet(Game.Instance.GetTickAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetTickAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD));
+            m_closeButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected());
             CommonButtonVisual.UpdateButtonIcons(m_closeButtonData, Game.Instance.GetGamepadType());
         }
 

@@ -32,7 +32,6 @@ public static class CommonSlotsVisual
         }
         if (value >= 1.0f)
             AffectedSlotsCount = 0;
-
     }
 
     public static void TickSpinWheelUI(RunData runData, float rotationSpeed, float dt, CardsBallsSpinWheelGUI m_cardsBallsSpinWheelGUI)

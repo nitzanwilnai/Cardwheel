@@ -95,7 +95,7 @@ namespace Cardwheel
             CommonButtonVisual.AddSelectedBorder(m_newRunButtonData);
             CommonButtonVisual.AddSelectedBorder(m_retryButtonData);
             CommonButtonVisual.AddSelectedBorder(m_closeButtonData);
-            
+
             CommonButtonVisual.UpdateButtonIcons(m_closeButtonData, Game.Instance.GetGamepadType());
 
             selectButton(MENU_BUTTONS.NONE);
@@ -113,27 +113,24 @@ namespace Cardwheel
 
             updateToggles(settingsData);
 
-            if (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
-                selectButton(MENU_BUTTONS.CLOSE);
-            else
-                selectButton(MENU_BUTTONS.NONE);
+            selectButton(MENU_BUTTONS.CLOSE);
         }
 
         void selectButton(MENU_BUTTONS newSelectedButton)
         {
             m_selectedButton = newSelectedButton;
 
-            m_sfxButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.SFX);
-            m_musicButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.MUSIC);
-            m_vibrateButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.VIBRATE);
-            m_speedButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.SPEED);
-            m_skipRound1ButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.SKIP);
+            m_sfxButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.SFX);
+            m_musicButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.MUSIC);
+            m_vibrateButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.VIBRATE);
+            m_speedButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.SPEED);
+            m_skipRound1ButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.SKIP);
 
-            m_mainMenuButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.MAIN_MENU);
-            m_newRunButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.NEW_RUN);
-            m_retryButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.RETRY);
+            m_mainMenuButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.MAIN_MENU);
+            m_newRunButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.NEW_RUN);
+            m_retryButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.RETRY);
 
-            m_closeButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.CLOSE);
+            m_closeButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.CLOSE);
         }
 
         public void Tick(RunData runData, float dt)

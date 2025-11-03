@@ -106,14 +106,8 @@ namespace Cardwheel
 
             CommonVisual.ShowJokerDescriptionCommon(runData, balance, m_descriptionGO, jokerType, m_jokerIndex);
 
-            m_sellButtonData.SelectedGO.SetActive(false);
-            m_closeButtonData.SelectedGO.SetActive(false);
-
-            if (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
-            {
-                m_selectedButton = MENU_BUTTONS.CLOSE;
-                m_closeButtonData.SelectedGO.SetActive(true);
-            }
+            m_selectedButton = MENU_BUTTONS.CLOSE;
+            m_closeButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected());
 
             m_UI.SetActive(true);
         }

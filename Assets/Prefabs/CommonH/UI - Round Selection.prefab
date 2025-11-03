@@ -77,12 +77,12 @@ GameObject:
   - component: {fileID: 3940183850079989761}
   - component: {fileID: 9027310789543669251}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7214378294935962204
 RectTransform:
   m_ObjectHideFlags: 0
@@ -97,10 +97,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 551462371700897927}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1920, y: 1080}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3940183850079989761
 CanvasRenderer:
@@ -123,7 +123,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.0627451}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -402,13 +402,14 @@ Animation:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6415384788887731630}
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Animation: {fileID: 7400000, guid: af1067e213e96460e9f078b8d0b59a3b, type: 2}
   m_Animations:
   - {fileID: 7400000, guid: af1067e213e96460e9f078b8d0b59a3b, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
+  m_UpdateMode: 0
   m_CullingType: 0
 --- !u!114 &7875199088620495074
 MonoBehaviour:
@@ -531,6 +532,14 @@ PrefabInstance:
     - target: {fileID: 4142216150322574446, guid: a9346baaa6aef42c0af10ee9233eefdb, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4434556866835236314, guid: a9346baaa6aef42c0af10ee9233eefdb, type: 3}
+      propertyPath: Buttons.Array.data[0].GamepadButton
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4434556866835236314, guid: a9346baaa6aef42c0af10ee9233eefdb, type: 3}
+      propertyPath: Buttons.Array.data[1].GamepadButton
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4491941042316817831, guid: a9346baaa6aef42c0af10ee9233eefdb, type: 3}
       propertyPath: m_AnchorMax.y
@@ -809,7 +818,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5504900893171724001, guid: a36a456e4cb504d49b472971f9d36d57, type: 3}
       propertyPath: m_fontSize
-      value: 35
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 5604926254883430356, guid: a36a456e4cb504d49b472971f9d36d57, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1014,6 +1023,10 @@ PrefabInstance:
       propertyPath: Buttons.Array.data[0].TEST
       value: Blah 1
       objectReference: {fileID: 0}
+    - target: {fileID: 559505624123941475, guid: b24cb9f4faa7e4bd3a9b93f5f6ad83c7, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 1678143091288246993, guid: b24cb9f4faa7e4bd3a9b93f5f6ad83c7, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1121,6 +1134,10 @@ PrefabInstance:
     - target: {fileID: 6211026159284875877, guid: b24cb9f4faa7e4bd3a9b93f5f6ad83c7, type: 3}
       propertyPath: m_fontSize
       value: 44.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6211026159284875877, guid: b24cb9f4faa7e4bd3a9b93f5f6ad83c7, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 7548976632474185913, guid: b24cb9f4faa7e4bd3a9b93f5f6ad83c7, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1239,7 +1256,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5504900893171724001, guid: a36a456e4cb504d49b472971f9d36d57, type: 3}
       propertyPath: m_fontSize
-      value: 35
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 5604926254883430356, guid: a36a456e4cb504d49b472971f9d36d57, type: 3}
       propertyPath: m_AnchorMax.y

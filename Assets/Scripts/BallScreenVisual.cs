@@ -78,11 +78,7 @@ namespace Cardwheel
             CommonBallVisual.PositionBalls(balance, m_uiBallMoveData);
             CommonBallVisual.ShowBalls(runData.BallTypes, balance, m_uiBallVisualData);
 
-            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
-                CommonBallVisual.HideBallSelected(m_uiBallMoveData);
-
-            m_closeButtonData.SelectedGO.SetActive(Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD));
-            m_selectedButton = MENU_BUTTONS.CLOSE;
+            selectButton(MENU_BUTTONS.CLOSE);
 
             m_descriptionTouch.SetActive(false);
             m_descriptionKeyboard.SetActive(false);
@@ -122,9 +118,10 @@ namespace Cardwheel
         void selectButton(MENU_BUTTONS selectedButton)
         {
             m_selectedButton = selectedButton;
-            m_closeButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.CLOSE);
+
+            m_closeButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.CLOSE);
             for (int i = 0; i < m_uiBallMoveData.BallSelectedGO.Length; i++)
-                m_uiBallMoveData.BallSelectedGO[i].SetActive(m_selectedButton == MENU_BUTTONS.BALL_1 + i);
+                m_uiBallMoveData.BallSelectedGO[i].SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.BALL_1 + i);
         }
 
         void handleInput()
