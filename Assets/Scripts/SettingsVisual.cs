@@ -95,6 +95,8 @@ namespace Cardwheel
             CommonButtonVisual.AddSelectedBorder(m_newRunButtonData);
             CommonButtonVisual.AddSelectedBorder(m_retryButtonData);
             CommonButtonVisual.AddSelectedBorder(m_closeButtonData);
+            
+            CommonButtonVisual.UpdateButtonIcons(m_closeButtonData, Game.Instance.GetGamepadType());
 
             selectButton(MENU_BUTTONS.NONE);
         }

@@ -6,20 +6,44 @@ namespace Cardwheel
 {
     public class WinScreenVisual : MonoBehaviour
     {
+        public enum MENU_BUTTONS
+        {
+            COPY,
+            MAIN_MENU,
+            NEW_GAME,
+            RETRY,
+            WHEEL = 11,
+            BALLS = 12,
+            JOKER_1 = 20,
+            JOKER_2 = 21,
+            JOKER_3 = 22,
+            JOKER_4 = 23,
+            JOKER_5 = 24,
+        };
+        MENU_BUTTONS m_selectedButton;
+
         GameObject m_UI;
 
         TextMeshProUGUI m_bestSpinText;
         TextMeshProUGUI m_wheelPlayedText;
         TextMeshProUGUI m_mostFrequentColorText;
         TextMeshProUGUI m_seedText;
-        // TextMeshProUGUI m_title;
+
+        GUIButtonData m_copyButtonData;
+        GUIButtonData m_mainMenuButtonData;
+        GUIButtonData m_newGameButtonData;
+        GUIButtonData m_retryButtonData;
 
         CardsBallsSpinWheelGUI m_cardsBallsSpinWheelGUI;
 
-        float m_time;
+        RunData runData;
+        Balance balance;
 
         public void Init(RunData runData, Balance balance, Camera camera)
         {
+            this.runData = runData;
+            this.balance = balance;
+
             m_UI = AssetManager.Instance.LoadWinScreenUI();
             m_UI.GetComponent<Canvas>().worldCamera = camera;
             CommonVisual.ChangeCanvasScalerMatching(m_UI);
@@ -30,10 +54,21 @@ namespace Cardwheel
             m_mostFrequentColorText = guiRef.GetTextGUI("MostFrequentColor");
             m_seedText = guiRef.GetTextGUI("Seed");
 
-            guiRef.GetButton("Copy").onClick.AddListener(Game.Instance.CopySeed);
-            guiRef.GetButton("MainMenu").onClick.AddListener(Game.Instance.GoToMainMenu);
-            guiRef.GetButton("NewGame").onClick.AddListener(Game.Instance.StartNewRunSameWheel);
-            guiRef.GetButton("Retry").onClick.AddListener(Game.Instance.RetryRun);
+            GUIButtonRef guiButtonRef = m_UI.GetComponent<GUIButtonRef>();
+            m_copyButtonData = guiButtonRef.GetButtonData("Copy");
+            m_mainMenuButtonData = guiButtonRef.GetButtonData("MainMenu");
+            m_newGameButtonData = guiButtonRef.GetButtonData("NewGame");
+            m_retryButtonData = guiButtonRef.GetButtonData("Retry");
+
+            m_copyButtonData.Button.onClick.AddListener(Game.Instance.CopySeed);
+            m_mainMenuButtonData.Button.onClick.AddListener(Game.Instance.GoToMainMenu);
+            m_newGameButtonData.Button.onClick.AddListener(Game.Instance.StartNewRunSameWheel);
+            m_retryButtonData.Button.onClick.AddListener(Game.Instance.RetryRun);
+
+            CommonButtonVisual.AddSelectedBorder(m_copyButtonData);
+            CommonButtonVisual.AddSelectedBorder(m_mainMenuButtonData);
+            CommonButtonVisual.AddSelectedBorder(m_newGameButtonData);
+            CommonButtonVisual.AddSelectedBorder(m_retryButtonData);
 
             CommonVisual.InitCardsBallsSpinWheelGUI(balance, guiRef.GetGameObject("CardsAndBalls"), ref m_cardsBallsSpinWheelGUI);
 
@@ -51,10 +86,141 @@ namespace Cardwheel
             m_seedText.text = Logic.EncodeSeed(runData.StartSeed);
 
             CommonVisual.ShowJokersBallsAndSpinWheel(runData, balance, m_cardsBallsSpinWheelGUI, runData.SlotType);
+            selectButton(MENU_BUTTONS.MAIN_MENU);
         }
+
+        void selectButton(MENU_BUTTONS newSelectedButton)
+        {
+            m_selectedButton = newSelectedButton;
+
+            m_cardsBallsSpinWheelGUI.BallsButtonData.SelectedGO.SetActive(false);
+            m_cardsBallsSpinWheelGUI.SpinwheelButtonData.SelectedGO.SetActive(false);
+            CommonVisual.UnselectAllJokers();
+
+            m_copyButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.COPY);
+            m_mainMenuButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.MAIN_MENU);
+            m_newGameButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.NEW_GAME);
+            m_retryButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.RETRY);
+
+            if (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
+                CommonButtonVisual.CommonSelectButtonNoTopBar(m_cardsBallsSpinWheelGUI, (COMMON_BUTTONS)m_selectedButton);
+        }
+
         public void Hide()
         {
             m_UI.SetActive(false);
+        }
+
+        public void Tick(float dt)
+        {
+            CommonSlotsVisual.TickSpinWheelUI(runData, balance.UISpinWheelSpeed, dt, m_cardsBallsSpinWheelGUI);
+
+            if (CommonButtonVisual.CommonHandleInputNoTopBar(m_cardsBallsSpinWheelGUI, Game.Instance.GetTickAvailableInputs(), (COMMON_BUTTONS)m_selectedButton))
+                return;
+
+            if (m_selectedButton == MENU_BUTTONS.COPY && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
+            {
+                Game.Instance.CopySeed();
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.MAIN_MENU && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
+            {
+                Game.Instance.GoToMainMenu();
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
+            {
+                Game.Instance.StartNewRunSameWheel();
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.RETRY && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
+            {
+                Game.Instance.RetryRun();
+                return;
+            }
+
+            // navigation
+            int newSelectedButton = CommonButtonVisual.CommonNavigation(runData, Game.Instance.GetTickAvailableInputs(), (COMMON_BUTTONS)m_selectedButton);
+            if (newSelectedButton > -1)
+            {
+                selectButton((MENU_BUTTONS)newSelectedButton);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.MAIN_MENU && CommonButtonVisual.NavigateUp(Game.Instance.GetTickAvailableInputs()))
+            {
+                selectButton(MENU_BUTTONS.NEW_GAME);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateUp(Game.Instance.GetTickAvailableInputs()))
+            {
+                selectButton(MENU_BUTTONS.COPY);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.RETRY && CommonButtonVisual.NavigateUp(Game.Instance.GetTickAvailableInputs()))
+            {
+                selectButton(MENU_BUTTONS.COPY);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.COPY && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
+            {
+                selectButton(MENU_BUTTONS.NEW_GAME);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
+            {
+                selectButton(MENU_BUTTONS.MAIN_MENU);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.RETRY && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
+            {
+                selectButton(MENU_BUTTONS.MAIN_MENU);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
+            {
+                selectButton(MENU_BUTTONS.RETRY);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.RETRY && CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()))
+            {
+                selectButton(MENU_BUTTONS.NEW_GAME);
+                return;
+            }
+
+            if (m_selectedButton < MENU_BUTTONS.RETRY && CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()))
+            {
+                selectButton(MENU_BUTTONS.WHEEL);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.WHEEL && CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
+            {
+                selectButton(MENU_BUTTONS.COPY);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.BALLS && CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
+            {
+                selectButton(MENU_BUTTONS.COPY);
+                return;
+            }
+
+            if (runData.JokerCount == (m_selectedButton - MENU_BUTTONS.JOKER_1 + 1) && CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
+            {
+                selectButton(MENU_BUTTONS.COPY);
+                return;
+            }
         }
     }
 }

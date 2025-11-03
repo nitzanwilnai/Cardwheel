@@ -28,6 +28,8 @@ namespace Cardwheel
 
         ShopRoundInfoGUI[] m_shopRoundInfoGUI;
 
+        GUIButtonData m_closeButtonData;
+
         public void Init(Camera camera)
         {
             m_UI = AssetManager.Instance.LoadShopInfoUI();
@@ -43,11 +45,15 @@ namespace Cardwheel
                 m_shopRoundInfoGUI[i].Cover.SetActive(false);
             }
 
-            guiRef.GetButton("Close").onClick.AddListener(animateClose);
             m_animation = guiRef.GetAnimation("Animation");
 
             m_baseChipsText = new TextMeshProUGUI[(int)SLOT_TYPE.LAST];
             CommonChipsVisual.InitChipsInfo(guiRef, m_baseChipsText);
+
+            GUIButtonRef guiButtonRef = m_UI.GetComponent<GUIButtonRef>();
+            m_closeButtonData = guiButtonRef.GetButtonData("Close");
+            m_closeButtonData.Button.onClick.AddListener(animateClose);
+            CommonButtonVisual.AddSelectedBorder(m_closeButtonData);
 
             m_UI.SetActive(false);
         }
@@ -74,6 +80,9 @@ namespace Cardwheel
 
                 CommonVisual.ShowRoundShopInfo(runData, balance, bigRound, i, m_shopRoundInfoGUI[i].Description);
             }
+
+            m_closeButtonData.SelectedGO.SetActive(Logic.IsBitSet(Game.Instance.GetTickAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetTickAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD));
+            CommonButtonVisual.UpdateButtonIcons(m_closeButtonData, Game.Instance.GetGamepadType());
         }
 
         public void Tick(RunData runData, float dt)
@@ -81,6 +90,8 @@ namespace Cardwheel
             if (CommonVisual.AnimateCloseTick(ref m_closeTimer, dt))
                 Game.Instance.SetMenuState(runData.PrevMenuState);
 
+            if (CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, Game.Instance.GetTickAvailableInputs()))
+                animateClose();
         }
 
         public void Hide()

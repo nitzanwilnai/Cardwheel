@@ -312,7 +312,7 @@ namespace Cardwheel
 
             SpinWheelLights.StartAnimation();
 
-            CommonVisual.UpdateTopBarMoney(runData, m_topBarGUI);
+            CommonVisual.ShowMoney(runData, m_topBarGUI);
 
             CommonButtonVisual.UpdateButtonIcons(m_spinButtonData, Game.Instance.GetGamepadType());
             CommonButtonVisual.UpdateButtonIcons(m_infoButtonData, Game.Instance.GetGamepadType());
