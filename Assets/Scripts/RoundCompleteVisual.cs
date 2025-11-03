@@ -143,7 +143,7 @@ namespace Cardwheel
             }
         }
 
-        public void Tick(RunData runData, Balance balance, float dt)
+        public void Tick(float dt)
         {
             CommonSlotsVisual.TickSpinWheelUI(runData, balance.UISpinWheelSpeed, dt, m_cardsBallsSpinWheelGUI);
 

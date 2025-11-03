@@ -346,14 +346,19 @@ namespace Cardwheel
 
         public static void ShowTopBar(RunData runData, TopBarGUI topBarGUI, string title)
         {
-            topBarGUI.MoneyText.text = "◇" + runData.Money.ToString("N0");
+            ShowMoney(runData, topBarGUI);
             topBarGUI.TitleText.text = title;
         }
 
         public static void UpdateTopBarMoney(RunData runData, TopBarGUI topBarGUI)
         {
-            topBarGUI.MoneyText.text = "◇" + runData.Money.ToString("N0");
+            ShowMoney(runData, topBarGUI);
             topBarGUI.MoneyAnim.Play();
+        }
+
+        public static void ShowMoney(RunData runData, TopBarGUI topBarGUI)
+        {
+            topBarGUI.MoneyText.text = "◇" + runData.Money.ToString("N0");            
         }
 
         public static void InitCardsBallsSpinWheelGUI(Balance balance, GameObject go, ref CardsBallsSpinWheelGUI cardsBallsSpinWheelGUI)

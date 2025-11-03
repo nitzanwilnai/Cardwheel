@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using CommonTools;
 using UnityEngine.InputSystem;
 using TMPro;
+using System.Security.Cryptography;
 
 namespace Cardwheel
 {
@@ -188,6 +189,14 @@ namespace Cardwheel
                 return true;
             }
 
+            if (CommonHandleInputNoTopBar(cardsBallsSpinWheelGUI, availableInputs, selectedButton))
+                return true;
+
+            return false;
+        }
+
+        public static bool CommonHandleInputNoTopBar(CardsBallsSpinWheelGUI cardsBallsSpinWheelGUI, int availableInputs, COMMON_BUTTONS selectedButton)
+        {
             if ((selectedButton == COMMON_BUTTONS.BALLS && NavigateEnter(availableInputs)) || NavigateGamepadButton(cardsBallsSpinWheelGUI.BallsButtonData, availableInputs))
             {
                 Game.Instance.GoToBallScreen();
@@ -208,7 +217,7 @@ namespace Cardwheel
 
             return false;
         }
-
+        
         public static int CommonNavigation(RunData runData, int availableInputs, COMMON_BUTTONS selectedButton)
         {
             if (selectedButton == COMMON_BUTTONS.WHEEL && CommonButtonVisual.NavigateUp(availableInputs))
@@ -234,6 +243,11 @@ namespace Cardwheel
         {
             topBarGUI.SettingsButtonData.SelectedGO.SetActive(m_selectedButton == COMMON_BUTTONS.SETTINGS);
 
+            CommonSelectButtonNoTopBar(cardsBallsSpinWheelGUI, m_selectedButton);
+        }
+
+        public static void CommonSelectButtonNoTopBar(CardsBallsSpinWheelGUI cardsBallsSpinWheelGUI, COMMON_BUTTONS m_selectedButton)
+        {
             cardsBallsSpinWheelGUI.BallsButtonData.SelectedGO.SetActive(m_selectedButton == COMMON_BUTTONS.BALLS);
             cardsBallsSpinWheelGUI.SpinwheelButtonData.SelectedGO.SetActive(m_selectedButton == COMMON_BUTTONS.WHEEL);
 

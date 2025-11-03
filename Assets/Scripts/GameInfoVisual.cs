@@ -55,6 +55,7 @@ namespace Cardwheel
             CommonBallVisual.ShowBalls(runData.BallTypesInGame, balance, m_uiBallVisualData);
 
             m_closeButtonData.SelectedGO.SetActive(Logic.IsBitSet(Game.Instance.GetTickAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetTickAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD));
+            CommonButtonVisual.UpdateButtonIcons(m_closeButtonData, Game.Instance.GetGamepadType());
         }
 
         public void Tick(RunData runData, float dt)

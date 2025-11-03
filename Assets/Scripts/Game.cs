@@ -419,7 +419,7 @@ namespace Cardwheel
             }
             else if (m_runData.MenuState == MENU_STATE.ROUND_COMPLETE)
             {
-                m_roundCompleteVisual.Tick(m_runData, m_balance, dt);
+                m_roundCompleteVisual.Tick(dt);
             }
             else if (m_runData.MenuState == MENU_STATE.IN_GAME_INFO)
             {
@@ -448,6 +448,14 @@ namespace Cardwheel
             else if (m_runData.MenuState == MENU_STATE.JOKER_INFO_POPUP)
             {
                 m_jokerInfoPopupVisual.Tick();
+            }
+            else if (m_runData.MenuState == MENU_STATE.GAME_OVER)
+            {
+                m_gameOverVisual.Tick();
+            }
+            else if (m_runData.MenuState == MENU_STATE.WIN_SCREEN)
+            {
+                m_winScreenVisual.Tick(dt);
             }
 
 
@@ -537,6 +545,9 @@ namespace Cardwheel
                 RunDataIOV3.LoadRun(m_runData, m_balance);
             else
                 RunDataIO.LoadRun(m_runData);
+
+            if (m_runData.MenuState == MENU_STATE.JOKER_INFO_POPUP)
+                m_runData.MenuState = m_runData.PrevMenuState;
             showMenuState(m_runData.MenuState);
         }
 
@@ -654,7 +665,10 @@ namespace Cardwheel
 
         public void CopySeed()
         {
-
+            TextEditor te = new TextEditor();
+            te.text = Logic.EncodeSeed(m_runData.StartSeed);
+            te.SelectAll();
+            te.Copy();
         }
 
         public void GoToSettings()
