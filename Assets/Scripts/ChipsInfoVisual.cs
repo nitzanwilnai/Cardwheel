@@ -45,7 +45,7 @@ namespace Cardwheel
 
             CommonChipsVisual.Show(runData, m_baseChipsText);
 
-            m_closeButtonData.SelectedGO.SetActive(Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD));
+            m_closeButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected());
         }
 
         public void Tick(RunData runData, float dt)

@@ -15,6 +15,42 @@ namespace Cardwheel
     [InitializeOnLoad]
     public class BuildGame
     {
+        [MenuItem("Cardwheel/Build/Mac")]
+        public static void BuildMac()
+        {
+            setAndroidBuildNumber();
+
+            PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Standalone, "");
+
+            DateTime theTime = DateTime.Now;
+            string dateTime = theTime.ToString("yyyy-MM-dd HH.mm.ss");
+
+            EditorUserBuildSettings.buildAppBundle = false;
+
+            Build(BuildTarget.StandaloneOSX, Application.dataPath + "/../../Build/Cardwheel " + dateTime + ".app", BuildOptions.None, "Assets/Scenes/MainGameScene H.unity");
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+
+        [MenuItem("Cardwheel/Build/Steamdeck")]
+        public static void BuildSteamdeck()
+        {
+            setAndroidBuildNumber();
+
+            PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Standalone, "");
+
+            DateTime theTime = DateTime.Now;
+            string dateTime = theTime.ToString("yyyy-MM-dd HH.mm.ss");
+
+            EditorUserBuildSettings.buildAppBundle = false;
+
+            Build(BuildTarget.StandaloneLinux64, Application.dataPath + "/../../Build/Cardwheel.x86_64", BuildOptions.None, "Assets/Scenes/MainGameScene H.unity");
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+
         [MenuItem("Cardwheel/Build/Android")]
         public static void BuildAndroid()
         {

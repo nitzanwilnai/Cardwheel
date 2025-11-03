@@ -816,12 +816,12 @@ MonoBehaviour:
   - Key: Spin
     Button: {fileID: 5204310372845949078}
     GlyphImage: {fileID: 3717667165708672909}
-    GamepadButton: 2
+    GamepadButton: 3
     SelectedGO: {fileID: 0}
   - Key: Info
     Button: {fileID: 7287451778340325781}
     GlyphImage: {fileID: 1791983240144328500}
-    GamepadButton: 0
+    GamepadButton: 1
     SelectedGO: {fileID: 0}
   - Key: Spin2
     Button: {fileID: 1187076402256847149}

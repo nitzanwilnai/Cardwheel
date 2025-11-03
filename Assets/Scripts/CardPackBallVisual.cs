@@ -164,7 +164,7 @@ namespace Cardwheel
             m_cardPackButton = (MENU_BUTTONS)cardPackButon;
 
             for (int i = 0; i < m_uiBallMoveData.BallSelectedGO.Length; i++)
-                m_uiBallMoveData.BallSelectedGO[i].SetActive(m_cardPackButton == MENU_BUTTONS.BALL_1 + i);
+                m_uiBallMoveData.BallSelectedGO[i].SetActive(CommonButtonVisual.ShowSelected() && m_cardPackButton == MENU_BUTTONS.BALL_1 + i);
         }
 
 

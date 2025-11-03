@@ -321,30 +321,18 @@ namespace Cardwheel
             selectButton(MENU_BUTTONS.DROP);
         }
 
-        void hideAllButtonSelections()
-        {
-            m_spinButtonData.SelectedGO.SetActive(false);
-            m_infoButtonData.SelectedGO.SetActive(false);
-            m_topBarGUI.SettingsButtonData.SelectedGO.SetActive(false);
-            CommonVisual.UnselectAllJokers();
-        }
-
         void selectButton(MENU_BUTTONS selectedButton)
         {
-            hideAllButtonSelections();
-
             m_selectedButton = selectedButton;
 
-            if (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
-            {
-                m_spinButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.DROP);
-                m_infoButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.INFO);
+            m_spinButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.DROP);
+            m_infoButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.INFO);
 
-                m_topBarGUI.SettingsButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.SETTINGS);
+            m_topBarGUI.SettingsButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.SETTINGS);
 
-                if (m_selectedButton >= MENU_BUTTONS.JOKER_1 && m_selectedButton <= MENU_BUTTONS.JOKER_5)
-                    CommonVisual.SelectJoker((int)m_selectedButton - (int)MENU_BUTTONS.JOKER_1);
-            }
+            CommonVisual.UnselectAllJokers();
+            if (m_selectedButton >= MENU_BUTTONS.JOKER_1 && m_selectedButton <= MENU_BUTTONS.JOKER_5)
+                CommonVisual.SelectJoker((int)m_selectedButton - (int)MENU_BUTTONS.JOKER_1);
         }
 
         public void showBallsInGame(int useBallSprite, bool debuffed)

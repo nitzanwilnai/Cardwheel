@@ -119,10 +119,7 @@ namespace Cardwheel
             CommonButtonVisual.UpdateButtonIcons(m_nextButtonData, Game.Instance.GetGamepadType());
             CommonButtonVisual.UpdateButtonIcons(m_prevButtonData, Game.Instance.GetGamepadType());
 
-            if (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
-                m_playButtonData.SelectedGO.SetActive(true);
-            else
-                m_playButtonData.SelectedGO.SetActive(false);
+            m_playButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected());
 
             m_UI.SetActive(true);
         }

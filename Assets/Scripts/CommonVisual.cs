@@ -133,7 +133,7 @@ namespace Cardwheel
 
         public static void SelectJoker(int jkrIdx)
         {
-            JokerGUIs[jkrIdx].SelectedGO.SetActive(true);
+            JokerGUIs[jkrIdx].SelectedGO.SetActive(CommonButtonVisual.ShowSelected());
         }
 
         public static void UpdateJokerDebuff(RunData runData)
@@ -358,7 +358,7 @@ namespace Cardwheel
 
         public static void ShowMoney(RunData runData, TopBarGUI topBarGUI)
         {
-            topBarGUI.MoneyText.text = "◇" + runData.Money.ToString("N0");            
+            topBarGUI.MoneyText.text = "◇" + runData.Money.ToString("N0");
         }
 
         public static void InitCardsBallsSpinWheelGUI(Balance balance, GameObject go, ref CardsBallsSpinWheelGUI cardsBallsSpinWheelGUI)
@@ -521,11 +521,22 @@ namespace Cardwheel
 
         public static void ChangeCanvasScalerMatching(GameObject UI)
         {
-            if ((float)Screen.width / (float)Screen.height > 9.0f / 16.0f)
-                UI.GetComponent<CanvasScaler>().matchWidthOrHeight = 1.0f;
-            else
-                UI.GetComponent<CanvasScaler>().matchWidthOrHeight = 0.0f;
+            float ratio = (float)Screen.width / (float)Screen.height;
 
+            if (Screen.width < Screen.height)
+            {
+                if (ratio > 9.0f / 16.0f)
+                    UI.GetComponent<CanvasScaler>().matchWidthOrHeight = 1.0f;
+                else
+                    UI.GetComponent<CanvasScaler>().matchWidthOrHeight = 0.0f;
+            }
+            else
+            {
+                if (ratio < 16.0f / 9.0f)
+                    UI.GetComponent<CanvasScaler>().matchWidthOrHeight = 0.0f;
+                else
+                    UI.GetComponent<CanvasScaler>().matchWidthOrHeight = 1.0f;
+            }
         }
     }
 }

@@ -200,16 +200,14 @@ namespace Cardwheel
             hideAllButtonSelections();
 
             m_selectedButton = selectedButton;
-            if (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
-            {
-                m_roundGUIInfos[smallRound].PlayButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.PLAY);
-                if (smallRound < 2)
-                    m_regularRoundGUIInfo[smallRound].SkipButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.SKIP);
-                else
-                    m_bossRoundGUIInfo.RerollButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.REROLL);
 
-                CommonButtonVisual.CommonSelectButton(m_topBarGUI, m_cardsBallsSpinWheelGUI, (COMMON_BUTTONS)m_selectedButton);
-            }
+            m_roundGUIInfos[smallRound].PlayButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.PLAY);
+            if (smallRound < 2)
+                m_regularRoundGUIInfo[smallRound].SkipButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.SKIP);
+            else
+                m_bossRoundGUIInfo.RerollButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.REROLL);
+
+            CommonButtonVisual.CommonSelectButton(m_topBarGUI, m_cardsBallsSpinWheelGUI, (COMMON_BUTTONS)m_selectedButton);
         }
 
         void hideAllButtonSelections()

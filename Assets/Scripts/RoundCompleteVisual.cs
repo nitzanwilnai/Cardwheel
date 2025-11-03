@@ -135,12 +135,9 @@ namespace Cardwheel
 
             hideAllButtonSelections();
 
-            if (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
-            {
-                m_claimRewardData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.CLAIM_REWARD);
+            m_claimRewardData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.CLAIM_REWARD);
 
-                CommonButtonVisual.CommonSelectButton(m_topBarGUI, m_cardsBallsSpinWheelGUI, (COMMON_BUTTONS)m_selectedButton);
-            }
+            CommonButtonVisual.CommonSelectButton(m_topBarGUI, m_cardsBallsSpinWheelGUI, (COMMON_BUTTONS)m_selectedButton);
         }
 
         public void Tick(float dt)

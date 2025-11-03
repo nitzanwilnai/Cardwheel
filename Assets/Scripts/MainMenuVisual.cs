@@ -125,13 +125,7 @@ namespace Cardwheel
             CommonButtonVisual.UpdateButtonIcons(m_newGameButtonData, Game.Instance.GetGamepadType());
             CommonButtonVisual.UpdateButtonIcons(m_continueButtonData, Game.Instance.GetGamepadType());
 
-            if (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
                 selectButton(MENU_BUTTONS.NEW_GAME);
-            else
-            {
-                m_newGameButtonData.SelectedGO.SetActive(false);
-                m_continueButtonData.SelectedGO.SetActive(false);
-            }
 
             m_UI.SetActive(true);
         }
@@ -139,8 +133,8 @@ namespace Cardwheel
         void selectButton(MENU_BUTTONS selectedButton)
         {
             m_selectedButton = selectedButton;
-            m_newGameButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.NEW_GAME);
-            m_continueButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.CONTINUE);
+            m_newGameButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.NEW_GAME);
+            m_continueButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.CONTINUE);
         }
 
         public void Tick(Balance balance, float dt)

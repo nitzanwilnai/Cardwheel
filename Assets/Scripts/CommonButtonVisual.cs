@@ -68,7 +68,10 @@ namespace Cardwheel
 
             if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
                 if (Keyboard.current.enterKey.isPressed)
+                {
+                    LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
                     return true;
+                }
 
             return false;
         }
@@ -81,7 +84,10 @@ namespace Cardwheel
 
             if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
                 if (Keyboard.current.upArrowKey.wasPressedThisFrame)
+                {
+                    LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
                     return true;
+                }
 
             return false;
         }
@@ -94,7 +100,10 @@ namespace Cardwheel
 
             if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
                 if (Keyboard.current.downArrowKey.wasPressedThisFrame)
+                {
+                    LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
                     return true;
+                }
 
             return false;
         }
@@ -108,7 +117,10 @@ namespace Cardwheel
 
             if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
                 if (Keyboard.current.rightArrowKey.wasPressedThisFrame)
+                {
+                    LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
                     return true;
+                }
 
             return false;
         }
@@ -121,7 +133,10 @@ namespace Cardwheel
 
             if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
                 if (Keyboard.current.leftArrowKey.wasPressedThisFrame)
+                {
+                    LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
                     return true;
+                }
 
             return false;
         }
@@ -243,15 +258,15 @@ namespace Cardwheel
 
         public static void CommonSelectButton(TopBarGUI topBarGUI, CardsBallsSpinWheelGUI cardsBallsSpinWheelGUI, COMMON_BUTTONS m_selectedButton)
         {
-            topBarGUI.SettingsButtonData.SelectedGO.SetActive(m_selectedButton == COMMON_BUTTONS.SETTINGS);
+            topBarGUI.SettingsButtonData.SelectedGO.SetActive(ShowSelected() && m_selectedButton == COMMON_BUTTONS.SETTINGS);
 
             CommonSelectButtonNoTopBar(cardsBallsSpinWheelGUI, m_selectedButton);
         }
 
         public static void CommonSelectButtonNoTopBar(CardsBallsSpinWheelGUI cardsBallsSpinWheelGUI, COMMON_BUTTONS m_selectedButton)
         {
-            cardsBallsSpinWheelGUI.BallsButtonData.SelectedGO.SetActive(m_selectedButton == COMMON_BUTTONS.BALLS);
-            cardsBallsSpinWheelGUI.SpinwheelButtonData.SelectedGO.SetActive(m_selectedButton == COMMON_BUTTONS.WHEEL);
+            cardsBallsSpinWheelGUI.BallsButtonData.SelectedGO.SetActive(ShowSelected() && m_selectedButton == COMMON_BUTTONS.BALLS);
+            cardsBallsSpinWheelGUI.SpinwheelButtonData.SelectedGO.SetActive(ShowSelected() && m_selectedButton == COMMON_BUTTONS.WHEEL);
 
             if (m_selectedButton >= COMMON_BUTTONS.JOKER_1 && m_selectedButton <= COMMON_BUTTONS.JOKER_5)
                 CommonVisual.SelectJoker((int)m_selectedButton - (int)COMMON_BUTTONS.JOKER_1);
@@ -264,6 +279,12 @@ namespace Cardwheel
             cardsBallsSpinWheelGUI.SpinwheelButtonData.SelectedGO.SetActive(false);
             CommonVisual.UnselectAllJokers();
 
+        }
+
+        public static bool ShowSelected()
+        {
+            return Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) ||
+            (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD) && (Time.realtimeSinceStartupAsDouble - LastKeyboardInputTime < 1.0d));
         }
     }
 }
