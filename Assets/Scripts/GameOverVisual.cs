@@ -82,10 +82,13 @@ namespace Cardwheel
         {
             m_selectedButton = newSelectedButton;
 
-            m_copyButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.COPY);
-            m_mainMenuButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.MAIN_MENU);
-            m_newGameButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.NEW_GAME);
-            m_retryButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.RETRY);
+            if (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
+            {
+                m_copyButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.COPY);
+                m_mainMenuButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.MAIN_MENU);
+                m_newGameButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.NEW_GAME);
+                m_retryButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.RETRY);
+            }
         }
 
         public void Hide()

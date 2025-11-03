@@ -1,9 +1,6 @@
 using UnityEngine;
-using UnityEngine.UI;
 using CommonTools;
 using UnityEngine.InputSystem;
-using TMPro;
-using System.Security.Cryptography;
 
 namespace Cardwheel
 {
@@ -28,6 +25,8 @@ namespace Cardwheel
 
     public static class CommonButtonVisual
     {
+        public static double LastKeyboardInputTime = 0.0d;
+
         public static void UpdateButtonIcons(GUIButtonData guiButtonData, GAMEPAD_TYPE gamepadType)
         {
             if (guiButtonData.GlyphImage != null)
@@ -52,7 +51,10 @@ namespace Cardwheel
 
             if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
                 if (Keyboard.current.enterKey.wasReleasedThisFrame)
+                {
+                    LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
                     return true;
+                }
 
             return false;
         }
@@ -217,7 +219,7 @@ namespace Cardwheel
 
             return false;
         }
-        
+
         public static int CommonNavigation(RunData runData, int availableInputs, COMMON_BUTTONS selectedButton)
         {
             if (selectedButton == COMMON_BUTTONS.WHEEL && CommonButtonVisual.NavigateUp(availableInputs))
