@@ -891,12 +891,12 @@ public static class Logic
 
     public static void AddJoker(RunData runData, Balance balance, int jokerType)
     {
-        // why did we have this?
-        // int count = 0;
-        // for (int jkrIdx = 0; jkrIdx < runData.AvailableJokerCount; jkrIdx++)
-        //     if (runData.AvailableJokerTypes[jkrIdx] != jokerType)
-        //         runData.AvailableJokerTypes[count++] = runData.AvailableJokerTypes[jkrIdx];
-        // runData.AvailableJokerCount = count;
+        // remove this joker from the available joker types so we don't show it in the shop again
+        int count = 0;
+        for (int jkrIdx = 0; jkrIdx < runData.AvailableJokerCount; jkrIdx++)
+            if (runData.AvailableJokerTypes[jkrIdx] != jokerType)
+                runData.AvailableJokerTypes[count++] = runData.AvailableJokerTypes[jkrIdx];
+        runData.AvailableJokerCount = count;
 
         int jokerIdx = runData.JokerCount;
 

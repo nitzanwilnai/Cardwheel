@@ -141,7 +141,7 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: 1.0.4
+  bundleVersion: 1.0.6
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -170,10 +170,10 @@ PlayerSettings:
   buildNumber:
     Standalone: 0
     VisionOS: 0
-    iPhone: 190
+    iPhone: 198
     tvOS: 0
   overrideDefaultApplicationIdentifier: 0
-  AndroidBundleVersionCode: 48
+  AndroidBundleVersionCode: 50
   AndroidMinSdkVersion: 23
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
@@ -818,7 +818,7 @@ PlayerSettings:
   webGLCloseOnQuit: 0
   webWasm2023: 0
   scriptingDefineSymbols:
-    Android: MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
+    Android: 
     Standalone: MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED;STEAMWORKS_NET
     iPhone: 
   additionalCompilerArguments: {}
