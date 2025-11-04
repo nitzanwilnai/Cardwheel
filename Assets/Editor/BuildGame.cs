@@ -3,8 +3,8 @@ using System.IO;
 using UnityEngine;
 using System;
 using UnityEditor.Callbacks;
-using UnityEditor.Build.Reporting;
-using System.Collections.Generic;
+using System.Diagnostics;
+
 #if UNITY_EDITOR_OSX
 using UnityEditor.iOS.Xcode;
 #endif
@@ -45,7 +45,7 @@ namespace Cardwheel
 
             EditorUserBuildSettings.buildAppBundle = false;
 
-            Build(BuildTarget.StandaloneLinux64, Application.dataPath + "/../../Build/Cardwheel.x86_64", BuildOptions.None, "Assets/Scenes/MainGameScene H.unity");
+            Build(BuildTarget.StandaloneLinux64, Application.dataPath + "/../../Build/Cardwheel/Cardwheel.x86_64", BuildOptions.None, "Assets/Scenes/MainGameScene H.unity");
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -124,7 +124,7 @@ namespace Cardwheel
         static void setAndroidBuildNumber()
         {
             string buildNumText = File.ReadAllText("Assets/Resources/AndroidBuildNum.txt");
-            Debug.LogFormat("Build num " + buildNumText);
+            UnityEngine.Debug.LogFormat("Build num " + buildNumText);
             int buildNum;
             if (int.TryParse(buildNumText, out buildNum))
             {
@@ -163,7 +163,7 @@ namespace Cardwheel
         static void setiOSBuildNumber()
         {
             string buildNumText = File.ReadAllText("Assets/Resources/iOSBuildNum.txt");
-            Debug.LogFormat("Build num " + buildNumText);
+            UnityEngine.Debug.LogFormat("Build num " + buildNumText);
             int buildNum;
             if (int.TryParse(buildNumText, out buildNum))
             {
@@ -188,13 +188,13 @@ namespace Cardwheel
             AssetDatabase.Refresh();
 
             string text = File.ReadAllText("Assets/Resources/Version.txt");
-            Debug.LogFormat("version saved as " + text);
+            UnityEngine.Debug.LogFormat("version saved as " + text);
 
-            Debug.LogFormat("Build {0} to {1}", buildTarget, path);
+            UnityEngine.Debug.LogFormat("Build {0} to {1}", buildTarget, path);
 
             CreateAssetBundles.BuildAllAssetBundles(buildTarget);
 
-            Debug.LogFormat("BuildAllAssetBundles elapsed time {0}", Time.realtimeSinceStartup - time);
+            UnityEngine.Debug.LogFormat("BuildAllAssetBundles elapsed time {0}", Time.realtimeSinceStartup - time);
 
             // Get filename.
             string[] levels = new string[] { scene };
@@ -202,7 +202,7 @@ namespace Cardwheel
             // Build player.
             BuildPipeline.BuildPlayer(levels, path, buildTarget, options);
 
-            Debug.LogFormat("Build elapsed time {0}", Time.realtimeSinceStartup - time);
+            UnityEngine.Debug.LogFormat("Build elapsed time {0}", Time.realtimeSinceStartup - time);
         }
 
         [PostProcessBuild(999)]
@@ -232,6 +232,10 @@ namespace Cardwheel
                 //     }
 
             }
+            else if (buildTarget == BuildTarget.StandaloneLinux64)
+            {
+                    OnPostprocessLinux(buildTarget, path);
+            }
         }
 
         private static void modifyXcodeFrameworks(string path)
@@ -250,8 +254,8 @@ namespace Cardwheel
                 project.SetBuildProperty(targetGuid, "ENABLE_BITCODE", "NO");
                 project.SetTeamId(targetGuid, "CLKC34YN6T");
 
-                Debug.Log("project.GetUnityMainTargetGuid()" + project.GetUnityMainTargetGuid());
-                Debug.Log("project.GetUnityFrameworkTargetGuid() " + project.GetUnityFrameworkTargetGuid());
+                UnityEngine.Debug.Log("project.GetUnityMainTargetGuid()" + project.GetUnityMainTargetGuid());
+                UnityEngine.Debug.Log("project.GetUnityFrameworkTargetGuid() " + project.GetUnityFrameworkTargetGuid());
             }
 
             project.SetBuildProperty(mainTargetGuid, "ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES", "YES");
@@ -281,7 +285,7 @@ namespace Cardwheel
 #if UNITY_EDITOR_OSX
             var destPodfilePath = pathToBuiltProject + "/Podfile";
 
-            Debug.Log(String.Format("Append text to {0}", destPodfilePath));
+            UnityEngine.Debug.Log(String.Format("Append text to {0}", destPodfilePath));
             using (StreamWriter sw = File.AppendText(destPodfilePath))
             {
                 sw.WriteLine("");
@@ -297,5 +301,81 @@ namespace Cardwheel
             }
 #endif
         }
+
+
+        //////// LINUX STEAMDECK ///////
+        public static void OnPostprocessLinux(BuildTarget target, string buildPath)
+        {
+            // buildPath is either the .x86_64 file (if you built "single file")
+            // or the folder containing <Name>.x86_64 and <Name>_Data/.
+            string exePath = buildPath;
+            string dir = buildPath;
+
+            if (Directory.Exists(buildPath))
+            {
+                // Find the .x86_64 in the folder
+                var candidates = Directory.GetFiles(buildPath, "*.x86_64", SearchOption.TopDirectoryOnly);
+                if (candidates.Length == 0)
+                {
+                    UnityEngine.Debug.LogWarning($"PostBuild: No .x86_64 found in {buildPath}");
+                    return;
+                }
+                exePath = candidates[0];
+                dir = buildPath;
+            }
+
+            // Mark the main binary executable
+            RunChmod($@"""{exePath}""");
+
+            // (Optional) Mark native plugins executable
+            // Useful if you bundle shared libs that need the exec bit.
+            var dataDir = Path.Combine(dir, Path.GetFileNameWithoutExtension(exePath) + "_Data");
+            var pluginsDir = Path.Combine(dataDir, "Plugins");
+            if (Directory.Exists(pluginsDir))
+            {
+                RunFindChmod(pluginsDir, "*.so");
+            }
+
+            UnityEngine.Debug.Log($"PostBuild chmod done:\n  exe: {exePath}\n  plugins: {pluginsDir}");
+        }
+
+        static void RunChmod(string path)
+        {
+            // Works on macOS/Linux editor machines
+            var psi = new ProcessStartInfo
+            {
+                FileName = "/bin/chmod",
+                Arguments = $@"+x {path}",
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true
+            };
+            using var p = Process.Start(psi);
+            p.WaitForExit();
+            if (p.ExitCode != 0)
+                UnityEngine.Debug.LogError($"chmod failed: {p.StandardError.ReadToEnd()}");
+        }
+
+        static void RunFindChmod(string root, string pattern)
+        {
+            // Use /bin/bash -lc so we can run a simple find -exec
+            var cmd = $"find {Escape(root)} -type f -name '{pattern}' -exec chmod +x {{}} \\;";
+            var psi = new ProcessStartInfo
+            {
+                FileName = "/bin/bash",
+                Arguments = $"-lc \"{cmd}\"",
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true
+            };
+            using var p = Process.Start(psi);
+            p.WaitForExit();
+            if (p.ExitCode != 0)
+                UnityEngine.Debug.LogError($"find+chmod failed: {p.StandardError.ReadToEnd()}");
+        }
+
+        static string Escape(string path) => path.Replace("\"", "\\\"");
     }
 }

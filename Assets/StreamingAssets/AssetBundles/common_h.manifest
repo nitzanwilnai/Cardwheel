@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.0.58f2
-CRC: 2055247661
+CRC: 3395834970
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 2ca429338f44a4fc6428e82be48be226
+    Hash: 373c29dc98cda0c080b98a123f40e22c
   TypeTreeHash:
     serializedVersion: 2
     Hash: c142684008850ddf3636ce192491e446
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: fcfb99a91dc54a7b2d4a3ebffc87db66
+    Hash: 8e34ab30b30bee15d958555de15990b4
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -169,6 +169,5 @@ Assets:
 - Assets/Prefabs/CommonH/UI - Card Pack Chips.prefab
 - Assets/Prefabs/CommonH/UI - Settings.prefab
 - Assets/Prefabs/CommonH/UI - Game Over.prefab
-- Assets/Prefabs/CommonH/UI - Upgrade Chips.prefab
 Dependencies:
 - /Users/nitzanwilnai/Programming/UnityRelease/Cardwheel/Assets/StreamingAssets/AssetBundles/common

@@ -744,7 +744,7 @@ MonoBehaviour:
   - Key: NextRound
     Button: {fileID: 2911337553761052250}
     GlyphImage: {fileID: 7147414840373688557}
-    GamepadButton: 0
+    GamepadButton: 3
     SelectedGO: {fileID: 0}
   - Key: Reroll
     Button: {fileID: 9089519277847765892}
@@ -754,7 +754,7 @@ MonoBehaviour:
   - Key: Info
     Button: {fileID: 5123099298760799695}
     GlyphImage: {fileID: 5447150648402772475}
-    GamepadButton: 0
+    GamepadButton: 1
     SelectedGO: {fileID: 0}
 --- !u!1 &1841075141364441816
 GameObject:

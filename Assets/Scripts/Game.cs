@@ -110,6 +110,8 @@ namespace Cardwheel
                     string gamepadString = Gamepad.current.description.ToJson();
                     if (gamepadString.Contains("Dualsense") || gamepadString.Contains("Sony"))
                         m_gamepadType = GAMEPAD_TYPE.PS5;
+                    if (gamepadString.Contains("Steam"))
+                        m_gamepadType = GAMEPAD_TYPE.STEAM;
 
                     m_availableInputs = Logic.SetBit(m_availableInputs, (int)INPUT_TYPES.GAMEPAD);
                 }
@@ -128,17 +130,6 @@ namespace Cardwheel
         public int GetAvailableInputs()
         {
             return m_availableInputs;
-        }
-
-        public int GetTickAvailableInputs()
-        {
-            int modifiedInputs = m_availableInputs;
-            if (!Logic.IsFlagSet(m_gameData.MenuTutorialFlags, (int)m_runData.MenuState))
-            {
-                m_tutorialVisual.HandleInput(m_availableInputs);
-                modifiedInputs = 0;
-            }
-            return modifiedInputs;
         }
 
         public GAMEPAD_TYPE GetGamepadType()
@@ -181,7 +172,7 @@ namespace Cardwheel
             tryLoadGameData();
 
 #if UNITY_EDITOR
-            // m_gameData.MenuTutorialFlags = 0;
+            m_gameData.MenuTutorialFlags = 0;
 #endif
 
             CommonVisual.InitJokers(m_balance);
@@ -305,7 +296,7 @@ namespace Cardwheel
             gamepadCheck();
 
             if (menuState == MENU_STATE.MAIN_MENU)
-                m_mainMenuVisual.Show(m_balance);
+                m_mainMenuVisual.Show();
             else if (menuState == MENU_STATE.ROUND_SELECTION)
                 m_roundSelectionVisual.Show(m_runData, m_balance);
             else if (menuState == MENU_STATE.ROUND_COMPLETE)
@@ -342,7 +333,7 @@ namespace Cardwheel
             }
 
             if (!Logic.IsFlagSet(m_gameData.MenuTutorialFlags, (int)menuState) && m_balance.MenuTutorialText[(int)menuState].Length > 0)
-                m_tutorialVisual.Show(m_availableInputs);
+                m_tutorialVisual.Show();
             else
                 m_tutorialVisual.Hide();
         }
@@ -388,6 +379,10 @@ namespace Cardwheel
 #if STEAM
             SteamInput.RunFrame();
 #endif
+
+            if (!Logic.IsFlagSet(m_gameData.MenuTutorialFlags, (int)m_runData.MenuState))
+                if (m_tutorialVisual.TutorialClosed())
+                    return;
 
             if (m_runData.MenuState == MENU_STATE.IN_GAME)
             {
