@@ -16,7 +16,7 @@ namespace Cardwheel
         MENU_BUTTONS m_selectedButton;
 
         GameObject m_UI;
-        TextMeshProUGUI m_title;
+        TextMeshProUGUI m_version;
 
         float m_goToWheelSelectTimer = 0.0f;
         float m_goToWheelSelectionTime = 0.1f;
@@ -100,7 +100,7 @@ namespace Cardwheel
             for (int i = 0; i < balance.JokerBalance.NumJokers; i++)
                 moveNewJoker(i);
 
-            m_title = guiRef.GetTextGUI("Title");
+            m_version = guiRef.GetTextGUI("Version");
             Hide();
         }
 
@@ -115,9 +115,15 @@ namespace Cardwheel
             m_jokerRotationSpeed[jkrIdx] = UnityEngine.Random.value * 50.0f + 50.0f;
         }
 
-        public void Show(Balance balance)
+        public void Show()
         {
-            m_title.text = CommonVisual.ColorText(balance, "Cardwheel");
+            m_version.text = "";
+
+            if (Gamepad.current != null)
+            {
+                m_version.text = Gamepad.current.description.ToString();
+            }
+
 
             MENU_STATE menuState = RunDataIO.LoadMenuStateOnly();
             m_continueButtonData.Button.gameObject.SetActive(menuState >= MENU_STATE.IN_GAME && menuState < MENU_STATE.GAME_OVER);
@@ -125,7 +131,7 @@ namespace Cardwheel
             CommonButtonVisual.UpdateButtonIcons(m_newGameButtonData, Game.Instance.GetGamepadType());
             CommonButtonVisual.UpdateButtonIcons(m_continueButtonData, Game.Instance.GetGamepadType());
 
-                selectButton(MENU_BUTTONS.NEW_GAME);
+            selectButton(MENU_BUTTONS.NEW_GAME);
 
             m_UI.SetActive(true);
         }
@@ -136,6 +142,7 @@ namespace Cardwheel
             m_newGameButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.NEW_GAME);
             m_continueButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.CONTINUE);
         }
+
 
         public void Tick(Balance balance, float dt)
         {
@@ -164,21 +171,21 @@ namespace Cardwheel
 
         private void handleInput()
         {
-            if (CommonButtonVisual.NavigateGamepadButton(m_newGameButtonData, Game.Instance.GetTickAvailableInputs()))
+            if (CommonButtonVisual.NavigateGamepadButton(m_newGameButtonData, Game.Instance.GetAvailableInputs()))
                 animateGoToWheelSelection();
 
-            if (CommonButtonVisual.NavigateGamepadButton(m_continueButtonData, Game.Instance.GetTickAvailableInputs()))
+            if (CommonButtonVisual.NavigateGamepadButton(m_continueButtonData, Game.Instance.GetAvailableInputs()))
                 animateContinueGame();
 
-            if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
                 animateGoToWheelSelection();
 
-            if (m_selectedButton == MENU_BUTTONS.CONTINUE && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.CONTINUE && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
                 animateContinueGame();
 
-            if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
                 selectButton(MENU_BUTTONS.CONTINUE);
-            if (m_selectedButton == MENU_BUTTONS.CONTINUE && CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.CONTINUE && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
                 selectButton(MENU_BUTTONS.NEW_GAME);
         }
 

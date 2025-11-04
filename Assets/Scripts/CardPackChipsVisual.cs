@@ -176,7 +176,7 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_cardPackButton >= COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1 && m_cardPackButton <= COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_4 && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
+            if (m_cardPackButton >= COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1 && m_cardPackButton <= COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_4 && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
             {
                 // use card
                 useCardPackChips(m_cardPackButton - COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1);

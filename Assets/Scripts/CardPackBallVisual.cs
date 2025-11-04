@@ -209,18 +209,19 @@ namespace Cardwheel
                     Game.Instance.SetMenuState(runData.PrevMenuState);
                 }
             }
+
             handleInput();
         }
 
         void handleInput()
         {
-            if (Logic.IsBitSet(Game.Instance.GetTickAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetTickAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
+            if (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
             {
-                MENU_BUTTONS newSelectedButton = (MENU_BUTTONS)CommonBallVisual.HandleInputGamepadKeyboard(runData, m_uiBallMoveData, m_uiBallVisualData, (COMMON_BUTTONS)m_cardPackButton, true, Game.Instance.GetTickAvailableInputs());
+                MENU_BUTTONS newSelectedButton = (MENU_BUTTONS)CommonBallVisual.HandleInputGamepadKeyboard(runData, m_uiBallMoveData, m_uiBallVisualData, (COMMON_BUTTONS)m_cardPackButton, true, Game.Instance.GetAvailableInputs());
                 selectButton(newSelectedButton);
             }
             else
-                CommonBallVisual.HanleInputTouchMove(runData, m_uiBallMoveData, mainCamera, true, Game.Instance.GetTickAvailableInputs());
+                CommonBallVisual.HanleInputTouchMove(runData, m_uiBallMoveData, mainCamera, true, Game.Instance.GetAvailableInputs());
 
             COMMON_CARDPACK_BUTTONS currentButton = (COMMON_CARDPACK_BUTTONS)m_cardPackButton;
             if (CardPackCommonVisual.HandleEnter(m_abandonButtonData, m_rerollButtonData, currentButton))
@@ -231,7 +232,7 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_cardPackButton >= MENU_BUTTONS.CARD_PACK_CARD_1 && m_cardPackButton <= MENU_BUTTONS.CARD_PACK_CARD_4 && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
+            if (m_cardPackButton >= MENU_BUTTONS.CARD_PACK_CARD_1 && m_cardPackButton <= MENU_BUTTONS.CARD_PACK_CARD_4 && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
             {
                 // use card
                 useCardPackOnBalls(m_cardPackButton - MENU_BUTTONS.CARD_PACK_CARD_1);
@@ -246,13 +247,13 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_cardPackButton >= MENU_BUTTONS.BALL_1 && m_cardPackButton <= MENU_BUTTONS.BALL_6 && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
+            if (m_cardPackButton >= MENU_BUTTONS.BALL_1 && m_cardPackButton <= MENU_BUTTONS.BALL_6 && CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs()))
             {
                 selectButton(MENU_BUTTONS.CARD_PACK_CARD_1);
                 return;
             }
 
-            if (m_cardPackButton >= MENU_BUTTONS.CARD_PACK_CARD_1 && m_cardPackButton <= MENU_BUTTONS.CARD_PACK_CARD_4 && CommonButtonVisual.NavigateUp(Game.Instance.GetTickAvailableInputs()))
+            if (m_cardPackButton >= MENU_BUTTONS.CARD_PACK_CARD_1 && m_cardPackButton <= MENU_BUTTONS.CARD_PACK_CARD_4 && CommonButtonVisual.NavigateUp(Game.Instance.GetAvailableInputs()))
             {
                 selectButton(MENU_BUTTONS.BALL_1);
                 return;

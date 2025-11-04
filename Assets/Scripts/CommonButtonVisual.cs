@@ -32,7 +32,7 @@ namespace Cardwheel
             if (guiButtonData.GlyphImage != null)
             {
                 guiButtonData.GlyphImage.gameObject.SetActive(gamepadType != GAMEPAD_TYPE.NONE);
-                guiButtonData.GlyphImage.sprite = AssetManager.Instance.GetGamepadGlyph(gamepadType, guiButtonData.GamepadButton);
+                guiButtonData.GlyphImage.sprite = AssetManager.Instance.GetGamepadGlyph(gamepadType, guiButtonData.GamepadButton - 1);
             }
         }
 
@@ -237,13 +237,13 @@ namespace Cardwheel
 
         public static int CommonNavigation(RunData runData, int availableInputs, COMMON_BUTTONS selectedButton)
         {
-            if (selectedButton == COMMON_BUTTONS.WHEEL && CommonButtonVisual.NavigateUp(availableInputs))
+            if (selectedButton == COMMON_BUTTONS.WHEEL && NavigateUp(availableInputs))
                 return (int)COMMON_BUTTONS.BALLS;
 
-            if (selectedButton == COMMON_BUTTONS.BALLS && CommonButtonVisual.NavigateDown(availableInputs))
+            if (selectedButton == COMMON_BUTTONS.BALLS && NavigateDown(availableInputs))
                 return (int)COMMON_BUTTONS.WHEEL;
 
-            if (selectedButton == COMMON_BUTTONS.BALLS && CommonButtonVisual.NavigateUp(availableInputs))
+            if (selectedButton == COMMON_BUTTONS.BALLS && NavigateUp(availableInputs))
                 return (int)COMMON_BUTTONS.JOKER_1;
 
             if (selectedButton >= COMMON_BUTTONS.JOKER_1 && selectedButton <= COMMON_BUTTONS.JOKER_5 && NavigateDown(availableInputs))

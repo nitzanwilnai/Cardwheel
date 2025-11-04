@@ -127,20 +127,20 @@ namespace Cardwheel
 
         void handleInput()
         {
-            if ((m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs())) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, Game.Instance.GetTickAvailableInputs()))
+            if ((m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs())) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, Game.Instance.GetAvailableInputs()))
             {
                 hideJokerInfoPopup();
                 return;
             }
 
             if (m_sellButtonData.Button.interactable)
-                if ((m_selectedButton == MENU_BUTTONS.SELL && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs())) || CommonButtonVisual.NavigateGamepadButton(m_sellButtonData, Game.Instance.GetTickAvailableInputs()))
+                if ((m_selectedButton == MENU_BUTTONS.SELL && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs())) || CommonButtonVisual.NavigateGamepadButton(m_sellButtonData, Game.Instance.GetAvailableInputs()))
                 {
                     sellJoker();
                     return;
                 }
 
-            if (m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateUp(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateUp(Game.Instance.GetAvailableInputs()))
             {
                 m_selectedButton = MENU_BUTTONS.SELL;
                 m_sellButtonData.SelectedGO.SetActive(true);
@@ -148,7 +148,7 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.SELL && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.SELL && CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs()))
             {
                 m_selectedButton = MENU_BUTTONS.CLOSE;
                 m_sellButtonData.SelectedGO.SetActive(false);

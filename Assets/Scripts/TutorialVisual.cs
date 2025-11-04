@@ -44,19 +44,24 @@ namespace Cardwheel
             m_UI.SetActive(false);
         }
 
-        public void Show(int availableInputs)
+        public void Show()
         {
             m_UI.SetActive(true);
 
-            m_closeButtonData.SelectedGO.SetActive(Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD));
+            m_closeButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected());
+            CommonButtonVisual.UpdateButtonIcons(m_closeButtonData, Game.Instance.GetGamepadType());
 
             m_text.text = balance.MenuTutorialText[(int)runData.MenuState];
         }
 
-        public void HandleInput(int availableInputs)
+        public bool TutorialClosed()
         {
-            if (CommonButtonVisual.NavigateEnter(availableInputs) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, availableInputs))
+            if (CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, Game.Instance.GetAvailableInputs()))
+            {
                 close();
+                return true;
+            }
+            return false;
         }
 
         public void Hide()

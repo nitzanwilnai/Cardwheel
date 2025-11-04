@@ -569,8 +569,8 @@ namespace Cardwheel
 
         void handlePopupInput()
         {
-            if (CommonButtonVisual.NavigateGamepadButton(m_infoButtonData, Game.Instance.GetTickAvailableInputs()) ||
-            m_popupButtons == POPUP_BUTTONS.BUY && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
+            if (CommonButtonVisual.NavigateGamepadButton(m_infoButtonData, Game.Instance.GetAvailableInputs()) ||
+            m_popupButtons == POPUP_BUTTONS.BUY && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
             {
                 if (m_popupState == POPUP_STATE.JOKER)
                 {
@@ -593,8 +593,8 @@ namespace Cardwheel
                 return;
             }
 
-            if (CommonButtonVisual.NavigateGamepadButton(m_infoButtonData, Game.Instance.GetTickAvailableInputs()) ||
-            m_popupButtons == POPUP_BUTTONS.CANCEL && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
+            if (CommonButtonVisual.NavigateGamepadButton(m_infoButtonData, Game.Instance.GetAvailableInputs()) ||
+            m_popupButtons == POPUP_BUTTONS.CANCEL && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
             {
                 if (m_popupState == POPUP_STATE.JOKER)
                     HideJokerBuyPopup();
@@ -605,7 +605,7 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_popupButtons == POPUP_BUTTONS.BUY && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
+            if (m_popupButtons == POPUP_BUTTONS.BUY && CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs()))
             {
                 m_popupButtons = POPUP_BUTTONS.CANCEL;
 
@@ -627,7 +627,7 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_popupButtons == POPUP_BUTTONS.CANCEL && CommonButtonVisual.NavigateUp(Game.Instance.GetTickAvailableInputs()))
+            if (m_popupButtons == POPUP_BUTTONS.CANCEL && CommonButtonVisual.NavigateUp(Game.Instance.GetAvailableInputs()))
             {
                 m_popupButtons = POPUP_BUTTONS.BUY;
 
@@ -652,47 +652,47 @@ namespace Cardwheel
 
         void handleShopInput()
         {
-            if (CommonButtonVisual.CommonHandleInput(m_topBarGUI, m_cardsBallsSpinWheelGUI, Game.Instance.GetTickAvailableInputs(), (COMMON_BUTTONS)m_selectedShopButton))
+            if (CommonButtonVisual.CommonHandleInput(m_topBarGUI, m_cardsBallsSpinWheelGUI, Game.Instance.GetAvailableInputs(), (COMMON_BUTTONS)m_selectedShopButton))
                 return;
 
-            int newSelectedButton = CommonButtonVisual.CommonNavigation(runData, Game.Instance.GetTickAvailableInputs(), (COMMON_BUTTONS)m_selectedShopButton);
+            int newSelectedButton = CommonButtonVisual.CommonNavigation(runData, Game.Instance.GetAvailableInputs(), (COMMON_BUTTONS)m_selectedShopButton);
             if (newSelectedButton > -1)
             {
                 selectButton((SHOP_MENU_BUTTONS)newSelectedButton);
                 return;
             }
 
-            if (CommonButtonVisual.NavigateGamepadButton(m_infoButtonData, Game.Instance.GetTickAvailableInputs()) ||
-            m_selectedShopButton == SHOP_MENU_BUTTONS.INFO && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
+            if (CommonButtonVisual.NavigateGamepadButton(m_infoButtonData, Game.Instance.GetAvailableInputs()) ||
+            m_selectedShopButton == SHOP_MENU_BUTTONS.INFO && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
             {
                 showShopInfo();
                 return;
             }
-            if (CommonButtonVisual.NavigateGamepadButton(m_rerollButtonData, Game.Instance.GetTickAvailableInputs()) ||
-            m_selectedShopButton == SHOP_MENU_BUTTONS.REROLL && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
+            if (CommonButtonVisual.NavigateGamepadButton(m_rerollButtonData, Game.Instance.GetAvailableInputs()) ||
+            m_selectedShopButton == SHOP_MENU_BUTTONS.REROLL && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
             {
                 rerollShop();
                 selectButton(SHOP_MENU_BUTTONS.REROLL);
                 return;
             }
-            if (CommonButtonVisual.NavigateGamepadButton(m_nextRoundButtonData, Game.Instance.GetTickAvailableInputs()) ||
-            m_selectedShopButton == SHOP_MENU_BUTTONS.NEXT_ROUND && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
+            if (CommonButtonVisual.NavigateGamepadButton(m_nextRoundButtonData, Game.Instance.GetAvailableInputs()) ||
+            m_selectedShopButton == SHOP_MENU_BUTTONS.NEXT_ROUND && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
             {
                 goToRoundSelection();
                 return;
             }
 
-            if (m_selectedShopButton >= SHOP_MENU_BUTTONS.SHOP_JOKER_1 && m_selectedShopButton <= SHOP_MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton >= SHOP_MENU_BUTTONS.SHOP_JOKER_1 && m_selectedShopButton <= SHOP_MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
             {
                 showJokerBuyPopup(m_selectedShopButton - SHOP_MENU_BUTTONS.SHOP_JOKER_1);
             }
 
-            if (m_selectedShopButton >= SHOP_MENU_BUTTONS.SHOP_CARDPACK_1 && m_selectedShopButton <= SHOP_MENU_BUTTONS.SHOP_CARDPACK_2 && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton >= SHOP_MENU_BUTTONS.SHOP_CARDPACK_1 && m_selectedShopButton <= SHOP_MENU_BUTTONS.SHOP_CARDPACK_2 && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
             {
                 showCardBuyPopup(m_selectedShopButton - SHOP_MENU_BUTTONS.SHOP_CARDPACK_1);
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_VOUCHER && CommonButtonVisual.NavigateEnter(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_VOUCHER && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
             {
                 showVoucherBuyPopup();
             }
@@ -700,47 +700,47 @@ namespace Cardwheel
             // navigate gamepad / enter jokers/cardpacks/voucher
 
             // navigate up left column
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.INFO && CommonButtonVisual.NavigateUp(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton == SHOP_MENU_BUTTONS.INFO && CommonButtonVisual.NavigateUp(Game.Instance.GetAvailableInputs()))
             {
                 selectButton(SHOP_MENU_BUTTONS.REROLL);
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.REROLL && CommonButtonVisual.NavigateUp(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton == SHOP_MENU_BUTTONS.REROLL && CommonButtonVisual.NavigateUp(Game.Instance.GetAvailableInputs()))
             {
                 selectButton(SHOP_MENU_BUTTONS.SETTINGS);
                 return;
             }
 
             // navigate down left column
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs()))
             {
                 selectButton(SHOP_MENU_BUTTONS.REROLL);
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.REROLL && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton == SHOP_MENU_BUTTONS.REROLL && CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs()))
             {
                 selectButton(SHOP_MENU_BUTTONS.INFO);
                 return;
             }
 
             // navigate up right column
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.NEXT_ROUND && CommonButtonVisual.NavigateUp(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton == SHOP_MENU_BUTTONS.NEXT_ROUND && CommonButtonVisual.NavigateUp(Game.Instance.GetAvailableInputs()))
             {
                 selectButton(SHOP_MENU_BUTTONS.WHEEL);
                 return;
             }
 
             // navigate up right column
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.WHEEL && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton == SHOP_MENU_BUTTONS.WHEEL && CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs()))
             {
                 selectButton(SHOP_MENU_BUTTONS.NEXT_ROUND);
                 return;
             }
 
             // navigate left bottom row
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.NEXT_ROUND && CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton == SHOP_MENU_BUTTONS.NEXT_ROUND && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
             {
                 if (runData.ShopCardPackIdxs[1] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_CARDPACK_2);
@@ -753,7 +753,7 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_2 && CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_2 && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
             {
                 if (runData.ShopCardPackIdxs[0] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_CARDPACK_1);
@@ -764,7 +764,7 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_1 && CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_1 && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
             {
                 if (!runData.VoucherPurchased)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_VOUCHER);
@@ -773,14 +773,14 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_VOUCHER && CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_VOUCHER && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
             {
                 selectButton(SHOP_MENU_BUTTONS.INFO);
                 return;
             }
 
             // navigate right bottom row
-            if ((m_selectedShopButton == SHOP_MENU_BUTTONS.INFO || m_selectedShopButton == SHOP_MENU_BUTTONS.REROLL) && CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
+            if ((m_selectedShopButton == SHOP_MENU_BUTTONS.INFO || m_selectedShopButton == SHOP_MENU_BUTTONS.REROLL) && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
             {
                 if (!runData.VoucherPurchased)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_VOUCHER);
@@ -793,7 +793,7 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_VOUCHER && CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_VOUCHER && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
             {
                 if (runData.ShopCardPackIdxs[0] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_CARDPACK_1);
@@ -804,7 +804,7 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_1 && CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_1 && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
             {
                 if (runData.ShopCardPackIdxs[1] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_CARDPACK_2);
@@ -813,7 +813,7 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_2 && CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_2 && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
             {
                 selectButton(SHOP_MENU_BUTTONS.NEXT_ROUND);
                 return;
@@ -821,7 +821,7 @@ namespace Cardwheel
 
             // navigate left top row
             if (((m_selectedShopButton >= SHOP_MENU_BUTTONS.JOKER_1 && m_selectedShopButton <= SHOP_MENU_BUTTONS.JOKER_5) || m_selectedShopButton == SHOP_MENU_BUTTONS.BALLS || m_selectedShopButton == SHOP_MENU_BUTTONS.WHEEL) &&
-            CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()))
+            CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
             {
                 if (runData.ShopJokerCount > 2 && runData.ShopJokerIdxs[2] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_JOKER_3);
@@ -834,7 +834,7 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
             {
                 if (runData.ShopJokerIdxs[1] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_JOKER_2);
@@ -845,7 +845,7 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_2 && CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_2 && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
             {
                 if (runData.ShopJokerIdxs[0] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_JOKER_1);
@@ -854,14 +854,14 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_1 && CommonButtonVisual.NavigateLeft(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_1 && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
             {
                 selectButton(SHOP_MENU_BUTTONS.SETTINGS);
                 return;
             }
 
             // navigate right top row
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
             {
                 if (runData.ShopJokerIdxs[0] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_JOKER_1);
@@ -876,7 +876,7 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_1 && CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_1 && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
             {
                 if (runData.ShopJokerIdxs[1] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_JOKER_2);
@@ -889,7 +889,7 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_2 && CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_2 && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
             {
                 if (runData.ShopJokerCount > 2 && runData.ShopJokerIdxs[2] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_JOKER_3);
@@ -900,7 +900,7 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateRight(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
             {
                 if (runData.JokerCount > 0)
                     selectButton(SHOP_MENU_BUTTONS.JOKER_1);
@@ -925,7 +925,7 @@ namespace Cardwheel
             if (availableJokerCount > 2)
             {
                 // if only 2 jokers, left joker should go to voucher first, then cardpack 1, then card pack 2
-                if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_1 && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
+                if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_1 && CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs()))
                 {
                     if (!runData.VoucherPurchased)
                         selectButton(SHOP_MENU_BUTTONS.SHOP_VOUCHER);
@@ -937,7 +937,7 @@ namespace Cardwheel
                 }
 
                 // if more than 2 jokers, center joker should go to cardpack 1, then cardpack 2, then voucher
-                if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_2 && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
+                if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_2 && CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs()))
                 {
                     if (runData.ShopCardPackIdxs[0] > -1)
                         selectButton(SHOP_MENU_BUTTONS.SHOP_CARDPACK_1);
@@ -949,7 +949,7 @@ namespace Cardwheel
                 }
 
                 // if more than 2 jokers, right joker should go to cardpack 2, then cardpack 1, then voucher
-                if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
+                if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs()))
                 {
                     if (runData.ShopCardPackIdxs[1] > -1)
                         selectButton(SHOP_MENU_BUTTONS.SHOP_CARDPACK_2);
@@ -967,7 +967,7 @@ namespace Cardwheel
                 SHOP_MENU_BUTTONS rightJoker = runData.ShopJokerIdxs[1] > -1 ? SHOP_MENU_BUTTONS.SHOP_JOKER_2 : SHOP_MENU_BUTTONS.SHOP_JOKER_3;
 
                 // if more than 2 jokers, left most joker should go to voucher, then cardpack 1, then card pack 2
-                if (m_selectedShopButton == leftJoker && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
+                if (m_selectedShopButton == leftJoker && CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs()))
                 {
                     if (!runData.VoucherPurchased)
                         selectButton(SHOP_MENU_BUTTONS.SHOP_VOUCHER);
@@ -978,7 +978,7 @@ namespace Cardwheel
                     return;
                 }
 
-                if (m_selectedShopButton == rightJoker && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
+                if (m_selectedShopButton == rightJoker && CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs()))
                 {
                     if (runData.ShopCardPackIdxs[1] > -1)
                         selectButton(SHOP_MENU_BUTTONS.SHOP_CARDPACK_2);
@@ -990,7 +990,7 @@ namespace Cardwheel
                 }
             }
 
-            if (availableJokerCount == 1 && m_selectedShopButton >= SHOP_MENU_BUTTONS.SHOP_JOKER_1 && m_selectedShopButton <= SHOP_MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateDown(Game.Instance.GetTickAvailableInputs()))
+            if (availableJokerCount == 1 && m_selectedShopButton >= SHOP_MENU_BUTTONS.SHOP_JOKER_1 && m_selectedShopButton <= SHOP_MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs()))
             {
                 if (runData.ShopCardPackIdxs[0] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_CARDPACK_1);
@@ -1003,7 +1003,7 @@ namespace Cardwheel
             }
 
             // navigate up from voucher/cardpacks
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_VOUCHER && CommonButtonVisual.NavigateUp(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_VOUCHER && CommonButtonVisual.NavigateUp(Game.Instance.GetAvailableInputs()))
             {
                 if (runData.ShopJokerIdxs[0] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_JOKER_1);
@@ -1013,7 +1013,7 @@ namespace Cardwheel
                     selectButton(SHOP_MENU_BUTTONS.SHOP_JOKER_3);
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_1 && CommonButtonVisual.NavigateUp(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_1 && CommonButtonVisual.NavigateUp(Game.Instance.GetAvailableInputs()))
             {
                 if (runData.ShopJokerIdxs[1] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_JOKER_2);
@@ -1023,7 +1023,7 @@ namespace Cardwheel
                     selectButton(SHOP_MENU_BUTTONS.SHOP_JOKER_3);
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_2 && CommonButtonVisual.NavigateUp(Game.Instance.GetTickAvailableInputs()))
+            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_2 && CommonButtonVisual.NavigateUp(Game.Instance.GetAvailableInputs()))
             {
                 if (runData.ShopJokerCount == 3 && runData.ShopJokerIdxs[2] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_JOKER_3);
