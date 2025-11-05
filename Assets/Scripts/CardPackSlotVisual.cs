@@ -86,7 +86,7 @@ namespace Cardwheel
             m_UI.SetActive(false);
         }
 
-        public void Show(RunData runData, Balance balance)
+        public void Show()
         {
             m_UI.SetActive(true);
 
@@ -131,7 +131,7 @@ namespace Cardwheel
                     GameObject.Destroy(m_descriptionGOs[i]);
         }
 
-        public void Tick(RunData runData, Balance balance, float dt)
+        public void Tick(float dt)
         {
             CardPackCommonVisual.TickCardPackAnimation(runData, balance, dt, ref m_packAnimationTimer, m_packAnimationTime, m_cardPackCardGUIs, m_descriptionGOs, m_abandonButtonData.Button, m_rerollButtonData.Button);
 
@@ -227,12 +227,12 @@ namespace Cardwheel
 
         }
 
-        public void Reroll(RunData runData, Balance balance)
+        public void Reroll()
         {
             if (Logic.TryRerollCardPack(runData, balance))
             {
                 Hide();
-                Show(runData, balance);
+                Show();
             }
         }
 

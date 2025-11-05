@@ -302,7 +302,7 @@ namespace Cardwheel
                 if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.BALL_EFFECTS_HIDDEN)
                     useBallSprite = 0;
             }
-
+            m_bossDescriptionGO.SetActive(Logic.InBossRound(runData));
 
             CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotEffects, runData.UseSlotsSpecial == 0);
 
@@ -323,6 +323,8 @@ namespace Cardwheel
 
         void selectButton(MENU_BUTTONS selectedButton)
         {
+            Game.Instance.LastSelectedMenuButton[(int)runData.MenuState] = (int)selectedButton;
+
             m_selectedButton = selectedButton;
 
             m_spinButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.DROP);
@@ -333,6 +335,21 @@ namespace Cardwheel
             CommonVisual.UnselectAllJokers();
             if (m_selectedButton >= MENU_BUTTONS.JOKER_1 && m_selectedButton <= MENU_BUTTONS.JOKER_5)
                 CommonVisual.SelectJoker((int)m_selectedButton - (int)MENU_BUTTONS.JOKER_1);
+        }
+
+        public void SelectPrevButton(MENU_BUTTONS selectedButton)
+        {
+            if (selectedButton == MENU_BUTTONS.SETTINGS || selectedButton == MENU_BUTTONS.INFO)
+                selectButton(selectedButton);
+
+            if (selectedButton >= MENU_BUTTONS.JOKER_1 && selectedButton <= MENU_BUTTONS.JOKER_5)
+            {
+                int jokerIdx = selectedButton - MENU_BUTTONS.JOKER_1;
+                if (jokerIdx < runData.JokerCount)
+                    selectButton(selectedButton);
+                else
+                    selectButton(MENU_BUTTONS.JOKER_1);
+            }
         }
 
         public void showBallsInGame(int useBallSprite, bool debuffed)
@@ -1247,13 +1264,13 @@ namespace Cardwheel
                     return;
                 }
             }
-            if (m_selectedButton == MENU_BUTTONS.INFO && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.INFO && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()) || CommonButtonVisual.NavigateGamepadButton(m_infoButtonData, Game.Instance.GetAvailableInputs()))
             {
                 showGameInfo();
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()) || CommonButtonVisual.NavigateGamepadButton(m_topBarGUI.SettingsButtonData, Game.Instance.GetAvailableInputs()))
             {
                 Game.Instance.GoToSettings();
                 return;

@@ -119,7 +119,7 @@ namespace Cardwheel
 
         }
 
-        public void Show(RunData runData, Balance balance)
+        public void Show()
         {
             m_UI.SetActive(true);
 
@@ -139,7 +139,7 @@ namespace Cardwheel
 
             CardPackCommonVisual.ShowRerollButton(runData, balance, m_rerollButtonData.Button, m_rerollCostText);
 
-            CheckUseButtonForCards(runData, balance);
+            setUseButtonForCards();
 
             m_abandonButtonData.Button.gameObject.SetActive(false);
             m_rerollButtonData.Button.gameObject.SetActive(false);
@@ -168,7 +168,7 @@ namespace Cardwheel
         }
 
 
-        public void Hide(Balance balance)
+        public void Hide()
         {
             m_UI.SetActive(false);
             CommonVisual.HideJokers();
@@ -187,7 +187,7 @@ namespace Cardwheel
             // Debug.Log("m_ballIdx " + m_ballIdx + " m_ballIdx + 1" + (m_ballIdx + 1));
             CommonBallVisual.TickCheckSwapBalls(runData, m_uiBallMoveData, m_uiBallVisualData, true);
 
-            CheckUseButtonForCards(runData, balance);
+            setUseButtonForCards();
 
             CardPackCommonVisual.TickCardPackAnimation(runData, balance, dt, ref m_packAnimationTimer, m_packAnimationTime, m_cardPackCardGUIs, m_descriptionGOs, m_abandonButtonData.Button, m_rerollButtonData.Button);
 
@@ -205,7 +205,7 @@ namespace Cardwheel
                 m_ballChangedTimer -= dt;
                 if (m_ballChangedTimer <= 0.0f)
                 {
-                    Hide(balance);
+                    Hide();
                     Game.Instance.SetMenuState(runData.PrevMenuState);
                 }
             }
@@ -235,7 +235,9 @@ namespace Cardwheel
             if (m_cardPackButton >= MENU_BUTTONS.CARD_PACK_CARD_1 && m_cardPackButton <= MENU_BUTTONS.CARD_PACK_CARD_4 && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
             {
                 // use card
-                useCardPackOnBalls(m_cardPackButton - MENU_BUTTONS.CARD_PACK_CARD_1);
+                int cardIdx = m_cardPackButton - MENU_BUTTONS.CARD_PACK_CARD_1;
+                if (checkUseButtonForCard(cardIdx))
+                    useCardPackOnBalls(cardIdx);
                 return;
             }
 
@@ -262,23 +264,31 @@ namespace Cardwheel
 
         }
 
-        private void CheckUseButtonForCards(RunData runData, Balance balance)
+        private bool checkUseButtonForCard(int cardIdx)
         {
             int numBallsSelected = 0;
             for (int i = 0; i < runData.CardPackBallSelected.Length; i++)
                 if (runData.CardPackBallSelected[i])
                     numBallsSelected++;
 
+            int cardType = runData.CardPackCardIdxs[cardIdx];
+            int numBallsRequired = balance.CardPackBallBalance.NumBalls[cardType];
+
+            return numBallsSelected == numBallsRequired;
+        }
+
+        private void setUseButtonForCards()
+        {
+
             int numCards = balance.CardPackMaxCards[runData.SelectedShopCardPackIdx];
             int index = numCards - 2;
             for (int cardIdx = 0; cardIdx < numCards; cardIdx++)
             {
-                int cardType = runData.CardPackCardIdxs[cardIdx];
-                int numBallsRequired = balance.CardPackBallBalance.NumBalls[cardType];
+                bool okToUse = checkUseButtonForCard(cardIdx);
                 // Debug.Log("cardIdx " + cardIdx + " cardType " + cardType + " numBallsSelected " + numBallsSelected + " numBallsRequired " + numBallsRequired);
-                m_cardPackCardGUIs[index][cardIdx].UseButtonData.Button.interactable = (numBallsSelected == numBallsRequired);
+                m_cardPackCardGUIs[index][cardIdx].UseButtonData.Button.interactable = okToUse;
                 // Debug.Log("m_cardPackCardGUIs[" + index + "][" + cardIdx + "].UseButton.interactable " + m_cardPackCardGUIs[index][cardIdx].UseButton.interactable);
-                m_cardPackCardGUIs[index][cardIdx].UseButtonImage.color = (numBallsSelected == numBallsRequired) ? balance.ButtonColorEnabled : balance.ButtonColorDisabled;
+                m_cardPackCardGUIs[index][cardIdx].UseButtonImage.color = okToUse ? balance.ButtonColorEnabled : balance.ButtonColorDisabled;
             }
         }
 
@@ -317,12 +327,12 @@ namespace Cardwheel
             m_ballAnimTimer = 0.0f;
         }
 
-        public void Reroll(RunData runData, Balance balance)
+        public void Reroll()
         {
             if (Logic.TryRerollCardPack(runData, balance))
             {
-                Hide(balance);
-                Show(runData, balance);
+                Hide();
+                Show();
             }
         }
     }

@@ -63,8 +63,14 @@ namespace Cardwheel
         float m_slotAnimTimer = 0.0f;
         float m_slotAnimTime = 1.5f;
 
-        public void Init(Balance balance, Camera camera)
+        RunData runData;
+        Balance balance;
+
+        public void Init(RunData runData, Balance balance, Camera camera)
         {
+            this.runData = runData;
+            this.balance = balance;
+
             m_UI = AssetManager.Instance.LoadRoundSelectionUI();
             CommonVisual.ChangeCanvasScalerMatching(m_UI);
 
@@ -120,7 +126,7 @@ namespace Cardwheel
             GUIButtonRef guiButtonRef = go.GetComponent<GUIButtonRef>();
 
             regularRoundGUIInfo.SkipButtonData = guiButtonRef.GetButtonData("Skip");
-            regularRoundGUIInfo.SkipButtonData.Button.onClick.AddListener(Game.Instance.SkipRound);
+            regularRoundGUIInfo.SkipButtonData.Button.onClick.AddListener(skip);
             CommonButtonVisual.AddSelectedBorder(regularRoundGUIInfo.SkipButtonData);
         }
 
@@ -133,11 +139,11 @@ namespace Cardwheel
 
             GUIButtonRef guiButtonRef = go.GetComponent<GUIButtonRef>();
             bossRoundGUIInfo.RerollButtonData = guiButtonRef.GetButtonData("Reroll");
-            bossRoundGUIInfo.RerollButtonData.Button.onClick.AddListener(Game.Instance.UseBossReroll);
+            bossRoundGUIInfo.RerollButtonData.Button.onClick.AddListener(tryUseBossReroll);
             CommonButtonVisual.AddSelectedBorder(bossRoundGUIInfo.RerollButtonData);
         }
 
-        public void Show(RunData runData, Balance balance)
+        public void Show()
         {
             Logic.SetDataForNextRound(runData, balance);
 
@@ -176,7 +182,7 @@ namespace Cardwheel
 
             CommonSlotsVisual.ShowSpinWheelForRound(runData, balance, m_cardsBallsSpinWheelGUI.ScoringSlots, runData.Round);
 
-            selectButton(runData, MENU_BUTTONS.PLAY);
+            selectButton(MENU_BUTTONS.PLAY);
 
             Canvas.ForceUpdateCanvases();
             if (m_verticalLayoutGroup != null)
@@ -192,8 +198,10 @@ namespace Cardwheel
             Canvas.ForceUpdateCanvases();
         }
 
-        void selectButton(RunData runData, MENU_BUTTONS selectedButton)
+        void selectButton(MENU_BUTTONS selectedButton)
         {
+            Game.Instance.LastSelectedMenuButton[(int)runData.MenuState] = (int)selectedButton;
+
             Debug.Log("selectMenuButton(" + selectedButton.ToString() + ")");
             int smallRound = runData.Round % 3;
 
@@ -208,6 +216,21 @@ namespace Cardwheel
                 m_bossRoundGUIInfo.RerollButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.REROLL);
 
             CommonButtonVisual.CommonSelectButton(m_topBarGUI, m_cardsBallsSpinWheelGUI, (COMMON_BUTTONS)m_selectedButton);
+        }
+
+        public void SelectPrevButton(MENU_BUTTONS selectedButton)
+        {
+            if (selectedButton == MENU_BUTTONS.BALLS || selectedButton == MENU_BUTTONS.WHEEL || selectedButton == MENU_BUTTONS.SETTINGS)
+                selectButton(selectedButton);
+
+            if (selectedButton >= MENU_BUTTONS.JOKER_1 && selectedButton <= MENU_BUTTONS.JOKER_5)
+            {
+                int jokerIdx = selectedButton - MENU_BUTTONS.JOKER_1;
+                if (jokerIdx < runData.JokerCount)
+                    selectButton(selectedButton);
+                else
+                    selectButton(MENU_BUTTONS.JOKER_1);
+            }
         }
 
         void hideAllButtonSelections()
@@ -230,7 +253,7 @@ namespace Cardwheel
             CommonVisual.HideJokers();
         }
 
-        public void Tick(RunData runData, Balance balance, float dt)
+        public void Tick(float dt)
         {
             if (m_slotAnimTimer > 0.0f)
             {
@@ -242,7 +265,7 @@ namespace Cardwheel
                 if (m_slotAnimTimer <= 0.0f)
                     if (Logic.CheckForSortSlotsJoker(runData, balance, jokerIdxs, ref jokerCount))
                     {
-                        SortSlots(runData, balance);
+                        sortSlots();
                         for (int jIdx = 0; jIdx < jokerCount; jIdx++)
                             CommonVisual.JokerGUIs[jokerIdxs[jIdx]].Animation.Play("ScoreGrow");
                     }
@@ -270,7 +293,7 @@ namespace Cardwheel
             int newSelectedButton = CommonButtonVisual.CommonNavigation(runData, Game.Instance.GetAvailableInputs(), (COMMON_BUTTONS)m_selectedButton);
             if (newSelectedButton > -1)
             {
-                selectButton(runData, (MENU_BUTTONS)newSelectedButton);
+                selectButton((MENU_BUTTONS)newSelectedButton);
                 return;
             }
 
@@ -285,14 +308,14 @@ namespace Cardwheel
             if ((smallRound < 2 && CommonButtonVisual.NavigateGamepadButton(m_regularRoundGUIInfo[smallRound].SkipButtonData, Game.Instance.GetAvailableInputs())) ||
             m_selectedButton == MENU_BUTTONS.SKIP && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
             {
-                Game.Instance.SkipRound();
+                skip();
                 return;
             }
 
             if ((smallRound == 2 && CommonButtonVisual.NavigateGamepadButton(m_bossRoundGUIInfo.RerollButtonData, Game.Instance.GetAvailableInputs())) ||
             m_selectedButton == MENU_BUTTONS.REROLL && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
             {
-                Game.Instance.UseBossReroll();
+                tryUseBossReroll();
                 return;
             }
 
@@ -317,87 +340,89 @@ namespace Cardwheel
             if (m_selectedButton == MENU_BUTTONS.PLAY && CommonButtonVisual.NavigateUp(Game.Instance.GetAvailableInputs()))
             {
                 if (smallRound < 2)
-                    selectButton(runData, MENU_BUTTONS.SKIP);
+                    selectButton(MENU_BUTTONS.SKIP);
                 else
-                    selectButton(runData, MENU_BUTTONS.REROLL);
+                    selectButton(MENU_BUTTONS.REROLL);
                 return;
             }
 
             if (m_selectedButton == MENU_BUTTONS.PLAY && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
             {
-                selectButton(runData, MENU_BUTTONS.WHEEL);
+                selectButton(MENU_BUTTONS.WHEEL);
                 return;
             }
 
             if (m_selectedButton == MENU_BUTTONS.PLAY && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
             {
-                selectButton(runData, MENU_BUTTONS.SETTINGS);
+                selectButton(MENU_BUTTONS.SETTINGS);
                 return;
             }
 
             if (m_selectedButton == MENU_BUTTONS.SKIP && CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs()))
             {
-                selectButton(runData, MENU_BUTTONS.PLAY);
+                selectButton(MENU_BUTTONS.PLAY);
                 return;
             }
 
             if (m_selectedButton == MENU_BUTTONS.SKIP && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
             {
-                selectButton(runData, MENU_BUTTONS.SETTINGS);
+                selectButton(MENU_BUTTONS.SETTINGS);
                 return;
             }
 
             if (m_selectedButton == MENU_BUTTONS.REROLL && CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs()))
             {
-                selectButton(runData, MENU_BUTTONS.PLAY);
+                selectButton(MENU_BUTTONS.PLAY);
                 return;
             }
 
             if (m_selectedButton == MENU_BUTTONS.REROLL && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
             {
-                selectButton(runData, MENU_BUTTONS.SETTINGS);
+                selectButton(MENU_BUTTONS.SETTINGS);
                 return;
             }
 
             if (m_selectedButton == MENU_BUTTONS.SKIP && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
             {
-                selectButton(runData, MENU_BUTTONS.WHEEL);
+                selectButton(MENU_BUTTONS.WHEEL);
                 return;
             }
 
             if (m_selectedButton == MENU_BUTTONS.REROLL && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
             {
-                selectButton(runData, MENU_BUTTONS.WHEEL);
+                selectButton(MENU_BUTTONS.WHEEL);
                 return;
             }
 
             if (m_selectedButton == MENU_BUTTONS.SETTINGS && (CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()) || CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs())))
             {
-                selectButton(runData, MENU_BUTTONS.PLAY);
+                selectButton(MENU_BUTTONS.PLAY);
                 return;
             }
 
             if (m_selectedButton == MENU_BUTTONS.WHEEL && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
             {
-                selectButton(runData, MENU_BUTTONS.PLAY);
+                selectButton(MENU_BUTTONS.PLAY);
                 return;
             }
 
             if (m_selectedButton == MENU_BUTTONS.BALLS && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
             {
-                selectButton(runData, MENU_BUTTONS.PLAY);
+                selectButton(MENU_BUTTONS.PLAY);
                 return;
             }
 
         }
 
-        public void Skip(RunData runData, Balance balance)
+        public void skip()
         {
+            SoundManager.Instance.PlaySFXButtonOK();
+
             int skipIdx = runData.Round % balance.SkipBalance.NumSkips;
             int skipType = runData.SkipType[skipIdx];
 
             Logic.Skip(runData, balance, CommonSlotsVisual.AffectedSlotsIdxs, ref CommonSlotsVisual.AffectedSlotsCount);
-            Show(runData, balance);
+            Show();
 
             if (balance.SkipBalance.DoubleMoney[skipType] ||
                 balance.SkipBalance.MoneyNow[skipType] > 0 ||
@@ -411,7 +436,7 @@ namespace Cardwheel
                 m_slotAnimTimer = m_slotAnimTime;
             }
             if (balance.SkipBalance.SortSlots[skipType])
-                SortSlots(runData, balance);
+                sortSlots();
 
             if (balance.SkipBalance.CardPackIdx[skipType] > -1)
             {
@@ -448,13 +473,17 @@ namespace Cardwheel
             }
         }
 
-        public void TryUseBossReroll(RunData runData, Balance balance)
+        private void tryUseBossReroll()
         {
             if (Logic.TryUseBossRerolls(runData, balance))
-                Show(runData, balance);
+            {
+                Show();
+                RunDataIO.SaveRun(runData, balance);
+            }
+
         }
 
-        public void SortSlots(RunData runData, Balance balance)
+        private void sortSlots()
         {
             CommonSlotsVisual.SortSlotsRoundSelection(runData, balance, m_cardsBallsSpinWheelGUI);
         }

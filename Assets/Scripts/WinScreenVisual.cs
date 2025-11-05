@@ -75,7 +75,7 @@ namespace Cardwheel
             Hide();
         }
 
-        public void Show(RunData runData, Balance balance)
+        public void Show()
         {
             m_UI.SetActive(true);
 
@@ -89,9 +89,11 @@ namespace Cardwheel
             selectButton(MENU_BUTTONS.MAIN_MENU);
         }
 
-        void selectButton(MENU_BUTTONS newSelectedButton)
+        void selectButton(MENU_BUTTONS selectedButton)
         {
-            m_selectedButton = newSelectedButton;
+            Game.Instance.LastSelectedMenuButton[(int)runData.MenuState] = (int)selectedButton;
+
+            m_selectedButton = selectedButton;
 
             m_cardsBallsSpinWheelGUI.BallsButtonData.SelectedGO.SetActive(false);
             m_cardsBallsSpinWheelGUI.SpinwheelButtonData.SelectedGO.SetActive(false);
@@ -108,6 +110,21 @@ namespace Cardwheel
             }
         }
 
+        public void SelectPrevButton(MENU_BUTTONS selectedButton)
+        {
+            if (selectedButton == MENU_BUTTONS.BALLS || selectedButton == MENU_BUTTONS.WHEEL)
+                selectButton(selectedButton);
+
+            if (selectedButton >= MENU_BUTTONS.JOKER_1 && selectedButton <= MENU_BUTTONS.JOKER_5)
+            {
+                int jokerIdx = selectedButton - MENU_BUTTONS.JOKER_1;
+                if (jokerIdx < runData.JokerCount)
+                    selectButton(selectedButton);
+                else
+                    selectButton(MENU_BUTTONS.JOKER_1);
+            }
+        }
+
         public void Hide()
         {
             m_UI.SetActive(false);
@@ -117,8 +134,18 @@ namespace Cardwheel
         {
             CommonSlotsVisual.TickSpinWheelUI(runData, balance.UISpinWheelSpeed, dt, m_cardsBallsSpinWheelGUI);
 
-            if (CommonButtonVisual.CommonHandleInputNoTopBar(m_cardsBallsSpinWheelGUI, Game.Instance.GetAvailableInputs(), (COMMON_BUTTONS)m_selectedButton))
+            if ((m_selectedButton == MENU_BUTTONS.WHEEL && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs())) || CommonButtonVisual.NavigateGamepadButton(m_cardsBallsSpinWheelGUI.SpinwheelButtonData, Game.Instance.GetAvailableInputs()))
+            {
+                selectButton(MENU_BUTTONS.WHEEL);
+                Game.Instance.GoToChipsInfo();
                 return;
+            }
+
+            if ((m_selectedButton >= MENU_BUTTONS.JOKER_1 && m_selectedButton <= MENU_BUTTONS.JOKER_5) && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            {
+                Game.Instance.ShowJokerInfoPopupFromWinScreen((int)m_selectedButton - (int)COMMON_BUTTONS.JOKER_1);
+                return;
+            }
 
             if (m_selectedButton == MENU_BUTTONS.COPY && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
             {

@@ -28,12 +28,14 @@ namespace Cardwheel
         Image m_borderRarity;
 
         RunData runData;
+        Balance balance;
 
         int m_jokerIndex;
 
-        public void Init(RunData runData, Camera camera)
+        public void Init(RunData runData, Balance balance, Camera camera)
         {
             this.runData = runData;
+            this.balance = balance;
 
             m_UI = AssetManager.Instance.LoadJokerInfoPopupUI();
             CommonVisual.ChangeCanvasScalerMatching(m_UI);
@@ -59,16 +61,13 @@ namespace Cardwheel
 
             CommonButtonVisual.AddSelectedBorder(m_sellButtonData);
             CommonButtonVisual.AddSelectedBorder(m_closeButtonData);
-            m_sellButtonData.SelectedGO.SetActive(false);
-            m_closeButtonData.SelectedGO.SetActive(false);
 
             Hide();
         }
 
-        public void Show(RunData runData, Balance balance, int jokerIdx)
+        public void Show(int jokerIdx)
         {
-            m_jokerIndex = jokerIdx;
-            ShowCommon(runData, balance);
+            showCommon(jokerIdx);
 
             m_sellButtonData.Button.interactable = true;
             m_sellButtonData.Button.image.color = balance.ButtonColorEnabled;
@@ -76,17 +75,25 @@ namespace Cardwheel
 
         }
 
-        public void ShowInGame(RunData runData, Balance balance, int jokerIdx)
+        public void ShowInGame(int jokerIdx)
         {
-            m_jokerIndex = jokerIdx;
             m_sellButtonData.Button.interactable = false;
             m_sellButtonData.Button.image.color = balance.ButtonColorDisabled;
 
-            ShowCommon(runData, balance);
+            showCommon(jokerIdx);
         }
 
-        void ShowCommon(RunData runData, Balance balance)
+        public void ShowFromWinGame(int jokerIdx)
         {
+            showCommon(jokerIdx);
+            m_sellButtonData.Button.interactable = false;
+            m_sellButtonData.Button.image.color = balance.ButtonColorDisabled;
+        }
+
+        void showCommon(int jokerIdx)
+        {
+            m_jokerIndex = jokerIdx;
+
             int jokerType = runData.JokerTypes[m_jokerIndex];
             m_sellButtonData.Button.onClick.RemoveAllListeners();
 
@@ -107,7 +114,11 @@ namespace Cardwheel
             CommonVisual.ShowJokerDescriptionCommon(runData, balance, m_descriptionGO, jokerType, m_jokerIndex);
 
             m_selectedButton = MENU_BUTTONS.CLOSE;
+            m_sellButtonData.SelectedGO.SetActive(false);
             m_closeButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected());
+
+            CommonButtonVisual.UpdateButtonIcons(m_sellButtonData, Game.Instance.GetGamepadType());
+            CommonButtonVisual.UpdateButtonIcons(m_closeButtonData, Game.Instance.GetGamepadType());
 
             m_UI.SetActive(true);
         }

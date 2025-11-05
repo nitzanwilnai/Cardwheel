@@ -84,6 +84,8 @@ namespace Cardwheel
 
         public GAMEPAD_TYPE m_gamepadType = GAMEPAD_TYPE.NONE;
 
+        public int[] LastSelectedMenuButton;
+
         void gamepadInit()
         {
 #if STEAM
@@ -147,6 +149,8 @@ namespace Cardwheel
 
             UIDebug.SetActive(false);
 
+            LastSelectedMenuButton = new int[(int)MENU_STATE.LAST];
+
             AssetManager.Instance.LoadCommonAssetBundle();
             AssetManager.Instance.LoadCommonUIAssetBundle(GameInfoSO.CommonBundle, GameInfoSO.CommonBundleUIPath);
 
@@ -172,7 +176,7 @@ namespace Cardwheel
             tryLoadGameData();
 
 #if UNITY_EDITOR
-            m_gameData.MenuTutorialFlags = 0;
+            // m_gameData.MenuTutorialFlags = 0;
 #endif
 
             CommonVisual.InitJokers(m_balance);
@@ -198,16 +202,16 @@ namespace Cardwheel
             m_tutorialVisual = new TutorialVisual();
 
             m_mainMenuVisual.Init(Camera, m_balance);
-            m_roundSelectionVisual.Init(m_balance, Camera);
+            m_roundSelectionVisual.Init(m_runData, m_balance, Camera);
             m_roundCompleteVisual.Init(m_runData, m_balance, Camera);
-            m_gameOverVisual.Init(Camera);
+            m_gameOverVisual.Init(m_runData, Camera);
             m_shopVisual.Init(m_runData, m_balance, Camera);
             m_cardPackBallVisual.Init(m_runData, m_balance, Camera);
             m_cardPackSlotVisual.Init(m_runData, m_balance, Camera);
             m_cardPackChipsVisual.Init(m_runData, m_balance, Camera);
-            m_jokerInfoPopupVisual.Init(m_runData, Camera);
+            m_jokerInfoPopupVisual.Init(m_runData, m_balance, Camera);
             m_ballScreenVisual.Init(m_runData, m_balance, Camera);
-            m_settingsVisual.Init(Camera, m_settingsData);
+            m_settingsVisual.Init(m_runData, m_balance, Camera, m_settingsData);
             m_winScreenVisual.Init(m_runData, m_balance, Camera);
             m_chipsInfoVisual.Init(Camera);
             m_gameInfoVisual.Init(Camera, m_balance);
@@ -240,6 +244,8 @@ namespace Cardwheel
 
         public void SetMenuState(MENU_STATE newMenuState)
         {
+            bool goingBackToPrevMenu = newMenuState == m_runData.PrevMenuState;
+
             Debug.Log("SetMenuState(" + newMenuState.ToString() + ")");
             m_runData.PrevMenuState = m_runData.MenuState;
             m_runData.MenuState = newMenuState;
@@ -250,7 +256,7 @@ namespace Cardwheel
             }
 
             hideMenuState(m_runData.PrevMenuState);
-            showMenuState(m_runData.MenuState);
+            showMenuState(m_runData.MenuState, goingBackToPrevMenu);
         }
 
         void hideMenuState(MENU_STATE menuState)
@@ -266,7 +272,7 @@ namespace Cardwheel
             else if (menuState == MENU_STATE.SHOP)
                 m_shopVisual.Hide();
             else if (menuState == MENU_STATE.CARD_PACK_BALL)
-                m_cardPackBallVisual.Hide(m_balance);
+                m_cardPackBallVisual.Hide();
             else if (menuState == MENU_STATE.CARD_PACK_SLOT)
                 m_cardPackSlotVisual.Hide();
             else if (menuState == MENU_STATE.CARD_PACK_CHIPS)
@@ -291,34 +297,56 @@ namespace Cardwheel
                 m_jokerInfoPopupVisual.Hide();
         }
 
-        void showMenuState(MENU_STATE menuState)
+        void showMenuState(MENU_STATE menuState, bool goingBackToPrevMenu)
         {
             gamepadCheck();
+
+                int prevSelectedMenuButton = LastSelectedMenuButton[(int)menuState];
 
             if (menuState == MENU_STATE.MAIN_MENU)
                 m_mainMenuVisual.Show();
             else if (menuState == MENU_STATE.ROUND_SELECTION)
-                m_roundSelectionVisual.Show(m_runData, m_balance);
+            {
+                m_roundSelectionVisual.Show();
+                if (goingBackToPrevMenu)
+                    m_roundSelectionVisual.SelectPrevButton((RoundSelectionVisual.MENU_BUTTONS)prevSelectedMenuButton);
+            }
             else if (menuState == MENU_STATE.ROUND_COMPLETE)
-                m_roundCompleteVisual.Show(m_runData, m_balance);
+            {                
+                m_roundCompleteVisual.Show();
+                if (goingBackToPrevMenu)
+                    m_roundCompleteVisual.SelectPrevButton((RoundCompleteVisual.MENU_BUTTONS)prevSelectedMenuButton);
+            }
             else if (menuState == MENU_STATE.GAME_OVER)
-                m_gameOverVisual.Show(m_runData);
+                m_gameOverVisual.Show();
             else if (menuState == MENU_STATE.SHOP)
+            {
                 m_shopVisual.Show();
+                if (goingBackToPrevMenu)
+                    m_shopVisual.SelectPrevButton((ShopVisual.SHOP_MENU_BUTTONS)prevSelectedMenuButton);
+            }
             else if (menuState == MENU_STATE.CARD_PACK_BALL)
-                m_cardPackBallVisual.Show(m_runData, m_balance);
+                m_cardPackBallVisual.Show();
             else if (menuState == MENU_STATE.CARD_PACK_SLOT)
-                m_cardPackSlotVisual.Show(m_runData, m_balance);
+                m_cardPackSlotVisual.Show();
             else if (menuState == MENU_STATE.CARD_PACK_CHIPS)
-                m_cardPackChipsVisual.Show(m_runData, m_balance);
+                m_cardPackChipsVisual.Show();
             else if (menuState == MENU_STATE.IN_GAME)
+            {
                 Board.Show();
+                if (goingBackToPrevMenu)
+                    Board.SelectPrevButton((Board.MENU_BUTTONS)prevSelectedMenuButton);
+            }
             else if (menuState == MENU_STATE.BALL_SCREEN)
-                m_ballScreenVisual.Show(m_availableInputs);
+                m_ballScreenVisual.Show();
             else if (menuState == MENU_STATE.SETTINGS)
-                m_settingsVisual.Show(m_runData, m_balance, m_settingsData);
+                m_settingsVisual.Show();
             else if (menuState == MENU_STATE.WIN_SCREEN)
-                m_winScreenVisual.Show(m_runData, m_balance);
+            {
+                m_winScreenVisual.Show();
+                if (goingBackToPrevMenu)
+                    m_winScreenVisual.SelectPrevButton((WinScreenVisual.MENU_BUTTONS)prevSelectedMenuButton);
+            }
             else if (menuState == MENU_STATE.CHIPS_INFO)
                 m_chipsInfoVisual.Show(m_runData);
             else if (menuState == MENU_STATE.IN_GAME_INFO)
@@ -398,11 +426,11 @@ namespace Cardwheel
             }
             else if (m_runData.MenuState == MENU_STATE.CARD_PACK_SLOT)
             {
-                m_cardPackSlotVisual.Tick(m_runData, m_balance, dt);
+                m_cardPackSlotVisual.Tick(dt);
             }
             else if (m_runData.MenuState == MENU_STATE.CARD_PACK_CHIPS)
             {
-                m_cardPackChipsVisual.Tick(m_runData, m_balance, dt);
+                m_cardPackChipsVisual.Tick(dt);
             }
             else if (m_runData.MenuState == MENU_STATE.SHOP)
             {
@@ -410,7 +438,7 @@ namespace Cardwheel
             }
             else if (m_runData.MenuState == MENU_STATE.ROUND_SELECTION)
             {
-                m_roundSelectionVisual.Tick(m_runData, m_balance, dt);
+                m_roundSelectionVisual.Tick(dt);
             }
             else if (m_runData.MenuState == MENU_STATE.ROUND_COMPLETE)
             {
@@ -430,7 +458,7 @@ namespace Cardwheel
             }
             else if (m_runData.MenuState == MENU_STATE.SETTINGS)
             {
-                m_settingsVisual.Tick(m_runData, dt);
+                m_settingsVisual.Tick(dt);
             }
             else if (m_runData.MenuState == MENU_STATE.CHIPS_INFO)
             {
@@ -543,7 +571,7 @@ namespace Cardwheel
 
             if (m_runData.MenuState == MENU_STATE.JOKER_INFO_POPUP)
                 m_runData.MenuState = m_runData.PrevMenuState;
-            showMenuState(m_runData.MenuState);
+            showMenuState(m_runData.MenuState, false);
         }
 
         public void StartGame(uint seed, int wheelIdx)
@@ -561,20 +589,6 @@ namespace Cardwheel
 
             Board.StartRound(m_runData, m_balance);
             SetMenuState(MENU_STATE.IN_GAME);
-        }
-
-        public void SkipRound()
-        {
-            SoundManager.Instance.PlaySFXButtonOK();
-
-            m_roundSelectionVisual.Skip(m_runData, m_balance);
-        }
-
-        public void UseBossReroll()
-        {
-            m_roundSelectionVisual.TryUseBossReroll(m_runData, m_balance);
-
-            RunDataIO.SaveRun(m_runData, m_balance);
         }
 
         public void RoundComplete()
@@ -617,7 +631,7 @@ namespace Cardwheel
             SoundManager.Instance.PlaySFXButtonOK();
 
             SetMenuState(MENU_STATE.JOKER_INFO_POPUP);
-            m_jokerInfoPopupVisual.Show(m_runData, m_balance, jokerIdx);
+            m_jokerInfoPopupVisual.Show(jokerIdx);
         }
 
         public void ShowJokerInfoPopupInGame(int jokerIdx)
@@ -625,7 +639,15 @@ namespace Cardwheel
             SoundManager.Instance.PlaySFXButtonOK();
 
             SetMenuState(MENU_STATE.JOKER_INFO_POPUP);
-            m_jokerInfoPopupVisual.ShowInGame(m_runData, m_balance, jokerIdx);
+            m_jokerInfoPopupVisual.ShowInGame(jokerIdx);
+        }
+
+        public void ShowJokerInfoPopupFromWinScreen(int jokerIdx)
+        {
+            SoundManager.Instance.PlaySFXButtonOK();
+
+            SetMenuState(MENU_STATE.JOKER_INFO_POPUP);
+            m_jokerInfoPopupVisual.ShowFromWinGame(jokerIdx);
         }
 
         public void CloseCardPack()
@@ -642,11 +664,11 @@ namespace Cardwheel
             SoundManager.Instance.PlaySFXMoney();
 
             if (m_balance.CardPackType[m_runData.SelectedShopCardPackIdx] == CARD_PACK_TYPE.BALL)
-                m_cardPackBallVisual.Reroll(m_runData, m_balance);
+                m_cardPackBallVisual.Reroll();
             if (m_balance.CardPackType[m_runData.SelectedShopCardPackIdx] == CARD_PACK_TYPE.SLOT)
-                m_cardPackSlotVisual.Reroll(m_runData, m_balance);
+                m_cardPackSlotVisual.Reroll();
             if (m_balance.CardPackType[m_runData.SelectedShopCardPackIdx] == CARD_PACK_TYPE.CHIPS)
-                m_cardPackChipsVisual.Reroll(m_runData, m_balance);
+                m_cardPackChipsVisual.Reroll();
 
             RunDataIO.SaveRun(m_runData, m_balance);
         }
