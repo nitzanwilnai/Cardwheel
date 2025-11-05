@@ -1611,7 +1611,7 @@ MonoBehaviour:
   - Key: Close
     Button: {fileID: 8977271131787635306}
     GlyphImage: {fileID: 6070534921737582882}
-    GamepadButton: 3
+    GamepadButton: 4
     SelectedGO: {fileID: 0}
   - Key: Retry
     Button: {fileID: 4539432015871411903}

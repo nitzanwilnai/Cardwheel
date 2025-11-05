@@ -23,8 +23,6 @@ namespace Cardwheel
         TextMeshProUGUI m_speedText;
         TextMeshProUGUI m_skipFirstRound;
 
-        SettingsData settingsData;
-
         float m_closeTimer = 0.0f;
         float m_closeTime = 0.1f;
         Animation m_animation;
@@ -39,8 +37,14 @@ namespace Cardwheel
         GUIButtonData m_speedButtonData;
         GUIButtonData m_skipRound1ButtonData;
 
-        public void Init(Camera camera, SettingsData settingsData)
+        RunData runData;
+        Balance balance;
+        SettingsData settingsData;
+
+        public void Init(RunData runData, Balance balance, Camera camera, SettingsData settingsData)
         {
+            this.runData = runData;
+            this.balance = balance;
             this.settingsData = settingsData;
 
             m_UI = AssetManager.Instance.LoadSettingsUI();
@@ -96,12 +100,10 @@ namespace Cardwheel
             CommonButtonVisual.AddSelectedBorder(m_retryButtonData);
             CommonButtonVisual.AddSelectedBorder(m_closeButtonData);
 
-            CommonButtonVisual.UpdateButtonIcons(m_closeButtonData, Game.Instance.GetGamepadType());
-
             selectButton(MENU_BUTTONS.NONE);
         }
 
-        public void Show(RunData runData, Balance balance, SettingsData settingsData)
+        public void Show()
         {
             m_UI.SetActive(true);
 
@@ -110,6 +112,8 @@ namespace Cardwheel
             m_mostFrequentColorText.text = Logic.GetMostPlayedSlotType(runData).ToString();
             m_mostFrequentColorText.color = balance.SlotColors[(int)Logic.GetMostPlayedSlotType(runData)];
             m_seedText.text = Logic.EncodeSeed(runData.StartSeed);
+
+            CommonButtonVisual.UpdateButtonIcons(m_closeButtonData, Game.Instance.GetGamepadType());
 
             updateToggles(settingsData);
 
@@ -133,7 +137,7 @@ namespace Cardwheel
             m_closeButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.CLOSE);
         }
 
-        public void Tick(RunData runData, float dt)
+        public void Tick(float dt)
         {
             if (CommonVisual.AnimateCloseTick(ref m_closeTimer, dt))
                 Game.Instance.SetMenuState(runData.PrevMenuState);

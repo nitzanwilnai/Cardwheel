@@ -31,8 +31,12 @@ namespace Cardwheel
         TextMeshProUGUI m_wheelPlayedText;
         TextMeshProUGUI m_seedText;
 
-        public void Init(Camera camera)
+        RunData runData;
+
+        public void Init(RunData runData, Camera camera)
         {
+            this.runData = runData;
+
             m_UI = AssetManager.Instance.LoadGameOverUI();
             CommonVisual.ChangeCanvasScalerMatching(m_UI);
 
@@ -64,7 +68,7 @@ namespace Cardwheel
             Hide();
         }
 
-        public void Show(RunData runData)
+        public void Show()
         {
             m_UI.SetActive(true);
 

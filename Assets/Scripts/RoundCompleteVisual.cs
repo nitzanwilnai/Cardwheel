@@ -81,7 +81,7 @@ namespace Cardwheel
             Hide();
         }
 
-        public void Show(RunData runData, Balance balance)
+        public void Show()
         {
             m_moneyText.text = runData.Money.ToString("N0");
             m_rewardText.text = "◇" + balance.RoundReward[runData.Round % 3].ToString("N0");
@@ -131,6 +131,8 @@ namespace Cardwheel
 
         void selectButton(MENU_BUTTONS selectedButton)
         {
+            Game.Instance.LastSelectedMenuButton[(int)runData.MenuState] = (int)selectedButton;
+
             m_selectedButton = selectedButton;
 
             hideAllButtonSelections();
@@ -138,6 +140,21 @@ namespace Cardwheel
             m_claimRewardData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.CLAIM_REWARD);
 
             CommonButtonVisual.CommonSelectButton(m_topBarGUI, m_cardsBallsSpinWheelGUI, (COMMON_BUTTONS)m_selectedButton);
+        }
+
+        public void SelectPrevButton(MENU_BUTTONS selectedButton)
+        {
+            if (selectedButton == MENU_BUTTONS.BALLS || selectedButton == MENU_BUTTONS.WHEEL || selectedButton == MENU_BUTTONS.SETTINGS)
+                selectButton(selectedButton);
+
+            if (selectedButton >= MENU_BUTTONS.JOKER_1 && selectedButton <= MENU_BUTTONS.JOKER_5)
+            {
+                int jokerIdx = selectedButton - MENU_BUTTONS.JOKER_1;
+                if (jokerIdx < runData.JokerCount)
+                    selectButton(selectedButton);
+                else
+                    selectButton(MENU_BUTTONS.JOKER_1);
+            }
         }
 
         public void Tick(float dt)
@@ -160,7 +177,7 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.CLAIM_REWARD && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.CLAIM_REWARD && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs())  || CommonButtonVisual.NavigateGamepadButton(m_claimRewardData, Game.Instance.GetAvailableInputs()))
             {
                 claimRoundRewardAndGoToShop();
                 return;
@@ -173,7 +190,7 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.CLAIM_REWARD && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.CLAIM_REWARD && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()) || CommonButtonVisual.NavigateGamepadButton(m_topBarGUI.SettingsButtonData, Game.Instance.GetAvailableInputs()))
             {
                 selectButton(MENU_BUTTONS.SETTINGS);
                 return;

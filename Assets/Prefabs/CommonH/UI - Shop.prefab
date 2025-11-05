@@ -3161,39 +3161,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4925019916941643648, guid: cc479ee69cccd45e9acc77d628cd98a7, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5813896209021455363, guid: cc479ee69cccd45e9acc77d628cd98a7, type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5813896209021455363, guid: cc479ee69cccd45e9acc77d628cd98a7, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5813896209021455363, guid: cc479ee69cccd45e9acc77d628cd98a7, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5813896209021455363, guid: cc479ee69cccd45e9acc77d628cd98a7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 341
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5813896209021455363, guid: cc479ee69cccd45e9acc77d628cd98a7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -75
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7061120783915531146, guid: cc479ee69cccd45e9acc77d628cd98a7, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7061120783915531146, guid: cc479ee69cccd45e9acc77d628cd98a7, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7061120783915531146, guid: cc479ee69cccd45e9acc77d628cd98a7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 25
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7061120783915531146, guid: cc479ee69cccd45e9acc77d628cd98a7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -75
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3246,6 +3246,10 @@ PrefabInstance:
     - target: {fileID: 3290127826011811069, guid: 9e1b47becf6f24c0999ca7eff788c806, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -75
+      objectReference: {fileID: 0}
+    - target: {fileID: 3771215458305560214, guid: 9e1b47becf6f24c0999ca7eff788c806, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 4546553453755875904, guid: 9e1b47becf6f24c0999ca7eff788c806, type: 3}
       propertyPath: m_AnchorMax.y
