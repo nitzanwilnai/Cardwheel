@@ -12,8 +12,6 @@ namespace Cardwheel
 
         int m_index;
 
-        int m_animCount;
-
         LIGHT_ANIM_STATE m_animState;
 
         public void Awake()
@@ -30,30 +28,20 @@ namespace Cardwheel
             m_index = index;
         }
 
-        public void SetAnimationState(SpinWheelLightsStateData SpinWheelLightsStateData)
-        {
-            m_animState = SpinWheelLightsStateData.AnimState;
-            m_lightIndex = 0;
-
-            for (int i = 0; i < m_numLights; i++)
-                Lights[i].SetActive(false);
-        }
-
         public void SetAnimationState(LIGHT_ANIM_STATE newAnimState)
         {
-            m_animState = newAnimState;
+            if (m_animState != newAnimState)
+            {
+                m_animState = newAnimState;
+                m_lightIndex = 0;
 
-
-            m_lightIndex = 0;
-
-            for (int i = 0; i < m_numLights; i++)
-                Lights[i].SetActive(false);
+                for (int i = 0; i < m_numLights; i++)
+                    Lights[i].SetActive(false);
+            }
         }
 
         public void Tick()
         {
-            m_animCount++;
-
             if (m_animState == LIGHT_ANIM_STATE.CYCLE)
             {
                 m_lightIndex = (m_lightIndex + 1) % 24;

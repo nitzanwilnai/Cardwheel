@@ -89,7 +89,6 @@ namespace Cardwheel
 
         TopBarGUI m_topBarGUI;
 
-        public GameObject BallPrefab;
         public Transform BallParent;
         int m_numBalls;
         public GameObject[] BallsGO;
@@ -164,6 +163,7 @@ namespace Cardwheel
         float m_slotAnimTimer;
         float m_slotAnimTime = 1.0f;
         public AnimationCurve SlotScaleAnimCurve;
+        float[] m_slotJuiceTimer;
 
         float m_prevSpinWheelAngle;
 
@@ -277,6 +277,8 @@ namespace Cardwheel
             BoardSpites.SetActive(false);
 
             SpinWheelLights.Init();
+
+            m_slotJuiceTimer = new float[balance.NumSlots];
         }
 
         public void Show()
@@ -511,7 +513,7 @@ namespace Cardwheel
                         int slotChangedIdx = Logic.JokerPreRoundTryModifySlot(runData, balance, jokerType);
                         if (slotChangedIdx > -1)
                         {
-                            CommonSlotsVisual.AffectedSlotsIdxs[CommonSlotsVisual.AffectedSlotsCount++] = slotChangedIdx;
+                            CommonSlotsVisual.ChangedSlotsIdxs[CommonSlotsVisual.ChangedSlotsCount++] = slotChangedIdx;
                             CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotEffects, runData.UseSlotsSpecial == 0);
                             m_slotAnimTimer = m_slotAnimTime;
 
@@ -1210,6 +1212,21 @@ namespace Cardwheel
 
             handleInput();
 
+            if (GameState >= GAME_STATE.BALLS_DROPPED)
+            {
+                for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
+                {
+                    if (m_slotJuiceTimer[slotIdx] > 0.0f)
+                    {
+                        float value = 1.0f - m_slotJuiceTimer[slotIdx];
+                        m_slotJuiceTimer[slotIdx] -= dt;
+                        float colorMult = SlotScaleAnimCurve.Evaluate(value) * 0.5f;
+                        int slotType = (int)runData.SlotTypeInGame[slotIdx];
+                        m_scoringSlots[slotIdx].SpriteRenderer.color = runData.SlotColors[slotType] + Color.white * colorMult;
+                    }
+                }
+            }
+
             // slot animation
             if (m_slotAnimTimer > 0.0f)
             {
@@ -1339,7 +1356,7 @@ namespace Cardwheel
                 selectButton((MENU_BUTTONS)selectedJokerButton);
 
 #if UNITY_EDITOR
-            if (Keyboard.current.spaceKey.wasPressedThisFrame)
+            if (Keyboard.current.spaceKey.wasReleasedThisFrame)
                 dropBalls();
 #endif
 
@@ -1436,7 +1453,7 @@ namespace Cardwheel
             if (Logic.InBossRound(runData))
             {
                 bool slotsChanged;
-                Logic.StartSpinBossEffect(runData, balance, out slotsChanged, CommonSlotsVisual.AffectedSlotsIdxs, ref CommonSlotsVisual.AffectedSlotsCount);
+                Logic.StartSpinBossEffect(runData, balance, out slotsChanged, CommonSlotsVisual.ChangedSlotsIdxs, ref CommonSlotsVisual.ChangedSlotsCount);
                 if (slotsChanged)
                 {
                     CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotEffects, runData.UseSlotsSpecial == 0);
@@ -1477,7 +1494,7 @@ namespace Cardwheel
             }
         }
 
-        public void BallInSlot(RunData runData, Balance balance, SettingsData settingsData, int ballIdx, int slotIdx)
+        public void BallInSlot(RunData runData, Balance balance, int ballIdx, int slotIdx)
         {
             int slotChangedIdx;
             int slotChangeJokerIdx;
@@ -1489,7 +1506,7 @@ namespace Cardwheel
                 if (slotChangedIdx > -1)
                 {
                     m_slotAnimTimer = m_slotAnimTime;
-                    CommonSlotsVisual.AffectedSlotsIdxs[CommonSlotsVisual.AffectedSlotsCount++] = slotChangedIdx;
+                    CommonSlotsVisual.ChangedSlotsIdxs[CommonSlotsVisual.ChangedSlotsCount++] = slotChangedIdx;
                     CommonVisual.JokerGUIs[slotChangeJokerIdx].Animation.Play("ScoreGrow");
                     CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotEffects, runData.UseSlotsSpecial == 0);
                 }
@@ -1504,6 +1521,7 @@ namespace Cardwheel
                 // for (int i = 0; i < m_scoringSlots.Length; i++)
                 m_scoringSlots[slotIdx].LockGO.SetActive(true);
 
+                m_slotJuiceTimer[slotIdx] = 1.0f;
             }
         }
 
@@ -1535,6 +1553,7 @@ namespace Cardwheel
 
             Game.Instance.SetMenuState(MENU_STATE.IN_GAME_INFO);
         }
+
 
 #if UNITY_EDITOR
         float m_droppedAngle;

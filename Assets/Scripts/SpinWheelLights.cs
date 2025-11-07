@@ -19,8 +19,6 @@ namespace Cardwheel
     {
         public SpinWheelLight[] SpinWheelLight;
 
-        LIGHT_ANIM_STATE m_animState = LIGHT_ANIM_STATE.CYCLE;
-
         float m_lightTimer;
         float m_lightTime;
 
@@ -44,13 +42,11 @@ namespace Cardwheel
 
         public void SetAnimationState()
         {
-            m_animState = SpinWheelLightsStateData[AnimIndex].AnimState;
-
             m_lightTimer = MusicManager.Instance.TimeSinceLastBeat();
             m_lightTime = SpinWheelLightsStateData[AnimIndex].Time;
 
             for (int i = 0; i < SpinWheelLight.Length; i++)
-                SpinWheelLight[i].SetAnimationState(SpinWheelLightsStateData[AnimIndex]);
+                SpinWheelLight[i].SetAnimationState(SpinWheelLightsStateData[AnimIndex].AnimState);
         }
 
         public void Tick(float dt)
@@ -68,8 +64,9 @@ namespace Cardwheel
                 if (m_animCount > SpinWheelLightsStateData[AnimIndex].Count)
                 {
                     AnimIndex = (AnimIndex + 1) % SpinWheelLightsStateData.Length;
-                    m_animCount = 0;
+                    // AnimIndex = 4;
                     SetAnimationState();
+                    m_animCount = 0;
                 }
 
             }
