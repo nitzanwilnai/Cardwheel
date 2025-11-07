@@ -421,7 +421,7 @@ namespace Cardwheel
             int skipIdx = runData.Round % balance.SkipBalance.NumSkips;
             int skipType = runData.SkipType[skipIdx];
 
-            Logic.Skip(runData, balance, CommonSlotsVisual.AffectedSlotsIdxs, ref CommonSlotsVisual.AffectedSlotsCount);
+            Logic.Skip(runData, balance, CommonSlotsVisual.ChangedSlotsIdxs, ref CommonSlotsVisual.ChangedSlotsCount);
             Show();
 
             if (balance.SkipBalance.DoubleMoney[skipType] ||

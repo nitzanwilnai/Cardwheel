@@ -131,8 +131,8 @@ namespace Cardwheel
                 MENU_BUTTONS newSelectedButton = (MENU_BUTTONS)CommonBallVisual.HandleInputGamepadKeyboard(runData, m_uiBallMoveData, m_uiBallVisualData, (COMMON_BUTTONS)m_selectedButton, false, Game.Instance.GetAvailableInputs());
                 selectButton(newSelectedButton);
             }
-            else
-                CommonBallVisual.HanleInputTouchMove(runData, m_uiBallMoveData, mainCamera, false, Game.Instance.GetAvailableInputs());
+
+            CommonBallVisual.HanleInputTouchMove(runData, m_uiBallMoveData, mainCamera, false, Game.Instance.GetAvailableInputs());
 
             if (m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, Game.Instance.GetAvailableInputs()))
             {

@@ -7,16 +7,17 @@ using UnityEngine.Video;
 
 public static class CommonSlotsVisual
 {
-    public static int[] AffectedSlotsIdxs;
-    public static int AffectedSlotsCount;
+    public static int[] ChangedSlotsIdxs;
+    public static int ChangedSlotsCount;
 
     public static float SortingTime = 1.0f;
     public static float SortingTimer = 0.0f;
 
+
     public static void Init(Balance balance)
     {
-        AffectedSlotsIdxs = new int[balance.NumSlots];
-        AffectedSlotsCount = 0;
+        ChangedSlotsIdxs = new int[balance.NumSlots];
+        ChangedSlotsCount = 0;
     }
 
     public static void TickHighlightChangedSlots(float value, AnimationCurve SlotScaleCurve, ScoringSlot[] scoringSlots, SLOT_TYPE[] slotTypes, Color[] slotColors)
@@ -24,14 +25,14 @@ public static class CommonSlotsVisual
         if (value > 1.0f)
             value = 1.0f;
         float colorMult = SlotScaleCurve.Evaluate(value) * 0.5f;
-        for (int i = 0; i < AffectedSlotsCount; i++)
+        for (int i = 0; i < ChangedSlotsCount; i++)
         {
-            int slotIdx = AffectedSlotsIdxs[i];
+            int slotIdx = ChangedSlotsIdxs[i];
             int slotType = (int)slotTypes[slotIdx];
             scoringSlots[slotIdx].SpriteRenderer.color = slotColors[slotType] + Color.white * colorMult;
         }
         if (value >= 1.0f)
-            AffectedSlotsCount = 0;
+            ChangedSlotsCount = 0;
     }
 
     public static void TickSpinWheelUI(RunData runData, float rotationSpeed, float dt, CardsBallsSpinWheelGUI m_cardsBallsSpinWheelGUI)

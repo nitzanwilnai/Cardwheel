@@ -201,7 +201,7 @@ namespace Cardwheel
         {
             SoundManager.Instance.PlaySFXButtonOK();
 
-            Logic.UseCardPackSlotCard(runData, balance, cardIdx, CommonSlotsVisual.AffectedSlotsIdxs, ref CommonSlotsVisual.AffectedSlotsCount);
+            Logic.UseCardPackSlotCard(runData, balance, cardIdx, CommonSlotsVisual.ChangedSlotsIdxs, ref CommonSlotsVisual.ChangedSlotsCount);
 
             m_abandonButtonData.Button.gameObject.SetActive(false);
             m_rerollButtonData.Button.gameObject.SetActive(false);

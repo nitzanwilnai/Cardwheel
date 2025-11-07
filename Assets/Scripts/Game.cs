@@ -3,9 +3,7 @@ using System.IO;
 using CommonTools;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.LowLevel;
-using UnityEngine.InputSystem.Controls;
-using System.Collections.Generic;
+
 
 #if STEAM
 using Steamworks;
@@ -301,7 +299,7 @@ namespace Cardwheel
         {
             gamepadCheck();
 
-                int prevSelectedMenuButton = LastSelectedMenuButton[(int)menuState];
+            int prevSelectedMenuButton = LastSelectedMenuButton[(int)menuState];
 
             if (menuState == MENU_STATE.MAIN_MENU)
                 m_mainMenuVisual.Show();
@@ -312,7 +310,7 @@ namespace Cardwheel
                     m_roundSelectionVisual.SelectPrevButton((RoundSelectionVisual.MENU_BUTTONS)prevSelectedMenuButton);
             }
             else if (menuState == MENU_STATE.ROUND_COMPLETE)
-            {                
+            {
                 m_roundCompleteVisual.Show();
                 if (goingBackToPrevMenu)
                     m_roundCompleteVisual.SelectPrevButton((RoundCompleteVisual.MENU_BUTTONS)prevSelectedMenuButton);
@@ -613,7 +611,7 @@ namespace Cardwheel
 
         public void BallInSlot(int ballIdx, int slotIdx)
         {
-            Board.BallInSlot(m_runData, m_balance, m_settingsData, ballIdx, slotIdx);
+            Board.BallInSlot(m_runData, m_balance, ballIdx, slotIdx);
 
             SoundManager.Instance.PlaySFXMarbleInSlot();
         }

@@ -13,7 +13,7 @@ OcclusionCullingSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 9
+  serializedVersion: 10
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -42,8 +42,8 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 12
-  m_GIWorkflowMode: 1
+  serializedVersion: 13
+  m_BakeOnSceneLoad: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -66,9 +66,6 @@ LightmapSettings:
     m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 1
     m_TextureCompression: 1
-    m_FinalGather: 0
-    m_FinalGatherFiltering: 1
-    m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
     m_MixedBakeMode: 2
     m_BakeBackend: 0
@@ -526,11 +523,11 @@ MonoBehaviour:
   Board: {fileID: 2110473456}
   Camera: {fileID: 519420031}
   UIDebug: {fileID: 315485192}
-  MusicClip: {fileID: 8300000, guid: 40a97273c08eb47ddb41624616051b56, type: 3}
   CommonBundle: common
   GameInfoSO: {fileID: 11400000, guid: e6581526bdc7e48a384cfc00e68bf4ea, type: 2}
   StartSeed: 0
   m_gamepadType: 0
+  LastSelectedMenuButton: 
 --- !u!4 &844177295
 Transform:
   m_ObjectHideFlags: 0
@@ -627,15 +624,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -842,6 +841,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -996,6 +996,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 0.75
   m_Pitch: 1
@@ -1089,9 +1090,93 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 625330239723402528, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.207
+      objectReference: {fileID: 0}
+    - target: {fileID: 625330239723402528, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.152
+      objectReference: {fileID: 0}
+    - target: {fileID: 1079576915275846249, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.735
+      objectReference: {fileID: 0}
+    - target: {fileID: 1079576915275846249, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.698
+      objectReference: {fileID: 0}
+    - target: {fileID: 2568531836020624016, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: SpinWheelLightsStateData.Array.data[4].Count
+      value: 17
+      objectReference: {fileID: 0}
     - target: {fileID: 2646132462451246873, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
       propertyPath: m_Name
       value: Board
+      objectReference: {fileID: 0}
+    - target: {fileID: 2814498264226045707, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.105
+      objectReference: {fileID: 0}
+    - target: {fileID: 2814498264226045707, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.334
+      objectReference: {fileID: 0}
+    - target: {fileID: 2820592563475683445, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6369792634544730535, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.518
+      objectReference: {fileID: 0}
+    - target: {fileID: 6369792634544730535, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.97
+      objectReference: {fileID: 0}
+    - target: {fileID: 6914316755119602861, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.831
+      objectReference: {fileID: 0}
+    - target: {fileID: 6914316755119602861, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.791
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063361928916150422, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: TESTOBJECT
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063361928916150422, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: SparksColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063361928916150422, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: SparksColor.b
+      value: 0.05882353
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063361928916150422, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: SparksColor.g
+      value: 0.76862746
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063361928916150422, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: SparksColor.r
+      value: 0.94509804
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063361928916150422, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: ParticleSystemPuff
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063361928916150422, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: ParticleSystemSparks
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8176807368564177158, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.422
+      objectReference: {fileID: 0}
+    - target: {fileID: 8176807368564177158, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.514
       objectReference: {fileID: 0}
     - target: {fileID: 9154548170960038479, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
       propertyPath: m_LocalPosition.x
