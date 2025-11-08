@@ -538,5 +538,22 @@ namespace Cardwheel
                     UI.GetComponent<CanvasScaler>().matchWidthOrHeight = 1.0f;
             }
         }
+
+        public static void ShowUpdatedCards(
+            RunData runData,
+            Balance balance,
+            string[] descriptionNames,
+            ref float packAnimationTimer,
+            CardPackCardGUI[][] cardPackCardGUIs,
+            GameObject[] descriptionGOs,
+            GUIButtonData rerollButtonData,
+            TextMeshProUGUI rerollCostText)
+        {
+            packAnimationTimer = 0.0f;
+
+            CardPackCommonVisual.ShowCards(runData, balance, cardPackCardGUIs, descriptionGOs, descriptionNames);
+
+            CardPackCommonVisual.ShowRerollButton(runData, balance, rerollButtonData.Button, rerollCostText);
+        }
     }
 }

@@ -37,13 +37,13 @@ namespace Cardwheel
             }
         }
 
-        public static void ShowCards(RunData runData, Balance balance, CardPackCardGUI[][] cardPackCardGUIs, GameObject[] descriptionGOs, string[] descriptionNames, int[] weights, SLOT_TYPE[] slotTypes)
+        public static void ShowCards(RunData runData, Balance balance, CardPackCardGUI[][] cardPackCardGUIs, GameObject[] descriptionGOs, string[] descriptionNames)
         {
             int numCards = balance.CardPackMaxCards[runData.SelectedShopCardPackIdx];
 
             // show cards
             CARD_PACK_TYPE cardPackType = balance.CardPackType[runData.SelectedShopCardPackIdx];
-            Logic.GetCardPackCards(runData, balance, weights, slotTypes);
+            // Logic.GetCardPackCards(runData, balance, weights, slotTypes);
             for (int i = 0; i < cardPackCardGUIs.Length; i++)
                 for (int j = 0; j < cardPackCardGUIs[i].Length; j++)
                     cardPackCardGUIs[i][j].GO.SetActive(false);

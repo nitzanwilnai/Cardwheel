@@ -135,9 +135,9 @@ namespace Cardwheel
             for (int i = 0; i < m_ballStars.Length; i++)
                 m_ballStars[i].SetActive(false);
 
-            CardPackCommonVisual.ShowCards(runData, balance, m_cardPackCardGUIs, m_descriptionGOs, balance.CardPackBallBalance.DescriptionName, balance.CardPackBallBalance.Weights, balance.CardPackBallBalance.AffectedSlotType);
+            Logic.GetCardPackCards(runData, balance, balance.CardPackBallBalance.Weights, balance.CardPackBallBalance.AffectedSlotType);
 
-            CardPackCommonVisual.ShowRerollButton(runData, balance, m_rerollButtonData.Button, m_rerollCostText);
+            CommonVisual.ShowUpdatedCards(runData, balance, balance.CardPackBallBalance.DescriptionName, ref m_packAnimationTimer, m_cardPackCardGUIs, m_descriptionGOs, m_rerollButtonData, m_rerollCostText);
 
             setUseButtonForCards();
 
@@ -171,7 +171,6 @@ namespace Cardwheel
         public void Hide()
         {
             m_UI.SetActive(false);
-            CommonVisual.HideJokers();
 
             for (int i = 0; i < m_descriptionGOs.Length; i++)
                 if (m_descriptionGOs[i] != null)
@@ -220,8 +219,8 @@ namespace Cardwheel
                 MENU_BUTTONS newSelectedButton = (MENU_BUTTONS)CommonBallVisual.HandleInputGamepadKeyboard(runData, m_uiBallMoveData, m_uiBallVisualData, (COMMON_BUTTONS)m_cardPackButton, true, Game.Instance.GetAvailableInputs());
                 selectButton(newSelectedButton);
             }
-            else
-                CommonBallVisual.HanleInputTouchMove(runData, m_uiBallMoveData, mainCamera, true, Game.Instance.GetAvailableInputs());
+
+            CommonBallVisual.HanleInputTouchMove(runData, m_uiBallMoveData, mainCamera, true, Game.Instance.GetAvailableInputs());
 
             COMMON_CARDPACK_BUTTONS currentButton = (COMMON_CARDPACK_BUTTONS)m_cardPackButton;
             if (CardPackCommonVisual.HandleEnter(m_abandonButtonData, m_rerollButtonData, currentButton))
@@ -329,10 +328,16 @@ namespace Cardwheel
 
         public void Reroll()
         {
-            if (Logic.TryRerollCardPack(runData, balance))
+            if (Logic.TryRerollCardPack(runData, balance, balance.CardPackBallBalance.Weights, balance.CardPackBallBalance.AffectedSlotType))
             {
-                Hide();
-                Show();
+                m_UI.SetActive(false);
+
+                for (int i = 0; i < m_descriptionGOs.Length; i++)
+                    if (m_descriptionGOs[i] != null)
+                        GameObject.Destroy(m_descriptionGOs[i]);
+
+                m_UI.SetActive(true);
+                CommonVisual.ShowUpdatedCards(runData, balance, balance.CardPackBallBalance.DescriptionName, ref m_packAnimationTimer, m_cardPackCardGUIs, m_descriptionGOs, m_rerollButtonData, m_rerollCostText);
             }
         }
     }

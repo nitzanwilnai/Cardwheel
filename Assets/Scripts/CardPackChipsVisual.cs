@@ -91,9 +91,9 @@ namespace Cardwheel
 
             CommonVisual.ShowTopBarNoSettings(runData, m_topBarGUI, "Card Pack - Slot Chips");
 
-            CardPackCommonVisual.ShowCards(runData, balance, m_cardPackCardGUIs, m_descriptionGOs, balance.CardPackChipsBalance.DescriptionName, balance.CardPackChipsBalance.Weights, balance.CardPackChipsBalance.AffectedSlotType);
+            Logic.GetCardPackCards(runData, balance, balance.CardPackChipsBalance.Weights, balance.CardPackChipsBalance.AffectedSlotType);
 
-            CardPackCommonVisual.ShowRerollButton(runData, balance, m_rerollButtonData.Button, m_rerollCostText);
+            CommonVisual.ShowUpdatedCards(runData, balance, balance.CardPackChipsBalance.DescriptionName, ref m_packAnimationTimer, m_cardPackCardGUIs, m_descriptionGOs, m_rerollButtonData, m_rerollCostText);
 
             m_abandonButtonData.Button.gameObject.SetActive(false);
             m_rerollButtonData.Button.gameObject.SetActive(false);
@@ -186,14 +186,14 @@ namespace Cardwheel
             COMMON_CARDPACK_BUTTONS newCardPackButton = CardPackCommonVisual.HandleNavigation(m_cardPackButton, balance.CardPackMaxCards[runData.SelectedShopCardPackIdx]);
             if (newCardPackButton != m_cardPackButton)
             {
-                    CardPackCommonVisual.SelectButton(
-                        runData,
-                        balance,
-                        newCardPackButton,
-                        ref m_cardPackButton,
-                        m_cardPackCardGUIs,
-                        m_abandonButtonData,
-                        m_rerollButtonData);
+                CardPackCommonVisual.SelectButton(
+                    runData,
+                    balance,
+                    newCardPackButton,
+                    ref m_cardPackButton,
+                    m_cardPackCardGUIs,
+                    m_abandonButtonData,
+                    m_rerollButtonData);
                 return;
             }
         }
@@ -229,10 +229,11 @@ namespace Cardwheel
 
         public void Reroll()
         {
-            if (Logic.TryRerollCardPack(runData, balance))
+            if (Logic.TryRerollCardPack(runData, balance, balance.CardPackChipsBalance.Weights, balance.CardPackChipsBalance.AffectedSlotType))
             {
                 Hide();
-                Show();
+                m_UI.SetActive(true);
+                CommonVisual.ShowUpdatedCards(runData, balance, balance.CardPackChipsBalance.DescriptionName, ref m_packAnimationTimer, m_cardPackCardGUIs, m_descriptionGOs, m_rerollButtonData, m_rerollCostText);
             }
         }
 
