@@ -99,9 +99,9 @@ namespace Cardwheel
             // show slots
             CommonSlotsVisual.ShowSpinWheelUI(runData, balance, m_scoringSlots, runData.SlotType);
 
-            CardPackCommonVisual.ShowCards(runData, balance, m_cardPackCardGUIs, m_descriptionGOs, balance.CardPackSlotBalance.DescriptionName, balance.CardPackSlotBalance.Weights, balance.CardPackSlotBalance.AffectedSlotType);
+            Logic.GetCardPackCards(runData, balance, balance.CardPackSlotBalance.Weights, balance.CardPackSlotBalance.AffectedSlotType);
 
-            CardPackCommonVisual.ShowRerollButton(runData, balance, m_rerollButtonData.Button, m_rerollCostText);
+            CommonVisual.ShowUpdatedCards(runData, balance, balance.CardPackSlotBalance.DescriptionName, ref m_packAnimationTimer, m_cardPackCardGUIs, m_descriptionGOs, m_rerollButtonData, m_rerollCostText);
 
             m_abandonButtonData.Button.gameObject.SetActive(false);
             m_rerollButtonData.Button.gameObject.SetActive(false);
@@ -229,10 +229,11 @@ namespace Cardwheel
 
         public void Reroll()
         {
-            if (Logic.TryRerollCardPack(runData, balance))
+            if (Logic.TryRerollCardPack(runData, balance, balance.CardPackSlotBalance.Weights, balance.CardPackSlotBalance.AffectedSlotType))
             {
                 Hide();
-                Show();
+                m_UI.SetActive(true);
+                CommonVisual.ShowUpdatedCards(runData, balance, balance.CardPackSlotBalance.DescriptionName, ref m_packAnimationTimer, m_cardPackCardGUIs, m_descriptionGOs, m_rerollButtonData, m_rerollCostText);
             }
         }
 

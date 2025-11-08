@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Cardwheel;
 using UnityEngine;
 
@@ -1663,7 +1664,7 @@ public static class Logic
         runData.ShopCardPackIdxs[1] = GetRandomCardPackIdx(runData, balance);
     }
 
-    public static void GetCardPackCards(RunData runData, Balance balance, int[] weights, SLOT_TYPE[] slotTypes)
+    public static void GetCardPackCards(RunData runData, Balance balance, Span<int> weights, SLOT_TYPE[] slotTypes)
     {
         int maxCards = balance.CardPackMaxCards[runData.SelectedShopCardPackIdx];
 
@@ -1770,7 +1771,7 @@ public static class Logic
         runData.CardPackRerollCount = 0;
     }
 
-    public static bool TryRerollCardPack(RunData runData, Balance balance)
+    public static bool TryRerollCardPack(RunData runData, Balance balance, int[] weights, SLOT_TYPE[] slotTypes)
     {
         int cost = GetCardPackRerollCost(runData, balance);
         if (CanBuy(runData, balance, cost))
@@ -1778,6 +1779,18 @@ public static class Logic
             runData.Money -= cost;
             runData.CardPackRerollCount++;
             runData.CardPackRerollTotal++;
+
+            Span<int> tempWeights = stackalloc int[weights.Length];
+            for (int i = 0; i < weights.Length; i++)
+                tempWeights[i] = weights[i] * 10;
+
+            for (int i = 0; i < balance.CardPackMaxCards[runData.SelectedShopCardPackIdx]; i++)
+            {
+                int index = runData.CardPackCardIdxs[i];
+                tempWeights[index] = 1;
+            }
+
+            GetCardPackCards(runData, balance, tempWeights, slotTypes);
             return true;
         }
         return false;
