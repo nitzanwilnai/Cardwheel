@@ -78,6 +78,8 @@ namespace Cardwheel
             CommonBallVisual.PositionBalls(balance, m_uiBallMoveData);
             CommonBallVisual.ShowBalls(runData.BallTypes, balance, m_uiBallVisualData);
 
+            CommonButtonVisual.UpdateButtonIcons(m_closeButtonData, Game.Instance.GetGamepadType());
+
             selectButton(MENU_BUTTONS.CLOSE);
 
             m_descriptionTouch.SetActive(false);

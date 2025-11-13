@@ -234,11 +234,11 @@ public static class Logic
         // runData.SkipType[3] = 13;
         // runData.SkipType[1] = 7;
 
-        // AddJoker(runData, balance, 75);
-        // AddJoker(runData, balance, 76);
-        // AddJoker(runData, balance, 84);
-        // AddJoker(runData, balance, 81);
-        // AddJoker(runData, balance, 5);
+        AddJoker(runData, balance, 60);
+        // AddJoker(runData, balance, 30);
+        // AddJoker(runData, balance, 63);
+        // AddJoker(runData, balance, 68);
+        // AddJoker(runData, balance, 73); // 74 and 30
 
         // for (int i = 0; i < runData.BallTypes.Length; i++)
         //     runData.BallTypes[i] = i;
@@ -258,11 +258,11 @@ public static class Logic
         // runData.SlotModType[9] = 0;
         // runData.SlotModType[10] = 0;
 
-        for (int i = 0; i < balance.BossBalance.NumBosses; i++)
-            if (balance.BossBalance.BossEffect[i] == BOSS_EFFECT.MOST_PLAYED_BASE_CHIPS_TO_FIVE)
-                runData.BossType[0] = i;
+        // for (int i = 0; i < balance.BossBalance.NumBosses; i++)
+        //     if (balance.BossBalance.BossEffect[i] == BOSS_EFFECT.BALLS_DEBUFFED_FIRST_SPIN)
+        //         runData.BossType[0] = i;
 
-        runData.VoucherSlotMostPlayedColor = true;
+        // runData.VoucherSlotMostPlayedColor = true;
 
         // runData.Money = 0;
         // runData.VoucherShopDiscount *= 0.75f;
@@ -639,10 +639,10 @@ public static class Logic
             runData.JokerSpins[jkrIdx]++;
 
         runData.JokerBallTriggerIdx = 0;
+    }
 
-        runData.CurrentSpin++;
-        runData.TotalSpins++;
-        runData.SpinsUsed++;
+    public static void DropBalls(RunData runData)
+    {
     }
 
     public static void JumbleBalls(RunData runData, Balance balance)
@@ -682,7 +682,7 @@ public static class Logic
             if (balance.BossBalance.BossEffect[bossType] >= BOSS_EFFECT.ONLY_RED_FIRST_SPIN &&
                 balance.BossBalance.BossEffect[bossType] <= BOSS_EFFECT.ONLY_BLUE_FIRST_SPIN)
             {
-                if (runData.CurrentSpin > 1)
+                if (runData.CurrentSpin > 0)
                 {
                     for (int i = 0; i < (int)SLOT_TYPE.LAST; i++)
                     {
@@ -758,7 +758,7 @@ public static class Logic
             int slotType = (int)runData.SlotTypeInGame[slotIdx];
             runData.ColorCount[slotType]++;
 
-            if (runData.CurrentSpin == 1 && ballIdx == 0)
+            if (runData.CurrentSpin == 0 && ballIdx == 0)
                 for (int jokerIdx = 0; jokerIdx < runData.JokerCount; jokerIdx++)
                 {
                     int jokerType = runData.JokerTypes[jokerIdx];
@@ -1104,7 +1104,7 @@ public static class Logic
         {
             int jokerType = runData.JokerTypes[jokerIdx];
             if (balance.JokerBalance.RetriggerBallsEverySpin[jokerType] ||
-            (runData.CurrentSpin == runData.MaxSpinsThisRound && balance.JokerBalance.RetriggerBallsLastSpin[jokerType]))
+            (runData.CurrentSpin + 1 == runData.MaxSpinsThisRound && balance.JokerBalance.RetriggerBallsLastSpin[jokerType]))
             {
                 runData.JokerBallTriggerIdx = jokerIdx + 1;
                 return jokerIdx;
@@ -1152,7 +1152,7 @@ public static class Logic
         if (!scoringBossCheck(runData, balance))
             chips = 0;
 
-        Debug.Log("jokerType " + jokerType + " chips " + chips);
+        // Debug.Log("jokerType " + jokerType + " chips " + chips);
 
         runData.SpinChips += chips;
 
@@ -1168,7 +1168,7 @@ public static class Logic
             mult += balance.JokerBalance.BaseMultiplierAdd[jokerType];
             runData.JokerMultiplierAdd[jokerIdx] += balance.JokerBalance.MultIncreaseForSize[jokerType];
 
-            if (runData.CurrentSpin == runData.MaxSpinsThisRound)
+            if (runData.CurrentSpin + 1 == runData.MaxSpinsThisRound)
                 mult += balance.JokerBalance.LastSpinMultiplierAdd[jokerType];
         }
 
@@ -1219,7 +1219,7 @@ public static class Logic
         if (!scoringBossCheck(runData, balance))
             mult = 0;
 
-        Debug.Log("jokerType " + jokerType + " mult " + mult);
+        // Debug.Log("jokerType " + jokerType + " mult " + mult);
 
         runData.SpinMultiplier += mult;
 
@@ -1231,7 +1231,7 @@ public static class Logic
     {
         float mult = 0.0f;
 
-        Debug.Log("jokerType " + jokerType + " mult " + mult);
+        // Debug.Log("jokerType " + jokerType + " mult " + mult);
 
         if (jokerBaseCheck(runData, balance, jokerIdx, jokerType))
             mult += balance.JokerBalance.BaseMultiplierMult[jokerType];
@@ -1361,6 +1361,10 @@ public static class Logic
 
     public static void SpinComplete(RunData runData, Balance balance)
     {
+        runData.CurrentSpin++;
+        runData.TotalSpins++;
+        runData.SpinsUsed++;
+
         if (InBossRound(runData))
         {
             int bossType = GetBossTypeForRound(runData);
@@ -1576,7 +1580,7 @@ public static class Logic
         if (runData.Round < 3 && runData.SkipShopUncommonJoker == 0)
             uncommonJokerCount = 0;
 
-        Debug.Log("commonJokerCount " + commonJokerCount + " uncommonJokerCount " + uncommonJokerCount + " rareJokerCount " + rareJokerCount);
+        // Debug.Log("commonJokerCount " + commonJokerCount + " uncommonJokerCount " + uncommonJokerCount + " rareJokerCount " + rareJokerCount);
 
         float rareWeight = 0.05f * runData.VoucherRareJoker;
 
@@ -1587,11 +1591,11 @@ public static class Logic
             // 70% Common
             float rarityRandom = CustomRandFloat(ref runData.ShopSeed);
 
-            Debug.Log("rarityRandom " + rarityRandom);
+            // Debug.Log("rarityRandom " + rarityRandom);
 
             if (runData.SkipShopRareJoker > 0)
             {
-                Debug.Log("runData.SkipShopRareJoker " + runData.SkipShopRareJoker);
+                // Debug.Log("runData.SkipShopRareJoker " + runData.SkipShopRareJoker);
 
                 // force rare joker if available
                 runData.SkipShopRareJoker--;
@@ -1599,7 +1603,7 @@ public static class Logic
             }
             else if (runData.SkipShopUncommonJoker > 0)
             {
-                Debug.Log("runData.SkipShopUncommonJoker " + runData.SkipShopUncommonJoker);
+                // Debug.Log("runData.SkipShopUncommonJoker " + runData.SkipShopUncommonJoker);
 
                 // force uncommon joker if available
                 runData.SkipShopUncommonJoker--;

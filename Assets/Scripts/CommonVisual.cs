@@ -320,7 +320,7 @@ namespace Cardwheel
             {
                 int ballType = runData.BallTypes[ballIdx];
                 cardsBallsSpinWheelGUI.Balls[ballIdx].sprite = AssetManager.Instance.LoadBallSprite(balance.BallBalance.BallSprite[ballType]);
-                Debug.Log("CommonVisual showBalls ballType " + ballType + " sprite " + cardsBallsSpinWheelGUI.Balls[ballIdx].sprite.name);
+                // Debug.Log("CommonVisual showBalls ballType " + ballType + " sprite " + cardsBallsSpinWheelGUI.Balls[ballIdx].sprite.name);
             }
         }
 
@@ -523,19 +523,21 @@ namespace Cardwheel
         {
             float ratio = (float)Screen.width / (float)Screen.height;
 
+            CanvasScaler canvasScaler = UI.GetComponent<CanvasScaler>();
+
             if (Screen.width < Screen.height)
             {
                 if (ratio > 9.0f / 16.0f)
-                    UI.GetComponent<CanvasScaler>().matchWidthOrHeight = 1.0f;
+                    canvasScaler.matchWidthOrHeight = 1.0f;
                 else
-                    UI.GetComponent<CanvasScaler>().matchWidthOrHeight = 0.0f;
+                    canvasScaler.matchWidthOrHeight = 0.0f;
             }
             else
             {
-                if (ratio < 16.0f / 9.0f)
-                    UI.GetComponent<CanvasScaler>().matchWidthOrHeight = 0.0f;
+                if (ratio < 16.0f / 9.0f && canvasScaler.referenceResolution.x > canvasScaler.referenceResolution.y)
+                    canvasScaler.matchWidthOrHeight = 0.0f;
                 else
-                    UI.GetComponent<CanvasScaler>().matchWidthOrHeight = 1.0f;
+                    canvasScaler.matchWidthOrHeight = 1.0f;
             }
         }
 

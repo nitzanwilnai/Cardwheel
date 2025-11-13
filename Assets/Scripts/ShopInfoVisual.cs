@@ -20,6 +20,8 @@ namespace Cardwheel
         GameObject m_UI;
 
         TextMeshProUGUI[] m_baseChipsText;
+        TextMeshProUGUI m_mostFrequent;
+        TextMeshProUGUI m_leastFrequest;
 
         float m_closeTimer = 0.0f;
         float m_closeTime = 0.1f;
@@ -48,7 +50,7 @@ namespace Cardwheel
             m_animation = guiRef.GetAnimation("Animation");
 
             m_baseChipsText = new TextMeshProUGUI[(int)SLOT_TYPE.LAST];
-            CommonChipsVisual.InitChipsInfo(guiRef, m_baseChipsText);
+            CommonChipsVisual.InitChipsInfo(guiRef, m_baseChipsText, ref m_mostFrequent, ref m_leastFrequest);
 
             GUIButtonRef guiButtonRef = m_UI.GetComponent<GUIButtonRef>();
             m_closeButtonData = guiButtonRef.GetButtonData("Close");
@@ -69,7 +71,7 @@ namespace Cardwheel
         {
             m_UI.SetActive(true);
 
-            CommonChipsVisual.Show(runData, m_baseChipsText);
+            CommonChipsVisual.Show(runData, balance, m_baseChipsText, m_mostFrequent, m_leastFrequest);
 
             int smallRound = runData.Round % 3;
             int bigRound = runData.Round / 3;

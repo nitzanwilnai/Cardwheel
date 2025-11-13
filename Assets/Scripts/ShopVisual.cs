@@ -424,7 +424,7 @@ namespace Cardwheel
             hideAllButtonSelections();
 
             m_selectedShopButton = selectedButton;
-            if (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
+            if (CommonButtonVisual.ShowSelected())
             {
                 m_nextRoundButtonData.SelectedGO.SetActive(m_selectedShopButton == SHOP_MENU_BUTTONS.NEXT_ROUND);
                 m_rerollButtonData.SelectedGO.SetActive(m_selectedShopButton == SHOP_MENU_BUTTONS.REROLL);
@@ -498,7 +498,7 @@ namespace Cardwheel
                 CommonButtonVisual.UpdateButtonIcons(m_jokerBuyPopupGUI.BuyButtonData, Game.Instance.GetGamepadType());
                 CommonButtonVisual.UpdateButtonIcons(m_jokerBuyPopupGUI.CancelButtonData, Game.Instance.GetGamepadType());
 
-                m_jokerBuyPopupGUI.BuyButtonData.SelectedGO.SetActive(Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD));
+                m_jokerBuyPopupGUI.BuyButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected());
                 m_jokerBuyPopupGUI.CancelButtonData.SelectedGO.SetActive(false);
             }
         }
@@ -533,7 +533,7 @@ namespace Cardwheel
             CommonButtonVisual.UpdateButtonIcons(m_cardPackBuyPopupGUI.BuyButtonData, Game.Instance.GetGamepadType());
             CommonButtonVisual.UpdateButtonIcons(m_cardPackBuyPopupGUI.CancelButtonData, Game.Instance.GetGamepadType());
 
-            m_cardPackBuyPopupGUI.BuyButtonData.SelectedGO.SetActive(Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD));
+            m_cardPackBuyPopupGUI.BuyButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected());
             m_cardPackBuyPopupGUI.CancelButtonData.SelectedGO.SetActive(false);
         }
 
@@ -560,7 +560,7 @@ namespace Cardwheel
             CommonButtonVisual.UpdateButtonIcons(m_voucherBuyPopupGUI.BuyButtonData, Game.Instance.GetGamepadType());
             CommonButtonVisual.UpdateButtonIcons(m_voucherBuyPopupGUI.CancelButtonData, Game.Instance.GetGamepadType());
 
-            m_voucherBuyPopupGUI.BuyButtonData.SelectedGO.SetActive(Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD));
+            m_voucherBuyPopupGUI.BuyButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected());
             m_voucherBuyPopupGUI.CancelButtonData.SelectedGO.SetActive(false);
         }
 
@@ -635,7 +635,8 @@ namespace Cardwheel
                 if (CommonButtonVisual.NavigateGamepadButton(m_cardPackBuyPopupGUI.BuyButtonData, Game.Instance.GetAvailableInputs()) ||
                 m_popupButtons == POPUP_BUTTONS.BUY && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
                 {
-                    int cardPackIdx = m_selectedShopButton - SHOP_MENU_BUTTONS.SHOP_CARDPACK_1;
+                    int cardPackShopIndex = m_selectedShopButton - SHOP_MENU_BUTTONS.SHOP_CARDPACK_1;
+                    int cardPackIdx = runData.ShopCardPackIdxs[cardPackShopIndex];
                     if (Logic.CanBuy(runData, balance, Logic.GetCardPackShopCost(runData, balance, cardPackIdx)))
                         buyShopCardPack(cardPackIdx);
                 }

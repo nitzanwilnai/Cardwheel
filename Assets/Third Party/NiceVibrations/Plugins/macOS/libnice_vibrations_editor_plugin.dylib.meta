@@ -78,3 +78,10 @@ PluginImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 183370
+  packageName: Feel
+  packageVersion: 5.8
+  assetPath: Assets/Third Party/NiceVibrations/Plugins/macOS/libnice_vibrations_editor_plugin.dylib
+  uploadId: 799856

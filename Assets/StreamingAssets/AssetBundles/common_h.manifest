@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
-UnityVersion: 6000.0.58f2
-CRC: 3395834970
+UnityVersion: 6000.0.61f1
+CRC: 1272084369
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 373c29dc98cda0c080b98a123f40e22c
+    Hash: 42bd6ef7591b2f86088f9da5584fc09d
   TypeTreeHash:
     serializedVersion: 2
     Hash: c142684008850ddf3636ce192491e446
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 8e34ab30b30bee15d958555de15990b4
+    Hash: 2bc328f3d80ec170facd6e2a9a50c791
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -153,14 +153,13 @@ Assets:
 - Assets/Prefabs/CommonH/UI - Shop.prefab
 - Assets/Prefabs/CommonH/UI - Round Info.prefab
 - Assets/Prefabs/CommonH/UI - Main Menu.prefab
-- Assets/Prefabs/CommonH/UI - In Game Info.prefab
 - Assets/Prefabs/CommonH/UI - Win Screen.prefab
 - Assets/Prefabs/CommonH/UI - Boss Info.prefab
 - Assets/Prefabs/CommonH/UI - Card Pack Balls.prefab
 - Assets/Prefabs/CommonH/UI - Joker Info Popup.prefab
 - Assets/Prefabs/CommonH/UI - Wheel Selection.prefab
 - Assets/Prefabs/CommonH/UI - Round Complete.prefab
-- Assets/Prefabs/CommonH/UI - Chips Info.prefab
+- Assets/Prefabs/CommonH/UI - In Game Info.prefab
 - Assets/Prefabs/CommonH/UI - Cards Balls SpinWheel.prefab
 - Assets/Prefabs/CommonH/UI - In Game.prefab
 - Assets/Prefabs/CommonH/UI - Ball Screen.prefab

@@ -12,7 +12,7 @@ namespace Cardwheel
 {
     public class MainMenuVisual : MonoBehaviour
     {
-        public enum MENU_BUTTONS { NEW_GAME, CONTINUE };
+        public enum MENU_BUTTONS { NEW_GAME, CONTINUE, EXIT };
         MENU_BUTTONS m_selectedButton;
 
         GameObject m_UI;
@@ -39,6 +39,9 @@ namespace Cardwheel
         GUIButtonData m_newGameButtonData;
         GUIButtonData m_continueButtonData;
         GUIButtonData m_privacyPolicyButtonData;
+        GUIButtonData m_exitButtonData;
+
+        bool m_conitnueButtonOk = false;
 
         public void Init(Camera camera, Balance balance)
         {
@@ -60,6 +63,10 @@ namespace Cardwheel
             m_privacyPolicyButtonData = guiButtonRef.GetButtonData("PrivacyPolicy");
             m_privacyPolicyButtonData.Button.onClick.AddListener(Game.Instance.GoToPrivacyPolicy);
             CommonButtonVisual.AddSelectedBorder(m_privacyPolicyButtonData);
+
+            m_exitButtonData = guiButtonRef.GetButtonData("Exit");
+            m_exitButtonData.Button.onClick.AddListener(Game.Instance.ExitGame);
+            CommonButtonVisual.AddSelectedBorder(m_exitButtonData);
 
             GUIRef guiRef = m_UI.GetComponent<GUIRef>();
 
@@ -126,7 +133,8 @@ namespace Cardwheel
 
 
             MENU_STATE menuState = RunDataIO.LoadMenuStateOnly();
-            m_continueButtonData.Button.gameObject.SetActive(menuState >= MENU_STATE.IN_GAME && menuState < MENU_STATE.GAME_OVER);
+            m_conitnueButtonOk = menuState >= MENU_STATE.IN_GAME && menuState < MENU_STATE.GAME_OVER;
+            m_continueButtonData.Button.gameObject.SetActive(m_conitnueButtonOk);
 
             CommonButtonVisual.UpdateButtonIcons(m_newGameButtonData, Game.Instance.GetGamepadType());
             CommonButtonVisual.UpdateButtonIcons(m_continueButtonData, Game.Instance.GetGamepadType());
@@ -141,6 +149,7 @@ namespace Cardwheel
             m_selectedButton = selectedButton;
             m_newGameButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.NEW_GAME);
             m_continueButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.CONTINUE);
+            m_exitButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.EXIT);
         }
 
 
@@ -172,21 +181,72 @@ namespace Cardwheel
         private void handleInput()
         {
             if (CommonButtonVisual.NavigateGamepadButton(m_newGameButtonData, Game.Instance.GetAvailableInputs()))
+            {
                 animateGoToWheelSelection();
+                return;
+            }
 
             if (CommonButtonVisual.NavigateGamepadButton(m_continueButtonData, Game.Instance.GetAvailableInputs()))
+            {
                 animateContinueGame();
+                return;
+            }
+
+            if (CommonButtonVisual.NavigateGamepadButton(m_exitButtonData, Game.Instance.GetAvailableInputs()))
+            {
+                Game.Instance.ExitGame();
+                return;
+            }
 
             if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            {
                 animateGoToWheelSelection();
+                return;
+            }
 
             if (m_selectedButton == MENU_BUTTONS.CONTINUE && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            {
                 animateContinueGame();
+                return;
+            }
 
-            if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
-                selectButton(MENU_BUTTONS.CONTINUE);
+            if (m_selectedButton == MENU_BUTTONS.EXIT && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            {
+                Game.Instance.ExitGame();
+                return;
+            }
+
+            // navigate
+            if (m_conitnueButtonOk && m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
+            {
+                if (m_conitnueButtonOk)
+                    selectButton(MENU_BUTTONS.CONTINUE);
+                else
+                    selectButton(MENU_BUTTONS.EXIT);
+                return;
+            }
+
             if (m_selectedButton == MENU_BUTTONS.CONTINUE && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
+            {
                 selectButton(MENU_BUTTONS.NEW_GAME);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.CONTINUE && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
+            {
+                selectButton(MENU_BUTTONS.EXIT);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.EXIT && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
+            {
+                if (m_conitnueButtonOk)
+                    selectButton(MENU_BUTTONS.CONTINUE);
+                else
+                    selectButton(MENU_BUTTONS.NEW_GAME);
+                return;
+            }
+
         }
 
         public void Hide()

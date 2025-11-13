@@ -12,6 +12,8 @@ namespace Cardwheel
         GameObject m_UI;
 
         TextMeshProUGUI[] m_baseChipsText;
+        TextMeshProUGUI m_mostFrequent;
+        TextMeshProUGUI m_leastFrequest;
 
         float m_closeTimer = 0.0f;
         float m_closeTime = 0.1f;
@@ -34,18 +36,19 @@ namespace Cardwheel
             CommonButtonVisual.AddSelectedBorder(m_closeButtonData);
 
             m_baseChipsText = new TextMeshProUGUI[(int)SLOT_TYPE.LAST];
-            CommonChipsVisual.InitChipsInfo(guiRef, m_baseChipsText);
+            CommonChipsVisual.InitChipsInfo(guiRef, m_baseChipsText, ref m_mostFrequent, ref m_leastFrequest);
 
             m_UI.SetActive(false);
         }
 
-        public void Show(RunData runData)
+        public void Show(RunData runData, Balance balance)
         {
             m_UI.SetActive(true);
 
-            CommonChipsVisual.Show(runData, m_baseChipsText);
+            CommonChipsVisual.Show(runData, balance, m_baseChipsText, m_mostFrequent, m_leastFrequest);
 
             m_closeButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected());
+            CommonButtonVisual.UpdateButtonIcons(m_closeButtonData, Game.Instance.GetGamepadType());
         }
 
         public void Tick(RunData runData, float dt)
@@ -53,7 +56,7 @@ namespace Cardwheel
             if (CommonVisual.AnimateCloseTick(ref m_closeTimer, dt))
                 Game.Instance.SetMenuState(runData.PrevMenuState);
 
-            if (CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, Game.Instance.GetAvailableInputs()))
+            if (m_closeTimer <= 0.0f && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, Game.Instance.GetAvailableInputs()))
                 animateClose();
         }
 

@@ -212,7 +212,7 @@ namespace Cardwheel
 
         public GameObject LoadChipsInfoUI()
         {
-            return Instantiate(loadGameObject(m_commonBundleUI, "UI - Chips Info", "Assets/Prefabs/" + m_commonUIBundlePath + "/UI - Chips Info.prefab"));
+            return Instantiate(loadGameObject(m_commonBundle, "UI - Chips Info", "Assets/Prefabs/Common/UI - Chips Info.prefab"));
         }
 
         public GameInfoVisual LoadGameInfoVisual()
@@ -313,6 +313,7 @@ namespace Cardwheel
 
         public Sprite GetGamepadGlyph(GAMEPAD_TYPE gamepadType, GAMEPAD_BUTTON gamepadButton)
         {
+            Debug.Log("(int)gamepadButton " + (int)gamepadButton);
             if (gamepadType == GAMEPAD_TYPE.PS5)
                 return GamepadGlyphsPS5[(int)gamepadButton];
             else if (gamepadType == GAMEPAD_TYPE.XBOX)

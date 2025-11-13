@@ -3161,39 +3161,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4925019916941643648, guid: cc479ee69cccd45e9acc77d628cd98a7, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5813896209021455363, guid: cc479ee69cccd45e9acc77d628cd98a7, type: 3}
+      propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5813896209021455363, guid: cc479ee69cccd45e9acc77d628cd98a7, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5813896209021455363, guid: cc479ee69cccd45e9acc77d628cd98a7, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5813896209021455363, guid: cc479ee69cccd45e9acc77d628cd98a7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 341
       objectReference: {fileID: 0}
     - target: {fileID: 5813896209021455363, guid: cc479ee69cccd45e9acc77d628cd98a7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -75
       objectReference: {fileID: 0}
     - target: {fileID: 7061120783915531146, guid: cc479ee69cccd45e9acc77d628cd98a7, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7061120783915531146, guid: cc479ee69cccd45e9acc77d628cd98a7, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7061120783915531146, guid: cc479ee69cccd45e9acc77d628cd98a7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 7061120783915531146, guid: cc479ee69cccd45e9acc77d628cd98a7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -75
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3826,6 +3826,14 @@ PrefabInstance:
     - target: {fileID: 2115602107647144310, guid: 314d3229303df4f718fa09f0a76c6210, type: 3}
       propertyPath: m_SortingLayer
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2140313694180765684, guid: 314d3229303df4f718fa09f0a76c6210, type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2140313694180765684, guid: 314d3229303df4f718fa09f0a76c6210, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2189567876475067982, guid: 314d3229303df4f718fa09f0a76c6210, type: 3}
       propertyPath: m_SortingLayer
