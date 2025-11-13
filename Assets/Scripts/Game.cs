@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 
+
 #if STEAM
 using Steamworks;
 #endif
@@ -123,7 +124,7 @@ namespace Cardwheel
                 else
                     m_availableInputs = Logic.RemoveBit(m_availableInputs, (int)INPUT_TYPES.KEYBOARD);
 
-                Cursor.visible = Mouse.current != null;
+                Cursor.visible = (Mouse.current != null);
             }
 
             Debug.Log("m_availableInputs " + m_availableInputs);

@@ -638,7 +638,7 @@ namespace Cardwheel
                     int cardPackShopIndex = m_selectedShopButton - SHOP_MENU_BUTTONS.SHOP_CARDPACK_1;
                     int cardPackIdx = runData.ShopCardPackIdxs[cardPackShopIndex];
                     if (Logic.CanBuy(runData, balance, Logic.GetCardPackShopCost(runData, balance, cardPackIdx)))
-                        buyShopCardPack(cardPackIdx);
+                        buyShopCardPack(cardPackShopIndex);
                 }
 
             if (m_popupState == POPUP_STATE.VOUCHER)
