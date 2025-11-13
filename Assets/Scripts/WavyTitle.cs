@@ -8,8 +8,16 @@ public class WavyTitle : MonoBehaviour
     public float AnimYMult = 1.0f;
 
     public GameObject[] Title;
+    RectTransform[] m_rectTransforms;
 
     float m_time;
+
+    void Awake()
+    {
+        m_rectTransforms = new RectTransform[Title.Length];
+        for (int i = 0; i < Title.Length; i++)
+            m_rectTransforms[i] = Title[i].GetComponent<RectTransform>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -21,12 +29,17 @@ public class WavyTitle : MonoBehaviour
 
         for (int i = 0; i < Title.Length; i++)
         {
-            Vector3 pos = Title[i].transform.localPosition;
             float time = m_time + (i / (float)Title.Length);
             if (time > 1.0f)
                 time -= 1.0f;
-            pos.y = TitleAnimCurve.Evaluate(time) * AnimYMult;
-            Title[i].transform.localPosition = pos;
+         
+            // Vector3 pos = Title[i].transform.localPosition;
+            // pos.y = TitleAnimCurve.Evaluate(time) * AnimYMult;
+            // Title[i].transform.localPosition = pos;
+
+            Vector2 anchoredPos = m_rectTransforms[i].anchoredPosition;
+            anchoredPos.y = TitleAnimCurve.Evaluate(time) * AnimYMult;
+            m_rectTransforms[i].anchoredPosition = anchoredPos;
         }
     }
 }
