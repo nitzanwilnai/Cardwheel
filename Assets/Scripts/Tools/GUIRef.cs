@@ -81,7 +81,7 @@ namespace CommonTools
                 if (GUIRefGameObjects[i].Name == name)
                     return GUIRefGameObjects[i].Value;
 
-            Debug.LogErrorFormat("GUIRef GetGameObject({0}) does not exist!", name);
+            Debug.LogErrorFormat("GUIRef " + gameObject.name + " GetGameObject(" + name + ") does not exist!");
             return null;
         }
 
@@ -92,7 +92,7 @@ namespace CommonTools
                 if (GUIRefTexts[i].Name == name)
                     return GUIRefTexts[i].Value;
 
-            Debug.LogErrorFormat("GUIRef GetText({0}) does not exist!", name);
+            Debug.LogErrorFormat("GUIRef " + gameObject.name + " GetText(" + name + ") does not exist!");
             return null;
         }
 
@@ -103,7 +103,7 @@ namespace CommonTools
                 if (GUIRefTextGUI[i].Name == name)
                     return GUIRefTextGUI[i].Value;
 
-            Debug.LogErrorFormat("GUIRef GetTextGUI({0}) does not exist!", name);
+            Debug.LogErrorFormat("GUIRef " + gameObject.name + " GetTextGUI(" + name + ") does not exist!");
             return null;
         }
 
@@ -114,7 +114,7 @@ namespace CommonTools
                 if (GUIRefImages[i].Name == name)
                     return GUIRefImages[i].Value;
 
-            Debug.LogErrorFormat("GUIRef GetImage({0}) does not exist!", name);
+            Debug.LogErrorFormat("GUIRef " + gameObject.name + " GetImage(" + name + ") does not exist!");
             return null;
         }
 
@@ -125,7 +125,7 @@ namespace CommonTools
                 if (GUIRefRawImages[i].Name == name)
                     return GUIRefRawImages[i].Value;
 
-            Debug.LogErrorFormat("GUIRef GetRawImage({0}) does not exist!", name);
+            Debug.LogErrorFormat("GUIRef " + gameObject.name + " GetRawImage(" + name + ") does not exist!");
             return null;
         }
 
@@ -136,7 +136,7 @@ namespace CommonTools
                 if (GUIRefButtons[i].Name == name)
                     return GUIRefButtons[i].Value;
 
-            Debug.LogErrorFormat("GUIRef GetButton({0}) does not exist!", name);
+            Debug.LogErrorFormat("GUIRef " + gameObject.name + " GetButton(" + name + ") does not exist!");
             return null;
         }
 
@@ -147,7 +147,7 @@ namespace CommonTools
                 if (GUIRefSliders[i].Name == name)
                     return GUIRefSliders[i].Value;
 
-            Debug.LogErrorFormat("GUIRef GetSlider({0}) does not exist!", name);
+            Debug.LogErrorFormat("GUIRef " + gameObject.name + " GetSlider(" + name + ") does not exist!");
             return null;
         }
 
@@ -158,7 +158,7 @@ namespace CommonTools
                 if (GUIRefAnimations[i].Name == name)
                     return GUIRefAnimations[i].Value;
 
-            Debug.LogErrorFormat("GUIRef GetAnimation({0}) does not exist!", name);
+            Debug.LogErrorFormat("GUIRef " + gameObject.name + " GetAnimation(" + name + ") does not exist!");
             return null;
         }
     }

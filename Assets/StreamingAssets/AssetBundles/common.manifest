@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
-UnityVersion: 6000.0.58f2
-CRC: 1074443556
+UnityVersion: 6000.0.61f1
+CRC: 1449127828
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 4561ed740752d23221cce261d9a8aa1a
+    Hash: dffea5d2f098c312ad7019b8ac5e5861
   TypeTreeHash:
     serializedVersion: 2
     Hash: 3ff497320468a173bb882883c1d22dbd
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 30a470c5eff8905ec523d857eb5bde73
+    Hash: 49afa1caff06f1e028b4e688f72270d2
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -356,7 +356,7 @@ Assets:
   orange.prefab"
 - Assets/Prefabs/Descriptions/Pack Balls - 0009 - Mult Green.prefab
 - Assets/Prefabs/Common/CardPackBallVisual.prefab
-- Assets/Prefabs/Descriptions/Joker 0046 +1 Mult for Unused Spins, -1 Mult for Used
+- Assets/Prefabs/Descriptions/Joker 0046 +2 Mult for Unused Spins, -1 Mult for Used
   Spins.prefab
 - Assets/Textures/Balls/B 0020 - Red multiplier.png
 - Assets/Textures/Jokers/0048 - Joker +20 chips per ball on yellow.png
@@ -407,7 +407,7 @@ Assets:
 - Assets/Prefabs/Descriptions/Pack Balls - 0006 - Chips Blue.prefab
 - Assets/Prefabs/Common/GameInfoVisual.prefab
 - Assets/Textures/Jokers/0025 - Joker Random 0-20 Mult.png
-- Assets/Prefabs/Descriptions/Joker 0035 +5 Mult -1 Per Round.prefab
+- Assets/Prefabs/Descriptions/Joker 0035 +10 Mult -1 Per Round.prefab
 - Assets/Prefabs/Descriptions/Joker 0076 Gains +3x mult when round is skipped.prefab
 - Assets/Textures/Cards/Chips Card.png
 - Assets/Textures/Balls/B 0023 - Blue mutliplier.png
@@ -416,6 +416,7 @@ Assets:
 - Assets/Prefabs/Common/WheelSelectionVisual.prefab
 - Assets/Textures/Cards/Slot Card.png
 - Assets/Textures/Balls/B 0001 - Chips.png
+- Assets/Prefabs/Common/UI - Chips Info.prefab
 - Assets/Textures/Jokers/0003 - Joker +4 Mult Green.png
 - Assets/Textures/Jokers/0083 - Joker Gain 10 chips for every abandoned cardpack.png
 - Assets/Prefabs/Descriptions/Joker 0047 +20 chips per ball on Red.prefab

@@ -254,7 +254,6 @@ namespace Cardwheel
             bool mouseUp = false;
             Vector3 mousePosition = Vector3.zero;
 
-#if UNITY_EDITOR
             if (Mouse.current != null)
             {
                 mouseDown = Mouse.current.leftButton.wasPressedThisFrame;
@@ -262,8 +261,7 @@ namespace Cardwheel
                 mouseUp = Mouse.current.leftButton.wasReleasedThisFrame;
                 mousePosition = Mouse.current.position.ReadValue();
             }
-#else
-            if (Touchscreen.current != null)
+            else if (Touchscreen.current != null)
             {
                 mouseDown = Touchscreen.current.touches[0].press.wasPressedThisFrame;
                 mouseMove = Touchscreen.current.touches[0].press.isPressed;
@@ -272,7 +270,6 @@ namespace Cardwheel
                 if (Touchscreen.current.touches.Count > 0)
                     mousePosition = Touchscreen.current.touches[0].position.ReadValue();
             }
-#endif
 
             Vector3 worldPosition = camera.ScreenToWorldPoint(mousePosition);
             Vector3 localPosition = uiBallMoveData.BallParent.InverseTransformPoint(worldPosition);
@@ -305,8 +302,8 @@ namespace Cardwheel
                 {
                     uiBallMoveData.BallIdx = worldIdx;
                     uiBallMoveData.MouseDiff = worldPosition - uiBallMoveData.BallCurrentPosition[uiBallMoveData.BallIdx];
-                    if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
-                        uiBallMoveData.BallSelectedGO[uiBallMoveData.BallIdx].SetActive(true);
+                    // if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+                    //     uiBallMoveData.BallSelectedGO[uiBallMoveData.BallIdx].SetActive(true);
                 }
 
                 uiBallMoveData.BallMoved = false;

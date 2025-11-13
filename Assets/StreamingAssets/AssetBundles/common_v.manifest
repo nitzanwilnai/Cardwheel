@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
-UnityVersion: 6000.0.58f2
-CRC: 3961200110
+UnityVersion: 6000.0.61f1
+CRC: 3383265910
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f936fc4e47d7696dc205ae6777355cee
+    Hash: e72db2dab162b1d7ee8918a1d855e426
   TypeTreeHash:
     serializedVersion: 2
     Hash: c142684008850ddf3636ce192491e446
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 8c9810f857ac30694c5dcf74c850f768
+    Hash: 1316fdfba59c5448df6e56f02017b755
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -158,12 +158,11 @@ Assets:
 - Assets/Prefabs/CommonV/UI - Top Bar.prefab
 - Assets/Prefabs/CommonV/UI - Main Menu.prefab
 - Assets/Prefabs/CommonV/UI - Ball Screen.prefab
-- Assets/Prefabs/CommonV/UI - Shop Info.prefab
 - Assets/Prefabs/CommonV/UI - Wheel Selection.prefab
 - Assets/Prefabs/CommonV/UI - In Game Info.prefab
 - Assets/Prefabs/CommonV/UI - Settings.prefab
-- Assets/Prefabs/CommonV/UI - Chips Info.prefab
 - Assets/Prefabs/CommonV/UI - Chips.prefab
+- Assets/Prefabs/CommonV/UI - Shop Info.prefab
 - Assets/Prefabs/CommonV/UI - Joker Info Popup.prefab
 - Assets/Prefabs/CommonV/UI - Shop.prefab
 - Assets/Prefabs/CommonV/UI - In Game.prefab

@@ -122,6 +122,8 @@ namespace Cardwheel
                     m_availableInputs = Logic.SetBit(m_availableInputs, (int)INPUT_TYPES.KEYBOARD);
                 else
                     m_availableInputs = Logic.RemoveBit(m_availableInputs, (int)INPUT_TYPES.KEYBOARD);
+
+                Cursor.visible = Mouse.current != null;
             }
 
             Debug.Log("m_availableInputs " + m_availableInputs);
@@ -346,7 +348,7 @@ namespace Cardwheel
                     m_winScreenVisual.SelectPrevButton((WinScreenVisual.MENU_BUTTONS)prevSelectedMenuButton);
             }
             else if (menuState == MENU_STATE.CHIPS_INFO)
-                m_chipsInfoVisual.Show(m_runData);
+                m_chipsInfoVisual.Show(m_runData, m_balance);
             else if (menuState == MENU_STATE.IN_GAME_INFO)
                 m_gameInfoVisual.Show(m_runData, m_balance);
             else if (menuState == MENU_STATE.SHOP_INFO)
@@ -717,6 +719,11 @@ namespace Cardwheel
         public void GoToPrivacyPolicy()
         {
             Application.OpenURL("https://nitzanwilnai.github.io/PrivacyPolicy/Cardwheel");
+        }
+
+        public void ExitGame()
+        {
+            Application.Quit();
         }
     }
 }

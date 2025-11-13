@@ -78,3 +78,10 @@ PluginImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 183370
+  packageName: Feel
+  packageVersion: 5.8
+  assetPath: Assets/Third Party/NiceVibrations/Plugins/Windows/x64/nice_vibrations_editor_plugin.dll
+  uploadId: 799856

@@ -15,6 +15,8 @@ namespace Cardwheel
         GameObject m_UI;
 
         TextMeshProUGUI[] m_baseChipsText;
+        TextMeshProUGUI m_mostFrequent;
+        TextMeshProUGUI m_leastFrequest;
 
         UIBallVisualData m_uiBallVisualData = new UIBallVisualData();
 
@@ -41,7 +43,7 @@ namespace Cardwheel
             CommonBallVisual.InitBallsVisualData(balance, guiRef.GetGameObject("Balls").GetComponent<GUIRef>(), m_uiBallVisualData);
 
             m_baseChipsText = new TextMeshProUGUI[(int)SLOT_TYPE.LAST];
-            CommonChipsVisual.InitChipsInfo(guiRef, m_baseChipsText);
+            CommonChipsVisual.InitChipsInfo(guiRef, m_baseChipsText, ref m_mostFrequent, ref m_leastFrequest);
 
             m_UI.SetActive(false);
         }
@@ -50,7 +52,7 @@ namespace Cardwheel
         {
             m_UI.SetActive(true);
 
-            CommonChipsVisual.Show(runData, m_baseChipsText);
+            CommonChipsVisual.Show(runData, balance, m_baseChipsText, m_mostFrequent, m_leastFrequest);
 
             CommonBallVisual.ShowBalls(runData.BallTypesInGame, balance, m_uiBallVisualData);
 

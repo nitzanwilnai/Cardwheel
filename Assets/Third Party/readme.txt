@@ -1,7 +1,7 @@
 A more user friendly doc is available at https://feel-docs.moremountains.com/
 Find out more about the asset at https://feel.moremountains.com/
 
-Feel v4.3
+Feel v5.8
 
 ## WHAT'S IN THE ASSET ?
 -------------------------
@@ -14,14 +14,13 @@ The Feel asset contains the following folders :
 - MMTools : a set of tools and helpers
 - NiceVibrations : the NiceVibrations package, exactly the same as https://assetstore.unity.com/packages/tools/integration/nice-vibrations-by-lofelt-hd-haptic-feedback-for-mobile-and-game-197444?aid=1011lKhG&utm_source=aff, offered as a gift
 
-
 ## HOW DO I ADD THIS TO MY GAME ?
 ------------------------------
 
 You should probably go check out http://feel-docs.moremountains.com/how-to-install.html, there'll be more details, but basically, you can follow these simple steps :
 
 To add Feel to your project, simply follow the simple steps below :
-1. using 2019.4.35f (or a recent - and stable - version of Unity of your choice), create a new project, pick the “3D” template
+1. using 6000.0.23f1 (or a recent - and stable - version of Unity of your choice), create a new project, pick the “3D” template
 2. via the asset store panel, go to the Feel page, click the download button, then the import button
 3. wait until a “import Unity package” popup appears, make sure everything is checked (it should be by default), click “import”
 4. open Unity’s Package Manager, install the latest version of the Post Processing package
@@ -33,6 +32,11 @@ To add Feel to your project, simply follow the simple steps below :
 Note that steps 4, 5, 6 and 7 are optional, but if you want to get access to post processing, TextMesh Pro and Cinemachine feedbacks, you’ll need these.
 Also note that most of the Feel demos make use of as many feedbacks as needed, and will feature most of these dependencies.
 You’ll get errors in these if you haven’t installed the corresponding dependencies. You can check the MMFeedbacksMinimalDemo scene if you’re not interested in any of the Unity packages feedbacks.
+
+## WHAT IF I'M USING URP?
+-------------------------
+
+You'll find a FeelDemosURP.unitypackage in the Feel/FeelDemosURP folder. Double click on it (inside Unity) and click import in the popup that opens. This will override a number of demo scenes and materials to make them compatible in URP. That's it, you're good to go!
 
 ## IS THERE DOCUMENTATION SOMEWHERE ?
 -------------------------------------

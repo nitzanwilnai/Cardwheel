@@ -99,7 +99,7 @@ namespace Cardwheel
             m_cardsBallsSpinWheelGUI.SpinwheelButtonData.SelectedGO.SetActive(false);
             CommonVisual.UnselectAllJokers();
 
-            if (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
+            if (CommonButtonVisual.ShowSelected())
             {
                 m_copyButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.COPY);
                 m_mainMenuButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.MAIN_MENU);

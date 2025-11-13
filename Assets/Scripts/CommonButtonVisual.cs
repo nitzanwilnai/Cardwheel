@@ -284,7 +284,7 @@ namespace Cardwheel
         public static bool ShowSelected()
         {
             return Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) ||
-            (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD) && (Time.realtimeSinceStartupAsDouble - LastKeyboardInputTime < 1.0d));
+            (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD) && (Time.realtimeSinceStartupAsDouble - LastKeyboardInputTime < 5.0d));
         }
     }
 }
