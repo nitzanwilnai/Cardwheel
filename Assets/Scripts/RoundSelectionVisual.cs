@@ -418,8 +418,7 @@ namespace Cardwheel
         {
             SoundManager.Instance.PlaySFXButtonOK();
 
-            int skipIdx = runData.Round % balance.SkipBalance.NumSkips;
-            int skipType = runData.SkipType[skipIdx];
+            int skipType = Logic.GetSkipTypeForRound(runData, balance, runData.Round);
 
             Logic.Skip(runData, balance, CommonSlotsVisual.ChangedSlotsIdxs, ref CommonSlotsVisual.ChangedSlotsCount);
             Show();

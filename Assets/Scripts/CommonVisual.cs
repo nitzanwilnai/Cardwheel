@@ -437,8 +437,7 @@ namespace Cardwheel
             }
             else
             {
-                int skipIdx = ((bigRound * 3) + i) % balance.SkipBalance.NumSkips;
-                int skipType = runData.SkipType[skipIdx];
+                int skipType = Logic.GetSkipTypeForRound(runData, balance, bigRound * 3 + i);
 
                 string extra = getSkipDescriptionCurrent(runData, balance, skipType);
 
@@ -454,8 +453,7 @@ namespace Cardwheel
             }
             else
             {
-                int skipIdx = ((bigRound * 3) + i) % balance.SkipBalance.NumSkips;
-                int skipType = runData.SkipType[skipIdx];
+                int skipType = Logic.GetSkipTypeForRound(runData, balance, bigRound * 3 + i);
 
                 string extra = getSkipDescriptionCurrent(runData, balance, skipType);
 

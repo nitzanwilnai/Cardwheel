@@ -1988,12 +1988,22 @@ public static class Logic
         return money;
     }
 
+    public static int GetSkipIndexForRound(int round)
+    {
+        return round - Mathf.FloorToInt((float)round / 3.0f);
+    }
+
+    public static int GetSkipTypeForRound(RunData runData, Balance balance, int round)
+    {
+        int skipIdx = GetSkipIndexForRound(round) % balance.SkipBalance.NumSkips;
+        return runData.SkipType[skipIdx];
+    }
+
     public static void Skip(RunData runData, Balance balance, int[] affectedSlotsIdxs, ref int affectedSlotsCount)
     {
         affectedSlotsCount = 0;
 
-        int skipIdx = runData.Round % balance.SkipBalance.NumSkips;
-        int skipType = runData.SkipType[skipIdx];
+        int skipType = GetSkipTypeForRound(runData, balance, runData.Round);
 
         Debug.Log("Skip " + balance.SkipBalance.SkipDescription[skipType]);
 
