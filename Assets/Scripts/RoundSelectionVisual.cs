@@ -319,23 +319,6 @@ namespace Cardwheel
                 return;
             }
 
-            // handle button trigger WHY IS THIS HERE?
-            // if (m_selectedButton == MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
-            // {
-            //     Game.Instance.GoToSettings();
-            //     return;
-            // }
-            // if (m_selectedButton == MENU_BUTTONS.BALLS && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
-            // {
-            //     Game.Instance.GoToBallScreen();
-            //     return;
-            // }
-            // if (m_selectedButton == MENU_BUTTONS.WHEEL && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
-            // {
-            //     Game.Instance.GoToChipsInfo();
-            //     return;
-            // }
-
             // handle navigation
             if (m_selectedButton == MENU_BUTTONS.PLAY && CommonButtonVisual.NavigateUp(Game.Instance.GetAvailableInputs()))
             {

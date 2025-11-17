@@ -114,7 +114,12 @@ namespace Cardwheel
                     if (gamepadString.Contains("Steam"))
                         m_gamepadType = GAMEPAD_TYPE.STEAM;
 
+                    // TEST
+                    m_gamepadType = GAMEPAD_TYPE.STEAM;
+
                     m_availableInputs = Logic.SetBit(m_availableInputs, (int)INPUT_TYPES.GAMEPAD);
+
+                    Cursor.visible = false;
                 }
                 else
                     m_availableInputs = Logic.RemoveBit(m_availableInputs, (int)INPUT_TYPES.GAMEPAD);
@@ -124,7 +129,8 @@ namespace Cardwheel
                 else
                     m_availableInputs = Logic.RemoveBit(m_availableInputs, (int)INPUT_TYPES.KEYBOARD);
 
-                Cursor.visible = (Mouse.current != null);
+                // Cursor.visible = (Mouse.current != null);
+                // Cursor.visible = false;
             }
 
             Debug.Log("m_availableInputs " + m_availableInputs);

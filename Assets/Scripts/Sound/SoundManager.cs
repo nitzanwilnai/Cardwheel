@@ -33,10 +33,9 @@ namespace Cardwheel
             base.Awake();
 
             if (SFXMarbleMarble == null)
-            {
                 m_sfxExists = false;
-                Debug.LogWarning("SFX missing!");
-            }
+            else
+                m_sfxExists = true;
 
             m_audioSource = GetComponent<AudioSource>();
         }

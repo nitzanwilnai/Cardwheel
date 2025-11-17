@@ -50,10 +50,14 @@ namespace Cardwheel
         GUIButtonData m_prevButtonData;
         GUIButtonData m_nextButtonData;
 
+        int m_wheelOffset;
+
         public void Init(Camera camera, GameData gameData, Balance balance)
         {
             this.gameData = gameData;
             this.balance = balance;
+
+            m_wheelOffset = Screen.width > Screen.height ? 1920 : 1080; //Screen.width;
 
             m_UI = AssetManager.Instance.LoadWheelSelectionUI();
             m_UI.GetComponent<Canvas>().worldCamera = camera;
@@ -87,7 +91,7 @@ namespace Cardwheel
             for (int wheelIdx = 1; wheelIdx < balance.SpinWheelBalance.NumSpinWheels; wheelIdx++)
             {
                 m_wheelSelectionSpinWheels[wheelIdx].SpinWheelGO = GameObject.Instantiate(m_wheelSelectionSpinWheels[0].SpinWheelGO, m_spinWheelParent);
-                Vector3 pos = new Vector3(Screen.width * wheelIdx, 0.0f, 0.0f);
+                Vector3 pos = new Vector3(m_wheelOffset * wheelIdx, 0.0f, 0.0f);
                 m_wheelSelectionSpinWheels[wheelIdx].SpinWheelGO.transform.localPosition = pos;
             }
 
@@ -225,7 +229,7 @@ namespace Cardwheel
                 m_wheelSelectionIdx--;
 
                 m_startX = m_targetX;
-                m_targetX += Screen.width;
+                m_targetX += m_wheelOffset;
 
                 slideSpinWheel();
             }
@@ -238,7 +242,7 @@ namespace Cardwheel
                 m_wheelSelectionIdx++;
 
                 m_startX = m_targetX;
-                m_targetX -= Screen.width;
+                m_targetX -= m_wheelOffset;
 
                 slideSpinWheel();
             }
