@@ -124,13 +124,17 @@ namespace Cardwheel
 
         public void Show()
         {
-            m_version.text = "";
+            TextAsset versionText = (TextAsset)Resources.Load("Version");
+            m_version.text = "Version: " + versionText.text;
 
+#if UNITY_EDITOR
             if (Gamepad.current != null)
             {
-                m_version.text = Gamepad.current.description.ToString();
+                m_version.text += "\n" + Gamepad.current.description.ToString();
             }
-
+            if (Mouse.current != null)
+                m_version.text += " - Mouse detected!";
+#endif
 
             MENU_STATE menuState = RunDataIO.LoadMenuStateOnly();
             m_conitnueButtonOk = menuState >= MENU_STATE.IN_GAME && menuState < MENU_STATE.GAME_OVER;
