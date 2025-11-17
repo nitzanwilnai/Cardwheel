@@ -44,15 +44,15 @@ namespace Cardwheel
         ONLY_GREEN_FIRST_SPIN = 29,
         ONLY_BLUE_FIRST_SPIN = 30,
 
-        ONLY_SCORE_SIX_BALLS = 31, // 8 // tested
-        MOST_PLAYED_BASE_CHIPS_TO_FIVE = 32, // 7-8 // tested
-        ONLY_SCORE_AT_LEAST_TWO_COLORS = 33, // 6-7 // tested
-        ONLY_SCORE_AT_LEAST_THREE_COLORS = 34, // 8 // tested
-        JUMBLE_SLOT_EFFECTS = 35, // 4-6 // NOT DONE
-        ONLY_RED_ORANGE = 36, // tested
-        ONLY_GREEN_BLUE = 37, // tested 
-        ONLY_RED_GREEN = 38, // tested
-        ONLY_BLUE_ORANGE = 39, // done
+        ONLY_SCORE_SIX_BALLS = 31,
+        MOST_PLAYED_BASE_CHIPS_TO_FIVE = 32,
+        ONLY_SCORE_AT_LEAST_TWO_COLORS = 33,
+        ONLY_SCORE_AT_LEAST_THREE_COLORS = 34,
+        JUMBLE_SLOT_EFFECTS = 35,
+        ONLY_RED_ORANGE = 36,
+        ONLY_GREEN_BLUE = 37, 
+        ONLY_RED_GREEN = 38,
+        ONLY_BLUE_ORANGE = 39,
     };
     public enum VOUCHER_TYPE
     {

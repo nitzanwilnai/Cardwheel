@@ -168,7 +168,6 @@ namespace Cardwheel
             m_rerollButtonImage = guiRef.GetImage("Reroll");
             m_rerollCostText = guiRef.GetTextGUI("RerollCost");
 
-            //TODO chnage to guirefbutton
             GUIButtonRef guiButtonRef = m_UI.GetComponent<GUIButtonRef>();
             m_rerollButtonData = guiButtonRef.GetButtonData("Reroll");
             m_nextRoundButtonData = guiButtonRef.GetButtonData("NextRound");

@@ -225,7 +225,6 @@ public static class Logic
         runData.CardPackAbandonTotal = 0;
 
 
-        // TEST
 #if UNITY_EDITOR
         // runData.Money = -20;
 

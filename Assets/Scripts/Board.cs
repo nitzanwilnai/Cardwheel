@@ -640,7 +640,6 @@ namespace Cardwheel
 
                     if (spinTime > 1.0f)
                     {
-                        //todo check all balls are in slots
                         if (Logic.AllBallsInSlot(runData) && allBlocksLocked())
                         {
                             startScoring(runData, balance);
