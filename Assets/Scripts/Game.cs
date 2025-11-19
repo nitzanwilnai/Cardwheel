@@ -3,6 +3,12 @@ using System.IO;
 using CommonTools;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XInput;
+using UnityEngine.InputSystem.DualShock;
+using Steamworks;
+
+
+
 
 
 
@@ -107,15 +113,14 @@ namespace Cardwheel
             {
                 if (Gamepad.current != null)
                 {
-                    Debug.Log(Gamepad.current.description);
                     string gamepadString = Gamepad.current.description.ToJson();
-                    if (gamepadString.Contains("Dualsense") || gamepadString.Contains("Sony"))
-                        m_gamepadType = GAMEPAD_TYPE.PS5;
-                    if (gamepadString.Contains("Steam"))
-                        m_gamepadType = GAMEPAD_TYPE.STEAM;
 
-                    // TEST
-                    m_gamepadType = GAMEPAD_TYPE.STEAM;
+                    if (Gamepad.current is XInputController)
+                        m_gamepadType = GAMEPAD_TYPE.XBOX;
+                    else if (Gamepad.current is DualShockGamepad)
+                        m_gamepadType = GAMEPAD_TYPE.PS5;
+                    else if (gamepadString.Contains("Steam"))
+                        m_gamepadType = GAMEPAD_TYPE.STEAM;
 
                     m_availableInputs = Logic.SetBit(m_availableInputs, (int)INPUT_TYPES.GAMEPAD);
 
