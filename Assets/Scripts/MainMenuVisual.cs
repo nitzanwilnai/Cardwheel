@@ -41,7 +41,7 @@ namespace Cardwheel
         GUIButtonData m_privacyPolicyButtonData;
         GUIButtonData m_exitButtonData;
 
-        bool m_conitnueButtonOk = false;
+        bool m_continueButtonOk = false;
 
         public void Init(Camera camera, Balance balance)
         {
@@ -137,8 +137,8 @@ namespace Cardwheel
 #endif
 
             MENU_STATE menuState = RunDataIO.LoadMenuStateOnly();
-            m_conitnueButtonOk = menuState >= MENU_STATE.IN_GAME && menuState < MENU_STATE.GAME_OVER;
-            m_continueButtonData.Button.gameObject.SetActive(m_conitnueButtonOk);
+            m_continueButtonOk = menuState >= MENU_STATE.IN_GAME && menuState < MENU_STATE.GAME_OVER;
+            m_continueButtonData.Button.gameObject.SetActive(m_continueButtonOk);
 
             CommonButtonVisual.UpdateButtonIcons(m_newGameButtonData, Game.Instance.GetGamepadType());
             CommonButtonVisual.UpdateButtonIcons(m_continueButtonData, Game.Instance.GetGamepadType());
@@ -221,9 +221,9 @@ namespace Cardwheel
             }
 
             // navigate
-            if (m_conitnueButtonOk && m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
             {
-                if (m_conitnueButtonOk)
+                if (m_continueButtonOk)
                     selectButton(MENU_BUTTONS.CONTINUE);
                 else
                     selectButton(MENU_BUTTONS.EXIT);
@@ -244,7 +244,7 @@ namespace Cardwheel
 
             if (m_selectedButton == MENU_BUTTONS.EXIT && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
             {
-                if (m_conitnueButtonOk)
+                if (m_continueButtonOk)
                     selectButton(MENU_BUTTONS.CONTINUE);
                 else
                     selectButton(MENU_BUTTONS.NEW_GAME);
