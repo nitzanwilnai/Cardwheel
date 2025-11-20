@@ -8,31 +8,11 @@ using UnityEngine;
 
 namespace Cardwheel
 {
-    public static class GameDataIO
+    public static class GameDataIOV3
     {
-        public static int VERSION = 4;
-
-        public static void SaveGameData(GameData gameData)
-        {
-            Debug.LogFormat("SaveGame()");
-
-            string fileName = Application.persistentDataPath + "/gamedata_v"+VERSION+".dat";
-            using (FileStream fs = File.Create(fileName))
-            using (BinaryWriter bw = new BinaryWriter(fs))
-            {
-                bw.Write(VERSION);
-                bw.Write(gameData.InitialVersion);
-                bw.Write(gameData.SpinWheelWinCount.Length);
-                for (int i = 0; i < gameData.SpinWheelWinCount.Length; i++)
-                    bw.Write(gameData.SpinWheelWinCount[i]);
-
-                bw.Write(gameData.MenuTutorialFlags);
-            }
-        }
-
         public static bool LoadGameData(GameData gameData, Balance balance)
         {
-            string fileName = Application.persistentDataPath + "/gamedata_v"+VERSION+".dat";
+            string fileName = Application.persistentDataPath + "/gamedata.dat";
             bool gameDataLoaded = false;
             if (File.Exists(fileName))
             {

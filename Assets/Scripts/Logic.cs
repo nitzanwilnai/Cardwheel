@@ -91,6 +91,7 @@ public static class Logic
 
     public static void AllocateGameData(GameData gameData, Balance balance)
     {
+        gameData.RunCounter = 0;
         gameData.InitialVersion = GameDataIO.VERSION;
         gameData.SpinWheelWinCount = new int[balance.SpinWheelBalance.NumSpinWheels];
     }
@@ -1411,7 +1412,19 @@ public static class Logic
 
     public static void WinGame(GameData gameData, RunData runData)
     {
+        gameData.RunCounter++;
         gameData.SpinWheelWinCount[runData.WheelIdx]++;
+    }
+
+    public static void GameOver(GameData gameData)
+    {
+        gameData.RunCounter++;
+    }
+
+    public static void SetMenuState(RunData runData, MENU_STATE newMenuState)
+    {
+        runData.PrevMenuState = runData.MenuState;
+        runData.MenuState = newMenuState;
     }
 
     public static void RoundComplete(RunData runData, Balance balance)
