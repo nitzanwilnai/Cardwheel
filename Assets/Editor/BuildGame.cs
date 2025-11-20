@@ -33,6 +33,24 @@ namespace Cardwheel
             AssetDatabase.Refresh();
         }
 
+        [MenuItem("Cardwheel/Build/PC")]
+        public static void BuildPC()
+        {
+            setAndroidBuildNumber();
+
+            PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Standalone, "");
+
+            DateTime theTime = DateTime.Now;
+            string dateTime = theTime.ToString("yyyy-MM-dd HH.mm.ss");
+
+            EditorUserBuildSettings.buildAppBundle = false;
+
+            Build(BuildTarget.StandaloneWindows64, Application.dataPath + "/../../Build/Cardwheel " + dateTime + ".exe", BuildOptions.None, "Assets/Scenes/MainGameScene H.unity");
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+
         [MenuItem("Cardwheel/Build/Steamdeck")]
         public static void BuildSteamdeck()
         {

@@ -1239,11 +1239,7 @@ namespace Cardwheel
                     else if (Logic.CheckRoundComplete(runData, balance))
                         Game.Instance.RoundComplete();
                     else if (Logic.CheckGameOver(runData))
-                    {
-                        SoundManager.Instance.PlaySFXGameOver();
-
-                        Game.Instance.SetMenuState(MENU_STATE.GAME_OVER);
-                    }
+                        Game.Instance.GameOver();
                     else
                         startSpin(runData, balance);
                 }

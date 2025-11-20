@@ -239,13 +239,17 @@ namespace Cardwheel
 
         private void tryLoadGameData()
         {
-            bool gameDataLoaded = false;
-            int gameDataVersion = GameDataIO.LoadVersionOnly();
-            if (gameDataVersion < 3)
-                gameDataLoaded = GameDataIOV2.LoadGameData(m_gameData, m_balance);
+            if (GameDataIO.LoadGameData(m_gameData, m_balance))
+            {
+                Debug.Log("loaded gamedata v4");
+                // loaded v4
+            }
+            else if (GameDataIOV3.LoadGameData(m_gameData, m_balance))
+            {
+                Debug.Log("loaded gamedata v3");
+                // loaded v3
+            }
             else
-                gameDataLoaded = GameDataIO.LoadGameData(m_gameData, m_balance);
-            if (!gameDataLoaded)
                 Logic.AllocateGameData(m_gameData, m_balance);
         }
 
@@ -259,8 +263,7 @@ namespace Cardwheel
             bool goingBackToPrevMenu = newMenuState == m_runData.PrevMenuState;
 
             Debug.Log("SetMenuState(" + newMenuState.ToString() + ")");
-            m_runData.PrevMenuState = m_runData.MenuState;
-            m_runData.MenuState = newMenuState;
+            Logic.SetMenuState(m_runData, newMenuState);
 
             if (newMenuState > MENU_STATE.IN_GAME)
             {
@@ -573,13 +576,16 @@ namespace Cardwheel
         {
             hideMenuState(m_runData.MenuState);
 
-            int version = RunDataIO.LoadVersionOnly();
-            if (version == 2)
-                RunDataIOV2.LoadRun(m_runData, m_balance);
-            else if (version == 3)
-                RunDataIOV3.LoadRun(m_runData, m_balance);
-            else
-                RunDataIO.LoadRun(m_runData);
+            if (RunDataIO.LoadRun(m_runData))
+            {
+                Debug.Log("Loaded rundata v5");
+                // loaded v5
+            }
+            else if (RunDataIOV4.LoadRun(m_runData))
+            {
+                Debug.Log("Loaded rundata v4");
+                // loaded v4
+            }
 
             if (m_runData.MenuState == MENU_STATE.JOKER_INFO_POPUP)
                 m_runData.MenuState = m_runData.PrevMenuState;
@@ -613,12 +619,23 @@ namespace Cardwheel
 
         public void WinScreen()
         {
-            Logic.WinGame(m_gameData, m_runData);
-
             SoundManager.Instance.PlaySFXWinGame();
+
+            Logic.WinGame(m_gameData, m_runData);
 
             Logic.RoundComplete(m_runData, m_balance);
             SetMenuState(MENU_STATE.WIN_SCREEN);
+
+            GameDataIO.SaveGameData(m_gameData);
+        }
+
+        public void GameOver()
+        {
+            SoundManager.Instance.PlaySFXGameOver();
+
+            Logic.GameOver(m_gameData);
+
+            SetMenuState(MENU_STATE.GAME_OVER);
 
             GameDataIO.SaveGameData(m_gameData);
         }
