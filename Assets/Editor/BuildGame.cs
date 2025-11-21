@@ -1,9 +1,10 @@
-﻿using UnityEditor;
-using System.IO;
-using UnityEngine;
-using System;
-using UnityEditor.Callbacks;
+﻿using System;
 using System.Diagnostics;
+using System.IO;
+using UnityEditor;
+using UnityEditor.Callbacks;
+using UnityEditor.WindowsStandalone;
+using UnityEngine;
 
 #if UNITY_EDITOR_OSX
 using UnityEditor.iOS.Xcode;
@@ -123,13 +124,14 @@ namespace Cardwheel
             DateTime theTime = DateTime.Now;
             string dateTime = theTime.ToString("yyyy-MM-dd HH.mm.ss");
             EditorUserBuildSettings.buildAppBundle = true;
-            UnityEditor.Android.UserBuildSettings.DebugSymbols.level = Unity.Android.Types.DebugSymbolLevel.Full;
+            //UnityEditor.Android.UserBuildSettings.DebugSymbols.level = Unity.Android.Types.DebugSymbolLevel.Full;
+            //UserBuildSettings.DebugSymbols.format = DebugSymbolFormat.IncludeInBundle | DebugSymbolFormat.Zip | DebugSymbolFormat.LegacyExtensions;
 
             PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARMv7 | AndroidArchitecture.ARM64;
 
             Build(BuildTarget.Android, Application.dataPath + "/../../Build/Release " + PlayerSettings.productName + " " + dateTime + ".aab", BuildOptions.None, "Assets/Scenes/MainGameScene V.unity");
 
-            UnityEditor.Android.UserBuildSettings.DebugSymbols.level = Unity.Android.Types.DebugSymbolLevel.None;
+            //UnityEditor.Android.UserBuildSettings.DebugSymbols.level = Unity.Android.Types.DebugSymbolLevel.None;
             EditorUserBuildSettings.buildAppBundle = false;
             PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Android, "");
 
