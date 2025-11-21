@@ -28,7 +28,7 @@ namespace Cardwheel
 
             EditorUserBuildSettings.buildAppBundle = false;
 
-            Build(BuildTarget.StandaloneOSX, Application.dataPath + "/../../Build/Cardwheel " + dateTime + ".app", BuildOptions.None, "Assets/Scenes/MainGameScene H.unity");
+            Build(BuildTarget.StandaloneOSX, Application.dataPath + "/../../Build/Cardwheel " + dateTime + "/Cardwheel..app", BuildOptions.None, "Assets/Scenes/MainGameScene H.unity");
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -46,7 +46,7 @@ namespace Cardwheel
 
             EditorUserBuildSettings.buildAppBundle = false;
 
-            Build(BuildTarget.StandaloneWindows64, Application.dataPath + "/../../Build/Cardwheel " + dateTime + ".exe", BuildOptions.None, "Assets/Scenes/MainGameScene H.unity");
+            Build(BuildTarget.StandaloneWindows64, Application.dataPath + "/../../Build/Cardwheel " + dateTime + "/Cardwheel.exe", BuildOptions.None, "Assets/Scenes/MainGameScene H.unity");
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -64,7 +64,7 @@ namespace Cardwheel
 
             EditorUserBuildSettings.buildAppBundle = false;
 
-            Build(BuildTarget.StandaloneLinux64, Application.dataPath + "/../../Build/Cardwheel/Cardwheel.x86_64", BuildOptions.None, "Assets/Scenes/MainGameScene H.unity");
+            Build(BuildTarget.StandaloneLinux64, Application.dataPath + "/../../Build/Cardwheel " + dateTime + "/Cardwheel.x86_64", BuildOptions.None, "Assets/Scenes/MainGameScene H.unity");
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
