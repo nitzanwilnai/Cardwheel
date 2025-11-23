@@ -5,16 +5,10 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XInput;
 using UnityEngine.InputSystem.DualShock;
-using Steamworks;
 
-
-
-
-
-
-#if STEAM
-using Steamworks;
-#endif
+// #if STEAM
+// using Steamworks;
+// #endif
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -93,16 +87,16 @@ namespace Cardwheel
 
         void gamepadInit()
         {
-#if STEAM
-            bool steamInit = SteamAPI.Init();
-            if (!steamInit)
-            {
-                Debug.LogError("[Steamworks.NET] SteamAPI_Init() failed. Refer to Valve's documentation or the comment above this line for more information.", this);
-            }
-            else
-                Debug.Log("Steam Init Success");
+            // #if STEAM
+            //             bool steamInit = SteamAPI.Init();
+            //             if (!steamInit)
+            //             {
+            //                 Debug.LogError("[Steamworks.NET] SteamAPI_Init() failed. Refer to Valve's documentation or the comment above this line for more information.", this);
+            //             }
+            //             else
+            //                 Debug.Log("Steam Init Success");
 
-#endif
+            // #endif
         }
 
         void gamepadCheck()
@@ -263,7 +257,8 @@ namespace Cardwheel
             bool goingBackToPrevMenu = newMenuState == m_runData.PrevMenuState;
 
             Debug.Log("SetMenuState(" + newMenuState.ToString() + ")");
-            Logic.SetMenuState(m_runData, newMenuState);
+            if (newMenuState != m_runData.MenuState)
+                Logic.SetMenuState(m_runData, newMenuState);
 
             if (newMenuState > MENU_STATE.IN_GAME)
             {
@@ -419,9 +414,9 @@ namespace Cardwheel
         {
             float dt = Time.deltaTime;
 
-#if STEAM
-            SteamInput.RunFrame();
-#endif
+            // #if STEAM
+            //             SteamInput.RunFrame();
+            // #endif
 
             if (!Logic.IsFlagSet(m_gameData.MenuTutorialFlags, (int)m_runData.MenuState))
                 if (m_tutorialVisual.TutorialClosed())
@@ -679,13 +674,13 @@ namespace Cardwheel
             m_jokerInfoPopupVisual.ShowFromWinGame(jokerIdx);
         }
 
-        public void CloseCardPack()
+        public void AbandonCardPack()
         {
             SoundManager.Instance.PlaySFXButtonOK();
 
             Logic.AbandonCardPack(m_runData);
 
-            SetMenuState(m_runData.PrevMenuState);
+            SetMenuState(MENU_STATE.SHOP);
         }
 
         public void RerollCardPack()

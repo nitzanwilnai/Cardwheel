@@ -68,7 +68,7 @@ namespace Cardwheel
             CommonVisual.InitTopBarGUI(guiRef.GetGameObject("TopBar"), ref m_topBarGUI);
 
             m_abandonButtonData = guiButtonRef.GetButtonData("Abandon");
-            m_abandonButtonData.Button.onClick.AddListener(Game.Instance.CloseCardPack);
+            m_abandonButtonData.Button.onClick.AddListener(Game.Instance.AbandonCardPack);
 
             SpinWheelRef spinWheelRef = guiRef.GetGameObject("SpinWheel").GetComponent<SpinWheelRef>();
             spinWheelRef.SortingPopup.SetActive(false);
@@ -149,7 +149,7 @@ namespace Cardwheel
                 if (m_slotChangedTimer <= 0.0f)
                 {
                     Hide();
-                    Game.Instance.SetMenuState(runData.PrevMenuState);
+                    Game.Instance.SetMenuState(MENU_STATE.SHOP);
                 }
             }
 

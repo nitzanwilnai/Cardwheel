@@ -138,7 +138,7 @@ namespace Cardwheel
             if (CommonButtonVisual.NavigateGamepadButton(abandonButtonData, Game.Instance.GetAvailableInputs()) ||
             cardPackButton == COMMON_CARDPACK_BUTTONS.ABANDON && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
             {
-                Game.Instance.CloseCardPack();
+                Game.Instance.AbandonCardPack();
                 return true;
             }
 
