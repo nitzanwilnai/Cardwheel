@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.0.61f1
-CRC: 1226324641
+CRC: 739377903
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: d5ed5597882942b4f82d4e9a08e4b311
+    Hash: e500860cecc00c7ee76e8678111af7ae
   TypeTreeHash:
     serializedVersion: 2
     Hash: 3ff497320468a173bb882883c1d22dbd
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 704f0373d7cb975bd81524aa1c208296
+    Hash: 55270ac723e5fe81a82b3fdaa29adee2
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -221,7 +221,7 @@ Assets:
 - Assets/Textures/Jokers/0007 - Joker.png
 - Assets/Textures/Jokers/0084 - Joker Gains x0.1 every abandoned cardpack.png
 - Assets/Prefabs/Common/Shop Card Pack.prefab
-- Assets/Textures/Jokers/0000 - Joker +4 Mult.png
+- Assets/Textures/Jokers/0000 - Joker +3 Mult.png
 - Assets/Prefabs/Descriptions/Joker 0030 Change Slot to Money on First Ball.prefab
 - Assets/Prefabs/Descriptions/Joker 0052 +40 chips +2x mult if 4 balls land on one
   color and 2 on another.prefab
@@ -328,7 +328,7 @@ Assets:
 - Assets/Textures/Jokers/0029 - Joker x0.25 Mult for Each Special Ball.png
 - Assets/Prefabs/Descriptions/Pack Chips - 0002 - Change to Green.prefab
 - Assets/Textures/Balls/B 0010 - Red add chips.png
-- Assets/Prefabs/Descriptions/Joker 0000 +4 Mult.prefab
+- Assets/Prefabs/Descriptions/Joker 0000 +3 Mult.prefab
 - Assets/Prefabs/Descriptions/Joker 0055 +80 chips no balls on Green.prefab
 - Assets/Prefabs/Descriptions/Pack Slots - 0001 - Change to Yellow.prefab
 - Assets/Textures/Jokers/0018 - Joker +1 Mult Per No Joker.png
@@ -448,8 +448,9 @@ Assets:
 - Assets/Prefabs/Descriptions/Pack Balls - 0005 - Chips Green.prefab
 - Assets/Prefabs/Common/SpinWheel UI.prefab
 - Assets/Prefabs/Descriptions/Pack Slots - 0003 - Change to Blue.prefab
-- Assets/Textures/Vouchers/0006 Voucher - Cardpacks most played color.png
+- Assets/Prefabs/Common/UI - Chips.prefab
 - Assets/Prefabs/Common/Ball UI Prefab.prefab
+- Assets/Textures/Vouchers/0006 Voucher - Cardpacks most played color.png
 - "Assets/Textures/Jokers/0051 - Joker +300 chips, -\u25C71 per spin.png"
 - Assets/Textures/Jokers/0076 - Joker Gains +3x mult when round is skipped.png
 - Assets/Prefabs/Descriptions/Pack Balls - 0011 - Multiplier Mult.prefab

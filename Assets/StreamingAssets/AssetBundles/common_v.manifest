@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.0.61f1
-CRC: 2356154642
+CRC: 2755064117
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 8b02b89acf42ec3b7de7d0ba6454f932
+    Hash: ef71200731364b3aef82f2ca3e43f92f
   TypeTreeHash:
     serializedVersion: 2
     Hash: c142684008850ddf3636ce192491e446
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 69612231862a2fa701595a644be72c5b
+    Hash: 633f4e32927a80988016db859f25f011
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -161,7 +161,6 @@ Assets:
 - Assets/Prefabs/CommonV/UI - Wheel Selection.prefab
 - Assets/Prefabs/CommonV/UI - In Game Info.prefab
 - Assets/Prefabs/CommonV/UI - Settings.prefab
-- Assets/Prefabs/CommonV/UI - Chips.prefab
 - Assets/Prefabs/CommonV/UI - Shop Info.prefab
 - Assets/Prefabs/CommonV/UI - Joker Info Popup.prefab
 - Assets/Prefabs/CommonV/UI - Shop.prefab

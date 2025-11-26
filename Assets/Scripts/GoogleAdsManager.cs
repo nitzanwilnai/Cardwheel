@@ -1,14 +1,18 @@
 using UnityEngine;
+using System;
+using CommonTools;
+
+
 #if UNITY_EDITOR || UNITY_ANDROID || UNITY_IOS
 using GoogleMobileAds.Api;
 #endif
 
-public class GoogleAdsManager : MonoBehaviour
+public class GoogleAdsManager : Singleton<GoogleAdsManager>
 {
 #if UNITY_ANDROID
-        private const string AD_UNIT_ID = "ca-app-pub-2715576489475489/3665452846";
+    private const string AD_UNIT_ID = "ca-app-pub-2715576489475489/3665452846";
 #elif UNITY_IPHONE
-        private const string AD_UNIT_ID = "ca-app-pub-2715576489475489/4104452452";
+    private const string AD_UNIT_ID = "ca-app-pub-2715576489475489/4104452452";
 #else
     private const string AD_UNIT_ID = "unused";
 #endif

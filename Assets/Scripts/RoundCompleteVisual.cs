@@ -42,11 +42,13 @@ namespace Cardwheel
 
         GUIButtonData m_claimRewardData;
 
+        GameData gameData;
         RunData runData;
         Balance balance;
 
-        public void Init(RunData runData, Balance balance, Camera camera)
+        public void Init(GameData gameData, RunData runData, Balance balance, Camera camera)
         {
+            this.gameData = gameData;
             this.runData = runData;
             this.balance = balance;
 
@@ -177,7 +179,7 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.CLAIM_REWARD && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs())  || CommonButtonVisual.NavigateGamepadButton(m_claimRewardData, Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.CLAIM_REWARD && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()) || CommonButtonVisual.NavigateGamepadButton(m_claimRewardData, Game.Instance.GetAvailableInputs()))
             {
                 claimRoundRewardAndGoToShop();
                 return;
@@ -241,6 +243,11 @@ namespace Cardwheel
 
         void claimRoundRewardAndGoToShop()
         {
+#if UNITY_IOS || UNITY_ANDROID
+            // if (gameData.RunCounter > 2)
+            //     GoogleAdsManager.Instance.ShowInterstitial();
+#endif
+
             SoundManager.Instance.PlaySFXMoney();
 
             Logic.ClaimRoundReward(runData, balance);

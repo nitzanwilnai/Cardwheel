@@ -302,8 +302,6 @@ namespace Cardwheel
                 {
                     uiBallMoveData.BallIdx = worldIdx;
                     uiBallMoveData.MouseDiff = worldPosition - uiBallMoveData.BallCurrentPosition[uiBallMoveData.BallIdx];
-                    // if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
-                    //     uiBallMoveData.BallSelectedGO[uiBallMoveData.BallIdx].SetActive(true);
                 }
 
                 uiBallMoveData.BallMoved = false;
@@ -316,15 +314,12 @@ namespace Cardwheel
 
                 if (uiBallMoveData.BallIdx > -1)
                     uiBallMoveData.BallTargetPosition[uiBallMoveData.BallIdx] = worldPosition - uiBallMoveData.MouseDiff;
-
-                // Debug.Log("diff " + diff + " m_ballTargetPosition[" + m_ballIdx + "] " + m_ballTargetPosition[m_ballIdx]);
             }
 
             if (mouseUp)
             {
                 if (uiBallMoveData.BallIdx > -1)
                 {
-                    Debug.Log("mouse down time " + (Time.realtimeSinceStartup - uiBallMoveData.MouseDownTime));
                     if (allowSelection && !uiBallMoveData.BallMoved && Time.realtimeSinceStartup - uiBallMoveData.MouseDownTime < 0.5f)
                     {
                         Logic.ToggleCardPackBallSelection(runData, uiBallMoveData.BallIdx);

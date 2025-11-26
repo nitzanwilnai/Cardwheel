@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 4
   BallSprite: {fileID: 21300000, guid: df6180fef59a84de7b9ff3a9e6d4383f, type: 3}
-  BallDescription: +$1
+  BallDescription: "+\u25C71"
   BallChips: 0
   BallMultiplierAdd: 0
   BallMultiplierMult: 1

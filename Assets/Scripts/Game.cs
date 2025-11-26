@@ -209,7 +209,7 @@ namespace Cardwheel
 
             m_mainMenuVisual.Init(Camera, m_balance);
             m_roundSelectionVisual.Init(m_runData, m_balance, Camera);
-            m_roundCompleteVisual.Init(m_runData, m_balance, Camera);
+            m_roundCompleteVisual.Init(m_gameData, m_runData, m_balance, Camera);
             m_gameOverVisual.Init(m_runData, Camera);
             m_shopVisual.Init(m_runData, m_balance, Camera);
             m_cardPackBallVisual.Init(m_runData, m_balance, Camera);
@@ -314,7 +314,7 @@ namespace Cardwheel
             int prevSelectedMenuButton = LastSelectedMenuButton[(int)menuState];
 
             if (menuState == MENU_STATE.MAIN_MENU)
-                m_mainMenuVisual.Show();
+                m_mainMenuVisual.Show(m_gameData);
             else if (menuState == MENU_STATE.ROUND_SELECTION)
             {
                 m_roundSelectionVisual.Show();
@@ -536,6 +536,20 @@ namespace Cardwheel
 #endif
         }
 
+        void LateUpdate()
+        {
+            float dt = Time.deltaTime;
+
+            if (m_runData.MenuState == MENU_STATE.BALL_SCREEN)
+            {
+                m_ballScreenVisual.HandleTouchInput();
+            }
+            else if (m_runData.MenuState == MENU_STATE.CARD_PACK_BALL)
+            {
+                m_cardPackBallVisual.HandleTouchInput();
+            }
+        }
+
         public void GoToMainMenu()
         {
             SoundManager.Instance.PlaySFXButtonOK();
@@ -598,6 +612,9 @@ namespace Cardwheel
 
         public void StartRound()
         {
+#if UNITY_IOS || UNITY_ANDROID
+            // GoogleAdsManager.Instance.LoadInterstitialAd();
+#endif
             SoundManager.Instance.PlaySFXButtonOK();
 
             Board.StartRound(m_runData, m_balance);
@@ -680,7 +697,7 @@ namespace Cardwheel
 
             Logic.AbandonCardPack(m_runData);
 
-            SetMenuState(MENU_STATE.SHOP);
+            SetMenuState(m_runData.PrevMenuState);
         }
 
         public void RerollCardPack()
