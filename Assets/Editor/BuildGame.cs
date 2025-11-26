@@ -295,6 +295,7 @@ namespace Cardwheel
             PlistElementDict rootDict = plist.root;
 
             rootDict.SetBoolean("ITSAppUsesNonExemptEncryption", false);
+            rootDict.SetString("GADApplicationIdentifier", "ca-app-pub-2715576489475489~7867603494");
 
             File.WriteAllText(plistPath, plist.WriteToString());
 #endif

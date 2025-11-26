@@ -5,10 +5,10 @@ using UnityEngine.Purchasing;
 
 public class IAPManager : MonoBehaviour
 {
-#if false
+#if UNITY_IOS || UNITY_ANDROID
 
     // Cross-platform ID you’ll use in code (must match the one you create on the stores)
-    public const string PremiumUpgradeId = "unlock_premium";
+    public const string PremiumUpgradeId = "com.nitzan.games.cardwheel.remove_ads";
 
     IStoreService _store;           // Connects to the store
     IProductService _products;      // Fetches product data
@@ -159,5 +159,6 @@ public class IAPManager : MonoBehaviour
         PlayerPrefs.Save();
         // Update UI/feature flags here
     }
+
 #endif
 }

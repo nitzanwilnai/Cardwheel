@@ -151,7 +151,7 @@ namespace Cardwheel
                 if (m_slotChangedTimer <= 0.0f)
                 {
                     Hide();
-                    Game.Instance.SetMenuState(MENU_STATE.SHOP);
+                    Game.Instance.SetMenuState(runData.PrevMenuState);
                 }
             }
 
@@ -234,6 +234,12 @@ namespace Cardwheel
                 Hide();
                 m_UI.SetActive(true);
                 CommonVisual.ShowUpdatedCards(runData, balance, balance.CardPackChipsBalance.DescriptionName, ref m_packAnimationTimer, m_cardPackCardGUIs, m_descriptionGOs, m_rerollButtonData, m_rerollCostText);
+
+                for (int i = 0; i < balance.CardPackMaxCards[runData.SelectedShopCardPackIdx]; i++)
+                {
+                    int type = runData.CardPackCardIdxs[i];
+                    m_descriptionGOs[i].GetComponent<GUIRef>().GetTextGUI("Chips").text = (runData.BaseChips[type] + balance.BaseChips).ToString("N0");
+                }
             }
         }
 

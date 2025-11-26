@@ -229,7 +229,7 @@ public static class Logic
 #if UNITY_EDITOR
         // runData.Money = -20;
 
-        // runData.SkipType[0] = 6;
+        // runData.SkipType[0] = 11;
         // runData.SkipType[1] = 12;
         // runData.SkipType[3] = 13;
         // runData.SkipType[1] = 7;

@@ -205,11 +205,16 @@ namespace Cardwheel
                 if (m_ballChangedTimer <= 0.0f)
                 {
                     Hide();
-                    Game.Instance.SetMenuState(MENU_STATE.SHOP);
+                    Game.Instance.SetMenuState(runData.PrevMenuState);
                 }
             }
 
             handleInput();
+        }
+
+        public void HandleTouchInput()
+        {
+            CommonBallVisual.HanleInputTouchMove(runData, m_uiBallMoveData, mainCamera, true, Game.Instance.GetAvailableInputs());
         }
 
         void handleInput()
@@ -219,8 +224,6 @@ namespace Cardwheel
                 MENU_BUTTONS newSelectedButton = (MENU_BUTTONS)CommonBallVisual.HandleInputGamepadKeyboard(runData, m_uiBallMoveData, m_uiBallVisualData, (COMMON_BUTTONS)m_cardPackButton, true, Game.Instance.GetAvailableInputs());
                 selectButton(newSelectedButton);
             }
-
-            CommonBallVisual.HanleInputTouchMove(runData, m_uiBallMoveData, mainCamera, true, Game.Instance.GetAvailableInputs());
 
             COMMON_CARDPACK_BUTTONS currentButton = (COMMON_CARDPACK_BUTTONS)m_cardPackButton;
             if (CardPackCommonVisual.HandleEnter(m_abandonButtonData, m_rerollButtonData, currentButton))

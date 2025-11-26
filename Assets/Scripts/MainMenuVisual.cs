@@ -40,6 +40,8 @@ namespace Cardwheel
         GUIButtonData m_continueButtonData;
         GUIButtonData m_privacyPolicyButtonData;
         GUIButtonData m_exitButtonData;
+        GUIButtonData m_removeAdsButtonData;
+        GameObject m_adsRemoved;
 
         bool m_continueButtonOk = false;
 
@@ -68,9 +70,13 @@ namespace Cardwheel
             m_exitButtonData.Button.onClick.AddListener(Game.Instance.ExitGame);
             CommonButtonVisual.AddSelectedBorder(m_exitButtonData);
 
+            m_removeAdsButtonData = guiButtonRef.GetButtonData("RemoveAds");
+
             GUIRef guiRef = m_UI.GetComponent<GUIRef>();
 
             m_animation = guiRef.GetAnimation("Animation");
+
+            m_adsRemoved = guiRef.GetGameObject("AdsRemoved");
 
             Joker1Parent = guiRef.GetGameObject("Jokers1").transform;
             Joker2Parent = guiRef.GetGameObject("Jokers2").transform;
@@ -122,7 +128,7 @@ namespace Cardwheel
             m_jokerRotationSpeed[jkrIdx] = UnityEngine.Random.value * 50.0f + 50.0f;
         }
 
-        public void Show()
+        public void Show(GameData gameData)
         {
             TextAsset versionText = (TextAsset)Resources.Load("Version");
             m_version.text = "Version: " + versionText.text;
@@ -132,8 +138,6 @@ namespace Cardwheel
             {
                 m_version.text += "\n" + Gamepad.current.description.ToString();
             }
-            if (Mouse.current != null)
-                m_version.text += " - Mouse detected!";
 #endif
 
             MENU_STATE menuState = RunDataIO.LoadMenuStateOnly();
@@ -146,6 +150,9 @@ namespace Cardwheel
             selectButton(MENU_BUTTONS.NEW_GAME);
 
             m_UI.SetActive(true);
+
+            m_adsRemoved.SetActive(gameData.InitialVersion <= 4);
+            m_removeAdsButtonData.Button.gameObject.SetActive(false);
         }
 
         void selectButton(MENU_BUTTONS selectedButton)

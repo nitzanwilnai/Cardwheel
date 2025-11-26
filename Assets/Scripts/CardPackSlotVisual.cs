@@ -149,7 +149,7 @@ namespace Cardwheel
                 if (m_slotChangedTimer <= 0.0f)
                 {
                     Hide();
-                    Game.Instance.SetMenuState(MENU_STATE.SHOP);
+                    Game.Instance.SetMenuState(runData.PrevMenuState);
                 }
             }
 

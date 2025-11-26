@@ -1180,7 +1180,6 @@ namespace Cardwheel
             SoundManager.Instance.PlaySFXButtonOK();
 
             Game.Instance.SetMenuState(MENU_STATE.ROUND_SELECTION);
-
         }
     }
 

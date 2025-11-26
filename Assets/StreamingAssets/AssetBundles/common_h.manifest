@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.0.61f1
-CRC: 3992540073
+CRC: 2202942414
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: cc2e1fedfe337bebed0cb0efdc5ee98d
+    Hash: b3cbd0fd49e6db3f1cbe94c45910fef9
   TypeTreeHash:
     serializedVersion: 2
     Hash: c142684008850ddf3636ce192491e446
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 57ae8ce9a90bf5078237d4b736014233
+    Hash: 2b44ae44f2a85b86764476a4718d9a69
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -164,7 +164,6 @@ Assets:
 - Assets/Prefabs/CommonH/UI - In Game.prefab
 - Assets/Prefabs/CommonH/UI - Ball Screen.prefab
 - Assets/Prefabs/CommonH/UI - Shop Info.prefab
-- Assets/Prefabs/CommonH/UI - Chips.prefab
 - Assets/Prefabs/CommonH/UI - Card Pack Chips.prefab
 - Assets/Prefabs/CommonH/UI - Settings.prefab
 - Assets/Prefabs/CommonH/UI - Game Over.prefab

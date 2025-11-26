@@ -126,6 +126,11 @@ namespace Cardwheel
                 m_uiBallMoveData.BallSelectedGO[i].SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.BALL_1 + i);
         }
 
+        public void HandleTouchInput()
+        {
+            CommonBallVisual.HanleInputTouchMove(runData, m_uiBallMoveData, mainCamera, false, Game.Instance.GetAvailableInputs());
+        }
+
         void handleInput()
         {
             if (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
@@ -134,7 +139,6 @@ namespace Cardwheel
                 selectButton(newSelectedButton);
             }
 
-            CommonBallVisual.HanleInputTouchMove(runData, m_uiBallMoveData, mainCamera, false, Game.Instance.GetAvailableInputs());
 
             if (m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, Game.Instance.GetAvailableInputs()))
             {
