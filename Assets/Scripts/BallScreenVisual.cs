@@ -1,5 +1,6 @@
 using UnityEngine;
 using CommonTools;
+using UnityEngine.InputSystem;
 
 namespace Cardwheel
 {
@@ -85,9 +86,9 @@ namespace Cardwheel
             m_descriptionTouch.SetActive(false);
             m_descriptionKeyboard.SetActive(false);
             m_descriptionGamepad.SetActive(false);
-            if (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD))
+            if (Gamepad.current != null)
                 m_descriptionGamepad.SetActive(true);
-            else if (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
+            else if (Keyboard.current != null)
                 m_descriptionKeyboard.SetActive(true);
             else
                 m_descriptionTouch.SetActive(true);
@@ -128,31 +129,31 @@ namespace Cardwheel
 
         public void HandleTouchInput()
         {
-            CommonBallVisual.HanleInputTouchMove(runData, m_uiBallMoveData, mainCamera, false, Game.Instance.GetAvailableInputs());
+            CommonBallVisual.HanleInputTouchMove(runData, m_uiBallMoveData, mainCamera, false);
         }
 
         void handleInput()
         {
-            if (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
+            if (Gamepad.current != null || Keyboard.current != null)
             {
-                MENU_BUTTONS newSelectedButton = (MENU_BUTTONS)CommonBallVisual.HandleInputGamepadKeyboard(runData, m_uiBallMoveData, m_uiBallVisualData, (COMMON_BUTTONS)m_selectedButton, false, Game.Instance.GetAvailableInputs());
+                MENU_BUTTONS newSelectedButton = (MENU_BUTTONS)CommonBallVisual.HandleInputGamepadKeyboard(runData, m_uiBallMoveData, m_uiBallVisualData, (COMMON_BUTTONS)m_selectedButton, false);
                 selectButton(newSelectedButton);
             }
 
 
-            if (m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateEnter() || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData))
             {
                 animateClose();
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateUp(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateUp())
             {
                 selectButton(MENU_BUTTONS.BALL_1);
                 return;
             }
 
-            if (m_selectedButton >= MENU_BUTTONS.BALL_1 && m_selectedButton <= MENU_BUTTONS.BALL_6 && CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton >= MENU_BUTTONS.BALL_1 && m_selectedButton <= MENU_BUTTONS.BALL_6 && CommonButtonVisual.NavigateDown())
             {
                 m_uiBallMoveData.BallIdx = -1;
                 selectButton(MENU_BUTTONS.CLOSE);

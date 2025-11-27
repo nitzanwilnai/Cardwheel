@@ -177,9 +177,9 @@ namespace Cardwheel
             uiBallMoveData.BallSelectedGO[idx2].SetActive(active1);
         }
 
-        public static COMMON_BUTTONS HandleInputGamepadKeyboard(RunData runData, UIBallMoveData uiBallMoveData, UIBallVisualData uiBallVisualData, COMMON_BUTTONS selectedButton, bool allowSelection, int availableInputs)
+        public static COMMON_BUTTONS HandleInputGamepadKeyboard(RunData runData, UIBallMoveData uiBallMoveData, UIBallVisualData uiBallVisualData, COMMON_BUTTONS selectedButton, bool allowSelection)
         {
-            if (allowSelection && selectedButton >= COMMON_BUTTONS.BALL_1 && selectedButton < COMMON_BUTTONS.BALL_6 && CommonButtonVisual.NavigateEnter(availableInputs))
+            if (allowSelection && selectedButton >= COMMON_BUTTONS.BALL_1 && selectedButton < COMMON_BUTTONS.BALL_6 && CommonButtonVisual.NavigateEnter())
             {
                 uiBallMoveData.BallIdx = selectedButton - COMMON_BUTTONS.BALL_1;
                 if (!uiBallMoveData.BallMoved)
@@ -192,7 +192,7 @@ namespace Cardwheel
                 return selectedButton;
             }
 
-            if (selectedButton >= COMMON_BUTTONS.BALL_1 && selectedButton < COMMON_BUTTONS.BALL_6 && CommonButtonVisual.NavigateEnterHold(availableInputs) && CommonButtonVisual.NavigateLeft(availableInputs))
+            if (selectedButton >= COMMON_BUTTONS.BALL_1 && selectedButton < COMMON_BUTTONS.BALL_6 && CommonButtonVisual.NavigateEnterHold() && CommonButtonVisual.NavigateLeft())
             {
                 int idx1 = selectedButton - COMMON_BUTTONS.BALL_1;
                 int idx2 = idx1 + 1;
@@ -212,7 +212,7 @@ namespace Cardwheel
                 return selectedButton + 1;
             }
 
-            if (selectedButton > COMMON_BUTTONS.BALL_1 && selectedButton <= COMMON_BUTTONS.BALL_6 && CommonButtonVisual.NavigateEnterHold(availableInputs) && CommonButtonVisual.NavigateRight(availableInputs))
+            if (selectedButton > COMMON_BUTTONS.BALL_1 && selectedButton <= COMMON_BUTTONS.BALL_6 && CommonButtonVisual.NavigateEnterHold() && CommonButtonVisual.NavigateRight())
             {
                 int idx1 = selectedButton - COMMON_BUTTONS.BALL_1;
                 int idx2 = idx1 - 1;
@@ -232,13 +232,13 @@ namespace Cardwheel
                 return selectedButton - 1;
             }
 
-            if (selectedButton >= COMMON_BUTTONS.BALL_1 && selectedButton < COMMON_BUTTONS.BALL_6 && CommonButtonVisual.NavigateLeft(availableInputs))
+            if (selectedButton >= COMMON_BUTTONS.BALL_1 && selectedButton < COMMON_BUTTONS.BALL_6 && CommonButtonVisual.NavigateLeft())
             {
                 // m_uiBallMoveData.BallIdx = m_selectedButton - MENU_BUTTONS.BALL_1;
                 return selectedButton + 1;
             }
 
-            if (selectedButton > COMMON_BUTTONS.BALL_1 && selectedButton <= COMMON_BUTTONS.BALL_6 && CommonButtonVisual.NavigateRight(availableInputs))
+            if (selectedButton > COMMON_BUTTONS.BALL_1 && selectedButton <= COMMON_BUTTONS.BALL_6 && CommonButtonVisual.NavigateRight())
             {
                 // m_uiBallMoveData.BallIdx = m_selectedButton - MENU_BUTTONS.BALL_1;
                 return selectedButton - 1;
@@ -247,7 +247,7 @@ namespace Cardwheel
             return selectedButton;
         }
 
-        public static void HanleInputTouchMove(RunData runData, UIBallMoveData uiBallMoveData, Camera camera, bool allowSelection, int availableInputs)
+        public static void HanleInputTouchMove(RunData runData, UIBallMoveData uiBallMoveData, Camera camera, bool allowSelection)
         {
             bool mouseDown = false;
             bool mouseMove = false;

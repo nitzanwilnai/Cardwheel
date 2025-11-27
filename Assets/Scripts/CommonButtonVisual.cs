@@ -42,14 +42,17 @@ namespace Cardwheel
             gUIButtonData.SelectedGO.SetActive(false);
         }
 
-        public static bool NavigateEnter(int availableInputs)
+        public static bool NavigateEnter()
         {
-            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+            if (Gamepad.current != null)
                 if (Gamepad.current.buttonSouth.wasReleasedThisFrame)
+                {
+                    LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
                     return true;
+                }
 
 
-            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+            if (Keyboard.current != null)
                 if (Keyboard.current.enterKey.wasReleasedThisFrame)
                 {
                     LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
@@ -59,14 +62,17 @@ namespace Cardwheel
             return false;
         }
 
-        public static bool NavigateEnterHold(int availableInputs)
+        public static bool NavigateEnterHold()
         {
-            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+            if (Gamepad.current != null)
                 if (Gamepad.current.buttonSouth.isPressed)
+                {
+                    LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
                     return true;
+                }
 
 
-            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+            if (Keyboard.current != null)
                 if (Keyboard.current.enterKey.isPressed)
                 {
                     LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
@@ -76,13 +82,16 @@ namespace Cardwheel
             return false;
         }
 
-        public static bool NavigateUp(int availableInputs)
+        public static bool NavigateUp()
         {
-            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+            if (Gamepad.current != null)
                 if (Gamepad.current.dpad.up.wasPressedThisFrame || Gamepad.current.leftStick.up.wasPressedThisFrame)
+                {
+                    LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
                     return true;
+                }
 
-            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+            if (Keyboard.current != null)
                 if (Keyboard.current.upArrowKey.wasPressedThisFrame)
                 {
                     LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
@@ -92,13 +101,16 @@ namespace Cardwheel
             return false;
         }
 
-        public static bool NavigateDown(int availableInputs)
+        public static bool NavigateDown()
         {
-            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+            if (Gamepad.current != null)
                 if (Gamepad.current.dpad.down.wasPressedThisFrame || Gamepad.current.leftStick.down.wasPressedThisFrame)
+                {
+                    LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
                     return true;
+                }
 
-            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+            if (Keyboard.current != null)
                 if (Keyboard.current.downArrowKey.wasPressedThisFrame)
                 {
                     LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
@@ -108,14 +120,17 @@ namespace Cardwheel
             return false;
         }
 
-        public static bool NavigateRight(int availableInputs)
+        public static bool NavigateRight()
         {
-            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+            if (Gamepad.current != null)
                 if (Gamepad.current.dpad.right.wasPressedThisFrame || Gamepad.current.leftStick.right.wasPressedThisFrame)
+                {
+                    LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
                     return true;
+                }
 
 
-            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+            if (Keyboard.current != null)
                 if (Keyboard.current.rightArrowKey.wasPressedThisFrame)
                 {
                     LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
@@ -125,13 +140,16 @@ namespace Cardwheel
             return false;
         }
 
-        public static bool NavigateLeft(int availableInputs)
+        public static bool NavigateLeft()
         {
-            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+            if (Gamepad.current != null)
                 if (Gamepad.current.dpad.left.wasPressedThisFrame || Gamepad.current.leftStick.left.wasPressedThisFrame)
+                {
+                    LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
                     return true;
+                }
 
-            if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.KEYBOARD))
+            if (Keyboard.current != null)
                 if (Keyboard.current.leftArrowKey.wasPressedThisFrame)
                 {
                     LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
@@ -141,52 +159,79 @@ namespace Cardwheel
             return false;
         }
 
-        public static bool NavigateGamepadButton(GUIButtonData guiButtonData, int availableInputs)
+        public static bool NavigateGamepadButton(GUIButtonData guiButtonData)
         {
             if (guiButtonData.GamepadButton == GAMEPAD_BUTTON.NORTH)
-                if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+                if (Gamepad.current != null)
                     if (Gamepad.current.buttonNorth.wasPressedThisFrame)
+                    {
+                        LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
                         return true;
+                    }
 
             if (guiButtonData.GamepadButton == GAMEPAD_BUTTON.SOUTH)
-                if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+                if (Gamepad.current != null)
                     if (Gamepad.current.buttonSouth.wasPressedThisFrame)
+                    {
+                        LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
                         return true;
+                    }
 
             if (guiButtonData.GamepadButton == GAMEPAD_BUTTON.WEST)
-                if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+                if (Gamepad.current != null)
                     if (Gamepad.current.buttonWest.wasPressedThisFrame)
+                    {
+                        LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
                         return true;
+                    }
 
             if (guiButtonData.GamepadButton == GAMEPAD_BUTTON.EAST)
-                if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+                if (Gamepad.current != null)
                     if (Gamepad.current.buttonEast.wasPressedThisFrame)
+                    {
+                        LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
                         return true;
+                    }
 
             if (guiButtonData.GamepadButton == GAMEPAD_BUTTON.OPTIONS)
-                if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+                if (Gamepad.current != null)
                     if (Gamepad.current.startButton.wasPressedThisFrame)
+                    {
+                        LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
                         return true;
+                    }
 
             if (guiButtonData.GamepadButton == GAMEPAD_BUTTON.R1)
-                if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+                if (Gamepad.current != null)
                     if (Gamepad.current.rightTrigger.wasPressedThisFrame)
+                    {
+                        LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
                         return true;
+                    }
 
             if (guiButtonData.GamepadButton == GAMEPAD_BUTTON.L1)
-                if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+                if (Gamepad.current != null)
                     if (Gamepad.current.leftTrigger.wasPressedThisFrame)
+                    {
+                        LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
                         return true;
+                    }
 
             if (guiButtonData.GamepadButton == GAMEPAD_BUTTON.R2)
-                if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+                if (Gamepad.current != null)
                     if (Gamepad.current.rightShoulder.wasPressedThisFrame)
+                    {
+                        LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
                         return true;
+                    }
 
             if (guiButtonData.GamepadButton == GAMEPAD_BUTTON.L2)
-                if (Logic.IsBitSet(availableInputs, (byte)INPUT_TYPES.GAMEPAD))
+                if (Gamepad.current != null)
                     if (Gamepad.current.leftShoulder.wasPressedThisFrame)
+                    {
+                        LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
                         return true;
+                    }
 
             return false;
         }
@@ -198,35 +243,35 @@ namespace Cardwheel
             UpdateButtonIcons(cardsBallsSpinWheelGUI.SpinwheelButtonData, gamepadType);
         }
 
-        public static bool CommonHandleInput(TopBarGUI topBarGUI, CardsBallsSpinWheelGUI cardsBallsSpinWheelGUI, int availableInputs, COMMON_BUTTONS selectedButton)
+        public static bool CommonHandleInput(TopBarGUI topBarGUI, CardsBallsSpinWheelGUI cardsBallsSpinWheelGUI, COMMON_BUTTONS selectedButton)
         {
-            if ((selectedButton == COMMON_BUTTONS.SETTINGS && NavigateEnter(availableInputs)) || NavigateGamepadButton(topBarGUI.SettingsButtonData, availableInputs))
+            if ((selectedButton == COMMON_BUTTONS.SETTINGS && NavigateEnter()) || NavigateGamepadButton(topBarGUI.SettingsButtonData))
             {
                 Game.Instance.GoToSettings();
                 return true;
             }
 
-            if (CommonHandleInputNoTopBar(cardsBallsSpinWheelGUI, availableInputs, selectedButton))
+            if (CommonHandleInputNoTopBar(cardsBallsSpinWheelGUI, selectedButton))
                 return true;
 
             return false;
         }
 
-        public static bool CommonHandleInputNoTopBar(CardsBallsSpinWheelGUI cardsBallsSpinWheelGUI, int availableInputs, COMMON_BUTTONS selectedButton)
+        public static bool CommonHandleInputNoTopBar(CardsBallsSpinWheelGUI cardsBallsSpinWheelGUI, COMMON_BUTTONS selectedButton)
         {
-            if ((selectedButton == COMMON_BUTTONS.BALLS && NavigateEnter(availableInputs)) || NavigateGamepadButton(cardsBallsSpinWheelGUI.BallsButtonData, availableInputs))
+            if ((selectedButton == COMMON_BUTTONS.BALLS && NavigateEnter()) || NavigateGamepadButton(cardsBallsSpinWheelGUI.BallsButtonData))
             {
                 Game.Instance.GoToBallScreen();
                 return true;
             }
 
-            if ((selectedButton == COMMON_BUTTONS.WHEEL && NavigateEnter(availableInputs)) || NavigateGamepadButton(cardsBallsSpinWheelGUI.SpinwheelButtonData, availableInputs))
+            if ((selectedButton == COMMON_BUTTONS.WHEEL && NavigateEnter()) || NavigateGamepadButton(cardsBallsSpinWheelGUI.SpinwheelButtonData))
             {
                 Game.Instance.GoToChipsInfo();
                 return true;
             }
 
-            if ((selectedButton >= COMMON_BUTTONS.JOKER_1 && selectedButton <= COMMON_BUTTONS.JOKER_5) && NavigateEnter(availableInputs))
+            if ((selectedButton >= COMMON_BUTTONS.JOKER_1 && selectedButton <= COMMON_BUTTONS.JOKER_5) && NavigateEnter())
             {
                 Game.Instance.ShowJokerInfoPopup((int)selectedButton - (int)COMMON_BUTTONS.JOKER_1);
                 return true;
@@ -235,23 +280,23 @@ namespace Cardwheel
             return false;
         }
 
-        public static int CommonNavigation(RunData runData, int availableInputs, COMMON_BUTTONS selectedButton)
+        public static int CommonNavigation(RunData runData, COMMON_BUTTONS selectedButton)
         {
-            if (selectedButton == COMMON_BUTTONS.WHEEL && NavigateUp(availableInputs))
+            if (selectedButton == COMMON_BUTTONS.WHEEL && NavigateUp())
                 return (int)COMMON_BUTTONS.BALLS;
 
-            if (selectedButton == COMMON_BUTTONS.BALLS && NavigateDown(availableInputs))
+            if (selectedButton == COMMON_BUTTONS.BALLS && NavigateDown())
                 return (int)COMMON_BUTTONS.WHEEL;
 
-            if (selectedButton == COMMON_BUTTONS.BALLS && NavigateUp(availableInputs))
+            if (selectedButton == COMMON_BUTTONS.BALLS && NavigateUp() && runData.JokerCount > 0)
                 return (int)COMMON_BUTTONS.JOKER_1;
 
-            if (selectedButton >= COMMON_BUTTONS.JOKER_1 && selectedButton <= COMMON_BUTTONS.JOKER_5 && NavigateDown(availableInputs))
+            if (selectedButton >= COMMON_BUTTONS.JOKER_1 && selectedButton <= COMMON_BUTTONS.JOKER_5 && NavigateDown())
                 return (int)COMMON_BUTTONS.BALLS;
 
-            if ((selectedButton >= COMMON_BUTTONS.JOKER_1 && selectedButton < (COMMON_BUTTONS.JOKER_1 + runData.JokerCount - 1)) && NavigateRight(availableInputs))
+            if ((selectedButton >= COMMON_BUTTONS.JOKER_1 && selectedButton < (COMMON_BUTTONS.JOKER_1 + runData.JokerCount - 1)) && NavigateRight())
                 return ((int)selectedButton + 1);
-            if ((selectedButton >= COMMON_BUTTONS.JOKER_2 && selectedButton < (COMMON_BUTTONS.JOKER_1 + runData.JokerCount)) && NavigateLeft(availableInputs))
+            if ((selectedButton >= COMMON_BUTTONS.JOKER_2 && selectedButton < (COMMON_BUTTONS.JOKER_1 + runData.JokerCount)) && NavigateLeft())
                 return ((int)selectedButton - 1);
             return -1;
         }
@@ -283,8 +328,8 @@ namespace Cardwheel
 
         public static bool ShowSelected()
         {
-            return Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) ||
-            (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD) && (Time.realtimeSinceStartupAsDouble - LastKeyboardInputTime < 5.0d));
+            return (Gamepad.current != null ||
+            Keyboard.current != null) && (Time.realtimeSinceStartupAsDouble - LastKeyboardInputTime < 5.0d);
         }
     }
 }

@@ -76,8 +76,6 @@ namespace Cardwheel
         GameData m_gameData;
         Balance m_balance;
 
-        int m_availableInputs;
-
         [Header("Set to 0 for Random")]
         public uint StartSeed;
 
@@ -116,28 +114,9 @@ namespace Cardwheel
                     else if (gamepadString.Contains("Steam"))
                         m_gamepadType = GAMEPAD_TYPE.STEAM;
 
-                    m_availableInputs = Logic.SetBit(m_availableInputs, (int)INPUT_TYPES.GAMEPAD);
-
                     Cursor.visible = false;
                 }
-                else
-                    m_availableInputs = Logic.RemoveBit(m_availableInputs, (int)INPUT_TYPES.GAMEPAD);
-
-                if (Keyboard.current != null)
-                    m_availableInputs = Logic.SetBit(m_availableInputs, (int)INPUT_TYPES.KEYBOARD);
-                else
-                    m_availableInputs = Logic.RemoveBit(m_availableInputs, (int)INPUT_TYPES.KEYBOARD);
-
-                // Cursor.visible = (Mouse.current != null);
-                // Cursor.visible = false;
             }
-
-            Debug.Log("m_availableInputs " + m_availableInputs);
-        }
-
-        public int GetAvailableInputs()
-        {
-            return m_availableInputs;
         }
 
         public GAMEPAD_TYPE GetGamepadType()

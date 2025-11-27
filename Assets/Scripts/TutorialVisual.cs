@@ -56,7 +56,7 @@ namespace Cardwheel
 
         public bool TutorialClosed()
         {
-            if (CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, Game.Instance.GetAvailableInputs()))
+            if (CommonButtonVisual.NavigateEnter() || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData))
             {
                 close();
                 return true;

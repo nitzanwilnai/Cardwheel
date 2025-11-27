@@ -191,44 +191,44 @@ namespace Cardwheel
 
         private void handleInput()
         {
-            if (CommonButtonVisual.NavigateGamepadButton(m_newGameButtonData, Game.Instance.GetAvailableInputs()))
+            if (CommonButtonVisual.NavigateGamepadButton(m_newGameButtonData))
             {
                 animateGoToWheelSelection();
                 return;
             }
 
-            if (CommonButtonVisual.NavigateGamepadButton(m_continueButtonData, Game.Instance.GetAvailableInputs()))
+            if (CommonButtonVisual.NavigateGamepadButton(m_continueButtonData))
             {
                 animateContinueGame();
                 return;
             }
 
-            if (CommonButtonVisual.NavigateGamepadButton(m_exitButtonData, Game.Instance.GetAvailableInputs()))
+            if (CommonButtonVisual.NavigateGamepadButton(m_exitButtonData))
             {
                 Game.Instance.ExitGame();
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateEnter())
             {
                 animateGoToWheelSelection();
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.CONTINUE && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.CONTINUE && CommonButtonVisual.NavigateEnter())
             {
                 animateContinueGame();
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.EXIT && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.EXIT && CommonButtonVisual.NavigateEnter())
             {
                 Game.Instance.ExitGame();
                 return;
             }
 
             // navigate
-            if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateRight())
             {
                 if (m_continueButtonOk)
                     selectButton(MENU_BUTTONS.CONTINUE);
@@ -237,19 +237,19 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.CONTINUE && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.CONTINUE && CommonButtonVisual.NavigateLeft())
             {
                 selectButton(MENU_BUTTONS.NEW_GAME);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.CONTINUE && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.CONTINUE && CommonButtonVisual.NavigateRight())
             {
                 selectButton(MENU_BUTTONS.EXIT);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.EXIT && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.EXIT && CommonButtonVisual.NavigateLeft())
             {
                 if (m_continueButtonOk)
                     selectButton(MENU_BUTTONS.CONTINUE);

@@ -56,7 +56,7 @@ namespace Cardwheel
             if (CommonVisual.AnimateCloseTick(ref m_closeTimer, dt))
                 Game.Instance.SetMenuState(runData.PrevMenuState);
 
-            if (m_closeTimer <= 0.0f && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, Game.Instance.GetAvailableInputs()))
+            if (m_closeTimer <= 0.0f && CommonButtonVisual.NavigateEnter() || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData))
                 animateClose();
         }
 

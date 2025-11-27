@@ -134,118 +134,118 @@ namespace Cardwheel
         {
             CommonSlotsVisual.TickSpinWheelUI(runData, balance.UISpinWheelSpeed, dt, m_cardsBallsSpinWheelGUI);
 
-            if ((m_selectedButton == MENU_BUTTONS.WHEEL && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs())) || CommonButtonVisual.NavigateGamepadButton(m_cardsBallsSpinWheelGUI.SpinwheelButtonData, Game.Instance.GetAvailableInputs()))
+            if ((m_selectedButton == MENU_BUTTONS.WHEEL && CommonButtonVisual.NavigateEnter()) || CommonButtonVisual.NavigateGamepadButton(m_cardsBallsSpinWheelGUI.SpinwheelButtonData))
             {
                 selectButton(MENU_BUTTONS.WHEEL);
                 Game.Instance.GoToChipsInfo();
                 return;
             }
 
-            if ((m_selectedButton >= MENU_BUTTONS.JOKER_1 && m_selectedButton <= MENU_BUTTONS.JOKER_5) && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            if ((m_selectedButton >= MENU_BUTTONS.JOKER_1 && m_selectedButton <= MENU_BUTTONS.JOKER_5) && CommonButtonVisual.NavigateEnter())
             {
                 Game.Instance.ShowJokerInfoPopupFromWinScreen((int)m_selectedButton - (int)COMMON_BUTTONS.JOKER_1);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.COPY && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.COPY && CommonButtonVisual.NavigateEnter())
             {
                 Game.Instance.CopySeed();
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.MAIN_MENU && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.MAIN_MENU && CommonButtonVisual.NavigateEnter())
             {
                 Game.Instance.GoToMainMenu();
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateEnter())
             {
                 Game.Instance.StartNewRunSameWheel();
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.RETRY && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.RETRY && CommonButtonVisual.NavigateEnter())
             {
                 Game.Instance.RetryRun();
                 return;
             }
 
             // navigation
-            int newSelectedButton = CommonButtonVisual.CommonNavigation(runData, Game.Instance.GetAvailableInputs(), (COMMON_BUTTONS)m_selectedButton);
+            int newSelectedButton = CommonButtonVisual.CommonNavigation(runData, (COMMON_BUTTONS)m_selectedButton);
             if (newSelectedButton > -1)
             {
                 selectButton((MENU_BUTTONS)newSelectedButton);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.MAIN_MENU && CommonButtonVisual.NavigateUp(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.MAIN_MENU && CommonButtonVisual.NavigateUp())
             {
                 selectButton(MENU_BUTTONS.NEW_GAME);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateUp(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateUp())
             {
                 selectButton(MENU_BUTTONS.COPY);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.RETRY && CommonButtonVisual.NavigateUp(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.RETRY && CommonButtonVisual.NavigateUp())
             {
                 selectButton(MENU_BUTTONS.COPY);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.COPY && CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.COPY && CommonButtonVisual.NavigateDown())
             {
                 selectButton(MENU_BUTTONS.NEW_GAME);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateDown())
             {
                 selectButton(MENU_BUTTONS.MAIN_MENU);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.RETRY && CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.RETRY && CommonButtonVisual.NavigateDown())
             {
                 selectButton(MENU_BUTTONS.MAIN_MENU);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateRight())
             {
                 selectButton(MENU_BUTTONS.RETRY);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.RETRY && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.RETRY && CommonButtonVisual.NavigateLeft())
             {
                 selectButton(MENU_BUTTONS.NEW_GAME);
                 return;
             }
 
-            if (m_selectedButton < MENU_BUTTONS.RETRY && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton < MENU_BUTTONS.RETRY && CommonButtonVisual.NavigateLeft())
             {
                 selectButton(MENU_BUTTONS.WHEEL);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.WHEEL && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.WHEEL && CommonButtonVisual.NavigateRight())
             {
                 selectButton(MENU_BUTTONS.COPY);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.BALLS && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.BALLS && CommonButtonVisual.NavigateRight())
             {
                 selectButton(MENU_BUTTONS.COPY);
                 return;
             }
 
-            if (runData.JokerCount == (m_selectedButton - MENU_BUTTONS.JOKER_1 + 1) && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
+            if (runData.JokerCount == (m_selectedButton - MENU_BUTTONS.JOKER_1 + 1) && CommonButtonVisual.NavigateRight())
             {
                 selectButton(MENU_BUTTONS.COPY);
                 return;
