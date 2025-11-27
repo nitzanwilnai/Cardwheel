@@ -135,15 +135,15 @@ namespace Cardwheel
 
         public static bool HandleEnter(GUIButtonData abandonButtonData, GUIButtonData rerollButtonData, COMMON_CARDPACK_BUTTONS cardPackButton)
         {
-            if (CommonButtonVisual.NavigateGamepadButton(abandonButtonData, Game.Instance.GetAvailableInputs()) ||
-            cardPackButton == COMMON_CARDPACK_BUTTONS.ABANDON && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            if (CommonButtonVisual.NavigateGamepadButton(abandonButtonData) ||
+            cardPackButton == COMMON_CARDPACK_BUTTONS.ABANDON && CommonButtonVisual.NavigateEnter())
             {
                 Game.Instance.AbandonCardPack();
                 return true;
             }
 
-            if (CommonButtonVisual.NavigateGamepadButton(rerollButtonData, Game.Instance.GetAvailableInputs()) ||
-            cardPackButton == COMMON_CARDPACK_BUTTONS.REROLL && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            if (CommonButtonVisual.NavigateGamepadButton(rerollButtonData) ||
+            cardPackButton == COMMON_CARDPACK_BUTTONS.REROLL && CommonButtonVisual.NavigateEnter())
             {
                 Game.Instance.RerollCardPack();
                 return true;
@@ -155,27 +155,27 @@ namespace Cardwheel
         public static COMMON_CARDPACK_BUTTONS HandleNavigation(COMMON_CARDPACK_BUTTONS m_cardPackButton, int maxCards)
         {
             // navigation
-            if (m_cardPackButton >= COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1 && m_cardPackButton < COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_4 && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
+            if (m_cardPackButton >= COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1 && m_cardPackButton < COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_4 && CommonButtonVisual.NavigateRight())
             {
                 return (m_cardPackButton - COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1) < maxCards - 1 ? m_cardPackButton + 1 : m_cardPackButton;
             }
 
-            if (m_cardPackButton > COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1 && m_cardPackButton <= COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_4 && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
+            if (m_cardPackButton > COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1 && m_cardPackButton <= COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_4 && CommonButtonVisual.NavigateLeft())
                 return m_cardPackButton - 1;
 
-            if (m_cardPackButton == COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1 && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
+            if (m_cardPackButton == COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1 && CommonButtonVisual.NavigateLeft())
                 return COMMON_CARDPACK_BUTTONS.ABANDON;
 
-            if (m_cardPackButton == COMMON_CARDPACK_BUTTONS.ABANDON && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
+            if (m_cardPackButton == COMMON_CARDPACK_BUTTONS.ABANDON && CommonButtonVisual.NavigateRight())
                 return COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1;
 
-            if (m_cardPackButton == COMMON_CARDPACK_BUTTONS.ABANDON && CommonButtonVisual.NavigateUp(Game.Instance.GetAvailableInputs()))
+            if (m_cardPackButton == COMMON_CARDPACK_BUTTONS.ABANDON && CommonButtonVisual.NavigateUp())
                 return COMMON_CARDPACK_BUTTONS.REROLL;
 
-            if (m_cardPackButton == COMMON_CARDPACK_BUTTONS.REROLL && CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs()))
+            if (m_cardPackButton == COMMON_CARDPACK_BUTTONS.REROLL && CommonButtonVisual.NavigateDown())
                 return COMMON_CARDPACK_BUTTONS.ABANDON;
 
-            if (m_cardPackButton == COMMON_CARDPACK_BUTTONS.REROLL && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
+            if (m_cardPackButton == COMMON_CARDPACK_BUTTONS.REROLL && CommonButtonVisual.NavigateRight())
                 return COMMON_CARDPACK_BUTTONS.CARD_PACK_CARD_1;
 
             return m_cardPackButton;

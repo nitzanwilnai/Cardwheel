@@ -202,16 +202,16 @@ namespace Cardwheel
         void handleInput()
         {
 
-            if (CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
+            if (CommonButtonVisual.NavigateLeft())
                 prev();
 
-            if (CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
+            if (CommonButtonVisual.NavigateRight())
                 next();
 
-            if (CommonButtonVisual.NavigateGamepadButton(m_playButtonData, Game.Instance.GetAvailableInputs()))
+            if (CommonButtonVisual.NavigateGamepadButton(m_playButtonData))
                 animateClose();
 
-            if (CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            if (CommonButtonVisual.NavigateEnter())
                 animateClose();
         }
 

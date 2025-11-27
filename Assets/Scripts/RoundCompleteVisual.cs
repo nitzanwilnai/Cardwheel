@@ -169,66 +169,66 @@ namespace Cardwheel
         void handleInput()
         {
             // common input (settings, balls, spinwheel and jokers)
-            if (CommonButtonVisual.CommonHandleInput(m_topBarGUI, m_cardsBallsSpinWheelGUI, Game.Instance.GetAvailableInputs(), (COMMON_BUTTONS)m_selectedButton))
+            if (CommonButtonVisual.CommonHandleInput(m_topBarGUI, m_cardsBallsSpinWheelGUI, (COMMON_BUTTONS)m_selectedButton))
                 return;
 
-            int newSelectedButton = CommonButtonVisual.CommonNavigation(runData, Game.Instance.GetAvailableInputs(), (COMMON_BUTTONS)m_selectedButton);
+            int newSelectedButton = CommonButtonVisual.CommonNavigation(runData, (COMMON_BUTTONS)m_selectedButton);
             if (newSelectedButton > -1)
             {
                 selectButton((MENU_BUTTONS)newSelectedButton);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.CLAIM_REWARD && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()) || CommonButtonVisual.NavigateGamepadButton(m_claimRewardData, Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.CLAIM_REWARD && CommonButtonVisual.NavigateEnter() || CommonButtonVisual.NavigateGamepadButton(m_claimRewardData))
             {
                 claimRoundRewardAndGoToShop();
                 return;
             }
 
 
-            if (m_selectedButton == MENU_BUTTONS.CLAIM_REWARD && CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.CLAIM_REWARD && CommonButtonVisual.NavigateRight())
             {
                 selectButton(MENU_BUTTONS.WHEEL);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.CLAIM_REWARD && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()) || CommonButtonVisual.NavigateGamepadButton(m_topBarGUI.SettingsButtonData, Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.CLAIM_REWARD && CommonButtonVisual.NavigateLeft() || CommonButtonVisual.NavigateGamepadButton(m_topBarGUI.SettingsButtonData))
             {
                 selectButton(MENU_BUTTONS.SETTINGS);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.SETTINGS && (CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()) || CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs())))
+            if (m_selectedButton == MENU_BUTTONS.SETTINGS && (CommonButtonVisual.NavigateRight() || CommonButtonVisual.NavigateDown()))
             {
                 selectButton(MENU_BUTTONS.CLAIM_REWARD);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.WHEEL && (CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()) || CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs())))
+            if (m_selectedButton == MENU_BUTTONS.WHEEL && (CommonButtonVisual.NavigateLeft() || CommonButtonVisual.NavigateDown()))
             {
                 selectButton(MENU_BUTTONS.CLAIM_REWARD);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.JOKER_1 && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.JOKER_1 && CommonButtonVisual.NavigateLeft())
             {
                 selectButton(MENU_BUTTONS.CLAIM_REWARD);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.BALLS && CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.BALLS && CommonButtonVisual.NavigateLeft())
             {
                 selectButton(MENU_BUTTONS.CLAIM_REWARD);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.WHEEL && CommonButtonVisual.NavigateUp(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.WHEEL && CommonButtonVisual.NavigateUp())
             {
                 selectButton(MENU_BUTTONS.BALLS);
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.BALLS && CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.BALLS && CommonButtonVisual.NavigateDown())
             {
                 selectButton(MENU_BUTTONS.WHEEL);
                 return;

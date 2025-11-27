@@ -147,90 +147,90 @@ namespace Cardwheel
 
         void handleInput()
         {
-            if ((m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs())) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, Game.Instance.GetAvailableInputs()))
+            if ((m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateEnter()) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData))
             {
                 closeSettings();
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.MAIN_MENU && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.MAIN_MENU && CommonButtonVisual.NavigateEnter())
             {
                 Game.Instance.GoToMainMenu();
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.NEW_RUN && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.NEW_RUN && CommonButtonVisual.NavigateEnter())
             {
                 Game.Instance.StartNewRunSameWheel();
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.RETRY && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.RETRY && CommonButtonVisual.NavigateEnter())
             {
                 Game.Instance.RetryRun();
                 return;
             }
 
 
-            if (m_selectedButton == MENU_BUTTONS.SFX && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.SFX && CommonButtonVisual.NavigateEnter())
             {
                 toggleSFX();
                 return;
             }
-            if (m_selectedButton == MENU_BUTTONS.MUSIC && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.MUSIC && CommonButtonVisual.NavigateEnter())
             {
                 toggleMusic();
                 return;
             }
-            if (m_selectedButton == MENU_BUTTONS.VIBRATE && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.VIBRATE && CommonButtonVisual.NavigateEnter())
             {
                 toggleVibrate();
                 return;
             }
-            if (m_selectedButton == MENU_BUTTONS.SPEED && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.SPEED && CommonButtonVisual.NavigateEnter())
             {
                 toggleSpeed();
                 return;
             }
-            if (m_selectedButton == MENU_BUTTONS.SKIP && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.SKIP && CommonButtonVisual.NavigateEnter())
             {
                 toggleSkipRound1();
                 return;
             }
 
             if (m_selectedButton >= MENU_BUTTONS.SFX && m_selectedButton < MENU_BUTTONS.SKIP)
-                if (CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs()))
+                if (CommonButtonVisual.NavigateDown())
                 {
                     selectButton(m_selectedButton + 1);
                     return;
                 }
 
             if (m_selectedButton > MENU_BUTTONS.SFX && m_selectedButton <= MENU_BUTTONS.SKIP)
-                if (CommonButtonVisual.NavigateUp(Game.Instance.GetAvailableInputs()))
+                if (CommonButtonVisual.NavigateUp())
                 {
                     selectButton(m_selectedButton - 1);
                     return;
                 }
             if (m_selectedButton >= MENU_BUTTONS.RETRY && m_selectedButton < MENU_BUTTONS.CLOSE)
-                if (CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs()))
+                if (CommonButtonVisual.NavigateDown())
                 {
                     selectButton(m_selectedButton + 1);
                     return;
                 }
             if (m_selectedButton > MENU_BUTTONS.RETRY && m_selectedButton <= MENU_BUTTONS.CLOSE)
-                if (CommonButtonVisual.NavigateUp(Game.Instance.GetAvailableInputs()))
+                if (CommonButtonVisual.NavigateUp())
                 {
                     selectButton(m_selectedButton - 1);
                     return;
                 }
             if (m_selectedButton >= MENU_BUTTONS.RETRY && m_selectedButton <= MENU_BUTTONS.CLOSE)
-                if (CommonButtonVisual.NavigateRight(Game.Instance.GetAvailableInputs()))
+                if (CommonButtonVisual.NavigateRight())
                 {
                     selectButton(MENU_BUTTONS.SFX);
                     return;
                 }
             if (m_selectedButton >= MENU_BUTTONS.SFX && m_selectedButton <= MENU_BUTTONS.SKIP)
-                if (CommonButtonVisual.NavigateLeft(Game.Instance.GetAvailableInputs()))
+                if (CommonButtonVisual.NavigateLeft())
                 {
                     selectButton(MENU_BUTTONS.CLOSE);
                     return;

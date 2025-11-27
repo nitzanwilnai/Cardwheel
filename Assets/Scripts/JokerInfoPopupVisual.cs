@@ -138,20 +138,20 @@ namespace Cardwheel
 
         void handleInput()
         {
-            if ((m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs())) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData, Game.Instance.GetAvailableInputs()))
+            if ((m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateEnter()) || CommonButtonVisual.NavigateGamepadButton(m_closeButtonData))
             {
                 hideJokerInfoPopup();
                 return;
             }
 
             if (m_sellButtonData.Button.interactable)
-                if ((m_selectedButton == MENU_BUTTONS.SELL && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs())) || CommonButtonVisual.NavigateGamepadButton(m_sellButtonData, Game.Instance.GetAvailableInputs()))
+                if ((m_selectedButton == MENU_BUTTONS.SELL && CommonButtonVisual.NavigateEnter()) || CommonButtonVisual.NavigateGamepadButton(m_sellButtonData))
                 {
                     sellJoker();
                     return;
                 }
 
-            if (m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateUp(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.CLOSE && CommonButtonVisual.NavigateUp())
             {
                 m_selectedButton = MENU_BUTTONS.SELL;
                 m_sellButtonData.SelectedGO.SetActive(true);
@@ -159,7 +159,7 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.SELL && CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs()))
+            if (m_selectedButton == MENU_BUTTONS.SELL && CommonButtonVisual.NavigateDown())
             {
                 m_selectedButton = MENU_BUTTONS.CLOSE;
                 m_sellButtonData.SelectedGO.SetActive(false);

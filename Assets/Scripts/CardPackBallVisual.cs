@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using CommonTools;
 using TMPro;
 using UnityEngine.Purchasing;
+using UnityEngine.InputSystem;
 
 namespace Cardwheel
 {
@@ -214,14 +215,14 @@ namespace Cardwheel
 
         public void HandleTouchInput()
         {
-            CommonBallVisual.HanleInputTouchMove(runData, m_uiBallMoveData, mainCamera, true, Game.Instance.GetAvailableInputs());
+            CommonBallVisual.HanleInputTouchMove(runData, m_uiBallMoveData, mainCamera, true);
         }
 
         void handleInput()
         {
-            if (Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.GAMEPAD) || Logic.IsBitSet(Game.Instance.GetAvailableInputs(), (byte)INPUT_TYPES.KEYBOARD))
+            if (Gamepad.current != null || Keyboard.current != null)
             {
-                MENU_BUTTONS newSelectedButton = (MENU_BUTTONS)CommonBallVisual.HandleInputGamepadKeyboard(runData, m_uiBallMoveData, m_uiBallVisualData, (COMMON_BUTTONS)m_cardPackButton, true, Game.Instance.GetAvailableInputs());
+                MENU_BUTTONS newSelectedButton = (MENU_BUTTONS)CommonBallVisual.HandleInputGamepadKeyboard(runData, m_uiBallMoveData, m_uiBallVisualData, (COMMON_BUTTONS)m_cardPackButton, true);
                 selectButton(newSelectedButton);
             }
 
@@ -234,7 +235,7 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_cardPackButton >= MENU_BUTTONS.CARD_PACK_CARD_1 && m_cardPackButton <= MENU_BUTTONS.CARD_PACK_CARD_4 && CommonButtonVisual.NavigateEnter(Game.Instance.GetAvailableInputs()))
+            if (m_cardPackButton >= MENU_BUTTONS.CARD_PACK_CARD_1 && m_cardPackButton <= MENU_BUTTONS.CARD_PACK_CARD_4 && CommonButtonVisual.NavigateEnter())
             {
                 // use card
                 int cardIdx = m_cardPackButton - MENU_BUTTONS.CARD_PACK_CARD_1;
@@ -251,13 +252,13 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_cardPackButton >= MENU_BUTTONS.BALL_1 && m_cardPackButton <= MENU_BUTTONS.BALL_6 && CommonButtonVisual.NavigateDown(Game.Instance.GetAvailableInputs()))
+            if (m_cardPackButton >= MENU_BUTTONS.BALL_1 && m_cardPackButton <= MENU_BUTTONS.BALL_6 && CommonButtonVisual.NavigateDown())
             {
                 selectButton(MENU_BUTTONS.CARD_PACK_CARD_1);
                 return;
             }
 
-            if (m_cardPackButton >= MENU_BUTTONS.CARD_PACK_CARD_1 && m_cardPackButton <= MENU_BUTTONS.CARD_PACK_CARD_4 && CommonButtonVisual.NavigateUp(Game.Instance.GetAvailableInputs()))
+            if (m_cardPackButton >= MENU_BUTTONS.CARD_PACK_CARD_1 && m_cardPackButton <= MENU_BUTTONS.CARD_PACK_CARD_4 && CommonButtonVisual.NavigateUp())
             {
                 selectButton(MENU_BUTTONS.BALL_1);
                 return;

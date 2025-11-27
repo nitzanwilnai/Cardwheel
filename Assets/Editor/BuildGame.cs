@@ -28,7 +28,7 @@ namespace Cardwheel
 
             EditorUserBuildSettings.buildAppBundle = false;
 
-            Build(BuildTarget.StandaloneOSX, Application.dataPath + "/../../Build/Cardwheel " + dateTime + "/Cardwheel..app", BuildOptions.None, "Assets/Scenes/MainGameScene H.unity");
+            Build(BuildTarget.StandaloneOSX, Application.dataPath + "/../../Build/Cardwheel " + dateTime + "/Cardwheel.app", BuildOptions.None, "Assets/Scenes/MainGameScene H.unity");
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
