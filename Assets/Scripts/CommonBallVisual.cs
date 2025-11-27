@@ -179,7 +179,7 @@ namespace Cardwheel
 
         public static COMMON_BUTTONS HandleInputGamepadKeyboard(RunData runData, UIBallMoveData uiBallMoveData, UIBallVisualData uiBallVisualData, COMMON_BUTTONS selectedButton, bool allowSelection)
         {
-            if (allowSelection && selectedButton >= COMMON_BUTTONS.BALL_1 && selectedButton < COMMON_BUTTONS.BALL_6 && CommonButtonVisual.NavigateEnter())
+            if (allowSelection && selectedButton >= COMMON_BUTTONS.BALL_1 && selectedButton <= COMMON_BUTTONS.BALL_6 && CommonButtonVisual.NavigateEnter())
             {
                 uiBallMoveData.BallIdx = selectedButton - COMMON_BUTTONS.BALL_1;
                 if (!uiBallMoveData.BallMoved)
