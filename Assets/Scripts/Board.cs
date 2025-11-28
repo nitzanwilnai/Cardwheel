@@ -139,6 +139,7 @@ namespace Cardwheel
 
         TextMeshProUGUI m_bossDescription;
         GameObject m_bossDescriptionGO;
+        Animation m_bossGrowAnim;
 
         // rounds
         public float NextSpinTime;
@@ -272,6 +273,7 @@ namespace Cardwheel
 
             m_bossDescription = guiRef.GetTextGUI("BossDescription");
             m_bossDescriptionGO = guiRef.GetGameObject("BossDescription");
+            m_bossGrowAnim = guiRef.GetAnimation("BossDescription");
 
             m_UI.SetActive(false);
             BoardSpites.SetActive(false);
@@ -1091,6 +1093,9 @@ namespace Cardwheel
                     m_totalScoreText.text = runData.TotalChips.ToString("N0");
                     m_totalScoreAnimation.Play();
                     SoundManager.Instance.PlaySFXScoringTotal();
+
+                    if(Logic.InBossRound(runData) && runData.TotalChips == 0)
+                        m_bossGrowAnim.Play("ScoreGrow");
 
                     Logic.JokerPostSpin(runData, balance);
 
