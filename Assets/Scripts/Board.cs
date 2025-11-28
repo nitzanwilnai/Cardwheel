@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using ParticleSystemDOD;
 
 namespace Cardwheel
 {
@@ -89,13 +90,14 @@ namespace Cardwheel
 
         TopBarGUI m_topBarGUI;
 
-        public Transform BallParent;
+        public Transform BallParticleParent;
         int m_numBalls;
-        public GameObject[] BallsGO;
+        public Ball[] BallsGO;
         public Transform[] BallStartPos;
         Vector3[] m_ballStartPos;
         Rigidbody2D[] m_ballsRB;
         BallSprites[] m_ballSprites;
+        public ParticleSystemSmokeBoard ParticleSystemSmokeBoard;
 
         public GameObject BallsChipsGO;
         public GameObject BallsMultiplierGO;
@@ -281,6 +283,8 @@ namespace Cardwheel
             SpinWheelLights.Init();
 
             m_slotJuiceTimer = new float[balance.NumSlots];
+
+            ParticleSystemSmokeBoard.Init(BallParticleParent);
         }
 
         public void Show()
@@ -1094,7 +1098,7 @@ namespace Cardwheel
                     m_totalScoreAnimation.Play();
                     SoundManager.Instance.PlaySFXScoringTotal();
 
-                    if(Logic.InBossRound(runData) && runData.TotalChips == 0)
+                    if (Logic.InBossRound(runData) && runData.TotalChips == 0)
                         m_bossGrowAnim.Play("ScoreGrow");
 
                     Logic.JokerPostSpin(runData, balance);
@@ -1398,9 +1402,16 @@ namespace Cardwheel
 #if UNITY_EDITOR
             if (Keyboard.current.spaceKey.wasReleasedThisFrame)
                 dropBalls();
+
+            if (Keyboard.current.vKey.wasReleasedThisFrame)
+                for (int i = 0; i < m_numBalls; i++)
+                    ParticleSystemSmokeBoard.Emit(Color.white, BallsGO[i].transform.position, 1.0f);
 #endif
+        }
 
-
+        public void EmitSmoke(Vector2 position, float magnitude)
+        {
+            ParticleSystemSmokeBoard.Emit(Color.white, position, magnitude);
         }
 
         bool allBlocksLocked()

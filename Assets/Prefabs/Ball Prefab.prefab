@@ -473,6 +473,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  ParticleSystemSmoke: {fileID: 0}
 --- !u!1 &7816400726297748417
 GameObject:
   m_ObjectHideFlags: 0
