@@ -499,6 +499,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 616485796340501115, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: particleBalance.TargetRadiusMax
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 616485796340501115, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: particleBalance.TargetRadiusMin
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069817559547407666, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: particleBalance.TargetRadiusMax
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069817559547407666, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: particleBalance.TargetRadiusMin
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 2646132462451246873, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
       propertyPath: m_Name
       value: Board
@@ -506,6 +522,18 @@ PrefabInstance:
     - target: {fileID: 2646132462451246873, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2822832657620230224, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: particleBalance.TargetRadiusMax
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2822832657620230224, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: particleBalance.TargetRadiusMin
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3246488481537512494, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: particleBalance.MaxSprites
+      value: 216
       objectReference: {fileID: 0}
     - target: {fileID: 4072154811109636285, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
       propertyPath: m_IsActive
@@ -515,6 +543,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6360666786618593020, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: particleBalance.TargetRadiusMax
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6360666786618593020, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: particleBalance.TargetRadiusMin
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 6638826757461630101, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -523,9 +559,29 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6906052799605867510, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: particleBalance.TargetRadiusMax
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6906052799605867510, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: particleBalance.TargetRadiusMin
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063361928916150422, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: BallParticleParent
+      value: 
+      objectReference: {fileID: 551517369}
     - target: {fileID: 7074447944681563893, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8167971580209956445, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: particleBalance.TargetRadiusMax
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8167971580209956445, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: particleBalance.TargetRadiusMin
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 9154548170960038479, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
       propertyPath: m_LocalPosition.x
@@ -592,6 +648,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8b9e20286d74487cb0ea369d8a9148f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &551517369 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5186817056899343701, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+  m_PrefabInstance: {fileID: 551517367}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &697370008
 GameObject:
   m_ObjectHideFlags: 0

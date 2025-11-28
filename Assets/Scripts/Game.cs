@@ -722,6 +722,11 @@ namespace Cardwheel
             SoundManager.Instance.PlaySFXMarbleMarble();
         }
 
+        public void EmitSmoke(Vector2 position, float magnitude)
+        {
+            Board.EmitSmoke(position, magnitude);
+        }
+
         public void BallSpinWheelCollision()
         {
             // Debug.Log("ball spinwheel collision");
