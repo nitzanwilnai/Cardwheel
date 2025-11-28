@@ -800,6 +800,8 @@ MonoBehaviour:
     Value: {fileID: 2570611067094767442}
   - Name: TotalScore
     Value: {fileID: 7939353721612705662}
+  - Name: BossDescription
+    Value: {fileID: 1624887854606078715}
 --- !u!114 &2114304083582008430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3893,6 +3895,7 @@ GameObject:
   - component: {fileID: 4696019445068552838}
   - component: {fileID: 1945504628793080739}
   - component: {fileID: 7585966141431534791}
+  - component: {fileID: 1624887854606078715}
   m_Layer: 5
   m_Name: Boss Description Container
   m_TagString: Untagged
@@ -3941,7 +3944,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 0.7529412, g: 0.22352941, b: 0.16862746, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3958,6 +3961,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!111 &1624887854606078715
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8357862165942146551}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Animation: {fileID: 7400000, guid: effdd52f2904746b2ad40493d5457871, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: effdd52f2904746b2ad40493d5457871, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_UpdateMode: 0
+  m_CullingType: 0
 --- !u!1 &8544877923110148700
 GameObject:
   m_ObjectHideFlags: 0
