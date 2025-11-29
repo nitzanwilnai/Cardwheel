@@ -263,12 +263,12 @@ namespace Cardwheel
             }
             else if (Touchscreen.current != null)
             {
-                mouseDown = Touchscreen.current.touches[0].press.wasPressedThisFrame;
-                mouseMove = Touchscreen.current.touches[0].press.isPressed;
-                mouseUp = Touchscreen.current.touches[0].press.wasReleasedThisFrame;
+                mouseDown = Touchscreen.current.primaryTouch.press.wasPressedThisFrame;
+                mouseMove = Touchscreen.current.primaryTouch.press.isPressed;
+                mouseUp = Touchscreen.current.primaryTouch.press.wasReleasedThisFrame;
                 mousePosition = Vector3.zero;
-                if (Touchscreen.current.touches.Count > 0)
-                    mousePosition = Touchscreen.current.touches[0].position.ReadValue();
+                if (Touchscreen.current.primaryTouch.press.isPressed)
+                    mousePosition = Touchscreen.current.primaryTouch.position.ReadValue();
             }
 
             Vector3 worldPosition = camera.ScreenToWorldPoint(mousePosition);
