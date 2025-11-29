@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f7a4dcac336914f5b94e423814720945, type: 3}
-  m_Name: JokerSO 0077 Gains +x0.25 mult when round is skipped
+  m_Name: JokerSO 0075 Gains +25 chips when round is skipped
   m_EditorClassIdentifier: 
-  JokerSprite: {fileID: 21300000, guid: bab09917abd5a458aae4445d5bd9a852, type: 3}
-  Cost: 11
-  Rarity: 2
-  DescriptionGO: {fileID: 7630852811119300315, guid: 2fcfa6251ccee4852a49c485d275e826, type: 3}
+  JokerSprite: {fileID: 21300000, guid: 082ac821b0c014543b473fc4f201a5cf, type: 3}
+  Cost: 9
+  Rarity: 1
+  DescriptionGO: {fileID: 7630852811119300315, guid: c90bca7d7777e4bc79bc3094ccb70bf7, type: 3}
   BaseChipsAdd: 0
   BaseMultiplierAdd: 0
   BaseMultiplierMult: 0
@@ -45,6 +45,7 @@ MonoBehaviour:
   MoneyPerSpin: 0
   ChipsPerDollar: 0
   MoneyForSpecialBallOnColor: 00000000000000000000000000000000
+  AddAllSellValueToMult: 0
   MultiplierMultForSpecialBall: 0
   MultiplierMultForNonSpecialBall: 0
   MultMultButBallsDisabled: 0
@@ -52,9 +53,9 @@ MonoBehaviour:
   FirstBallConvertSlot: {fileID: 0}
   AddSpin: 0
   LastSpinMultiplierAdd: 0
-  RoundSkippedChipsAdd: 0
+  RoundSkippedChipsAdd: 25
   RoundSkippedMultiplierAdd: 0
-  RoundSkippedMultiplierMult: 0.25
+  RoundSkippedMultiplierMult: 0
   BallIncreaseMultRemoveSlotMod: 0
   AddMultipierMultRemoveAllSlotMod: 0
   ChipsAddForEveryNonSlotMod: 0
