@@ -65,14 +65,13 @@ namespace Cardwheel
                 //     m_animVelocity = Random.value * 0.2f + 0.9f;
                 // }
 
-                if (collisionType == COLLISION_TYPE.BALL_TO_SPIN_WHEEL)
-                    Game.Instance.BallSpinWheelCollision();
-                else if (collisionType == COLLISION_TYPE.BALL_TO_BALL)
-                    Game.Instance.BallBallCollision();
+                Vector2 collisionPoint = col.contactCount > 0 ? col.contacts[0].point : transform.position;
+                float magnitude = col.relativeVelocity.magnitude;
 
-                if (col.relativeVelocity.magnitude > 2.0f && col.contactCount > 0)
-                    Game.Instance.EmitSmoke(col.contacts[0].point, col.relativeVelocity.magnitude);
-                // ParticleSystemSmoke.Emit(Color.white, col.contacts[0].point);
+                if (collisionType == COLLISION_TYPE.BALL_TO_SPIN_WHEEL)
+                    Game.Instance.BallSpinWheelCollision(collisionPoint, magnitude);
+                else if (collisionType == COLLISION_TYPE.BALL_TO_BALL)
+                    Game.Instance.BallBallCollision(collisionPoint, magnitude);
             }
         }
 
