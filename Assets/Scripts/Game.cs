@@ -715,23 +715,22 @@ namespace Cardwheel
             SetMenuState(MENU_STATE.SETTINGS);
         }
 
-        public void BallBallCollision()
+        public void BallBallCollision(Vector2 position, float magnitude)
         {
             // Debug.Log("ball ball collision");
+
+            Board.EmitSmoke(position, magnitude / 2.0f);
 
             SoundManager.Instance.PlaySFXMarbleMarble();
         }
 
-        public void EmitSmoke(Vector2 position, float magnitude)
-        {
-            Board.EmitSmoke(position, magnitude);
-        }
-
-        public void BallSpinWheelCollision()
+        public void BallSpinWheelCollision(Vector2 position, float magnitude)
         {
             // Debug.Log("ball spinwheel collision");
 
             SoundManager.Instance.PlaySFXMarbleSlot();
+
+            Board.EmitSmoke(position, magnitude);
         }
 
         public void GoToChipsInfo()
