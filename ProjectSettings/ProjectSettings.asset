@@ -821,7 +821,7 @@ PlayerSettings:
   scriptingDefineSymbols:
     Android: MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
     Standalone: MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED;STEAMWORKS_NET
-    iPhone: RELEASE
+    iPhone: 
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
