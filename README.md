@@ -1,3 +1,5 @@
+**License:** 🛑 Non-Commercial • 🔒 No Modification • 📜 Attribution Required  
+
 # Cardwheel
 
 Cardwheel is a Balatro-inspired roguelite. The core gameplay combines elements of roulette and a spin wheel. 
@@ -21,3 +23,12 @@ All the data is in `Assets/Data`.
 When the data is changed, you need to parse the balance through the drop-down menu to get it into the game: `Cardwheel -> Balance -> Parse Local`.
 
 To make a build, use the drop-down menu `Cardwheel -> Build`.
+
+## License
+
+Cardwheel is released as source-available software under a Non-Commercial, No-Modification license.  
+You may view and redistribute the code *unmodified* for non-commercial purposes only, and attribution is required.
+
+Commercial use, sublicensing, modification, and derivative works are expressly prohibited.
+
+See the LICENSE file for full terms.
