@@ -17,7 +17,7 @@ namespace Cardwheel
 {
     public static class RunDataIO
     {
-        public static int VERSION = 5;
+        public static int VERSION = 6;
 
         public static void SaveRun(RunData runData, Balance balance)
         {
@@ -26,7 +26,7 @@ namespace Cardwheel
             if (!Directory.Exists(Application.persistentDataPath + "/Cardwheel"))
                 Directory.CreateDirectory(Application.persistentDataPath + "/Cardwheel");
 
-            string fileName = Application.persistentDataPath + "/Cardwheel/save.dat";
+            string fileName = Application.persistentDataPath + "/Cardwheel/save_v"+VERSION+".dat";
             using (FileStream fs = File.Create(fileName))
             using (BinaryWriter bw = new BinaryWriter(fs))
             {
@@ -106,6 +106,7 @@ namespace Cardwheel
                     bw.Write(runData.JokerSellValues[i]);
                     bw.Write(runData.JokerChips[i]);
                     bw.Write(runData.JokerMultiplierAdd[i]);
+                    bw.Write(runData.JokerMultiplierMult[i]);
                     bw.Write(runData.UseJoker[i]);
                     bw.Write(runData.JokerSpins[i]);
                     bw.Write(runData.JokerRounds[i]);
@@ -291,6 +292,7 @@ namespace Cardwheel
                             runData.JokerSellValues[i] = br.ReadInt32();
                             runData.JokerChips[i] = br.ReadInt32();
                             runData.JokerMultiplierAdd[i] = br.ReadSingle();
+                            runData.JokerMultiplierMult[i] = br.ReadSingle();
                             runData.UseJoker[i] = br.ReadInt32();
                             runData.JokerSpins[i] = br.ReadInt32();
                             runData.JokerRounds[i] = br.ReadInt32();

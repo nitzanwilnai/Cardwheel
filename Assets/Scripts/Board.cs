@@ -446,7 +446,7 @@ namespace Cardwheel
 
         void animateRoundMultipierText()
         {
-            m_roundMultiplierText.text = "x" + CommonVisual.GetMultiplierString(runData.SpinMultiplier);
+            m_roundMultiplierText.text = CommonVisual.GetMultiplierString(runData.SpinMultiplier);
             m_roundMultiplierAnimation.Play();
             SoundManager.Instance.PlaySFXScoring();
         }
