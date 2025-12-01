@@ -187,6 +187,18 @@ namespace Cardwheel
                 go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + chipIncrease + ")";
             }
 
+            if (balance.JokerBalance.MultAddIncreasePerBall[jokerType] > 0)
+            {
+                float multiplierAdd = jokerIdx > -1 ? runData.JokerMultiplierAdd[jokerIdx] : 0.0f;
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + multiplierAdd.ToString("N0") + "x)";
+            }
+
+            if (balance.JokerBalance.MultMultIncreasePerBall[jokerType] > 0)
+            {
+                float multiplierMult = jokerIdx > -1 ? runData.JokerMultiplierMult[jokerIdx] : 0.0f;
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current x" + multiplierMult.ToString("N1") + ")";
+            }
+
             if (balance.JokerBalance.MultIncreaseForSize[jokerType] > 0.0f)
             {
                 float multiplierAdd = jokerIdx > -1 ? runData.JokerMultiplierAdd[jokerIdx] : 0.0f;

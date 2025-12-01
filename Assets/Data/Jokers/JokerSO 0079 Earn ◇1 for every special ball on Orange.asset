@@ -19,7 +19,7 @@ MonoBehaviour:
   BaseChipsAdd: 0
   BaseMultiplierAdd: 0
   BaseMultiplierMult: 0
-  TypeExists: 01010101
+  TypeExists: 00010000
   TypeNotExists: 00000000
   SizeExists: 000000000000
   SizeNotExists: 000000000000
@@ -27,6 +27,10 @@ MonoBehaviour:
   MinTypes: 1
   ChipsPerBall: 0
   ChipsIncreasePerBall: 0
+  MultAddPerBall: 0
+  MultAddIncreasePerBall: 0
+  MultMultPerBall: 0
+  MultMultIncreasePerBall: 0
   SubtractMultiplierAddPerRound: {x: 0, y: 0}
   SubtractChipsAddPerSpin: {x: 0, y: 0}
   PerJokerMultiplierAdd: 0

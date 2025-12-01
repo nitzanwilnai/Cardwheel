@@ -146,6 +146,11 @@ namespace Cardwheel
 
         public int[] ChipsPerBall;
         public int[] ChipsIncreasePerBall;
+        public float[] MultAddPerBall;
+        public float[] MultAddIncreasePerBall;
+        public float[] MultMultPerBall;
+        public float[] MultMultIncreasePerBall;
+
         public float[] MultIncreaseForSize;
         public int[] MinTypes;
 
@@ -404,6 +409,11 @@ namespace Cardwheel
 
                 JokerBalance.ChipsPerBall = new int[numJokers];
                 JokerBalance.ChipsIncreasePerBall = new int[numJokers];
+                JokerBalance.MultAddPerBall = new float[numJokers];
+                JokerBalance.MultAddIncreasePerBall = new float[numJokers];
+                JokerBalance.MultMultPerBall = new float[numJokers];
+                JokerBalance.MultMultIncreasePerBall = new float[numJokers];
+                
                 JokerBalance.MultIncreaseForSize = new float[numJokers];
                 JokerBalance.MinTypes = new int[numJokers];
 
@@ -491,6 +501,10 @@ namespace Cardwheel
 
                     JokerBalance.ChipsPerBall[jkrIdx] = br.ReadInt32();
                     JokerBalance.ChipsIncreasePerBall[jkrIdx] = br.ReadInt32();
+                    JokerBalance.MultAddPerBall[jkrIdx] = br.ReadSingle();
+                    JokerBalance.MultAddIncreasePerBall[jkrIdx] = br.ReadSingle();
+                    JokerBalance.MultMultPerBall[jkrIdx] = br.ReadSingle();
+                    JokerBalance.MultMultIncreasePerBall[jkrIdx] = br.ReadSingle();
                     JokerBalance.MultIncreaseForSize[jkrIdx] = br.ReadSingle();
                     JokerBalance.MinTypes[jkrIdx] = br.ReadInt32();
 

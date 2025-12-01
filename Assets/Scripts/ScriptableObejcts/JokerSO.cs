@@ -39,6 +39,10 @@ namespace Cardwheel
         [Header("PER BALL")]
         public int ChipsPerBall;
         public int ChipsIncreasePerBall;
+        public float MultAddPerBall;
+        public float MultAddIncreasePerBall;
+        public float MultMultPerBall;
+        public float MultMultIncreasePerBall;
 
         [Header("REDUCE EVERY SPIN")]
         public Vector2 SubtractMultiplierAddPerRound = Vector2.zero;

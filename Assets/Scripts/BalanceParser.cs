@@ -78,7 +78,7 @@ namespace Cardwheel
             {
                 using (BinaryWriter bw = new BinaryWriter(stream))
                 {
-                    int version = 1;
+                    int version = 2;
                     bw.Write(version);
 
                     BalanceSO balanceSO = (BalanceSO)AssetDatabase.LoadAssetAtPath("Assets/Data/BalanceSO.asset", typeof(BalanceSO));
@@ -191,6 +191,11 @@ namespace Cardwheel
 
                         bw.Write(jokerSO.ChipsPerBall);
                         bw.Write(jokerSO.ChipsIncreasePerBall);
+                        bw.Write(jokerSO.MultAddPerBall);
+                        bw.Write(jokerSO.MultAddIncreasePerBall);
+                        bw.Write(jokerSO.MultMultPerBall);
+                        bw.Write(jokerSO.MultMultIncreasePerBall);
+
                         bw.Write(jokerSO.MultIncreaseForSize);
                         bw.Write(jokerSO.MinTypes);
 

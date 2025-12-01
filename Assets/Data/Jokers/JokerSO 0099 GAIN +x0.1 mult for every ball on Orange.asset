@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7a4dcac336914f5b94e423814720945, type: 3}
+  m_Name: JokerSO 0099 GAIN +x0.1 mult for every ball on Orange
+  m_EditorClassIdentifier: 
+  JokerSprite: {fileID: 21300000, guid: 7af90fce365b94d0daa8ffb8043d8b69, type: 3}
+  Cost: 12
+  Rarity: 2
+  DescriptionGO: {fileID: 7630852811119300315, guid: fbea401ab44494eb8bbb541202600589, type: 3}
+  BaseChipsAdd: 0
+  BaseMultiplierAdd: 0
+  BaseMultiplierMult: 0
+  TypeExists: 00010000
+  TypeNotExists: 00000000
+  SizeExists: 000000000000
+  SizeNotExists: 000000000000
+  MultIncreaseForSize: 0
+  MinTypes: 1
+  ChipsPerBall: 0
+  ChipsIncreasePerBall: 0
+  MultAddPerBall: 0
+  MultAddIncreasePerBall: 0
+  MultMultPerBall: 0
+  MultMultIncreasePerBall: 0.1
+  SubtractMultiplierAddPerRound: {x: 0, y: 0}
+  SubtractChipsAddPerSpin: {x: 0, y: 0}
+  PerJokerMultiplierAdd: 0
+  PerNoJokerMultiplierAdd: 0
+  ChipsIncreasePerSpin: 0
+  MultIncreasePerUnusedSpin: 0
+  MultIncreasePerUsedSpin: 0
+  RetriggerBallsEverySpin: 0
+  RetriggerBallsLastSpin: 0
+  MultiplierAddRandomRange: {x: 0, y: 0}
+  EarnMoneyEveryRound: 0
+  IncreaseSellValueEveryRound: 0
+  GoIntoDebt: 0
+  InterestIncrease: 0
+  ChanceBallGivesMoney: 0
+  MoneyPerSpin: 0
+  ChipsPerDollar: 0
+  MoneyForSpecialBallOnColor: 00000000000000000000000000000000
+  AddAllSellValueToMult: 0
+  MultiplierMultForSpecialBall: 0
+  MultiplierMultForNonSpecialBall: 0
+  MultMultButBallsDisabled: 0
+  SortSlots: 0
+  FirstBallConvertSlot: {fileID: 0}
+  AddSpin: 0
+  LastSpinMultiplierAdd: 0
+  RoundSkippedChipsAdd: 0
+  RoundSkippedMultiplierAdd: 0
+  RoundSkippedMultiplierMult: 0
+  BallIncreaseMultRemoveSlotMod: 0
+  AddMultipierMultRemoveAllSlotMod: 0
+  ChipsAddForEveryNonSlotMod: 0
+  MultiplierAddForEverySlotMod: 0
+  BallMultiplierAddForSlotMod: 0
+  StartRoundChangeSlotID: {fileID: 0}
+  MultiplierAddForLeastPlayedColor: 0
+  MultiplierMultEveryShopReroll: 0
+  MultiplierMultEveryCardPackReroll: 0
+  ChipsAddForCardpackAbandon: 0
+  MultiplierMultForCardpackAbandon: 0
+  TriggerEveryXSpins: 1

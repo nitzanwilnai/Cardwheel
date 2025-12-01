@@ -58,6 +58,7 @@ public static class Logic
         runData.JokerSellValues = new int[balance.MaxJokersInHand];
         runData.JokerChips = new int[balance.MaxJokersInHand];
         runData.JokerMultiplierAdd = new float[balance.MaxJokersInHand];
+        runData.JokerMultiplierMult = new float[balance.MaxJokersInHand];
         runData.JokerSpins = new int[balance.MaxJokersInHand];
         runData.JokerRounds = new int[balance.MaxJokersInHand];
         runData.JokerSkipCount = new int[balance.MaxJokersInHand];
@@ -134,6 +135,7 @@ public static class Logic
             runData.JokerSellValues[i] = 0;
             runData.JokerChips[i] = 0;
             runData.JokerMultiplierAdd[i] = 0.0f;
+            runData.JokerMultiplierMult[i] = 0.0f;
         }
 
         for (int i = 0; i < balance.MaxBalls; i++)
@@ -245,10 +247,10 @@ public static class Logic
         // runData.SkipType[3] = 13;
         // runData.SkipType[1] = 7;
 
-        // AddJoker(runData, balance, 31);
-        // AddJoker(runData, balance, 30);
-        // AddJoker(runData, balance, 63);
-        // AddJoker(runData, balance, 68);
+        AddJoker(runData, balance, 98);
+        AddJoker(runData, balance, 99);
+        AddJoker(runData, balance, 100);
+        AddJoker(runData, balance, 101);
         // AddJoker(runData, balance, 73); // 74 and 30
 
         // for (int i = 0; i < runData.BallTypes.Length; i++)
@@ -934,6 +936,7 @@ public static class Logic
                 runData.JokerSellValues[count] = runData.JokerSellValues[jokerIdx];
                 runData.JokerChips[count] = runData.JokerChips[jokerIdx];
                 runData.JokerMultiplierAdd[count] = runData.JokerMultiplierAdd[jokerIdx];
+                runData.JokerMultiplierMult[count] = runData.JokerMultiplierMult[jokerIdx];
                 count++;
             }
         }
@@ -1140,6 +1143,11 @@ public static class Logic
             for (int slotType = 0; slotType < 4; slotType++)
                 if (IsFlagSet(balance.JokerBalance.TypeExists[jokerType], slotType))
                     runData.JokerChips[jokerIdx] += balance.JokerBalance.ChipsIncreasePerBall[jokerType] * slotTypeCount[slotType];
+
+            // add chips per ball
+            for (int slotType = 0; slotType < 4; slotType++)
+                if (IsFlagSet(balance.JokerBalance.TypeExists[jokerType], slotType))
+                    chips += slotTypeCount[slotType] * balance.JokerBalance.ChipsPerBall[jokerType];
         }
 
         chips += balance.JokerBalance.ChipsPerDollar[jokerType] * runData.Money;
@@ -1155,11 +1163,6 @@ public static class Logic
 
         chips *= runData.UseJoker[jokerIdx];
 
-        // add chips per ball
-        for (int slotType = 0; slotType < 4; slotType++)
-            if (runData.UseSlotType[slotType] == 1 && slotTypeCount[slotType] > 0 && IsFlagSet(balance.JokerBalance.TypeExists[jokerType], slotType))
-                chips += slotTypeCount[slotType] * balance.JokerBalance.ChipsPerBall[jokerType];
-
         if (!scoringBossCheck(runData, balance))
             chips = 0;
 
@@ -1174,6 +1177,9 @@ public static class Logic
     {
         float mult = 0.0f;
 
+        Span<int> slotTypeCount = stackalloc int[4];
+        CountNumBallsOnSlotType(runData, balance.MaxBalls, slotTypeCount);
+
         if (jokerBaseCheck(runData, balance, jokerIdx, jokerType))
         {
             mult += balance.JokerBalance.BaseMultiplierAdd[jokerType];
@@ -1181,13 +1187,20 @@ public static class Logic
 
             if (runData.CurrentSpin + 1 == runData.MaxSpinsThisRound)
                 mult += balance.JokerBalance.LastSpinMultiplierAdd[jokerType];
+
+            for (int slotType = 0; slotType < 4; slotType++)
+                if (runData.UseSlotType[slotType] == 1 && IsFlagSet(balance.JokerBalance.TypeExists[jokerType], slotType))
+                    mult += slotTypeCount[slotType] * balance.JokerBalance.MultAddPerBall[jokerType];
+
+            for (int slotType = 0; slotType < 4; slotType++)
+                if (runData.UseSlotType[slotType] == 1 && IsFlagSet(balance.JokerBalance.TypeExists[jokerType], slotType))
+                    runData.JokerMultiplierAdd[jokerIdx] += slotTypeCount[slotType] * balance.JokerBalance.MultAddIncreasePerBall[jokerType];
         }
 
         int numNoJokers = runData.MaxJokersInHand - runData.JokerCount;
         mult += balance.JokerBalance.PerJokerMultiplierAdd[jokerType] * runData.JokerCount;
         mult += balance.JokerBalance.PerNoJokerMultiplierAdd[jokerType] * numNoJokers;
 
-        // runData.JokerMultiplierAdd[jokerIdx] += (int)balance.JokerBalance.ChipsIncreasePerSpin[jokerType];
         mult += runData.JokerMultiplierAdd[jokerIdx];
 
         float randomValue = CustomRandFloatRange(ref runData.GameSeed, balance.JokerBalance.MultiplierAddRandomRange[jokerType].x, balance.JokerBalance.MultiplierAddRandomRange[jokerType].y + 1.0f);
@@ -1223,7 +1236,6 @@ public static class Logic
             mult += totalSellValue;
         }
 
-
         // branchless use or don't use
         mult *= runData.UseJoker[jokerIdx];
 
@@ -1244,8 +1256,23 @@ public static class Logic
 
         // Debug.Log("jokerType " + jokerType + " mult " + mult);
 
+        Span<int> slotTypeCount = stackalloc int[4];
+        CountNumBallsOnSlotType(runData, balance.MaxBalls, slotTypeCount);
+
         if (jokerBaseCheck(runData, balance, jokerIdx, jokerType))
+        {
             mult += balance.JokerBalance.BaseMultiplierMult[jokerType];
+            
+            for (int slotType = 0; slotType < 4; slotType++)
+                if (runData.UseSlotType[slotType] == 1 && IsFlagSet(balance.JokerBalance.TypeExists[jokerType], slotType))
+                    mult += slotTypeCount[slotType] * balance.JokerBalance.MultMultPerBall[jokerType];
+
+            for (int slotType = 0; slotType < 4; slotType++)
+                if (runData.UseSlotType[slotType] == 1 && IsFlagSet(balance.JokerBalance.TypeExists[jokerType], slotType))
+                    runData.JokerMultiplierMult[jokerIdx] += slotTypeCount[slotType] * balance.JokerBalance.MultMultIncreasePerBall[jokerType];
+        }
+
+        mult += runData.JokerMultiplierMult[jokerIdx];
 
         int numSpecialBalls = 0;
         for (int ballIdx = 0; ballIdx < balance.MaxBalls; ballIdx++)
