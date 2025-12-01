@@ -58,6 +58,9 @@ namespace Cardwheel
         public float MultIncreasePerUsedSpin = 0.0f;
         public bool RetriggerBallsEverySpin = false;
         public bool RetriggerBallsLastSpin = false;
+        public Vector2 ChipsIncreasePerXSpins = Vector2.zero;
+        public Vector2 MultAddIncreasePerXSpins = Vector2.zero;
+        public Vector2 MultMultIncreasePerXSpins = Vector2.zero;
 
         [Header("RANDOM")]
         public Vector2 MultiplierAddRandomRange = Vector2.zero;

@@ -240,6 +240,24 @@ namespace Cardwheel
                 float value = jokerIdx > -1 ? runData.JokerSkipCount[jokerIdx] * balance.JokerBalance.RoundSkippedMultiplierMult[jokerType] : 0;
                 go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current x" + value + ")";
             }
+
+            if (balance.JokerBalance.ChipsIncreasePerXSpins[jokerType].x > 0)
+            {
+                int chipIncrease = jokerIdx > -1 ? (int)Logic.GetValueForTriggerSpins(runData, balance.JokerBalance.ChipsIncreasePerXSpins[jokerType], jokerIdx) : 0;
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + chipIncrease + ")";
+            }
+
+            if (balance.JokerBalance.MultAddIncreasePerXSpins[jokerType].x > 0)
+            {
+                float multiplierAdd = jokerIdx > -1 ? Logic.GetValueForTriggerSpins(runData, balance.JokerBalance.MultAddIncreasePerXSpins[jokerType], jokerIdx) : 0.0f;
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + multiplierAdd.ToString("N0") + "x)";
+            }
+
+            if (balance.JokerBalance.MultMultIncreasePerXSpins[jokerType].x > 0)
+            {
+                float multiplierMult = jokerIdx > -1 ? Logic.GetValueForTriggerSpins(runData, balance.JokerBalance.MultMultIncreasePerXSpins[jokerType], jokerIdx) : 0.0f;
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current x" + multiplierMult.ToString("N1") + ")";
+            }
         }
 
         public static void ShowJokerDescriptionCommon(RunData runData, Balance balance, GameObject go, int jokerType, int jokerIdx)
