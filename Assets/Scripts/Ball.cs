@@ -65,7 +65,7 @@ namespace Cardwheel
             // else
             //     collisionScale = 1.0f + collisionScale * animScaleValue;
 
-            Debug.Log(gameObject.name + " collided with " + col.gameObject.name + " c " + c + " i " + i + " col.relativeVelocity.magnitude " + col.relativeVelocity.magnitude);
+            // Debug.Log(gameObject.name + " collided with " + col.gameObject.name + " c " + c + " i " + i + " col.relativeVelocity.magnitude " + col.relativeVelocity.magnitude);
 
             if (collisionType != COLLISION_TYPE.OTHER)
             {

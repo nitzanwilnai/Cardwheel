@@ -203,6 +203,9 @@ namespace Cardwheel
 
         public bool[] RetriggerBallsEverySpin;
         public bool[] RetriggerBallsLastSpin;
+        public Vector2[] ChipsIncreasePerXSpins;
+        public Vector2[] MultAddIncreasePerXSpins;
+        public Vector2[] MultMultIncreasePerXSpins;
 
         public float[] MultiplierMultEveryShopReroll;
         public float[] MultiplierMultEveryCardPackReroll;
@@ -413,7 +416,7 @@ namespace Cardwheel
                 JokerBalance.MultAddIncreasePerBall = new float[numJokers];
                 JokerBalance.MultMultPerBall = new float[numJokers];
                 JokerBalance.MultMultIncreasePerBall = new float[numJokers];
-                
+
                 JokerBalance.MultIncreaseForSize = new float[numJokers];
                 JokerBalance.MinTypes = new int[numJokers];
 
@@ -466,6 +469,9 @@ namespace Cardwheel
 
                 JokerBalance.RetriggerBallsEverySpin = new bool[numJokers];
                 JokerBalance.RetriggerBallsLastSpin = new bool[numJokers];
+                JokerBalance.ChipsIncreasePerXSpins = new Vector2[numJokers];
+                JokerBalance.MultAddIncreasePerXSpins = new Vector2[numJokers];
+                JokerBalance.MultMultIncreasePerXSpins = new Vector2[numJokers];
 
                 JokerBalance.MultiplierMultEveryShopReroll = new float[numJokers];
                 JokerBalance.MultiplierMultEveryCardPackReroll = new float[numJokers];
@@ -561,6 +567,9 @@ namespace Cardwheel
 
                     JokerBalance.RetriggerBallsEverySpin[jkrIdx] = br.ReadBoolean();
                     JokerBalance.RetriggerBallsLastSpin[jkrIdx] = br.ReadBoolean();
+                    JokerBalance.ChipsIncreasePerXSpins[jkrIdx] = new Vector2(br.ReadSingle(), br.ReadSingle());
+                    JokerBalance.MultAddIncreasePerXSpins[jkrIdx] = new Vector2(br.ReadSingle(), br.ReadSingle());
+                    JokerBalance.MultMultIncreasePerXSpins[jkrIdx] = new Vector2(br.ReadSingle(), br.ReadSingle());
 
                     JokerBalance.MultiplierMultEveryShopReroll[jkrIdx] = br.ReadSingle();
                     JokerBalance.MultiplierMultEveryCardPackReroll[jkrIdx] = br.ReadSingle();

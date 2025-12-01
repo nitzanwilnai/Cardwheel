@@ -300,7 +300,7 @@ namespace Cardwheel
 
         public void Show()
         {
-            Debug.Log("Show() GameState " + GameState);
+            // Debug.Log("Show() GameState " + GameState);
 
             m_goalText.text = Logic.GetRoundGoal(runData, balance).ToString("N0");
             m_totalScoreText.text = runData.TotalChips.ToString("N0");
@@ -496,7 +496,7 @@ namespace Cardwheel
 
         void setGameState(GAME_STATE newGamState)
         {
-            Debug.Log("setGameState(" + newGamState + ") m_scoringTimer " + m_scoringTimer);
+            // Debug.Log("setGameState(" + newGamState + ") m_scoringTimer " + m_scoringTimer);
             GameState = newGamState;
 
             hideJokerPopups();
@@ -1436,7 +1436,7 @@ namespace Cardwheel
 
         private void startScoring(RunData runData, Balance balance)
         {
-            Debug.Log("startScoring " + Time.realtimeSinceStartupAsDouble);
+            // Debug.Log("startScoring " + Time.realtimeSinceStartupAsDouble);
             setGameState(GAME_STATE.SCORING_SLOT_CHIPS);
             m_scoringIdx = 0;
             m_scoringTimer = ScoringTime;
@@ -1485,7 +1485,7 @@ namespace Cardwheel
 
             for (int i = 0; i < m_ballsRB.Length; i++)
                 m_ballsRB[i].bodyType = RigidbodyType2D.Dynamic;
-            Debug.Log("Set balls to DYNAMIC");
+            // Debug.Log("Set balls to DYNAMIC");
 
             for (int i = 0; i < m_scoringSlots.Length; i++)
                 m_scoringSlots[i].LockGO.SetActive(false);
@@ -1557,7 +1557,7 @@ namespace Cardwheel
             if (Logic.BallInSlot(runData, balance, ballIdx, slotIdx, out slotChangedIdx, out slotChangeJokerIdx, out jokerMultIncIdx, out jokerMultInc))
             {
                 m_ballsRB[ballIdx].bodyType = RigidbodyType2D.Static;
-                Debug.Log("Set ball " + ballIdx + " to STATIC");
+                // Debug.Log("Set ball " + ballIdx + " to STATIC");
                 if (slotChangedIdx > -1)
                 {
                     m_slotAnimTimer = m_slotAnimTime;

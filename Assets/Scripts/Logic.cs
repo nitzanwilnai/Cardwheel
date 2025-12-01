@@ -12,6 +12,7 @@
 using System;
 using System.Collections;
 using Cardwheel;
+using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 
 public static class Logic
@@ -247,10 +248,10 @@ public static class Logic
         // runData.SkipType[3] = 13;
         // runData.SkipType[1] = 7;
 
-        AddJoker(runData, balance, 98);
-        AddJoker(runData, balance, 99);
-        AddJoker(runData, balance, 100);
-        AddJoker(runData, balance, 101);
+        AddJoker(runData, balance, 102);
+        AddJoker(runData, balance, 103);
+        AddJoker(runData, balance, 104);
+        // AddJoker(runData, balance, 101);
         // AddJoker(runData, balance, 73); // 74 and 30
 
         // for (int i = 0; i < runData.BallTypes.Length; i++)
@@ -352,7 +353,7 @@ public static class Logic
             skipsAllRoundsCount = count;
         }
 
-        Debug.Log("balance.SkipBalance.NumSkips " + balance.SkipBalance.NumSkips + " skipsAllRoundsCount " + skipsAllRoundsCount);
+        // Debug.Log("balance.SkipBalance.NumSkips " + balance.SkipBalance.NumSkips + " skipsAllRoundsCount " + skipsAllRoundsCount);
 
         // assign the rest of the skips
         for (int skipIdx = 2; skipIdx < balance.SkipBalance.NumSkips; skipIdx++)
@@ -361,8 +362,8 @@ public static class Logic
 
     public static void setUniqueBossForRound(RunData runData, Balance balance, int round)
     {
-        if (runData.BossType[round - 1] > -1)
-            Debug.Log("Prev boss runData.BossType[" + (round - 1) + "] " + balance.BossBalance.Description[runData.BossType[round - 1]]);
+        // if (runData.BossType[round - 1] > -1)
+        //     Debug.Log("Prev boss runData.BossType[" + (round - 1) + "] " + balance.BossBalance.Description[runData.BossType[round - 1]]);
 
         Span<int> bossesForRound = stackalloc int[balance.BossBalance.NumBosses];
         int bossesForRoundCount = 0;
@@ -389,7 +390,7 @@ public static class Logic
         runData.BossType[round - 1] = bossesForRound[randomIdx];
 
         int bossType = runData.BossType[round - 1];
-        Debug.Log("setUniqueBossForRound round " + round + " bossesForRoundCount " + bossesForRoundCount + " runData.BossType[" + (round - 1) + "] " + bossType + " " + balance.BossBalance.Description[bossType] + " min " + balance.BossBalance.LevelRange[bossType].x + " max " + balance.BossBalance.LevelRange[bossType].y);
+        // Debug.Log("setUniqueBossForRound round " + round + " bossesForRoundCount " + bossesForRoundCount + " runData.BossType[" + (round - 1) + "] " + bossType + " " + balance.BossBalance.Description[bossType] + " min " + balance.BossBalance.LevelRange[bossType].x + " max " + balance.BossBalance.LevelRange[bossType].y);
     }
 
     public static void ShuffleSpanIntArray(ref uint seed, Span<int> array, int count)
@@ -1148,6 +1149,12 @@ public static class Logic
             for (int slotType = 0; slotType < 4; slotType++)
                 if (IsFlagSet(balance.JokerBalance.TypeExists[jokerType], slotType))
                     chips += slotTypeCount[slotType] * balance.JokerBalance.ChipsPerBall[jokerType];
+
+
+            chips += (int)GetValueForTriggerSpins(runData, balance.JokerBalance.ChipsIncreasePerXSpins[jokerType], jokerIdx);
+
+            if (Mathf.FloorToInt(balance.JokerBalance.ChipsIncreasePerXSpins[jokerType].y) > 0 && runData.JokerSpins[jokerIdx] % Mathf.FloorToInt(balance.JokerBalance.ChipsIncreasePerXSpins[jokerType].y) == 0)
+                Debug.Log("Increase chips! runData.JokerSpins["+jokerIdx+"] " + runData.JokerSpins[jokerIdx] + " balance.JokerBalance.ChipsIncreasePerXSpins[jokerType] " + balance.JokerBalance.ChipsIncreasePerXSpins[jokerType].ToString());
         }
 
         chips += balance.JokerBalance.ChipsPerDollar[jokerType] * runData.Money;
@@ -1195,6 +1202,11 @@ public static class Logic
             for (int slotType = 0; slotType < 4; slotType++)
                 if (runData.UseSlotType[slotType] == 1 && IsFlagSet(balance.JokerBalance.TypeExists[jokerType], slotType))
                     runData.JokerMultiplierAdd[jokerIdx] += slotTypeCount[slotType] * balance.JokerBalance.MultAddIncreasePerBall[jokerType];
+
+            mult += GetValueForTriggerSpins(runData, balance.JokerBalance.MultAddIncreasePerXSpins[jokerType], jokerIdx);
+
+            if (Mathf.FloorToInt(balance.JokerBalance.MultAddIncreasePerXSpins[jokerType].y) > 0 && runData.JokerSpins[jokerIdx] % Mathf.FloorToInt(balance.JokerBalance.MultAddIncreasePerXSpins[jokerType].y) == 0)
+                Debug.Log("Increase add mult! runData.JokerSpins["+jokerIdx+"] " + runData.JokerSpins[jokerIdx] + " balance.JokerBalance.MultAddIncreasePerXSpins[jokerType] " + balance.JokerBalance.MultAddIncreasePerXSpins[jokerType].ToString());
         }
 
         int numNoJokers = runData.MaxJokersInHand - runData.JokerCount;
@@ -1250,6 +1262,12 @@ public static class Logic
         return mult;
     }
 
+    public static float GetValueForTriggerSpins(RunData runData, Vector2 data, int jokerIdx)
+    {
+        int numTriggerSpins = Mathf.FloorToInt(runData.JokerSpins[jokerIdx] / data.y);
+        return (float)numTriggerSpins * data.x;
+    }
+
     public static float CalculateJokerMultiplierMult(RunData runData, Balance balance, int jokerIdx, int jokerType)
     {
         float mult = 0.0f;
@@ -1262,7 +1280,7 @@ public static class Logic
         if (jokerBaseCheck(runData, balance, jokerIdx, jokerType))
         {
             mult += balance.JokerBalance.BaseMultiplierMult[jokerType];
-            
+
             for (int slotType = 0; slotType < 4; slotType++)
                 if (runData.UseSlotType[slotType] == 1 && IsFlagSet(balance.JokerBalance.TypeExists[jokerType], slotType))
                     mult += slotTypeCount[slotType] * balance.JokerBalance.MultMultPerBall[jokerType];
@@ -1270,6 +1288,11 @@ public static class Logic
             for (int slotType = 0; slotType < 4; slotType++)
                 if (runData.UseSlotType[slotType] == 1 && IsFlagSet(balance.JokerBalance.TypeExists[jokerType], slotType))
                     runData.JokerMultiplierMult[jokerIdx] += slotTypeCount[slotType] * balance.JokerBalance.MultMultIncreasePerBall[jokerType];
+
+            mult += GetValueForTriggerSpins(runData, balance.JokerBalance.MultMultIncreasePerXSpins[jokerType], jokerIdx);
+
+            if (Mathf.FloorToInt(balance.JokerBalance.MultMultIncreasePerXSpins[jokerType].y) > 0 && runData.JokerSpins[jokerIdx] % Mathf.FloorToInt(balance.JokerBalance.MultMultIncreasePerXSpins[jokerType].y) == 0)
+                Debug.Log("Increase mult mult! runData.JokerSpins["+jokerIdx+"] " + runData.JokerSpins[jokerIdx] + " balance.JokerBalance.MultMultIncreasePerXSpins[jokerType] " + balance.JokerBalance.MultMultIncreasePerXSpins[jokerType].ToString());
         }
 
         mult += runData.JokerMultiplierMult[jokerIdx];

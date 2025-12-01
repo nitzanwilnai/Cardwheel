@@ -254,6 +254,12 @@ namespace Cardwheel
 
                         bw.Write(jokerSO.RetriggerBallsEverySpin);
                         bw.Write(jokerSO.RetriggerBallsLastSpin);
+                        bw.Write(jokerSO.ChipsIncreasePerXSpins.x);
+                        bw.Write(jokerSO.ChipsIncreasePerXSpins.y);
+                        bw.Write(jokerSO.MultAddIncreasePerXSpins.x);
+                        bw.Write(jokerSO.MultAddIncreasePerXSpins.y);
+                        bw.Write(jokerSO.MultMultIncreasePerXSpins.x);
+                        bw.Write(jokerSO.MultMultIncreasePerXSpins.y);
 
                         bw.Write(jokerSO.MultiplierMultEveryShopReroll);
                         bw.Write(jokerSO.MultiplierMultEveryCardPackReroll);
