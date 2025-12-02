@@ -5,6 +5,10 @@ using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.WindowsStandalone;
 using UnityEngine;
+using NUnit.Framework.Constraints;
+using System.Linq;
+
+
 
 #if UNITY_EDITOR_OSX
 using UnityEditor.iOS.Xcode;
@@ -19,15 +23,9 @@ namespace Cardwheel
         [MenuItem("Cardwheel/Build/Mac")]
         public static void BuildMac()
         {
-            setAndroidBuildNumber();
-
             PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Standalone, "");
 
-            DateTime theTime = DateTime.Now;
-            string dateTime = theTime.ToString("yyyy-MM-dd HH.mm.ss");
-
-            EditorUserBuildSettings.buildAppBundle = false;
-
+            string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss");
             Build(BuildTarget.StandaloneOSX, Application.dataPath + "/../../Build/Cardwheel " + dateTime + "/Cardwheel.app", BuildOptions.None, "Assets/Scenes/MainGameScene H.unity");
 
             AssetDatabase.SaveAssets();
@@ -37,15 +35,9 @@ namespace Cardwheel
         [MenuItem("Cardwheel/Build/PC")]
         public static void BuildPC()
         {
-            setAndroidBuildNumber();
-
             PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Standalone, "");
 
-            DateTime theTime = DateTime.Now;
-            string dateTime = theTime.ToString("yyyy-MM-dd HH.mm.ss");
-
-            EditorUserBuildSettings.buildAppBundle = false;
-
+            string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss");
             Build(BuildTarget.StandaloneWindows64, Application.dataPath + "/../../Build/Cardwheel " + dateTime + "/Cardwheel.exe", BuildOptions.None, "Assets/Scenes/MainGameScene H.unity");
 
             AssetDatabase.SaveAssets();
@@ -55,19 +47,82 @@ namespace Cardwheel
         [MenuItem("Cardwheel/Build/Steamdeck")]
         public static void BuildSteamdeck()
         {
-            setAndroidBuildNumber();
-
             PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Standalone, "");
 
-            DateTime theTime = DateTime.Now;
-            string dateTime = theTime.ToString("yyyy-MM-dd HH.mm.ss");
-
-            EditorUserBuildSettings.buildAppBundle = false;
-
+            string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss");
             Build(BuildTarget.StandaloneLinux64, Application.dataPath + "/../../Build/Cardwheel " + dateTime + "/Cardwheel.x86_64", BuildOptions.None, "Assets/Scenes/MainGameScene H.unity");
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+        }
+
+        [MenuItem("Cardwheel/Build/Mac DEMO")]
+        public static void BuildMacDemo()
+        {
+            setMacBuildNumber();
+
+            string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss");
+            string outputPath = Application.dataPath + "/../../Build/Cardwheel " + dateTime + "/Cardwheel_DEMO.app";
+            BuildDemoCommon(BuildTarget.StandaloneOSX, outputPath);
+        }
+
+        [MenuItem("Cardwheel/Build/PC DEMO")]
+        public static void BuildPCDemo()
+        {
+            string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss");
+            string outputPath = Application.dataPath + "/../../Build/Cardwheel " + dateTime + "/Cardwheel_DEMO.exe";
+            BuildDemoCommon(BuildTarget.StandaloneWindows64, outputPath);
+        }
+
+        [MenuItem("Cardwheel/Build/Steamdeck DEMO")]
+        public static void BuildSteamdeckDemo()
+        {
+            string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss");
+            string outputPath = Application.dataPath + "/../../Build/Cardwheel " + dateTime + "/Cardwheel.x86_64_DEMO";
+            BuildDemoCommon(BuildTarget.StandaloneLinux64, outputPath);
+        }
+
+        public static void BuildDemoCommon(BuildTarget buildTarget, string outputPath)
+        {
+            setMacBuildNumber();
+
+            // Get current defines
+            PlayerSettings.GetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Standalone, out var definesArray);
+            var originalDefines = definesArray.ToArray(); // copy to restore later
+
+            // Add DEMO define (uppercase; case-sensitive)
+            var definesList = definesArray.ToList();
+            if (!definesList.Contains("DEMO"))
+                definesList.Add("DEMO");
+
+            try
+            {
+                PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Standalone, definesList.ToArray());
+
+                Build(buildTarget, outputPath, BuildOptions.None, "Assets/Scenes/MainGameScene H.unity");
+            }
+            finally
+            {
+                // Restore original defines no matter what
+                PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Standalone, originalDefines);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+            }
+        }
+
+        static void setMacBuildNumber()
+        {
+            string buildNumText = File.ReadAllText("Assets/Resources/MacBuildNum.txt");
+            UnityEngine.Debug.LogFormat("Build num " + buildNumText);
+            int buildNum;
+            if (int.TryParse(buildNumText, out buildNum))
+            {
+                buildNum++;
+                PlayerSettings.macOS.buildNumber = buildNum.ToString();
+                File.WriteAllText("Assets/Resources/MacBuildNum.txt", buildNum.ToString());
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+            }
         }
 
         [MenuItem("Cardwheel/Build/Android")]
@@ -93,9 +148,6 @@ namespace Cardwheel
         {
             setAndroidBuildNumber();
 
-            // PlayerSettings.Android.useCustomKeystore = false;
-
-            PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Android, "RELEASE");
             DateTime theTime = DateTime.Now;
             string dateTime = theTime.ToString("yyyy-MM-dd HH.mm.ss");
             EditorUserBuildSettings.buildAppBundle = false;
@@ -120,7 +172,6 @@ namespace Cardwheel
 
             //PlayerSettings.Android.minifyRelease = true;
 
-            PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Android, "RELEASE");
             DateTime theTime = DateTime.Now;
             string dateTime = theTime.ToString("yyyy-MM-dd HH.mm.ss");
             EditorUserBuildSettings.buildAppBundle = true;
@@ -254,7 +305,7 @@ namespace Cardwheel
             }
             else if (buildTarget == BuildTarget.StandaloneLinux64)
             {
-                    OnPostprocessLinux(buildTarget, path);
+                OnPostprocessLinux(buildTarget, path);
             }
         }
 

@@ -61,6 +61,8 @@ namespace Cardwheel
         GUIButtonData m_prevButtonData;
         GUIButtonData m_nextButtonData;
 
+        GameObject m_demoGO;
+
         int m_wheelOffset;
 
         public void Init(Camera camera, GameData gameData, Balance balance)
@@ -122,6 +124,17 @@ namespace Cardwheel
                 }
             }
 
+            m_demoGO = guiRef.GetGameObject("Demo");
+
+            if (m_demoGO != null)
+            {
+#if DEMO
+                m_demoGO.SetActive(true);
+#else
+                m_demoGO.SetActive(false);
+#endif
+            }
+
             Hide();
         }
 
@@ -157,11 +170,13 @@ namespace Cardwheel
                 playButtonGO.SetActive(true);
                 lockedGO.SetActive(false);
             }
+#if !DEMO
             else if (gameData.SpinWheelWinCount[m_wheelSelectionIdx - 1] > 0)
             {
                 playButtonGO.SetActive(true);
                 lockedGO.SetActive(false);
             }
+#endif
             else
             {
                 playButtonGO.SetActive(false);
@@ -219,11 +234,14 @@ namespace Cardwheel
             if (CommonButtonVisual.NavigateRight())
                 next();
 
-            if (CommonButtonVisual.NavigateGamepadButton(m_playButtonData))
-                animateClose();
+            if (m_wheelSelectionIdx == 0 || gameData.SpinWheelWinCount[m_wheelSelectionIdx - 1] > 0)
+            {
+                if (CommonButtonVisual.NavigateGamepadButton(m_playButtonData))
+                    animateClose();
 
-            if (CommonButtonVisual.NavigateEnter())
-                animateClose();
+                if (CommonButtonVisual.NavigateEnter())
+                    animateClose();
+            }
         }
 
         public void animateClose()

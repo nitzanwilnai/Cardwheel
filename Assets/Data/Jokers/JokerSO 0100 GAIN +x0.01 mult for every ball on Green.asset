@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f7a4dcac336914f5b94e423814720945, type: 3}
-  m_Name: JokerSO 0093 GAIN +1x mult for every ball on Blue
+  m_Name: JokerSO 0100 GAIN +x0.01 mult for every ball on Green
   m_EditorClassIdentifier: 
-  JokerSprite: {fileID: 21300000, guid: 98b43e2e99d2d48c8b876b9d9673f209, type: 3}
-  Cost: 8
-  Rarity: 1
-  DescriptionGO: {fileID: 7630852811119300315, guid: 88b4208988194447ea9954dde83ebeca, type: 3}
+  JokerSprite: {fileID: 21300000, guid: 8ed53f4ea5fd6469ea005c1f4e3c20ba, type: 3}
+  Cost: 12
+  Rarity: 2
+  DescriptionGO: {fileID: 7630852811119300315, guid: ce7602331459f46aebe252e43fe984a9, type: 3}
   BaseChipsAdd: 0
   BaseMultiplierAdd: 0
   BaseMultiplierMult: 0
-  TypeExists: 00000001
+  TypeExists: 00000100
   TypeNotExists: 00000000
   SizeExists: 000000000000
   SizeNotExists: 000000000000
@@ -28,9 +28,9 @@ MonoBehaviour:
   ChipsPerBall: 0
   ChipsIncreasePerBall: 0
   MultAddPerBall: 0
-  MultAddIncreasePerBall: 1
+  MultAddIncreasePerBall: 0
   MultMultPerBall: 0
-  MultMultIncreasePerBall: 0
+  MultMultIncreasePerBall: 0.01
   SubtractMultiplierAddPerRound: {x: 0, y: 0}
   SubtractChipsAddPerSpin: {x: 0, y: 0}
   PerJokerMultiplierAdd: 0
@@ -40,6 +40,9 @@ MonoBehaviour:
   MultIncreasePerUsedSpin: 0
   RetriggerBallsEverySpin: 0
   RetriggerBallsLastSpin: 0
+  ChipsIncreasePerXSpins: {x: 0, y: 0}
+  MultAddIncreasePerXSpins: {x: 0, y: 0}
+  MultMultIncreasePerXSpins: {x: 0, y: 0}
   MultiplierAddRandomRange: {x: 0, y: 0}
   EarnMoneyEveryRound: 0
   IncreaseSellValueEveryRound: 0
