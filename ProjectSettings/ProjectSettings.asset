@@ -169,9 +169,9 @@ PlayerSettings:
     Standalone: com.nitzan.games.Cardwheel
     iPhone: com.nitzan.games.Cardwheel
   buildNumber:
-    Standalone: 0
+    Standalone: 13
     VisionOS: 0
-    iPhone: 231
+    iPhone: 236
     tvOS: 0
   overrideDefaultApplicationIdentifier: 0
   AndroidBundleVersionCode: 115

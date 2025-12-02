@@ -70,7 +70,10 @@ namespace ParticleSystemDOD
 
         public static void Emit(ParticleData particleData, ParticleBalance particleBalance, Span<int> addedSpriteIndices, Vector2 position, float magnitude, ref int addedSpriteCount, Color color)
         {
-            emitCommon(particleData, particleBalance, Mathf.FloorToInt(magnitude), addedSpriteIndices, ref addedSpriteCount, color);
+            int numSprites = Mathf.FloorToInt(magnitude);
+            if (numSprites > particleBalance.NumSprites)
+                numSprites = particleBalance.NumSprites;
+            emitCommon(particleData, particleBalance, numSprites, addedSpriteIndices, ref addedSpriteCount, color);
 
             for (int i = 0; i < addedSpriteCount; i++)
             {

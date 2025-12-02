@@ -53,6 +53,7 @@ namespace Cardwheel
         GUIButtonData m_exitButtonData;
         GUIButtonData m_removeAdsButtonData;
         GameObject m_adsRemoved;
+        GameObject m_demoVersion;
 
         bool m_continueButtonOk = false;
 
@@ -88,6 +89,16 @@ namespace Cardwheel
             m_animation = guiRef.GetAnimation("Animation");
 
             m_adsRemoved = guiRef.GetGameObject("AdsRemoved");
+            m_demoVersion = guiRef.GetGameObject("DemoVersion");
+
+            if (m_demoVersion != null)
+            {
+#if DEMO
+                m_demoVersion.SetActive(true);
+#else
+                m_demoVersion.SetActive(false);
+#endif
+            }
 
             Joker1Parent = guiRef.GetGameObject("Jokers1").transform;
             Joker2Parent = guiRef.GetGameObject("Jokers2").transform;
@@ -162,7 +173,7 @@ namespace Cardwheel
 
             m_UI.SetActive(true);
 
-            m_adsRemoved.SetActive(gameData.InitialVersion <= 4);
+            m_adsRemoved.SetActive(Screen.width < Screen.height && gameData.InitialVersion <= 4);
             m_removeAdsButtonData.Button.gameObject.SetActive(false);
         }
 

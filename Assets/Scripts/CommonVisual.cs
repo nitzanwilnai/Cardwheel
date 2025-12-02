@@ -190,13 +190,13 @@ namespace Cardwheel
             if (balance.JokerBalance.MultAddIncreasePerBall[jokerType] > 0)
             {
                 float multiplierAdd = jokerIdx > -1 ? runData.JokerMultiplierAdd[jokerIdx] : 0.0f;
-                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + multiplierAdd.ToString("N0") + "x)";
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + multiplierAdd.ToString("N1") + "x)";
             }
 
             if (balance.JokerBalance.MultMultIncreasePerBall[jokerType] > 0)
             {
                 float multiplierMult = jokerIdx > -1 ? runData.JokerMultiplierMult[jokerIdx] : 0.0f;
-                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current x" + multiplierMult.ToString("N1") + ")";
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current x" + multiplierMult.ToString("N2") + ")";
             }
 
             if (balance.JokerBalance.MultIncreaseForSize[jokerType] > 0.0f)
@@ -250,13 +250,13 @@ namespace Cardwheel
             if (balance.JokerBalance.MultAddIncreasePerXSpins[jokerType].x > 0)
             {
                 float multiplierAdd = jokerIdx > -1 ? Logic.GetValueForTriggerSpins(runData, balance.JokerBalance.MultAddIncreasePerXSpins[jokerType], jokerIdx) : 0.0f;
-                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + multiplierAdd.ToString("N0") + "x)";
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + multiplierAdd.ToString("N1") + "x)";
             }
 
             if (balance.JokerBalance.MultMultIncreasePerXSpins[jokerType].x > 0)
             {
                 float multiplierMult = jokerIdx > -1 ? Logic.GetValueForTriggerSpins(runData, balance.JokerBalance.MultMultIncreasePerXSpins[jokerType], jokerIdx) : 0.0f;
-                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current x" + multiplierMult.ToString("N1") + ")";
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current x" + multiplierMult.ToString("N2") + ")";
             }
         }
 

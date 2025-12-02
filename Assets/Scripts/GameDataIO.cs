@@ -27,7 +27,7 @@ namespace Cardwheel
         {
             Debug.LogFormat("SaveGame()");
 
-            string fileName = Application.persistentDataPath + "/gamedata_v"+VERSION+".dat";
+            string fileName = Application.persistentDataPath + "/gamedata_v" + VERSION + ".dat";
             using (FileStream fs = File.Create(fileName))
             using (BinaryWriter bw = new BinaryWriter(fs))
             {
@@ -43,7 +43,7 @@ namespace Cardwheel
 
         public static bool LoadGameData(GameData gameData, Balance balance)
         {
-            string fileName = Application.persistentDataPath + "/gamedata_v"+VERSION+".dat";
+            string fileName = Application.persistentDataPath + "/gamedata_v" + VERSION + ".dat";
             bool gameDataLoaded = false;
             if (File.Exists(fileName))
             {

@@ -10,9 +10,7 @@
 */
 
 using System;
-using System.Collections;
 using Cardwheel;
-using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 
 public static class Logic
@@ -248,10 +246,14 @@ public static class Logic
         // runData.SkipType[3] = 13;
         // runData.SkipType[1] = 7;
 
-        AddJoker(runData, balance, 102);
-        AddJoker(runData, balance, 103);
-        AddJoker(runData, balance, 104);
-        // AddJoker(runData, balance, 101);
+        // AddJoker(runData, balance, 102);
+        // AddJoker(runData, balance, 103);
+        // AddJoker(runData, balance, 104);
+
+        // AddJoker(runData, balance, 90);
+        // AddJoker(runData, balance, 91);
+        // AddJoker(runData, balance, 92);
+        // AddJoker(runData, balance, 93);
         // AddJoker(runData, balance, 73); // 74 and 30
 
         // for (int i = 0; i < runData.BallTypes.Length; i++)
