@@ -206,6 +206,7 @@ namespace Cardwheel
 
                         bw.Write(jokerSO.PerJokerMultiplierAdd);
                         bw.Write(jokerSO.PerNoJokerMultiplierAdd);
+                        bw.Write(jokerSO.NoJokersMultMult);
 
                         bw.Write(jokerSO.ChipsIncreasePerSpin);
                         bw.Write(jokerSO.MultIncreasePerUnusedSpin);
@@ -216,6 +217,7 @@ namespace Cardwheel
 
                         bw.Write(jokerSO.EarnMoneyEveryRound);
                         bw.Write(jokerSO.IncreaseSellValueEveryRound);
+                        bw.Write(jokerSO.IncreaseSellValueAllJokersEveryRound);
                         bw.Write(jokerSO.GoIntoDebt);
                         bw.Write(jokerSO.InterestIncrease);
                         bw.Write(jokerSO.ChanceBallGivesMoney);

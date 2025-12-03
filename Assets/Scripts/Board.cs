@@ -43,9 +43,11 @@ namespace Cardwheel
         public GameObject JokerChips;
         public GameObject JokerMult;
         public GameObject JokerColor;
+        public GameObject JokerMoney;
         public TextMeshProUGUI JokerChipsText;
         public TextMeshProUGUI JokerMultText;
         public TextMeshProUGUI JokerColorText;
+        public TextMeshProUGUI JokerMoneyText;
     }
 
     public class Board : MonoBehaviour
@@ -170,9 +172,11 @@ namespace Cardwheel
         GameObject m_jokerChipsGO;
         GameObject m_jokerMultGO;
         GameObject m_jokerColorGO;
+        GameObject m_jokerMoneyGO;
         TextMeshProUGUI m_jokerChipsText;
         TextMeshProUGUI m_jokerMultText;
         TextMeshProUGUI m_jokerColorText;
+        TextMeshProUGUI m_jokerMoneyText;
 
         float m_slotAnimTimer;
         float m_slotAnimTime = 1.0f;
@@ -277,9 +281,11 @@ namespace Cardwheel
             m_jokerChipsGO = guiRef.GetGameObject("JokerChips");
             m_jokerMultGO = guiRef.GetGameObject("JokerMult");
             m_jokerColorGO = guiRef.GetGameObject("JokerColor");
+            m_jokerMoneyGO = guiRef.GetGameObject("JokerMoney");
             m_jokerChipsText = guiRef.GetTextGUI("JokerChips");
             m_jokerMultText = guiRef.GetTextGUI("JokerMult");
             m_jokerColorText = guiRef.GetTextGUI("JokerColor");
+            m_jokerMoneyText = guiRef.GetTextGUI("JokerMoney");
             hideJokerPopups();
 
             m_jokerParent = guiRef.GetGameObject("JokerParent").transform;
@@ -435,6 +441,7 @@ namespace Cardwheel
             m_jokerMultGO.SetActive(false);
             m_jokerChipsGO.SetActive(false);
             m_jokerColorGO.SetActive(false);
+            m_jokerMoneyGO.SetActive(false);
         }
 
         void animateRoundChipsText()
@@ -484,14 +491,28 @@ namespace Cardwheel
             m_jokerMultText.text = text;
         }
 
-        public void ShowJokerColorPopup(int jokerIdx)
+        public void ShowJokerColorPopup(int jokerIdx, SLOT_TYPE slotType)
         {
             m_jokerColorGO.SetActive(false);
             m_jokerColorGO.transform.position = CommonVisual.JokerPool[jokerIdx].transform.position;
             m_jokerColorGO.SetActive(true);
-            SLOT_TYPE leastPlayedColor = Logic.GetLeastPlayedSlotType(runData);
-            m_jokerColorText.text = leastPlayedColor.ToString();
-            m_jokerColorText.color = balance.SlotColors[(int)leastPlayedColor];
+            m_jokerColorText.text = slotType.ToString();
+            m_jokerColorText.color = balance.SlotColors[(int)slotType];
+        }
+
+        public void ShowJokerMoneyPopup(int jokerIdx, string text)
+        {
+            m_jokerMoneyGO.SetActive(false);
+            m_jokerMoneyGO.transform.position = CommonVisual.JokerPool[jokerIdx].transform.position;
+            m_jokerMoneyGO.SetActive(true);
+            m_jokerMoneyText.text = text;
+        }
+
+        public void ShowJokerCardMoneyPopup(int jokerIdx, string text)
+        {
+            CommonVisual.JokerGUIs[jokerIdx].JokerMoney.SetActive(false);
+            CommonVisual.JokerGUIs[jokerIdx].JokerMoneyText.text = text;
+            CommonVisual.JokerGUIs[jokerIdx].JokerMoney.SetActive(true);
         }
 
         void setGameState(GAME_STATE newGamState)
@@ -556,7 +577,7 @@ namespace Cardwheel
 
                         if (balance.JokerBalance.MultiplierAddForLeastPlayedColor[jokerType] > 0.0f)
                         {
-                            ShowJokerColorPopup(jokerIdx);
+                            ShowJokerColorPopup(jokerIdx, Logic.GetLeastPlayedSlotType(runData));
 
                             m_scoringTimer = 0.0f;
                             break;
@@ -1171,7 +1192,8 @@ namespace Cardwheel
             }
             if (GameState == GAME_STATE.JOKER_POST_ROUND)
             {
-                m_scoringTimer += dt;// * settingsData.Speed;
+                float speed = settingsData.Speed < 1.0f ? settingsData.Speed : 1.0f;
+                m_scoringTimer += dt * speed;
                 if (m_scoringTimer > ScoringTime)
                 {
                     if (m_scoringIdx >= runData.JokerCount)
@@ -1197,6 +1219,20 @@ namespace Cardwheel
                                     Debug.Log(Time.realtimeSinceStartupAsDouble + " " + GameState.ToString() + " -" + amount.ToString() + "x Mult for Joker " + jokerType.ToString());
 
                                     ShowJokerMultPopup(jokerIdx, "-" + amount.ToString("N0"));
+                                    break;
+                                }
+
+                                int increaseSellAmount = 0;
+                                for (int allJKIdx = 0; allJKIdx < runData.JokerCount; allJKIdx++)
+                                    increaseSellAmount += balance.JokerBalance.IncreaseSellValueAllJokersEveryRound[runData.JokerTypes[allJKIdx]];
+
+                                if (balance.JokerBalance.IncreaseSellValueEveryRound[jokerType] > 0)
+                                    increaseSellAmount += balance.JokerBalance.IncreaseSellValueEveryRound[jokerType];
+
+                                if (increaseSellAmount > 0)
+                                {
+                                    m_scoringTimer = 0.0f;
+                                    ShowJokerMoneyPopup(jokerIdx, "+◇" + increaseSellAmount);
                                     break;
                                 }
                             }

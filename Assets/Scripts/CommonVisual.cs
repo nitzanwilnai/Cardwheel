@@ -64,9 +64,11 @@ namespace Cardwheel
                 JokerGUIs[i].JokerChips = guiRef.GetGameObject("JokerChips");
                 JokerGUIs[i].JokerMult = guiRef.GetGameObject("JokerMult");
                 JokerGUIs[i].JokerColor = guiRef.GetGameObject("JokerColor");
+                JokerGUIs[i].JokerMoney = guiRef.GetGameObject("JokerMoney");
                 JokerGUIs[i].JokerChipsText = guiRef.GetTextGUI("JokerChips");
                 JokerGUIs[i].JokerMultText = guiRef.GetTextGUI("JokerMult");
                 JokerGUIs[i].JokerColorText = guiRef.GetTextGUI("JokerColor");
+                JokerGUIs[i].JokerMoneyText = guiRef.GetTextGUI("JokerMoney");
 
                 JokerGUIs[i].DebuffGO.SetActive(false);
                 JokerGUIs[i].RainbowGO.SetActive(false);

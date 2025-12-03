@@ -249,11 +249,13 @@ public static class Logic
         // AddJoker(runData, balance, 102);
         // AddJoker(runData, balance, 103);
         // AddJoker(runData, balance, 104);
+        // AddJoker(runData, balance, 105);
+        AddJoker(runData, balance, 106);
 
-        // AddJoker(runData, balance, 90);
-        // AddJoker(runData, balance, 91);
-        // AddJoker(runData, balance, 92);
-        // AddJoker(runData, balance, 93);
+        AddJoker(runData, balance, 90);
+        AddJoker(runData, balance, 91);
+        AddJoker(runData, balance, 92);
+        AddJoker(runData, balance, 20);
         // AddJoker(runData, balance, 73); // 74 and 30
 
         // for (int i = 0; i < runData.BallTypes.Length; i++)
@@ -1156,7 +1158,7 @@ public static class Logic
             chips += (int)GetValueForTriggerSpins(runData, balance.JokerBalance.ChipsIncreasePerXSpins[jokerType], jokerIdx);
 
             if (Mathf.FloorToInt(balance.JokerBalance.ChipsIncreasePerXSpins[jokerType].y) > 0 && runData.JokerSpins[jokerIdx] % Mathf.FloorToInt(balance.JokerBalance.ChipsIncreasePerXSpins[jokerType].y) == 0)
-                Debug.Log("Increase chips! runData.JokerSpins["+jokerIdx+"] " + runData.JokerSpins[jokerIdx] + " balance.JokerBalance.ChipsIncreasePerXSpins[jokerType] " + balance.JokerBalance.ChipsIncreasePerXSpins[jokerType].ToString());
+                Debug.Log("Increase chips! runData.JokerSpins[" + jokerIdx + "] " + runData.JokerSpins[jokerIdx] + " balance.JokerBalance.ChipsIncreasePerXSpins[jokerType] " + balance.JokerBalance.ChipsIncreasePerXSpins[jokerType].ToString());
         }
 
         chips += balance.JokerBalance.ChipsPerDollar[jokerType] * runData.Money;
@@ -1208,7 +1210,7 @@ public static class Logic
             mult += GetValueForTriggerSpins(runData, balance.JokerBalance.MultAddIncreasePerXSpins[jokerType], jokerIdx);
 
             if (Mathf.FloorToInt(balance.JokerBalance.MultAddIncreasePerXSpins[jokerType].y) > 0 && runData.JokerSpins[jokerIdx] % Mathf.FloorToInt(balance.JokerBalance.MultAddIncreasePerXSpins[jokerType].y) == 0)
-                Debug.Log("Increase add mult! runData.JokerSpins["+jokerIdx+"] " + runData.JokerSpins[jokerIdx] + " balance.JokerBalance.MultAddIncreasePerXSpins[jokerType] " + balance.JokerBalance.MultAddIncreasePerXSpins[jokerType].ToString());
+                Debug.Log("Increase add mult! runData.JokerSpins[" + jokerIdx + "] " + runData.JokerSpins[jokerIdx] + " balance.JokerBalance.MultAddIncreasePerXSpins[jokerType] " + balance.JokerBalance.MultAddIncreasePerXSpins[jokerType].ToString());
         }
 
         int numNoJokers = runData.MaxJokersInHand - runData.JokerCount;
@@ -1294,7 +1296,7 @@ public static class Logic
             mult += GetValueForTriggerSpins(runData, balance.JokerBalance.MultMultIncreasePerXSpins[jokerType], jokerIdx);
 
             if (Mathf.FloorToInt(balance.JokerBalance.MultMultIncreasePerXSpins[jokerType].y) > 0 && runData.JokerSpins[jokerIdx] % Mathf.FloorToInt(balance.JokerBalance.MultMultIncreasePerXSpins[jokerType].y) == 0)
-                Debug.Log("Increase mult mult! runData.JokerSpins["+jokerIdx+"] " + runData.JokerSpins[jokerIdx] + " balance.JokerBalance.MultMultIncreasePerXSpins[jokerType] " + balance.JokerBalance.MultMultIncreasePerXSpins[jokerType].ToString());
+                Debug.Log("Increase mult mult! runData.JokerSpins[" + jokerIdx + "] " + runData.JokerSpins[jokerIdx] + " balance.JokerBalance.MultMultIncreasePerXSpins[jokerType] " + balance.JokerBalance.MultMultIncreasePerXSpins[jokerType].ToString());
         }
 
         mult += runData.JokerMultiplierMult[jokerIdx];
@@ -1303,6 +1305,9 @@ public static class Logic
         for (int ballIdx = 0; ballIdx < balance.MaxBalls; ballIdx++)
             if (runData.BallTypesInGame[ballIdx] > 0)
                 numSpecialBalls++;
+
+        if (runData.JokerCount == 1)
+            mult += balance.JokerBalance.NoJokersMultMult[jokerType];
 
         mult += balance.JokerBalance.MultiplierMultForSpecialBall[jokerType] * numSpecialBalls;
         mult += balance.JokerBalance.MultiplierMultForNonSpecialBall[jokerType] * (balance.MaxBalls - numSpecialBalls);
@@ -1515,6 +1520,15 @@ public static class Logic
             runData.JokerSellValues[jkrIdx] += balance.JokerBalance.IncreaseSellValueEveryRound[jokerType];
             runData.UseJoker[jkrIdx] = 1;
         }
+
+        int sellValueAddition = 0;
+        for (int jkrIdx = 0; jkrIdx < runData.JokerCount; jkrIdx++)
+        {
+            int jokerType = runData.JokerTypes[jkrIdx];
+            sellValueAddition += balance.JokerBalance.IncreaseSellValueAllJokersEveryRound[jokerType];
+        }
+        for (int jkrIdx = 0; jkrIdx < runData.JokerCount; jkrIdx++)
+            runData.JokerSellValues[jkrIdx] += sellValueAddition;
 
         if (InBossRound(runData))
             runData.Money += runData.MoneyAfterBoss;

@@ -169,12 +169,12 @@ PlayerSettings:
     Standalone: com.nitzan.games.Cardwheel
     iPhone: com.nitzan.games.Cardwheel
   buildNumber:
-    Standalone: 20
+    Standalone: 23
     VisionOS: 0
-    iPhone: 236
+    iPhone: 237
     tvOS: 0
   overrideDefaultApplicationIdentifier: 0
-  AndroidBundleVersionCode: 115
+  AndroidBundleVersionCode: 117
   AndroidMinSdkVersion: 23
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
@@ -820,7 +820,7 @@ PlayerSettings:
   webWasm2023: 0
   scriptingDefineSymbols:
     Android: MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
-    Standalone: MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED;STEAMWORKS_NET
+    Standalone: 
     iPhone: 
   additionalCompilerArguments: {}
   platformArchitecture: {}
