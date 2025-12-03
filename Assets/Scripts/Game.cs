@@ -17,6 +17,10 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XInput;
 using UnityEngine.InputSystem.DualShock;
 
+#if UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX || UNITY_STANDALONE_OSX
+using Steamworks;
+#endif
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -236,9 +240,6 @@ namespace Cardwheel
         public void Start()
         {
             SoundManager.Instance.Init(m_settingsData);
-#if STEAMWORKS
-    public CGameID steamAppID; // CGameID is a Steamworks.NET type
-#endif
         }
 
         public void SetMenuState(MENU_STATE newMenuState)

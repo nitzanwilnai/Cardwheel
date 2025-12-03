@@ -5,7 +5,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "96cc6635c21ea412808092aa6bb86b739d632023"
+      "hash": "a42219181f99e8b4e2b1c898a7d4ca3b08e73f8a"
     },
     "com.unity.2d.animation": {
       "version": "10.2.1",
@@ -200,7 +200,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.purchasing": {
-      "version": "5.0.2",
+      "version": "5.0.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {
