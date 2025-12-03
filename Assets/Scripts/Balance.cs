@@ -159,6 +159,7 @@ namespace Cardwheel
 
         public float[] PerJokerMultiplierAdd;
         public float[] PerNoJokerMultiplierAdd;
+        public float[] NoJokersMultMult;
 
         public float[] ChipsIncreasePerSpin;
         public float[] MultIncreasePerUnusedSpin;
@@ -168,6 +169,7 @@ namespace Cardwheel
 
         public int[] EarnMoneyEveryRound;
         public int[] IncreaseSellValueEveryRound;
+        public int[] IncreaseSellValueAllJokersEveryRound;
         public int[] GoIntoDebt;
         public int[] InterestIncrease;
         public float[] ChanceBallGivesMoney;
@@ -425,6 +427,7 @@ namespace Cardwheel
 
                 JokerBalance.PerJokerMultiplierAdd = new float[numJokers];
                 JokerBalance.PerNoJokerMultiplierAdd = new float[numJokers];
+                JokerBalance.NoJokersMultMult = new float[numJokers];
 
                 JokerBalance.ChipsIncreasePerSpin = new float[numJokers];
                 JokerBalance.MultIncreasePerUnusedSpin = new float[numJokers];
@@ -434,6 +437,7 @@ namespace Cardwheel
 
                 JokerBalance.EarnMoneyEveryRound = new int[numJokers];
                 JokerBalance.IncreaseSellValueEveryRound = new int[numJokers];
+                JokerBalance.IncreaseSellValueAllJokersEveryRound = new int[numJokers];
                 JokerBalance.GoIntoDebt = new int[numJokers];
                 JokerBalance.InterestIncrease = new int[numJokers];
                 JokerBalance.ChanceBallGivesMoney = new float[numJokers];
@@ -521,6 +525,7 @@ namespace Cardwheel
 
                     JokerBalance.PerJokerMultiplierAdd[jkrIdx] = br.ReadSingle();
                     JokerBalance.PerNoJokerMultiplierAdd[jkrIdx] = br.ReadSingle();
+                    JokerBalance.NoJokersMultMult[jkrIdx] = br.ReadSingle();
 
                     JokerBalance.ChipsIncreasePerSpin[jkrIdx] = br.ReadSingle();
                     JokerBalance.MultIncreasePerUnusedSpin[jkrIdx] = br.ReadSingle();
@@ -530,6 +535,7 @@ namespace Cardwheel
 
                     JokerBalance.EarnMoneyEveryRound[jkrIdx] = br.ReadInt32();
                     JokerBalance.IncreaseSellValueEveryRound[jkrIdx] = br.ReadInt32();
+                    JokerBalance.IncreaseSellValueAllJokersEveryRound[jkrIdx] = br.ReadInt32();
                     JokerBalance.GoIntoDebt[jkrIdx] = br.ReadInt32();
                     JokerBalance.InterestIncrease[jkrIdx] = br.ReadInt32();
                     JokerBalance.ChanceBallGivesMoney[jkrIdx] = br.ReadSingle();

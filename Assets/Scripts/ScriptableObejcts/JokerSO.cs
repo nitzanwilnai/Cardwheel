@@ -49,8 +49,9 @@ namespace Cardwheel
         public Vector2 SubtractChipsAddPerSpin = Vector2.zero;
 
         [Header("PER JOKER")]
-        public float PerJokerMultiplierAdd = 0.0f; // 0017
-        public float PerNoJokerMultiplierAdd = 0.0f; //0018
+        public float PerJokerMultiplierAdd = 0.0f;
+        public float PerNoJokerMultiplierAdd = 0.0f;
+        public float NoJokersMultMult = 0.0f;
 
         [Header("PER SPIN")]
         public float ChipsIncreasePerSpin = 0.0f;
@@ -68,6 +69,7 @@ namespace Cardwheel
         [Header("MONEY")]
         public int EarnMoneyEveryRound = 0;
         public int IncreaseSellValueEveryRound = 0;
+        public int IncreaseSellValueAllJokersEveryRound = 0;
         public int GoIntoDebt = 0;
         public int InterestIncrease = 0;
         public float ChanceBallGivesMoney = 0.0f;
