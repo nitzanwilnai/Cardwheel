@@ -162,6 +162,11 @@ namespace Cardwheel
             }
 #endif
 
+// #if UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX || UNITY_STANDALONE_OSX
+//             m_version.text += " STEAM " + SteamUtils.GetAppID();
+// #endif
+
+
             MENU_STATE menuState = RunDataIO.LoadMenuStateOnly();
             m_continueButtonOk = menuState >= MENU_STATE.IN_GAME && menuState < MENU_STATE.GAME_OVER;
             m_continueButtonData.Button.gameObject.SetActive(m_continueButtonOk);
