@@ -19,34 +19,11 @@ using UnityEngine;
 
 namespace Cardwheel
 {
-    public static class GameDataIO
+    public static class GameDataIOV4
     {
-        public static int VERSION = 5;
-
-        public static void SaveGameData(GameData gameData)
-        {
-            Debug.LogFormat("SaveGame()");
-
-            string fileName = Application.persistentDataPath + "/gamedata_v" + VERSION + ".dat";
-            using (FileStream fs = File.Create(fileName))
-            using (BinaryWriter bw = new BinaryWriter(fs))
-            {
-                bw.Write(VERSION);
-                bw.Write(gameData.InitialVersion);
-                bw.Write(gameData.SpinWheelWinCount.Length);
-                for (int i = 0; i < gameData.SpinWheelWinCount.Length; i++)
-                    bw.Write(gameData.SpinWheelWinCount[i]);
-
-                bw.Write(gameData.MenuTutorialFlags);
-
-                bw.Write(gameData.RunCounter);
-                bw.Write(gameData.AdsRemoved);
-            }
-        }
-
         public static bool LoadGameData(GameData gameData, Balance balance)
         {
-            string fileName = Application.persistentDataPath + "/gamedata_v" + VERSION + ".dat";
+            string fileName = Application.persistentDataPath + "/gamedata_v4.dat";
             bool gameDataLoaded = false;
             if (File.Exists(fileName))
             {
@@ -65,12 +42,12 @@ namespace Cardwheel
                         for (int i = 0; i < gameData.SpinWheelWinCount.Length && i < savedNumSpinWheels; i++)
                             gameData.SpinWheelWinCount[i] = tempArray[i];
 
-                        gameData.MenuTutorialFlags = br.ReadInt32();
-
-                        gameData.RunCounter = br.ReadInt32();
-                        gameData.AdsRemoved = br.ReadBoolean();
+                        if (version > 1)
+                            gameData.MenuTutorialFlags = br.ReadInt32();
 
                         gameDataLoaded = true;
+
+                        gameData.AdsRemoved = true;
                     }
                 }
             }

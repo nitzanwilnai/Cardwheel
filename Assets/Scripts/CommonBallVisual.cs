@@ -265,21 +265,41 @@ namespace Cardwheel
             bool mouseUp = false;
             Vector3 mousePosition = Vector3.zero;
 
-            if (Mouse.current != null)
+            // Debug.Log("HanleInputTouchMove Mouse.current " + (Mouse.current != null) + " Touchscreen.current " + (Touchscreen.current != null));
+
+            if (Touchscreen.current != null)
             {
-                mouseDown = Mouse.current.leftButton.wasPressedThisFrame;
-                mouseMove = Mouse.current.leftButton.isPressed;
-                mouseUp = Mouse.current.leftButton.wasReleasedThisFrame;
-                mousePosition = Mouse.current.position.ReadValue();
-            }
-            else if (Touchscreen.current != null)
-            {
+                Debug.Log("Touchscreen exists");
+
                 mouseDown = Touchscreen.current.primaryTouch.press.wasPressedThisFrame;
                 mouseMove = Touchscreen.current.primaryTouch.press.isPressed;
                 mouseUp = Touchscreen.current.primaryTouch.press.wasReleasedThisFrame;
                 mousePosition = Vector3.zero;
                 if (Touchscreen.current.primaryTouch.press.isPressed)
                     mousePosition = Touchscreen.current.primaryTouch.position.ReadValue();
+
+                if (mouseDown)
+                    Debug.Log("TOUCHSCREEN mouseDown " + mouseDown + " mousePosition " + mousePosition + " Touchscreen.current.primaryTouch.press.isPressed " + Touchscreen.current.primaryTouch.press.isPressed);
+                if (mouseMove)
+                    Debug.Log("TOUCHSCREEN mouseMove " + mouseMove + " mousePosition " + mousePosition + " Touchscreen.current.primaryTouch.press.isPressed " + Touchscreen.current.primaryTouch.press.isPressed);
+                if (mouseUp)
+                    Debug.Log("TOUCHSCREEN mouseUp " + mouseUp + " mousePosition " + mousePosition + " Touchscreen.current.primaryTouch.press.isPressed " + Touchscreen.current.primaryTouch.press.isPressed);
+            }
+            else if (Mouse.current != null)
+            {
+                Debug.Log("Mouse exists");
+
+                mouseDown = Mouse.current.leftButton.wasPressedThisFrame;
+                mouseMove = Mouse.current.leftButton.isPressed;
+                mouseUp = Mouse.current.leftButton.wasReleasedThisFrame;
+                mousePosition = Mouse.current.position.ReadValue();
+
+                if (mouseDown)
+                    Debug.Log("MOUSE mouseDown " + mouseDown + " mousePosition");
+                if (mouseMove)
+                    Debug.Log("MOUSE mouseMove " + mouseMove + " mousePosition");
+                if (mouseUp)
+                    Debug.Log("MOUSE mouseUp " + mouseUp + " mousePosition");
             }
 
             Vector3 worldPosition = camera.ScreenToWorldPoint(mousePosition);

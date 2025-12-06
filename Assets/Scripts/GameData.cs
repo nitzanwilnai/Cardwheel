@@ -22,5 +22,6 @@ namespace Cardwheel
         public int[] SpinWheelWinCount;
         public int MenuTutorialFlags;
         public int RunCounter;
+        public bool AdsRemoved;
     }
 }

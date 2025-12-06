@@ -669,7 +669,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &697370009
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -731,6 +731,7 @@ MonoBehaviour:
   UIDebug: {fileID: 315485192}
   CommonBundle: common
   GameInfoSO: {fileID: 11400000, guid: 9d25ef7a2653d4d07ae5ff249d5d3c28, type: 2}
+  IAPManager: {fileID: 697370009}
   StartSeed: 0
   m_gamepadType: 0
   LastSelectedMenuButton: 
@@ -1002,7 +1003,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1578681888
 MonoBehaviour:
   m_ObjectHideFlags: 0

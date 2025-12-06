@@ -61,7 +61,7 @@ namespace Cardwheel
         ONLY_SCORE_AT_LEAST_THREE_COLORS = 34,
         JUMBLE_SLOT_EFFECTS = 35,
         ONLY_RED_ORANGE = 36,
-        ONLY_GREEN_BLUE = 37, 
+        ONLY_GREEN_BLUE = 37,
         ONLY_RED_GREEN = 38,
         ONLY_BLUE_ORANGE = 39,
     };
@@ -398,6 +398,9 @@ namespace Cardwheel
 
                 int numJokers = br.ReadInt32();
                 JokerBalance.NumJokers = numJokers;
+// #if DEMO
+//                 JokerBalance.NumJokers = 71;
+// #endif
                 JokerBalance.JokerSpritesNames = new string[numJokers];
                 JokerBalance.Cost = new int[numJokers];
                 JokerBalance.Rarity = new RARITY[numJokers];

@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.0.61f1
-CRC: 2638661222
+CRC: 1408249764
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 18b713a482497d37806a9646991db678
+    Hash: 7e02dbe77d0344e1df8aaa66eef482ac
   TypeTreeHash:
     serializedVersion: 2
     Hash: 3ff497320468a173bb882883c1d22dbd
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: ebd5f75c142acf1d3b385fbfd42e67fe
+    Hash: 265af4ecf4daec89501c9dbe39ad7ea1
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -339,6 +339,7 @@ Assets:
 - Assets/Textures/Effects/Star2.png
 - Assets/Textures/Effects/Star.png
 - Assets/Prefabs/Common/MainMenuVisual.prefab
+- Assets/Prefabs/Common/UI - Demo.prefab
 - Assets/Prefabs/Descriptions/Joker 0086 Joker +1x mult for every ball on red.prefab
 - Assets/Prefabs/Descriptions/Joker 0017 +1 Mult Per Joker.prefab
 - Assets/Textures/Jokers/0005 - Joker.png
