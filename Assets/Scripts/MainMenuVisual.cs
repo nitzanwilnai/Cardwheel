@@ -94,7 +94,7 @@ namespace Cardwheel
 
             m_adsRemoved = guiRef.GetGameObject("AdsRemoved");
 
-#if UNITY_STAND_ALONE
+#if UNITY_STANDALONE
             m_demoVersion = guiRef.GetGameObject("DemoVersion");
 
             if (m_demoVersion != null)
