@@ -23,37 +23,27 @@ namespace Cardwheel
         [MenuItem("Cardwheel/Build/Mac")]
         public static void BuildMac()
         {
-            PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Standalone, "");
+            setMacBuildNumber();
 
             string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss");
-            Build(BuildTarget.StandaloneOSX, Application.dataPath + "/../../Build/Cardwheel " + dateTime + "/Cardwheel.app", BuildOptions.None, "Assets/Scenes/MainGameScene H.unity");
-
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
+            string outputPath = Application.dataPath + "/../../Build/Cardwheel OSX " + dateTime + "/Cardwheel.app";
+            BuildStandaloneCommon(BuildTarget.StandaloneOSX, outputPath, "");
         }
 
         [MenuItem("Cardwheel/Build/PC")]
         public static void BuildPC()
         {
-            PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Standalone, "");
-
             string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss");
-            Build(BuildTarget.StandaloneWindows64, Application.dataPath + "/../../Build/Cardwheel " + dateTime + "/Cardwheel.exe", BuildOptions.None, "Assets/Scenes/MainGameScene H.unity");
-
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
+            string outputPath = Application.dataPath + "/../../Build/Cardwheel WIN " + dateTime + "/Cardwheel.exe";
+            BuildStandaloneCommon(BuildTarget.StandaloneWindows64, outputPath, "");
         }
 
         [MenuItem("Cardwheel/Build/Steamdeck")]
         public static void BuildSteamdeck()
         {
-            PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Standalone, "");
-
             string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss");
-            Build(BuildTarget.StandaloneLinux64, Application.dataPath + "/../../Build/Cardwheel " + dateTime + "/Cardwheel.x86_64", BuildOptions.None, "Assets/Scenes/MainGameScene H.unity");
-
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
+            string outputPath = Application.dataPath + "/../../Build/Cardwheel STEAM " + dateTime + "/Cardwheel.x86_64";
+            BuildStandaloneCommon(BuildTarget.StandaloneLinux64, outputPath, "");
         }
 
         [MenuItem("Cardwheel/Build/Mac DEMO")]
@@ -62,27 +52,27 @@ namespace Cardwheel
             setMacBuildNumber();
 
             string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss");
-            string outputPath = Application.dataPath + "/../../Build/Cardwheel " + dateTime + "/Cardwheel_DEMO.app";
-            BuildDemoCommon(BuildTarget.StandaloneOSX, outputPath);
+            string outputPath = Application.dataPath + "/../../Build/Cardwheel OSX DEMO " + dateTime + "/Cardwheel_DEMO.app";
+            BuildStandaloneCommon(BuildTarget.StandaloneOSX, outputPath, "DEMO");
         }
 
         [MenuItem("Cardwheel/Build/PC DEMO")]
         public static void BuildPCDemo()
         {
             string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss");
-            string outputPath = Application.dataPath + "/../../Build/Cardwheel " + dateTime + "/Cardwheel_DEMO.exe";
-            BuildDemoCommon(BuildTarget.StandaloneWindows64, outputPath);
+            string outputPath = Application.dataPath + "/../../Build/Cardwheel WIN DEMO " + dateTime + "/Cardwheel_DEMO.exe";
+            BuildStandaloneCommon(BuildTarget.StandaloneWindows64, outputPath, "DEMO");
         }
 
         [MenuItem("Cardwheel/Build/Steamdeck DEMO")]
         public static void BuildSteamdeckDemo()
         {
             string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss");
-            string outputPath = Application.dataPath + "/../../Build/Cardwheel " + dateTime + "/Cardwheel.x86_64_DEMO";
-            BuildDemoCommon(BuildTarget.StandaloneLinux64, outputPath);
+            string outputPath = Application.dataPath + "/../../Build/Cardwheel STEAM DEMO " + dateTime + "/Cardwheel_DEMO.x86_64";
+            BuildStandaloneCommon(BuildTarget.StandaloneLinux64, outputPath, "DEMO");
         }
 
-        public static void BuildDemoCommon(BuildTarget buildTarget, string outputPath)
+        public static void BuildStandaloneCommon(BuildTarget buildTarget, string outputPath, string flag)
         {
             setMacBuildNumber();
 
@@ -92,8 +82,11 @@ namespace Cardwheel
 
             // Add DEMO define (uppercase; case-sensitive)
             var definesList = definesArray.ToList();
-            if (!definesList.Contains("DEMO"))
-                definesList.Add("DEMO");
+            if (!definesList.Contains(flag))
+                definesList.Add(flag);
+
+            if(flag.Length == 0 && definesList.Contains("DEMO"))
+                definesList.Remove("DEMO");
 
             try
             {
