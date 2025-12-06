@@ -255,8 +255,9 @@ namespace Cardwheel
         void claimRoundRewardAndGoToShop()
         {
 #if UNITY_IOS || UNITY_ANDROID
-            // if (gameData.RunCounter > 2)
-            //     GoogleAdsManager.Instance.ShowInterstitial();
+            Debug.Log("gameData.RunCounter " + gameData.RunCounter + " > 2 && !gameData.AdsRemoved " + !gameData.AdsRemoved);
+            if (gameData.RunCounter > 2 && !gameData.AdsRemoved)
+                GoogleAdsManager.Instance.ShowInterstitial();
 #endif
 
             SoundManager.Instance.PlaySFXMoney();

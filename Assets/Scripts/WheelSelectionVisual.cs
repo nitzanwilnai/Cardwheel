@@ -124,6 +124,7 @@ namespace Cardwheel
                 }
             }
 
+#if UNITY_STANDALONE
             m_demoGO = guiRef.GetGameObject("Demo");
 
             if (m_demoGO != null)
@@ -134,6 +135,7 @@ namespace Cardwheel
                 m_demoGO.SetActive(false);
 #endif
             }
+#endif
 
             Hide();
         }
@@ -165,23 +167,9 @@ namespace Cardwheel
             m_nextButtonData.Button.interactable = (m_wheelSelectionIdx < gameData.SpinWheelWinCount.Length - 1);
             m_nextButtonData.Button.image.color = (m_wheelSelectionIdx < gameData.SpinWheelWinCount.Length - 1) ? balance.ButtonColorEnabled : balance.ButtonColorDisabled;
 
-            if (m_wheelSelectionIdx == 0)
-            {
-                playButtonGO.SetActive(true);
-                lockedGO.SetActive(false);
-            }
-#if !DEMO
-            else if (gameData.SpinWheelWinCount[m_wheelSelectionIdx - 1] > 0)
-            {
-                playButtonGO.SetActive(true);
-                lockedGO.SetActive(false);
-            }
-#endif
-            else
-            {
-                playButtonGO.SetActive(false);
-                lockedGO.SetActive(true);
-            }
+            bool canPlay = canPlayWheel();
+            playButtonGO.SetActive(canPlay);
+            lockedGO.SetActive(!canPlay);
         }
 
         public void Hide()
@@ -234,7 +222,8 @@ namespace Cardwheel
             if (CommonButtonVisual.NavigateRight())
                 next();
 
-            if (m_wheelSelectionIdx == 0 || gameData.SpinWheelWinCount[m_wheelSelectionIdx - 1] > 0)
+
+            if (canPlayWheel())
             {
                 if (CommonButtonVisual.NavigateGamepadButton(m_playButtonData))
                     animateClose();
@@ -242,6 +231,16 @@ namespace Cardwheel
                 if (CommonButtonVisual.NavigateEnter())
                     animateClose();
             }
+        }
+
+        bool canPlayWheel()
+        {
+            bool canPlayWheel = m_wheelSelectionIdx == 0 ? true : false;
+#if !DEMO
+            if (m_wheelSelectionIdx > 0 && gameData.SpinWheelWinCount[m_wheelSelectionIdx - 1] > 0)
+                canPlayWheel = true;
+#endif
+            return canPlayWheel;
         }
 
         public void animateClose()

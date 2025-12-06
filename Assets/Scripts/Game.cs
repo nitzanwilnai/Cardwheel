@@ -64,6 +64,10 @@ namespace Cardwheel
         public string CommonBundle;
         public GameInfoSO GameInfoSO;
 
+#if UNITY_IOS || UNITY_ANDROID
+        public IAPManager IAPManager;
+#endif
+
         MainMenuVisual m_mainMenuVisual;
         RoundSelectionVisual m_roundSelectionVisual;
         RoundCompleteVisual m_roundCompleteVisual;
@@ -225,8 +229,13 @@ namespace Cardwheel
         {
             if (GameDataIO.LoadGameData(m_gameData, m_balance))
             {
-                Debug.Log("loaded gamedata v4");
+                Debug.Log("loaded gamedata v5");
                 // loaded v4
+            }
+            else if (GameDataIOV4.LoadGameData(m_gameData, m_balance))
+            {
+                Debug.Log("loaded gamedata v4");
+                // loaded v3
             }
             else if (GameDataIOV3.LoadGameData(m_gameData, m_balance))
             {
@@ -598,17 +607,26 @@ namespace Cardwheel
 
         public void StartGame(uint seed, int wheelIdx)
         {
-            Logic.StartNewGame(m_runData, m_balance, wheelIdx, seed);
+            Logic.StartNewGame(m_gameData, m_runData, m_balance, wheelIdx, seed);
+            GameDataIO.SaveGameData(m_gameData);
+
             if (m_settingsData.SkipRound1)
                 SkipRound1();
             else
                 SetMenuState(MENU_STATE.ROUND_SELECTION);
+
+#if UNITY_IOS || UNITY_ANDROID
+            if (!m_gameData.AdsRemoved)
+                GoogleAdsManager.Instance.LoadInterstitialAd();
+#endif
+
         }
 
         public void StartRound()
         {
 #if UNITY_IOS || UNITY_ANDROID
-            // GoogleAdsManager.Instance.LoadInterstitialAd();
+            if (!m_gameData.AdsRemoved)
+                GoogleAdsManager.Instance.LoadInterstitialAd();
 #endif
             SoundManager.Instance.PlaySFXButtonOK();
 
@@ -764,6 +782,21 @@ namespace Cardwheel
         public void ExitGame()
         {
             Application.Quit();
+        }
+
+        public void BuyPremium()
+        {
+#if UNITY_IOS || UNITY_ANDROID
+            IAPManager.BuyPremium();
+#endif
+        }
+
+        public void RemoveAdsPurchased()
+        {
+            m_gameData.AdsRemoved = true;
+            GameDataIO.SaveGameData(m_gameData);
+            if (m_runData.MenuState == MENU_STATE.MAIN_MENU)
+                m_mainMenuVisual.Show(m_gameData);
         }
     }
 }

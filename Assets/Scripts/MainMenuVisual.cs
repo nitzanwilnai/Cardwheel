@@ -83,12 +83,18 @@ namespace Cardwheel
             CommonButtonVisual.AddSelectedBorder(m_exitButtonData);
 
             m_removeAdsButtonData = guiButtonRef.GetButtonData("RemoveAds");
+            m_removeAdsButtonData.Button.gameObject.SetActive(false);
+#if UNITY_IOS || UNITY_ANDROID
+            m_removeAdsButtonData.Button.onClick.AddListener(Game.Instance.BuyPremium);
+#endif
 
             GUIRef guiRef = m_UI.GetComponent<GUIRef>();
 
             m_animation = guiRef.GetAnimation("Animation");
 
             m_adsRemoved = guiRef.GetGameObject("AdsRemoved");
+
+#if UNITY_STAND_ALONE
             m_demoVersion = guiRef.GetGameObject("DemoVersion");
 
             if (m_demoVersion != null)
@@ -99,6 +105,8 @@ namespace Cardwheel
                 m_demoVersion.SetActive(false);
 #endif
             }
+#endif
+
 
             Joker1Parent = guiRef.GetGameObject("Jokers1").transform;
             Joker2Parent = guiRef.GetGameObject("Jokers2").transform;
@@ -162,9 +170,9 @@ namespace Cardwheel
             }
 #endif
 
-// #if UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX || UNITY_STANDALONE_OSX
-//             m_version.text += " STEAM " + SteamUtils.GetAppID();
-// #endif
+            // #if UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX || UNITY_STANDALONE_OSX
+            //             m_version.text += " STEAM " + SteamUtils.GetAppID();
+            // #endif
 
 
             MENU_STATE menuState = RunDataIO.LoadMenuStateOnly();
@@ -178,8 +186,8 @@ namespace Cardwheel
 
             m_UI.SetActive(true);
 
-            m_adsRemoved.SetActive(Screen.width < Screen.height && gameData.InitialVersion <= 4);
-            m_removeAdsButtonData.Button.gameObject.SetActive(false);
+            m_adsRemoved.SetActive(Screen.width < Screen.height && gameData.AdsRemoved);
+            m_removeAdsButtonData.Button.gameObject.SetActive(Screen.width < Screen.height && !gameData.AdsRemoved);
         }
 
         void selectButton(MENU_BUTTONS selectedButton)

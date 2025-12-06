@@ -142,7 +142,7 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: 1.0.10
+  bundleVersion: 1.0.11
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -169,12 +169,12 @@ PlayerSettings:
     Standalone: com.nitzan.games.Cardwheel
     iPhone: com.nitzan.games.Cardwheel
   buildNumber:
-    Standalone: 23
+    Standalone: 26
     VisionOS: 0
-    iPhone: 237
+    iPhone: 247
     tvOS: 0
   overrideDefaultApplicationIdentifier: 0
-  AndroidBundleVersionCode: 117
+  AndroidBundleVersionCode: 120
   AndroidMinSdkVersion: 23
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1

@@ -43,6 +43,7 @@ public class GoogleAdsManager : Singleton<GoogleAdsManager>
 
     public void LoadInterstitialAd()
     {
+        Debug.Log("LoadInterstitiaAd()");
         if (m_insterstitialAd != null)
         {
             m_insterstitialAd.Destroy();
@@ -66,8 +67,13 @@ public class GoogleAdsManager : Singleton<GoogleAdsManager>
 
     public void ShowInterstitial()
     {
+        Debug.Log("m_insterstitialAd != null " + (m_insterstitialAd != null));
+        if (m_insterstitialAd != null)
+            Debug.Log("m_insterstitialAd.CanShowAd() " + m_insterstitialAd.CanShowAd());
+
         if (m_insterstitialAd != null && m_insterstitialAd.CanShowAd())
         {
+            Debug.Log("m_insterstitialAd.Show()");
             m_insterstitialAd.Show();
         }
     }

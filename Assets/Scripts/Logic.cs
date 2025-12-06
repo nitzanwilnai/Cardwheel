@@ -105,10 +105,13 @@ public static class Logic
         gameData.RunCounter = 0;
         gameData.InitialVersion = GameDataIO.VERSION;
         gameData.SpinWheelWinCount = new int[balance.SpinWheelBalance.NumSpinWheels];
+        gameData.AdsRemoved = false;
     }
 
-    public static void StartNewGame(RunData runData, Balance balance, int wheelIdx, uint seed)
+    public static void StartNewGame(GameData gameData, RunData runData, Balance balance, int wheelIdx, uint seed)
     {
+        gameData.RunCounter++;
+
         runData.WheelIdx = wheelIdx;
         runData.StartSeed = seed;
         runData.GameSeed = seed;
@@ -236,7 +239,6 @@ public static class Logic
         runData.ShopRerollTotal = 0;
         runData.CardPackRerollTotal = 0;
         runData.CardPackAbandonTotal = 0;
-
 
 #if UNITY_EDITOR
         // runData.Money = -20;
@@ -1480,13 +1482,12 @@ public static class Logic
 
     public static void WinGame(GameData gameData, RunData runData)
     {
-        gameData.RunCounter++;
         gameData.SpinWheelWinCount[runData.WheelIdx]++;
     }
 
     public static void GameOver(GameData gameData)
     {
-        gameData.RunCounter++;
+        // do nothing
     }
 
     public static void SetMenuState(RunData runData, MENU_STATE newMenuState)
