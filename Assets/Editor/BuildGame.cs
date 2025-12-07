@@ -42,6 +42,7 @@ namespace Cardwheel
         public static void BuildSteamdeck()
         {
             string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss");
+            // string outputPath = Application.dataPath + "/../../Build/Cardwheel/Cardwheel.x86_64";
             string outputPath = Application.dataPath + "/../../Build/Cardwheel STEAM " + dateTime + "/Cardwheel.x86_64";
             BuildStandaloneCommon(BuildTarget.StandaloneLinux64, outputPath, "");
         }
@@ -85,13 +86,14 @@ namespace Cardwheel
             if (!definesList.Contains(flag))
                 definesList.Add(flag);
 
-            if(flag.Length == 0 && definesList.Contains("DEMO"))
+            if (flag.Length == 0 && definesList.Contains("DEMO"))
                 definesList.Remove("DEMO");
 
             try
             {
                 PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Standalone, definesList.ToArray());
 
+                // BuildOptions.Development | BuildOptions.AllowDebugging
                 Build(buildTarget, outputPath, BuildOptions.None, "Assets/Scenes/MainGameScene H.unity");
             }
             finally
