@@ -23,7 +23,7 @@ namespace Cardwheel
 {
     public class MainMenuVisual : MonoBehaviour
     {
-        public enum MENU_BUTTONS { NEW_GAME, CONTINUE, EXIT };
+        public enum MENU_BUTTONS { NEW_GAME, CONTINUE, EXIT, WISHLIST };
         MENU_BUTTONS m_selectedButton;
 
         GameObject m_UI;
@@ -52,6 +52,7 @@ namespace Cardwheel
         GUIButtonData m_privacyPolicyButtonData;
         GUIButtonData m_exitButtonData;
         GUIButtonData m_removeAdsButtonData;
+        GUIButtonData m_wishlistButtonData;
         GameObject m_adsRemoved;
         GameObject m_demoVersion;
 
@@ -86,6 +87,13 @@ namespace Cardwheel
             m_removeAdsButtonData.Button.gameObject.SetActive(false);
 #if UNITY_IOS || UNITY_ANDROID
             m_removeAdsButtonData.Button.onClick.AddListener(Game.Instance.BuyPremium);
+#endif
+
+            m_wishlistButtonData = guiButtonRef.GetButtonData("Wishlist");
+            m_wishlistButtonData.Button.gameObject.SetActive(false);
+            CommonButtonVisual.AddSelectedBorder(m_wishlistButtonData);
+#if DEMO
+            m_wishlistButtonData.Button.onClick.AddListener(Game.Instance.GoToWishlist);
 #endif
 
             GUIRef guiRef = m_UI.GetComponent<GUIRef>();
@@ -182,6 +190,10 @@ namespace Cardwheel
             CommonButtonVisual.UpdateButtonIcons(m_newGameButtonData, Game.Instance.GetGamepadType());
             CommonButtonVisual.UpdateButtonIcons(m_continueButtonData, Game.Instance.GetGamepadType());
 
+#if DEMO
+            m_wishlistButtonData.Button.gameObject.SetActive(true);
+#endif
+
             selectButton(MENU_BUTTONS.NEW_GAME);
 
             m_UI.SetActive(true);
@@ -196,6 +208,9 @@ namespace Cardwheel
             m_newGameButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.NEW_GAME);
             m_continueButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.CONTINUE);
             m_exitButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.EXIT);
+#if DEMO
+            m_wishlistButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.WISHLIST);
+#endif
         }
 
 
@@ -292,6 +307,24 @@ namespace Cardwheel
                     selectButton(MENU_BUTTONS.NEW_GAME);
                 return;
             }
+
+#if DEMO
+            if (m_selectedButton == MENU_BUTTONS.WISHLIST && CommonButtonVisual.NavigateEnter())
+            {
+                Game.Instance.GoToWishlist();
+                return;
+            }
+            if (m_selectedButton == MENU_BUTTONS.WISHLIST && CommonButtonVisual.NavigateRight())
+            {
+                selectButton(MENU_BUTTONS.NEW_GAME);
+                return;
+            }
+            if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateLeft())
+            {
+                selectButton(MENU_BUTTONS.WISHLIST);
+                return;
+            }
+#endif
 
         }
 

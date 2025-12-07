@@ -21,8 +21,9 @@ namespace ParticleSystemDOD
         {
             gameData.StartPos = new Vector2[particleBalance.MaxSprites];
             gameData.CurrentPos = new Vector2[particleBalance.MaxSprites];
-            gameData.Radius = new Vector2[particleBalance.MaxSprites];
             gameData.TargetPos = new Vector2[particleBalance.MaxSprites];
+            gameData.StartRadius = new Vector2[particleBalance.MaxSprites];
+            gameData.TargetRadius = new Vector2[particleBalance.MaxSprites];
             gameData.Time = new float[particleBalance.MaxSprites];
             gameData.Velocity = new float[particleBalance.MaxSprites];
             gameData.AliveIndices = new int[particleBalance.MaxSprites];
@@ -84,8 +85,10 @@ namespace ParticleSystemDOD
                 float radius = UnityEngine.Random.value * (particleBalance.TargetRadiusMax - particleBalance.TargetRadiusMin) + particleBalance.TargetRadiusMin;
                 particleData.TargetPos[particleIndex] = position + GetRandomCirclePosition(radius);
 
-                particleData.Radius[particleIndex].x = (particleBalance.RadiusMax - particleBalance.RadiusMin) * UnityEngine.Random.value + particleBalance.RadiusMin;
-                particleData.Radius[particleIndex].y = (particleBalance.RadiusMax - particleBalance.RadiusMin) * UnityEngine.Random.value + particleBalance.RadiusMin;
+                particleData.StartRadius[particleIndex].x = (particleBalance.RadiusMax - particleBalance.RadiusMin) * UnityEngine.Random.value + particleBalance.RadiusMin;
+                particleData.StartRadius[particleIndex].y = (particleBalance.RadiusMax - particleBalance.RadiusMin) * UnityEngine.Random.value + particleBalance.RadiusMin;
+                particleData.TargetRadius[particleIndex].x = (particleBalance.RadiusMax - particleBalance.RadiusMin) * UnityEngine.Random.value + particleBalance.RadiusMin;
+                particleData.TargetRadius[particleIndex].y = (particleBalance.RadiusMax - particleBalance.RadiusMin) * UnityEngine.Random.value + particleBalance.RadiusMin;
             }
         }
 

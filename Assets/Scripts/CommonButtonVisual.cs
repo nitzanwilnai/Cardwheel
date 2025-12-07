@@ -170,6 +170,18 @@ namespace Cardwheel
             return false;
         }
 
+        public static bool NavigateEscape()
+        {
+            if (Keyboard.current != null)
+                if (Keyboard.current.escapeKey.wasPressedThisFrame)
+                {
+                    LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
+                    return true;
+                }
+
+            return false;
+        }
+
         public static bool NavigateGamepadButton(GUIButtonData guiButtonData)
         {
             if (guiButtonData.GamepadButton == GAMEPAD_BUTTON.NORTH)
@@ -257,6 +269,12 @@ namespace Cardwheel
         public static bool CommonHandleInput(TopBarGUI topBarGUI, CardsBallsSpinWheelGUI cardsBallsSpinWheelGUI, COMMON_BUTTONS selectedButton)
         {
             if ((selectedButton == COMMON_BUTTONS.SETTINGS && NavigateEnter()) || NavigateGamepadButton(topBarGUI.SettingsButtonData))
+            {
+                Game.Instance.GoToSettings();
+                return true;
+            }
+
+            if (NavigateEscape())
             {
                 Game.Instance.GoToSettings();
                 return true;
