@@ -1383,6 +1383,11 @@ namespace Cardwheel
                 Game.Instance.GoToSettings();
                 return;
             }
+            if(CommonButtonVisual.NavigateEscape())
+            {
+                Game.Instance.GoToSettings();
+                return;
+            }
 
             if ((m_selectedButton >= MENU_BUTTONS.JOKER_1 && m_selectedButton <= MENU_BUTTONS.JOKER_5) && CommonButtonVisual.NavigateEnter())
             {

@@ -25,7 +25,8 @@ namespace ParticleSystemDOD
         public Color[] ParticleColor;
         public float[] Velocity;
         public float[] Time;
-        public Vector2[] Radius;
+        public Vector2[] StartRadius;
+        public Vector2[] TargetRadius;
 
         public int[] AliveIndices;
         public int AliveCount;
@@ -149,7 +150,9 @@ namespace ParticleSystemDOD
 
             float scale = particleBalance.ScaleCurve.Evaluate(particleData.Time[spriteIndex]);
             // scale /= m_particleParent.parent.lossyScale.x;
-            m_particlePool[spriteIndex].transform.localScale = new Vector3(scale * particleData.Radius[spriteIndex].x, scale * particleData.Radius[spriteIndex].y, 1.0f);
+            Vector2 radius = (particleData.TargetRadius[spriteIndex] - particleData.StartRadius[spriteIndex]) * particleData.Time[spriteIndex] +  particleData.StartRadius[spriteIndex];
+            // m_particlePool[spriteIndex].transform.localScale = new Vector3(scale * particleData.StartRadius[spriteIndex].x, scale * particleData.StartRadius[spriteIndex].y, 1.0f);
+            m_particlePool[spriteIndex].transform.localScale = new Vector3(radius.x, scale * radius.y, 1.0f);
 
             // updateParticleRotation(spriteIndex);
 

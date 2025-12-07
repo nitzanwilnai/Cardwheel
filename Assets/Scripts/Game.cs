@@ -779,6 +779,11 @@ namespace Cardwheel
             Application.OpenURL("https://nitzanwilnai.github.io/PrivacyPolicy/Cardwheel");
         }
 
+        public void GoToWishlist()
+        {
+            Application.OpenURL("steam://openurl/https://store.steampowered.com/app/4047130/Cardwheel/");
+        }
+
         public void ExitGame()
         {
             Application.Quit();
