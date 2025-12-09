@@ -61,6 +61,7 @@ namespace Cardwheel
         public Camera Camera;
 
         public GameObject UIDebug;
+        public UIError UIError;
 
         public string CommonBundle;
         public GameInfoSO GameInfoSO;
@@ -96,7 +97,7 @@ namespace Cardwheel
         [Header("Set to 0 for Random")]
         public uint StartSeed;
 
-        public GAMEPAD_TYPE m_gamepadType = GAMEPAD_TYPE.NONE;
+        public GAMEPAD_TYPE GamepadType = GAMEPAD_TYPE.NONE;
 
         public int[] LastSelectedMenuButton;
 
@@ -116,7 +117,7 @@ namespace Cardwheel
 
         void gamepadCheck()
         {
-            m_gamepadType = GAMEPAD_TYPE.NONE;
+            GamepadType = GAMEPAD_TYPE.NONE;
 
             if (GameInfoSO.KeyboardGamepadSupport)
             {
@@ -125,11 +126,11 @@ namespace Cardwheel
                     string gamepadString = Gamepad.current.description.ToJson();
 
                     if (Gamepad.current is XInputController)
-                        m_gamepadType = GAMEPAD_TYPE.XBOX;
+                        GamepadType = GAMEPAD_TYPE.XBOX;
                     else if (Gamepad.current is DualShockGamepad)
-                        m_gamepadType = GAMEPAD_TYPE.PS5;
+                        GamepadType = GAMEPAD_TYPE.PS5;
                     else if (gamepadString.Contains("Steam"))
-                        m_gamepadType = GAMEPAD_TYPE.STEAM;
+                        GamepadType = GAMEPAD_TYPE.STEAM;
 
                     Cursor.visible = false;
                 }
@@ -138,7 +139,7 @@ namespace Cardwheel
 
         public GAMEPAD_TYPE GetGamepadType()
         {
-            return m_gamepadType;
+            return GamepadType;
         }
 
         override protected void Awake()
@@ -150,6 +151,7 @@ namespace Cardwheel
             gamepadInit();
 
             UIDebug.SetActive(false);
+            UIError.gameObject.SetActive(false);
 
             LastSelectedMenuButton = new int[(int)MENU_STATE.LAST];
 
@@ -401,16 +403,26 @@ namespace Cardwheel
                 if (logString.Contains("<RI.Hid> Failed to create device file"))
                     return;
 
+#if UNITY_EDITOR
                 UIDebug.SetActive(true);
                 GUIRef guiRef = UIDebug.GetComponent<GUIRef>();
                 guiRef.GetTextGUI("DebugText").text = type.ToString() + "\n\n" + logString + "\n\n" + stackTrace;
                 Canvas.ForceUpdateCanvases();
+#else
+                ShowError(type.ToString() + "\n\n" + logString + "\n\n" + stackTrace);
+#endif
 
 #if UNITY_EDITOR
                 EditorApplication.isPaused = true;
                 Time.timeScale = 1.0f;
 #endif
             }
+        }
+
+        public void ShowError(string errorMessage)
+        {
+            UIError.gameObject.SetActive(true);
+            UIError.ErrorMessage.text = errorMessage;
         }
 
         // Update is called once per frame
@@ -425,6 +437,9 @@ namespace Cardwheel
             if (!Logic.IsFlagSet(m_gameData.MenuTutorialFlags, (int)m_runData.MenuState))
                 if (m_tutorialVisual.TutorialClosed())
                     return;
+
+            if (UIError.isActiveAndEnabled)
+                return;
 
             if (m_runData.MenuState == MENU_STATE.IN_GAME)
             {
@@ -541,6 +556,10 @@ namespace Cardwheel
             {
                 gamepadCheck();
             }
+
+            if (Keyboard.current.eKey.wasReleasedThisFrame)
+                ShowError("TestError");
+
 #endif
         }
 

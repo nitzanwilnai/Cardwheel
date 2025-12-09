@@ -57,6 +57,7 @@ namespace Cardwheel
             new ProductDefinition(PremiumUpgradeId, ProductType.NonConsumable)
         });
 
+
             _purchases.FetchPurchases();
         }
 
@@ -67,7 +68,7 @@ namespace Cardwheel
             if (_premiumProduct == null || !_premiumProduct.availableToPurchase)
             {
                 Debug.LogWarning("Premium product not available yet.");
-                return;
+                // Game.Instance.ShowError("Premium product not available yet.");
             }
             _purchases.PurchaseProduct(_premiumProduct);
         }
@@ -85,17 +86,48 @@ namespace Cardwheel
 
         void OnProductsFetched(List<Product> products)
         {
+            // string s = "";
+            // if (products != null)
+            // {
+            //     foreach (var p in products)
+            //     {
+            //         Debug.Log($"[IAP] Product: id={p.definition.id}, " +
+            //                   $"storeSpecificId={p.definition.storeSpecificId}, " +
+            //                   $"type={p.definition.type}, " +
+            //                   $"available={p.availableToPurchase}, " +
+            //                   $"price={p.metadata.localizedPriceString}");
+            //         s += "\n" + $"[IAP] Product: id={p.definition.id}, " +
+            //         $"storeSpecificId={p.definition.storeSpecificId}, " +
+            //         $"type={p.definition.type}, " +
+            //         $"available={p.availableToPurchase}, " +
+            //         $"price={p.metadata.localizedPriceString}";
+            //     }
+            // }
+
+            string s = "";
+
             // Cache the product for later purchase calls
             _premiumProduct = _products.GetProductById(PremiumUpgradeId);
             if (_premiumProduct == null)
+            {
                 Debug.Log("Premium product not returned by store. Check IDs and store setup.");
+                // Game.Instance.ShowError("Premium product not returned by store. Check IDs and store setup.");
+                s += "\nPremium product not returned by store. Check IDs and store setup.";
+            }
             else
+            {
                 Debug.Log($"Fetched product: {_premiumProduct.definition.id} | price={_premiumProduct.metadata.localizedPriceString}");
+                // Game.Instance.ShowError($"Fetched product: {_premiumProduct.definition.id} | price={_premiumProduct.metadata.localizedPriceString}");
+                // s += "\n" + $"Fetched product: {_premiumProduct.definition.id} | price={_premiumProduct.metadata.localizedPriceString}";
+            }
+
+            // Game.Instance.ShowError(s);
         }
 
         void OnProductsFetchFailed(ProductFetchFailed failure)
         {
             Debug.Log($"Products fetch failed: {failure.FailureReason} - {failure.FailedFetchProducts.ToString()}");
+            // Game.Instance.ShowError($"Products fetch failed: {failure.FailureReason} - {failure.FailedFetchProducts.ToString()}");
         }
 
         static Product GetProductFromOrder(Order order)
@@ -109,7 +141,12 @@ namespace Cardwheel
         void OnPurchasePending(PendingOrder order)
         {
             var product = GetProductFromOrder(order);
-            if (product == null) { Debug.Log("Pending order has no items."); return; }
+            if (product == null)
+            {
+                Debug.Log("Pending order has no items.");
+                // Game.Instance.ShowError("Pending order has no items.");
+                return;
+            }
 
             if (product.definition.id == PremiumUpgradeId)
             {
@@ -130,6 +167,8 @@ namespace Cardwheel
             var product = GetProductFromOrder(failure);
             var productId = product?.definition?.id ?? "(unknown)";
             Debug.LogWarning(
+                $"Purchase failed: {productId} | reason={failure.FailureReason} | details={failure.Details}");
+            Game.Instance.ShowError(
                 $"Purchase failed: {productId} | reason={failure.FailureReason} | details={failure.Details}");
         }
 
@@ -155,11 +194,13 @@ namespace Cardwheel
         void OnPurchasesFetchFailed(PurchasesFetchFailureDescription failure)
         {
             Debug.LogWarning($"Purchases fetch failed: {failure.FailureReason} - {failure.Message}");
+            // Game.Instance.ShowError($"Purchases fetch failed: {failure.FailureReason} - {failure.Message}");
         }
 
         void OnStoreDisconnected(StoreConnectionFailureDescription desc)
         {
             Debug.LogWarning($"Store disconnected: {desc.Message} | retryable={desc.IsRetryable}");
+            // Game.Instance.ShowError($"Store disconnected: {desc.Message} | retryable={desc.IsRetryable}");
             // You can rely on the retry policy, or trigger a manual reconnect/UI here.
         }
 
