@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.0.61f1
-CRC: 3953148514
+CRC: 64418370
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: de45ab6e61c3602afa8621450e7aba63
+    Hash: 2746d53154c1e523103311347d23072f
   TypeTreeHash:
     serializedVersion: 2
     Hash: c142684008850ddf3636ce192491e446
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 3e013edbb80427ee3e76e5615d737202
+    Hash: a4b01a02fefba80c2d891270369c3e4e
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -168,4 +168,4 @@ Assets:
 - Assets/Prefabs/CommonV/UI - Round Complete.prefab
 - Assets/Prefabs/CommonV/UI - Boss Info.prefab
 Dependencies:
-- /Users/nitzanwilnai/Programming/UnityRelease/Cardwheel/Assets/StreamingAssets/AssetBundles/common
+- C:/Users/nitza/Documents/GitHub/Cardwheel/Assets/StreamingAssets/AssetBundles/common
