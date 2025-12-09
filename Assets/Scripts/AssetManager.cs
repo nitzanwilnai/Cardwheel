@@ -206,6 +206,11 @@ namespace Cardwheel
             return Instantiate(loadGameObject(m_commonBundleUI, "UI - Settings", "Assets/Prefabs/" + m_commonUIBundlePath + "/UI - Settings.prefab"));
         }
 
+        public GameObject LoadMainMenuSettingsUI()
+        {
+            return Instantiate(loadGameObject(m_commonBundle, "UI - Main Menu Settings", "Assets/Prefabs/Common/UI - Main Menu Settings.prefab"));
+        }
+
         public WinScreenVisual LoadWinScreenVisual()
         {
             return Instantiate(loadGameObject(m_commonBundle, "WinScreenVisual", "Assets/Prefabs/Common/WinScreenVisual.prefab")).GetComponent<WinScreenVisual>();

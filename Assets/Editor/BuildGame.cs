@@ -306,6 +306,7 @@ namespace Cardwheel
 
         private static void modifyXcodeFrameworks(string path)
         {
+            UnityEngine.Debug.Log("modifyXcodeFrameworks(" + path + ")");
 #if UNITY_EDITOR_OSX
             string projPath = PBXProject.GetPBXProjectPath(path);
 

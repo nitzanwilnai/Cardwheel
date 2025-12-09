@@ -113,7 +113,6 @@ namespace Cardwheel
 
             if (product.definition.id == PremiumUpgradeId)
             {
-                GrantPremiumLocally();
                 _purchases.ConfirmPurchase(order); // confirm after granting/validating
             }
         }
@@ -145,8 +144,7 @@ namespace Cardwheel
                 var product = GetProductFromOrder(confirmed);
                 if (product != null && product.definition.id == PremiumUpgradeId)
                 {
-                    GrantPremiumLocally();
-                    Debug.Log("Premium entitlement restored.");
+                    Game.Instance.RemoveAdsPurchased();
                 }
             }
 
@@ -163,16 +161,6 @@ namespace Cardwheel
         {
             Debug.LogWarning($"Store disconnected: {desc.Message} | retryable={desc.IsRetryable}");
             // You can rely on the retry policy, or trigger a manual reconnect/UI here.
-        }
-
-        // ===== Entitlement grant =====
-
-        void GrantPremiumLocally()
-        {
-            // TODO: persist this flag in your own saved data (and consider server entitlements).
-            PlayerPrefs.SetInt("premium_unlocked", 1);
-            PlayerPrefs.Save();
-            // Update UI/feature flags here
         }
 
 #endif

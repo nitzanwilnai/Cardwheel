@@ -48,6 +48,7 @@ namespace Cardwheel
         JOKER_INFO_POPUP,
         GAME_OVER,
         WIN_SCREEN,
+        MAIN_MENU_SETTINGS,
         LAST, // should always be last!
     };
 
@@ -85,6 +86,7 @@ namespace Cardwheel
         ShopInfoVisual m_shopInfoVisual;
         WheelSelectionVisual m_wheelSelectionVisual;
         TutorialVisual m_tutorialVisual;
+        MainMenuSettingsVisual m_mainMenuSettingsVisual;
 
         RunData m_runData;
         SettingsData m_settingsData;
@@ -200,6 +202,7 @@ namespace Cardwheel
             m_shopInfoVisual = AssetManager.Instance.LoadShopInfoVisual();
             m_wheelSelectionVisual = AssetManager.Instance.LoadWheelSelectionVisual();
             m_tutorialVisual = new TutorialVisual();
+            m_mainMenuSettingsVisual = new MainMenuSettingsVisual();
 
             m_mainMenuVisual.Init(Camera, m_balance);
             m_roundSelectionVisual.Init(m_runData, m_balance, Camera);
@@ -212,6 +215,7 @@ namespace Cardwheel
             m_jokerInfoPopupVisual.Init(m_runData, m_balance, Camera);
             m_ballScreenVisual.Init(m_runData, m_balance, Camera);
             m_settingsVisual.Init(m_runData, m_balance, Camera, m_settingsData);
+            m_mainMenuSettingsVisual.Init(Camera, m_settingsData);
             m_winScreenVisual.Init(m_runData, m_balance, Camera);
             m_chipsInfoVisual.Init(Camera);
             m_gameInfoVisual.Init(Camera, m_balance);
@@ -230,17 +234,14 @@ namespace Cardwheel
             if (GameDataIO.LoadGameData(m_gameData, m_balance))
             {
                 Debug.Log("loaded gamedata v5");
-                // loaded v4
             }
             else if (GameDataIOV4.LoadGameData(m_gameData, m_balance))
             {
                 Debug.Log("loaded gamedata v4");
-                // loaded v3
             }
             else if (GameDataIOV3.LoadGameData(m_gameData, m_balance))
             {
                 Debug.Log("loaded gamedata v3");
-                // loaded v3
             }
             else
                 Logic.AllocateGameData(m_gameData, m_balance);
@@ -259,7 +260,7 @@ namespace Cardwheel
             if (newMenuState != m_runData.MenuState)
                 Logic.SetMenuState(m_runData, newMenuState);
 
-            if (newMenuState > MENU_STATE.IN_GAME)
+            if (newMenuState > MENU_STATE.IN_GAME && newMenuState < MENU_STATE.MAIN_MENU_SETTINGS)
             {
                 RunDataIO.SaveRun(m_runData, m_balance);
             }
@@ -292,6 +293,8 @@ namespace Cardwheel
                 m_ballScreenVisual.Hide();
             else if (menuState == MENU_STATE.SETTINGS)
                 m_settingsVisual.Hide();
+            else if (menuState == MENU_STATE.MAIN_MENU_SETTINGS)
+                m_mainMenuSettingsVisual.Hide();
             else if (menuState == MENU_STATE.WIN_SCREEN)
                 m_winScreenVisual.Hide();
             else if (menuState == MENU_STATE.CHIPS_INFO)
@@ -350,6 +353,8 @@ namespace Cardwheel
                 m_ballScreenVisual.Show();
             else if (menuState == MENU_STATE.SETTINGS)
                 m_settingsVisual.Show();
+            else if (menuState == MENU_STATE.MAIN_MENU_SETTINGS)
+                m_mainMenuSettingsVisual.Show();
             else if (menuState == MENU_STATE.WIN_SCREEN)
             {
                 m_winScreenVisual.Show();
@@ -468,6 +473,10 @@ namespace Cardwheel
             else if (m_runData.MenuState == MENU_STATE.SETTINGS)
             {
                 m_settingsVisual.Tick(dt);
+            }
+            else if (m_runData.MenuState == MENU_STATE.MAIN_MENU_SETTINGS)
+            {
+                m_mainMenuSettingsVisual.Tick(dt);
             }
             else if (m_runData.MenuState == MENU_STATE.CHIPS_INFO)
             {
@@ -802,6 +811,14 @@ namespace Cardwheel
             GameDataIO.SaveGameData(m_gameData);
             if (m_runData.MenuState == MENU_STATE.MAIN_MENU)
                 m_mainMenuVisual.Show(m_gameData);
+        }
+
+        public void RestorePurchases()
+        {
+#if UNITY_IOS
+            IAPManager.RestoreOnIOS();
+#elif UNITY_ANDROID
+#endif
         }
     }
 }

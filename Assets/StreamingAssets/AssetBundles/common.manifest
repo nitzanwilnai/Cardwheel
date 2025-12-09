@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.0.61f1
-CRC: 1408249764
+CRC: 2168851129
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 7e02dbe77d0344e1df8aaa66eef482ac
+    Hash: 169c687266555f0e0a6d533304d81e2e
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 3ff497320468a173bb882883c1d22dbd
+    Hash: 543f217589179194a7c0c2500a6ee5da
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 265af4ecf4daec89501c9dbe39ad7ea1
+    Hash: 3e0c1064f0a4017af63875bb4915a175
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -67,6 +67,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: ce4fe6a26c1d74d48bc117737ea3e74b, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: debee259641b849589ded1d17feb1dd3, type: 3}
 - Class: 114
@@ -404,6 +406,7 @@ Assets:
 - Assets/Textures/Jokers/0119 - Joker x3 if ball falls on deactivated color in boss
   battle.png
 - Assets/Prefabs/Descriptions/Pack Balls - 0009 - Mult Green.prefab
+- Assets/Prefabs/Common/UI - Main Menu Settings.prefab
 - "Assets/Prefabs/Descriptions/Joker 0079 Earn \u25C71 for every special ball on
   orange.prefab"
 - Assets/Prefabs/Common/CardPackBallVisual.prefab

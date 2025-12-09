@@ -152,7 +152,7 @@ namespace ParticleSystemDOD
             // scale /= m_particleParent.parent.lossyScale.x;
             Vector2 radius = (particleData.TargetRadius[spriteIndex] - particleData.StartRadius[spriteIndex]) * particleData.Time[spriteIndex] +  particleData.StartRadius[spriteIndex];
             // m_particlePool[spriteIndex].transform.localScale = new Vector3(scale * particleData.StartRadius[spriteIndex].x, scale * particleData.StartRadius[spriteIndex].y, 1.0f);
-            m_particlePool[spriteIndex].transform.localScale = new Vector3(radius.x, scale * radius.y, 1.0f);
+            m_particlePool[spriteIndex].transform.localScale = new Vector3(scale * radius.x, scale * radius.y, 1.0f);
 
             // updateParticleRotation(spriteIndex);
 
