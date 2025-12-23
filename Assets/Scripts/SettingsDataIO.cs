@@ -22,8 +22,6 @@ namespace Cardwheel
     {
         public static void SaveSettings(SettingsData settingsData)
         {
-            Debug.LogFormat("SaveGame()");
-
             string fileName = Application.persistentDataPath + "/settings.dat";
             using (FileStream fs = File.Create(fileName))
             using (BinaryWriter bw = new BinaryWriter(fs))

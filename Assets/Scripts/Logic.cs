@@ -252,12 +252,12 @@ public static class Logic
         // AddJoker(runData, balance, 103);
         // AddJoker(runData, balance, 104);
         // AddJoker(runData, balance, 105);
-        AddJoker(runData, balance, 106);
+        // AddJoker(runData, balance, 106);
 
-        AddJoker(runData, balance, 90);
-        AddJoker(runData, balance, 91);
-        AddJoker(runData, balance, 92);
-        AddJoker(runData, balance, 20);
+        // AddJoker(runData, balance, 90);
+        // AddJoker(runData, balance, 91);
+        // AddJoker(runData, balance, 92);
+        // AddJoker(runData, balance, 20);
         // AddJoker(runData, balance, 73); // 74 and 30
 
         // for (int i = 0; i < runData.BallTypes.Length; i++)
@@ -1454,7 +1454,7 @@ public static class Logic
         if (bigRound >= balance.BaseChip.Length)
             bigRound = balance.BaseChip.Length - 1;
 
-        int goal = Mathf.FloorToInt(balance.BaseChip[bigRound] * balance.RoundChipMult[smallRound] * (balance.SpinWheelBalance.GoalMultiplier[runData.WheelIdx] + 1.0f));
+        int goal = Mathf.FloorToInt(balance.BaseChip[bigRound] * balance.RoundChipMult[smallRound] * balance.SpinWheelBalance.GoalMultiplier[runData.WheelIdx]);
         if (InBossRound(runData))
         {
             int bossType = GetBossTypeForRound(runData);
