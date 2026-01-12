@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e44fc03a97b425ca3c9a850cb853ec, type: 3}
   m_Name: 0002 SpinWheelSO - 1.25x goal
   m_EditorClassIdentifier: 
-  Description: 'Harder goals
-
-    Starting cast at $8'
+  Description: "Harder goals\nStarting cash at \u25C78"
   Spins: 4
   StartingMoney: 8
   GoalMultiplier: 1.125

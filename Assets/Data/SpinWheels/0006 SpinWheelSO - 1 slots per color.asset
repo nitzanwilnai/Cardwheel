@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e44fc03a97b425ca3c9a850cb853ec, type: 3}
   m_Name: 0006 SpinWheelSO - 1 slots per color
   m_EditorClassIdentifier: 
-  Description: 'Each slot a different color
-
-    Starting cash at $18'
+  Description: "Each slot a different color\nStarting cash at \u25C718"
   Spins: 4
   StartingMoney: 18
   GoalMultiplier: 1

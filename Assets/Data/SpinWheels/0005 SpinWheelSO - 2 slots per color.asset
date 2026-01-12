@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e44fc03a97b425ca3c9a850cb853ec, type: 3}
   m_Name: 0005 SpinWheelSO - 2 slots per color
   m_EditorClassIdentifier: 
-  Description: 'Colored slots grouped by 2s
-
-    Starting cash at $16'
+  Description: "Colored slots grouped by 2s\nStarting cash at \u25C716"
   Spins: 4
   StartingMoney: 16
   GoalMultiplier: 1

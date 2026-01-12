@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e44fc03a97b425ca3c9a850cb853ec, type: 3}
   m_Name: 0004 SpinWheelSO - 3 spins
   m_EditorClassIdentifier: 
-  Description: 'Start with 3 spins
-
-    Starting cash at $8'
+  Description: "Start with 3 spins\nStarting cash at \u25C78"
   Spins: 3
   StartingMoney: 8
   GoalMultiplier: 1
