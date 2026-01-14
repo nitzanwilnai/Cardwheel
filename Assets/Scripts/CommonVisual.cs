@@ -467,6 +467,9 @@ namespace Cardwheel
             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.DEBUFF_MOST_USED_COLOR)
                 bossText += " (" + Logic.GetMostPlayedSlotType(runData).ToString() + ")";
 
+            if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.LOSE_MONEY_EVERY_BALL_MOST_COMMON_COLOR)
+                bossText += " (" + Logic.GetMostPlayedSlotType(runData).ToString() + ")";
+
             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.MOST_PLAYED_BASE_CHIPS_TO_FIVE)
                 bossText += " (" + Logic.GetMostPlayedSlotType(runData).ToString() + ")";
 

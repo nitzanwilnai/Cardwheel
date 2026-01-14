@@ -243,10 +243,12 @@ public static class Logic
 #if UNITY_EDITOR
         // runData.Money = -20;
 
-        runData.SkipType[0] = 15;
-        runData.SkipType[1] = 16;
-        runData.SkipType[3] = 14;
-        // runData.SkipType[1] = 7;
+        // runData.SkipType[0] = 16;
+        // runData.SkipType[1] = 16;
+        // runData.SkipType[2] = 16;
+        // runData.SkipType[3] = 16;
+        // runData.SkipType[4] = 16;
+        // runData.SkipType[5] = 16;
 
         // AddJoker(runData, balance, 102);
         // AddJoker(runData, balance, 103);
@@ -278,9 +280,9 @@ public static class Logic
         // runData.SlotModType[9] = 0;
         // runData.SlotModType[10] = 0;
 
-        // for (int i = 0; i < balance.BossBalance.NumBosses; i++)
-        //     if (balance.BossBalance.BossEffect[i] == BOSS_EFFECT.BALLS_DEBUFFED_FIRST_SPIN)
-        //         runData.BossType[0] = i;
+        for (int i = 0; i < balance.BossBalance.NumBosses; i++)
+            if (balance.BossBalance.BossEffect[i] == BOSS_EFFECT.LOSE_MONEY_EVERY_BALL_MOST_COMMON_COLOR)
+                runData.BossType[0] = i;
 
         // runData.VoucherSlotMostPlayedColor = true;
 
@@ -634,13 +636,46 @@ public static class Logic
             runData.UseBaseChips = 0;
     }
 
-    public static void PostRoundBossEffect(RunData runData, Balance balance)
+    public static void PostRoundBossEffect(RunData runData, Balance balance, out bool moneyChanged)
     {
+        moneyChanged = false;
+
         int bossType = GetBossTypeForRound(runData);
-        if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.LOSE_MONEY_EVERY_SPIN)
+        BOSS_EFFECT bossEffect = balance.BossBalance.BossEffect[bossType];
+        if (bossEffect == BOSS_EFFECT.LOSE_MONEY_EVERY_SPIN)
         {
             runData.Money--;
+            moneyChanged = true;
         }
+
+        if (bossEffect >= BOSS_EFFECT.LOSE_MONEY_EVERY_BALL_RED &&
+            bossEffect <= BOSS_EFFECT.LOSE_MONEY_EVERY_BALL_BLUE)
+
+            for (int ballIdx = 0; ballIdx < balance.MaxBalls; ballIdx++)
+            {
+                int slotIdx = runData.BallSlotIdx[ballIdx];
+                for (SLOT_TYPE slotType = SLOT_TYPE.RED; slotType < SLOT_TYPE.LAST; slotType++)
+                    if (runData.SlotType[slotIdx] == slotType && bossEffect == (BOSS_EFFECT)((int)BOSS_EFFECT.LOSE_MONEY_EVERY_BALL_RED + (int)slotType))
+                    {
+                        runData.Money--;
+                        moneyChanged = true;
+                    }
+            }
+
+        if (bossEffect == BOSS_EFFECT.LOSE_MONEY_EVERY_BALL_MOST_COMMON_COLOR)
+        {
+            SLOT_TYPE slotType = GetMostPlayedSlotType(runData);
+            for (int ballIdx = 0; ballIdx < balance.MaxBalls; ballIdx++)
+            {
+                int slotIdx = runData.BallSlotIdx[ballIdx];
+                if (runData.SlotType[slotIdx] == slotType)
+                {
+                    runData.Money--;
+                    moneyChanged = true;
+                }
+            }
+        }
+
     }
 
     public static void StartSpin(RunData runData, Balance balance)
@@ -2089,9 +2124,10 @@ public static class Logic
         return runData.SkipType[skipIdx];
     }
 
-    public static void Skip(RunData runData, Balance balance, int[] affectedSlotsIdxs, ref int affectedSlotsCount)
+    public static void Skip(RunData runData, Balance balance, int[] affectedSlotsIdxs, ref int affectedSlotsCount, out int addedJokerCount)
     {
         affectedSlotsCount = 0;
+        addedJokerCount = 0;
 
         int skipType = GetSkipTypeForRound(runData, balance, runData.Round);
 
@@ -2149,48 +2185,44 @@ public static class Logic
             runData.JokerSellValues[jkrIdx] += balance.SkipBalance.IncreaseJokerSellValue[skipType];
 
 
-        if (balance.SkipBalance.AddCommonRandomJoker[skipType] > 0 && runData.JokerCount + balance.SkipBalance.AddCommonRandomJoker[skipType] <= balance.MaxJokersInHand)
+        for (int jkrIdx = 0; jkrIdx < balance.SkipBalance.AddCommonRandomJoker[skipType] && runData.JokerCount < balance.MaxJokersInHand; jkrIdx++)
         {
-            int commonJokerCount = 0;
-            Span<int> commonJokerTypes = stackalloc int[runData.AvailableJokerCount];
-            for (int i = 0; i < runData.AvailableJokerCount; i++)
+            if (runData.JokerCount < balance.MaxJokersInHand)
             {
-                int jokerType = runData.AvailableJokerTypes[i];
-                if (balance.JokerBalance.Rarity[jokerType] == RARITY.COMMON)
-                    commonJokerTypes[commonJokerCount++] = jokerType;
-            }
-
-            for (int jkrIdx = 0; jkrIdx < balance.SkipBalance.AddCommonRandomJoker[skipType]; jkrIdx++)
-            {
-                if (runData.JokerCount < balance.MaxJokersInHand)
+                int commonJokerCount = 0;
+                Span<int> commonJokerTypes = stackalloc int[runData.AvailableJokerCount];
+                for (int i = 0; i < runData.AvailableJokerCount; i++)
                 {
-                    int randomIndex = CustomRandInt(ref runData.SkipSeed) % balance.NumSlots;
-                    int jokerType = commonJokerTypes[randomIndex];
-                    AddJoker(runData, balance, jokerType);
+                    int availableJokerType = runData.AvailableJokerTypes[i];
+                    if (balance.JokerBalance.Rarity[availableJokerType] == RARITY.COMMON)
+                        commonJokerTypes[commonJokerCount++] = availableJokerType;
                 }
 
+                int randomIndex = CustomRandInt(ref runData.SkipSeed) % balance.NumSlots;
+                int jokerType = commonJokerTypes[randomIndex];
+                AddJoker(runData, balance, jokerType);
+                addedJokerCount++;
             }
+
         }
 
-        if (balance.SkipBalance.AddUncommonRandomJoker[skipType] > 0 && runData.JokerCount + balance.SkipBalance.AddUncommonRandomJoker[skipType] <= balance.MaxJokersInHand)
+        for (int jkrIdx = 0; jkrIdx < balance.SkipBalance.AddUncommonRandomJoker[skipType] && runData.JokerCount < balance.MaxJokersInHand; jkrIdx++)
         {
             int uncommonJokerCount = 0;
             Span<int> uncommonJokerTypes = stackalloc int[runData.AvailableJokerCount];
             for (int i = 0; i < runData.AvailableJokerCount; i++)
             {
-                int jokerType = runData.AvailableJokerTypes[i];
-                if (balance.JokerBalance.Rarity[jokerType] == RARITY.UNCOMMON)
-                    uncommonJokerTypes[uncommonJokerCount++] = jokerType;
+                int availableJokerType = runData.AvailableJokerTypes[i];
+                if (balance.JokerBalance.Rarity[availableJokerType] == RARITY.UNCOMMON)
+                    uncommonJokerTypes[uncommonJokerCount++] = availableJokerType;
             }
 
-            for (int jkrIdx = 0; jkrIdx < balance.SkipBalance.AddUncommonRandomJoker[skipType]; jkrIdx++)
+            if (runData.JokerCount < balance.MaxJokersInHand)
             {
-                if (runData.JokerCount < balance.MaxJokersInHand)
-                {
-                    int randomIndex = CustomRandInt(ref runData.SkipSeed) % balance.NumSlots;
-                    int jokerType = uncommonJokerTypes[randomIndex];
-                    AddJoker(runData, balance, jokerType);
-                }
+                int randomIndex = CustomRandInt(ref runData.SkipSeed) % balance.NumSlots;
+                int jokerType = uncommonJokerTypes[randomIndex];
+                AddJoker(runData, balance, jokerType);
+                addedJokerCount++;
             }
         }
 

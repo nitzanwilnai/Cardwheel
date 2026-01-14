@@ -414,7 +414,8 @@ namespace Cardwheel
 
             int skipType = Logic.GetSkipTypeForRound(runData, balance, runData.Round);
 
-            Logic.Skip(runData, balance, CommonSlotsVisual.ChangedSlotsIdxs, ref CommonSlotsVisual.ChangedSlotsCount);
+            int addedJokerCount;
+            Logic.Skip(runData, balance, CommonSlotsVisual.ChangedSlotsIdxs, ref CommonSlotsVisual.ChangedSlotsCount, out addedJokerCount);
             Show();
 
             if (balance.SkipBalance.DoubleMoney[skipType] ||
@@ -476,8 +477,7 @@ namespace Cardwheel
             {
                 CommonVisual.ShowJokers(runData, balance, m_cardsBallsSpinWheelGUI.JokerParent);
 
-                int numNewJokers = balance.SkipBalance.AddCommonRandomJoker[skipType] + balance.SkipBalance.AddUncommonRandomJoker[skipType];
-                for (int jkrIdx = runData.JokerCount - numNewJokers; jkrIdx < runData.JokerCount; jkrIdx++)
+                for (int jkrIdx = runData.JokerCount - addedJokerCount; jkrIdx < runData.JokerCount; jkrIdx++)
                     CommonVisual.JokerGUIs[jkrIdx].Animation.Play("ScoreGrow");
             }
 

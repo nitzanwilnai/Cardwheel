@@ -1247,13 +1247,12 @@ namespace Cardwheel
                 {
                     if (Logic.InBossRound(runData))
                     {
-                        int bossType = Logic.GetBossTypeForRound(runData);
+                        bool moneyChanged;
+                        Logic.PostRoundBossEffect(runData, balance, out moneyChanged);
 
-                        if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.LOSE_MONEY_EVERY_SPIN)
+                        if (moneyChanged)
                         {
                             m_scoringTimer = 0.0f;
-
-                            Logic.PostRoundBossEffect(runData, balance);
 
                             CommonVisual.UpdateTopBarMoney(runData, m_topBarGUI);
                             SoundManager.Instance.PlaySFXMoney();
@@ -1383,7 +1382,7 @@ namespace Cardwheel
                 Game.Instance.GoToSettings();
                 return;
             }
-            if(CommonButtonVisual.NavigateEscape())
+            if (CommonButtonVisual.NavigateEscape())
             {
                 Game.Instance.GoToSettings();
                 return;

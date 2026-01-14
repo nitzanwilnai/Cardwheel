@@ -64,7 +64,14 @@ namespace Cardwheel
         ONLY_GREEN_BLUE = 37,
         ONLY_RED_GREEN = 38,
         ONLY_BLUE_ORANGE = 39,
+
+        LOSE_MONEY_EVERY_BALL_RED = 40,
+        LOSE_MONEY_EVERY_BALL_ORANGE = 41,
+        LOSE_MONEY_EVERY_BALL_GREEN = 42,
+        LOSE_MONEY_EVERY_BALL_BLUE = 43,
+        LOSE_MONEY_EVERY_BALL_MOST_COMMON_COLOR = 44,
     };
+    
     public enum VOUCHER_TYPE
     {
         PLUS_ONE_SPIN,
