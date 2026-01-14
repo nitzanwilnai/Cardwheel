@@ -362,6 +362,9 @@ namespace Cardwheel
                         bw.Write(skipSO.BossReroll);
                         bw.Write(skipSO.CardPackIdx);
                         bw.Write(skipSO.CanShowFirstTwoRounds);
+                        bw.Write(skipSO.IncreaseJokerSellValue);
+                        bw.Write(skipSO.AddCommonRandomJoker);
+                        bw.Write(skipSO.AddUncommonRandomJoker);
                     }
 
                     objects.Clear();

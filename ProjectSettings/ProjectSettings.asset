@@ -142,7 +142,7 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: 1.0.13
+  bundleVersion: 1.0.14
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -171,10 +171,10 @@ PlayerSettings:
   buildNumber:
     Standalone: 70
     VisionOS: 0
-    iPhone: 269
+    iPhone: 272
     tvOS: 0
   overrideDefaultApplicationIdentifier: 0
-  AndroidBundleVersionCode: 127
+  AndroidBundleVersionCode: 130
   AndroidMinSdkVersion: 23
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
@@ -192,7 +192,7 @@ PlayerSettings:
   VertexChannelCompressionMask: 4054
   iPhoneSdkVersion: 988
   iOSSimulatorArchitecture: 0
-  iOSTargetOSVersionString: 13.0
+  iOSTargetOSVersionString: 15.0
   tvOSSdkVersion: 0
   tvOSSimulatorArchitecture: 0
   tvOSRequireExtendedGameController: 0

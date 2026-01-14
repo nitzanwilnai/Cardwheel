@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/gcm_defaultSenderId,@string/google_storage_bucket,@string/project_id,@string/google_api_key,@string/google_crash_reporting_api_key,@string/google_app_id">
+  <string name="gcm_defaultSenderId" translatable="false">156439192496</string>
+  <string name="google_storage_bucket" translatable="false">cardwheel-ios.firebasestorage.app</string>
+  <string name="project_id" translatable="false">cardwheel-ios</string>
+  <string name="google_api_key" translatable="false">AIzaSyA75o--xsDDgtRrsSlFGztOh4vuEcPj0d8</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyA75o--xsDDgtRrsSlFGztOh4vuEcPj0d8</string>
+  <string name="google_app_id" translatable="false">1:156439192496:android:10fc9b5268067257bc6c75</string>
+</resources>

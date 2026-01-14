@@ -122,6 +122,9 @@ namespace Cardwheel
         public bool[] BossReroll;
         public int[] CardPackIdx;
         public bool[] CanShowFirstTwoRounds;
+        public int[] IncreaseJokerSellValue;
+        public int[] AddCommonRandomJoker;
+        public int[] AddUncommonRandomJoker;
     }
 
 
@@ -679,6 +682,9 @@ namespace Cardwheel
                 SkipBalance.BossReroll = new bool[numSkips];
                 SkipBalance.CardPackIdx = new int[numSkips];
                 SkipBalance.CanShowFirstTwoRounds = new bool[numSkips];
+                SkipBalance.IncreaseJokerSellValue = new int[numSkips];
+                SkipBalance.AddCommonRandomJoker = new int[numSkips];
+                SkipBalance.AddUncommonRandomJoker = new int[numSkips];
                 for (int skipIdx = 0; skipIdx < numSkips; skipIdx++)
                 {
                     SkipBalance.SkipDescription[skipIdx] = br.ReadString();
@@ -694,6 +700,9 @@ namespace Cardwheel
                     SkipBalance.BossReroll[skipIdx] = br.ReadBoolean();
                     SkipBalance.CardPackIdx[skipIdx] = br.ReadInt32();
                     SkipBalance.CanShowFirstTwoRounds[skipIdx] = br.ReadBoolean();
+                    SkipBalance.IncreaseJokerSellValue[skipIdx] = br.ReadInt32();
+                    SkipBalance.AddCommonRandomJoker[skipIdx] = br.ReadInt32();
+                    SkipBalance.AddUncommonRandomJoker[skipIdx] = br.ReadInt32();
                 }
 
                 int numBosses = br.ReadInt32();

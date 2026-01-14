@@ -21,6 +21,10 @@ using UnityEngine.InputSystem.DualShock;
 // using Steamworks;
 // #endif
 
+#if UNITY_IOS || UNITY_ANDROID
+using Firebase.Extensions;
+#endif
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -89,6 +93,10 @@ namespace Cardwheel
         TutorialVisual m_tutorialVisual;
         MainMenuSettingsVisual m_mainMenuSettingsVisual;
 
+#if UNITY_IOS || UNITY_ANDROID
+        Firebase.FirebaseApp m_firebaseApp;
+#endif
+
         RunData m_runData;
         SettingsData m_settingsData;
         GameData m_gameData;
@@ -147,6 +155,29 @@ namespace Cardwheel
             base.Awake();
 
             Application.targetFrameRate = 60;
+
+#if UNITY_IOS || UNITY_ANDROID
+            Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
+            {
+                var dependencyStatus = task.Result;
+                if (dependencyStatus == Firebase.DependencyStatus.Available)
+                {
+                    // Create and hold a reference to your FirebaseApp,
+                    // where app is a Firebase.FirebaseApp property of your application class.
+                    m_firebaseApp = Firebase.FirebaseApp.DefaultInstance;
+
+                    Debug.Log("m_firebaseApp set!");
+
+                    // Set a flag here to indicate whether Firebase is ready to use by your app.
+                }
+                else
+                {
+                    UnityEngine.Debug.LogError(System.String.Format(
+                      "Could not resolve all Firebase dependencies: {0}", dependencyStatus));
+                    // Firebase Unity SDK is not safe to use here.
+                }
+            });
+#endif
 
             gamepadInit();
 
@@ -674,6 +705,8 @@ namespace Cardwheel
         {
             SoundManager.Instance.PlaySFXWinGame();
 
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("WIN_SCREEN_WHEEL_" + m_runData.WheelIdx);
+
             Logic.WinGame(m_gameData, m_runData);
 
             Logic.RoundComplete(m_runData, m_balance);
@@ -685,6 +718,8 @@ namespace Cardwheel
         public void GameOver()
         {
             SoundManager.Instance.PlaySFXGameOver();
+
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("GAME_OVER_WHEEL_" + m_runData.WheelIdx);
 
             Logic.GameOver(m_gameData);
 

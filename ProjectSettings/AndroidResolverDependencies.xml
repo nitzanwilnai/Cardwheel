@@ -3,9 +3,23 @@
     <package>androidx.constraintlayout:constraintlayout:2.1.4</package>
     <package>androidx.lifecycle:lifecycle-process:2.6.2</package>
     <package>com.google.android.gms:play-services-ads:24.5.0</package>
+    <package>com.google.android.gms:play-services-base:18.9.0</package>
     <package>com.google.android.ump:user-messaging-platform:3.2.0</package>
+    <package>com.google.firebase:firebase-analytics:23.0.0</package>
+    <package>com.google.firebase:firebase-analytics-unity:13.6.0</package>
+    <package>com.google.firebase:firebase-app-unity:13.6.0</package>
+    <package>com.google.firebase:firebase-common:22.0.1</package>
+    <package>com.google.firebase:firebase-crashlytics-ndk:20.0.3</package>
+    <package>com.google.firebase:firebase-crashlytics-unity:13.6.0</package>
   </packages>
-  <files />
+  <files>
+    <file>Assets/GeneratedLocalRepo/Firebase/m2repository/com/google/firebase/firebase-analytics-unity/13.6.0/firebase-analytics-unity-13.6.0.aar</file>
+    <file>Assets/GeneratedLocalRepo/Firebase/m2repository/com/google/firebase/firebase-analytics-unity/13.6.0/firebase-analytics-unity-13.6.0.pom</file>
+    <file>Assets/GeneratedLocalRepo/Firebase/m2repository/com/google/firebase/firebase-app-unity/13.6.0/firebase-app-unity-13.6.0.aar</file>
+    <file>Assets/GeneratedLocalRepo/Firebase/m2repository/com/google/firebase/firebase-app-unity/13.6.0/firebase-app-unity-13.6.0.pom</file>
+    <file>Assets/GeneratedLocalRepo/Firebase/m2repository/com/google/firebase/firebase-crashlytics-unity/13.6.0/firebase-crashlytics-unity-13.6.0.aar</file>
+    <file>Assets/GeneratedLocalRepo/Firebase/m2repository/com/google/firebase/firebase-crashlytics-unity/13.6.0/firebase-crashlytics-unity-13.6.0.pom</file>
+  </files>
   <settings>
     <setting name="androidAbis" value="arm64-v8a,armeabi-v7a" />
     <setting name="bundleId" value="com.nitzan.games.Cardwheel" />

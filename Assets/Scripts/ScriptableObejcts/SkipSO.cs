@@ -29,5 +29,8 @@ namespace Cardwheel
         public bool BossReroll;
         public int CardPackIdx = -1;
         public bool CanShowFirstTwoRounds;
+        public int IncreaseJokerSellValue;
+        public int AddCommonRandomJoker;
+        public int AddUncommonRandomJoker;
     }
 }

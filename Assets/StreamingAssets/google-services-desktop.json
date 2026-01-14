@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "156439192496",
+    "project_id": "cardwheel-ios",
+    "storage_bucket": "cardwheel-ios.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:156439192496:android:10fc9b5268067257bc6c75",
+        "android_client_info": {
+          "package_name": "com.nitzan.games.Cardwheel"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA75o--xsDDgtRrsSlFGztOh4vuEcPj0d8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

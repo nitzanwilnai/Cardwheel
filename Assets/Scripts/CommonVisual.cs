@@ -124,6 +124,7 @@ namespace Cardwheel
                 JokerGUIs[jkrIdx].JokerChips.SetActive(false);
                 JokerGUIs[jkrIdx].JokerMult.SetActive(false);
                 JokerGUIs[jkrIdx].JokerColor.SetActive(false);
+                JokerGUIs[jkrIdx].JokerMoney.SetActive(false);
             }
 
             for (int jkrIdx = 0; jkrIdx < runData.JokerCount; jkrIdx++)

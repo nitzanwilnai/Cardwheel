@@ -443,6 +443,7 @@ namespace Cardwheel
                 if (balance.CardPackType[runData.SelectedShopCardPackIdx] == CARD_PACK_TYPE.CHIPS)
                     Game.Instance.SetMenuState(MENU_STATE.CARD_PACK_CHIPS);
             }
+
             for (int jkrIdx = 0; jkrIdx < runData.JokerCount; jkrIdx++)
             {
                 int jokerType = runData.JokerTypes[jkrIdx];
@@ -462,8 +463,25 @@ namespace Cardwheel
                         CommonVisual.JokerGUIs[jkrIdx].JokerMultText.text = "+x" + balance.JokerBalance.RoundSkippedMultiplierMult[jokerType];
                         CommonVisual.JokerGUIs[jkrIdx].JokerMult.SetActive(true);
                     }
+                    if (balance.SkipBalance.IncreaseJokerSellValue[skipType] > 0)
+                    {
+                        CommonVisual.JokerGUIs[jkrIdx].JokerMoneyText.text = "+" + balance.SkipBalance.IncreaseJokerSellValue[skipType];
+                        CommonVisual.JokerGUIs[jkrIdx].JokerMoney.SetActive(true);
+                    }
                 }
             }
+
+            if (balance.SkipBalance.AddCommonRandomJoker[skipType] > 0 ||
+                balance.SkipBalance.AddUncommonRandomJoker[skipType] > 0)
+            {
+                CommonVisual.ShowJokers(runData, balance, m_cardsBallsSpinWheelGUI.JokerParent);
+
+                int numNewJokers = balance.SkipBalance.AddCommonRandomJoker[skipType] + balance.SkipBalance.AddUncommonRandomJoker[skipType];
+                for (int jkrIdx = runData.JokerCount - numNewJokers; jkrIdx < runData.JokerCount; jkrIdx++)
+                    CommonVisual.JokerGUIs[jkrIdx].Animation.Play("ScoreGrow");
+            }
+
+
         }
 
         private void tryUseBossReroll()
