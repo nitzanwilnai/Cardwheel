@@ -558,7 +558,12 @@ namespace Cardwheel
             }
 
             if (Keyboard.current.xKey.wasPressedThisFrame)
-                m_runData.TotalChips += 100000;
+            {
+                if (m_runData.TotalChips < 100000)
+                    m_runData.TotalChips += 100000;
+                else
+                    m_runData.TotalChips *= 2;
+            }
 
             if (Keyboard.current.cKey.wasPressedThisFrame)
                 RoundComplete();
@@ -620,6 +625,15 @@ namespace Cardwheel
             SoundManager.Instance.PlaySFXButtonOK();
 
             StartGame(m_runData.StartSeed, m_runData.WheelIdx);
+        }
+
+        public void EndlessMode()
+        {
+            SoundManager.Instance.PlaySFXButtonOK();
+
+            Logic.StartEndlessMode(m_runData, m_balance);
+
+            SetMenuState(MENU_STATE.ROUND_COMPLETE);
         }
 
         public void StartNewRunSameWheel()

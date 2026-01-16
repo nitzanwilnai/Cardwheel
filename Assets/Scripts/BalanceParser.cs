@@ -379,6 +379,7 @@ namespace Cardwheel
                         bw.Write(bossSO.Description);
                         bw.Write((int)bossSO.LevelRange.x);
                         bw.Write((int)bossSO.LevelRange.y);
+                        bw.Write(bossSO.EndlessMode);
                     }
 
                     objects.Clear();

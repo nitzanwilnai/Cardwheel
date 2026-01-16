@@ -127,7 +127,7 @@ public static class CommonSlotsVisual
 
         if (round % 3 == 2)
         {
-            int bossType = Logic.GetBossTypeForRound(runData);
+            int bossType = Logic.GetBossTypeForRound(runData, balance);
 
             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.SLOT_EFFECTS_HIDDEN)
                 showSlotEffects = false;

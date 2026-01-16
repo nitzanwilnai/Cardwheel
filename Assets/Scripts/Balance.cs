@@ -111,6 +111,7 @@ namespace Cardwheel
         public BOSS_EFFECT[] BossEffect;
         public string[] Description;
         public Vector2[] LevelRange;
+        public bool[] EndlessMode;
     }
 
     public class SkipBalance
@@ -717,12 +718,14 @@ namespace Cardwheel
                 BossBalance.BossEffect = new BOSS_EFFECT[numBosses];
                 BossBalance.Description = new string[numBosses];
                 BossBalance.LevelRange = new Vector2[numBosses];
+                BossBalance.EndlessMode = new bool[numBosses];
                 for (int i = 0; i < numBosses; i++)
                 {
                     BossBalance.BossEffect[i] = (BOSS_EFFECT)br.ReadByte();
                     BossBalance.Description[i] = br.ReadString();
                     BossBalance.LevelRange[i].x = br.ReadInt32();
                     BossBalance.LevelRange[i].y = br.ReadInt32();
+                    BossBalance.EndlessMode[i] = br.ReadBoolean();
                 }
 
                 int numVouchers = br.ReadInt32();

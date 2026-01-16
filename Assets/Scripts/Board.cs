@@ -346,7 +346,7 @@ namespace Cardwheel
             int useBallSprite = 1;
             if (Logic.InBossRound(runData))
             {
-                int bossType = Logic.GetBossTypeForRound(runData);
+                int bossType = Logic.GetBossTypeForRound(runData, balance);
 
                 if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.BALL_EFFECTS_HIDDEN)
                     useBallSprite = 0;
@@ -1271,7 +1271,7 @@ namespace Cardwheel
 
                     if (Logic.InBossRound(runData))
                     {
-                        int bossType = Logic.GetBossTypeForRound(runData);
+                        int bossType = Logic.GetBossTypeForRound(runData, balance);
 
                         if (runData.CurrentSpin == 1)
                         {
@@ -1451,9 +1451,6 @@ namespace Cardwheel
                 selectButton((MENU_BUTTONS)selectedJokerButton);
 
 #if UNITY_EDITOR
-            if (Keyboard.current.spaceKey.wasReleasedThisFrame)
-                dropBalls();
-
             if (Keyboard.current.vKey.wasReleasedThisFrame)
                 for (int i = 0; i < m_numBalls; i++)
                     ParticleSystemSmokeBoard.Emit(Color.white, BallsGO[i].transform.position, 1.0f);
@@ -1549,7 +1546,7 @@ namespace Cardwheel
                     m_slotAnimTimer = m_slotAnimTime;
                 }
 
-                int bossType = Logic.GetBossTypeForRound(runData);
+                int bossType = Logic.GetBossTypeForRound(runData, balance);
                 if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.JUMBLE_BALLS)
                 {
                     Logic.JumbleBalls(runData, balance);

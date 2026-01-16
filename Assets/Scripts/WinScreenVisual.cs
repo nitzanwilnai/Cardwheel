@@ -44,6 +44,7 @@ namespace Cardwheel
         GUIButtonData m_mainMenuButtonData;
         GUIButtonData m_newGameButtonData;
         GUIButtonData m_retryButtonData;
+        GUIButtonData m_continueButtonData;
 
         CardsBallsSpinWheelGUI m_cardsBallsSpinWheelGUI;
 
@@ -70,16 +71,19 @@ namespace Cardwheel
             m_mainMenuButtonData = guiButtonRef.GetButtonData("MainMenu");
             m_newGameButtonData = guiButtonRef.GetButtonData("NewGame");
             m_retryButtonData = guiButtonRef.GetButtonData("Retry");
+            m_continueButtonData = guiButtonRef.GetButtonData("Continue");
 
             m_copyButtonData.Button.onClick.AddListener(Game.Instance.CopySeed);
             m_mainMenuButtonData.Button.onClick.AddListener(Game.Instance.GoToMainMenu);
             m_newGameButtonData.Button.onClick.AddListener(Game.Instance.StartNewRunSameWheel);
             m_retryButtonData.Button.onClick.AddListener(Game.Instance.RetryRun);
+            m_continueButtonData.Button.onClick.AddListener(Game.Instance.EndlessMode);
 
             CommonButtonVisual.AddSelectedBorder(m_copyButtonData);
             CommonButtonVisual.AddSelectedBorder(m_mainMenuButtonData);
             CommonButtonVisual.AddSelectedBorder(m_newGameButtonData);
             CommonButtonVisual.AddSelectedBorder(m_retryButtonData);
+            CommonButtonVisual.AddSelectedBorder(m_continueButtonData);
 
             CommonVisual.InitCardsBallsSpinWheelGUI(balance, guiRef.GetGameObject("CardsAndBalls"), ref m_cardsBallsSpinWheelGUI);
 

@@ -458,7 +458,7 @@ namespace Cardwheel
 
         public static string GetBossDescription(RunData runData, Balance balance, string title)
         {
-            int bossType = Logic.GetBossTypeForRound(runData);
+            int bossType = Logic.GetBossTypeForRound(runData, balance);
             string bossText = title + balance.BossBalance.Description[bossType];
 
             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.ONLY_PLAY_MOST_USED_COLOR)

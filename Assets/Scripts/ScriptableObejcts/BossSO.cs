@@ -22,5 +22,6 @@ namespace Cardwheel
         public BOSS_EFFECT bossEffects;
         public string Description;
         public Vector2 LevelRange;
+        public bool EndlessMode;
     }
 }
