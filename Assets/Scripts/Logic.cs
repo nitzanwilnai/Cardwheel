@@ -79,9 +79,9 @@ public static class Logic
         runData.JokerCount = 0;
         runData.JokerTypes = new int[balance.MaxJokersInHand];
         runData.JokerSellValues = new int[balance.MaxJokersInHand];
-        runData.JokerChips = new int[balance.MaxJokersInHand];
-        runData.JokerMultiplierAdd = new float[balance.MaxJokersInHand];
-        runData.JokerMultiplierMult = new float[balance.MaxJokersInHand];
+        runData.JokerChips = new double[balance.MaxJokersInHand];
+        runData.JokerMultiplierAdd = new double[balance.MaxJokersInHand];
+        runData.JokerMultiplierMult = new double[balance.MaxJokersInHand];
         runData.JokerSpins = new int[balance.MaxJokersInHand];
         runData.JokerRounds = new int[balance.MaxJokersInHand];
         runData.JokerSkipCount = new int[balance.MaxJokersInHand];
@@ -98,7 +98,7 @@ public static class Logic
 
         runData.BallScoresCount = new int[(int)SLOT_TYPE.LAST];
 
-        runData.BaseChips = new int[(int)SLOT_TYPE.LAST];
+        runData.BaseChips = new double[(int)SLOT_TYPE.LAST];
 
         runData.SlotScored = new int[balance.NumSlots];
         runData.SlotType = new SLOT_TYPE[balance.NumSlots];
@@ -288,12 +288,12 @@ public static class Logic
 
         // for (int i = 0; i < runData.BallTypes.Length; i++)
         //     runData.BallTypes[i] = i;
-        // runData.BallTypes[0] = 1;
-        // runData.BallTypes[1] = 2;
-        // runData.BallTypes[2] = 3;
-        // runData.BallTypes[3] = 4;
-        // runData.BallTypes[4] = 5;
-        // runData.BallTypes[5] = 6;
+        runData.BallTypes[0] = 1;
+        runData.BallTypes[1] = 3;
+        runData.BallTypes[2] = 4;
+        runData.BallTypes[3] = 5;
+        runData.BallTypes[4] = 12;
+        runData.BallTypes[5] = 0;
 
         // int cnt = 0;
         // for (int i = 0; i < runData.SlotModType.Length; i++)
@@ -304,9 +304,9 @@ public static class Logic
         // runData.SlotModType[9] = 0;
         // runData.SlotModType[10] = 0;
 
-        for (int i = 0; i < balance.BossBalance.NumBosses; i++)
-            if (balance.BossBalance.BossEffect[i] == BOSS_EFFECT.LOSE_MONEY_EVERY_BALL_MOST_COMMON_COLOR)
-                runData.BossType[0] = i;
+        // for (int i = 0; i < balance.BossBalance.NumBosses; i++)
+        //     if (balance.BossBalance.BossEffect[i] == BOSS_EFFECT.LOSE_MONEY_EVERY_BALL_MOST_COMMON_COLOR)
+        //         runData.BossType[0] = i;
 
         // runData.VoucherSlotMostPlayedColor = true;
 
@@ -899,14 +899,14 @@ public static class Logic
                 runData.BallScoreIdxs[ballCount++] = runData.SlotScored[i];
     }
 
-    public static int CalculateSlotBallChips(RunData runData, Balance balance, int ballIdx)
+    public static double CalculateSlotBallChips(RunData runData, Balance balance, int ballIdx)
     {
         int slotIdx = runData.BallSlotIdx[ballIdx];
         int slotType = (int)runData.SlotTypeInGame[slotIdx];
 
         runData.BallScoresCount[slotType]++;
 
-        int baseChips = runData.BaseChips[slotType];
+        double baseChips = runData.BaseChips[slotType];
 
         if (InBossRound(runData))
             if (balance.BossBalance.BossEffect[GetBossTypeForRound(runData, balance)] == BOSS_EFFECT.MOST_PLAYED_BASE_CHIPS_TO_FIVE)
@@ -914,7 +914,7 @@ public static class Logic
                     baseChips = 5;
 
         // Debug.Log("slotType " + slotType + " m_ballScoresCount " + runData.BallScoresCount.ToString());
-        int chips = runData.BallScoresCount[slotType] * baseChips * runData.UseBaseChips;
+        double chips = runData.BallScoresCount[slotType] * baseChips * runData.UseBaseChips;
         int slotModType = runData.SlotModType[slotIdx];
         if (slotModType > -1)
             chips += balance.CardPackSlotBalance.Chips[slotModType] * runData.UseSlotsSpecial;
@@ -922,7 +922,7 @@ public static class Logic
         chips *= runData.UseSlotType[slotType];
 
         if (!scoringBossCheck(runData, balance))
-            chips = 0;
+            chips = 0.0d;
 
         runData.SpinChips += chips;
 
@@ -1198,9 +1198,9 @@ public static class Logic
         return -1;
     }
 
-    public static int CalculateJokerChipsAdd(RunData runData, Balance balance, int jokerIdx, int jokerType)
+    public static double CalculateJokerChipsAdd(RunData runData, Balance balance, int jokerIdx, int jokerType)
     {
-        int chips = 0;
+        double chips = 0;
 
         Span<int> slotTypeCount = stackalloc int[4];
         CountNumBallsOnSlotType(runData, balance.MaxBalls, slotTypeCount);
@@ -1241,7 +1241,7 @@ public static class Logic
         chips *= runData.UseJoker[jokerIdx];
 
         if (!scoringBossCheck(runData, balance))
-            chips = 0;
+            chips = 0.0d;
 
         // Debug.Log("jokerType " + jokerType + " chips " + chips);
 
@@ -1250,9 +1250,9 @@ public static class Logic
         return chips;
     }
 
-    public static float CalculateJokerMultiplierAdd(RunData runData, Balance balance, int jokerIdx, int jokerType)
+    public static double CalculateJokerMultiplierAdd(RunData runData, Balance balance, int jokerIdx, int jokerType)
     {
-        float mult = 0.0f;
+        double mult = 0.0d;
 
         Span<int> slotTypeCount = stackalloc int[4];
         CountNumBallsOnSlotType(runData, balance.MaxBalls, slotTypeCount);
@@ -1338,9 +1338,9 @@ public static class Logic
         return (float)numTriggerSpins * data.x;
     }
 
-    public static float CalculateJokerMultiplierMult(RunData runData, Balance balance, int jokerIdx, int jokerType)
+    public static double CalculateJokerMultiplierMult(RunData runData, Balance balance, int jokerIdx, int jokerType)
     {
-        float mult = 0.0f;
+        double mult = 0.0f;
 
         // Debug.Log("jokerType " + jokerType + " mult " + mult);
 
@@ -1386,12 +1386,12 @@ public static class Logic
 
         mult *= runData.UseJoker[jokerIdx];
 
-        mult += 1.0f;
+        mult += 1.0d;
 
         if (!scoringBossCheck(runData, balance))
             mult = 0;
 
-        if (mult > 1.0f)
+        if (mult > 1.0d)
             runData.SpinMultiplier *= mult;
 
 
@@ -1469,9 +1469,9 @@ public static class Logic
         }
     }
 
-    public static int CalculateTotalScore(RunData runData)
+    public static double CalculateTotalScore(RunData runData)
     {
-        int roundTotalScore = Mathf.FloorToInt((float)runData.SpinChips * runData.SpinMultiplier);
+        double roundTotalScore = runData.SpinChips * runData.SpinMultiplier;
 
         if (runData.BestSpin < roundTotalScore)
             runData.BestSpin = roundTotalScore;
@@ -1509,21 +1509,21 @@ public static class Logic
         }
     }
 
-    public static int GetRoundGoal(RunData runData, Balance balance)
+    public static double GetRoundGoal(RunData runData, Balance balance)
     {
         return GetRoundGoal(runData, balance, runData.Round / 3, runData.Round % 3);
     }
-    public static int GetRoundGoal(RunData runData, Balance balance, int bigRound, int smallRound)
+    public static double GetRoundGoal(RunData runData, Balance balance, int bigRound, int smallRound)
     {
-        int goal = 0;
-        float mult = 1.0f;
+        double goal = 0;
+        double mult = 1.0f;
         if (bigRound >= balance.BaseChip.Length)
         {
             int diff = bigRound - (balance.BaseChip.Length - 1);
             mult = Mathf.Pow(2.0f, diff);
             bigRound = balance.BaseChip.Length - 1;
         }
-        goal = Mathf.FloorToInt(balance.BaseChip[bigRound] * balance.RoundChipMult[smallRound] * balance.SpinWheelBalance.GoalMultiplier[runData.WheelIdx] * mult);
+        goal = balance.BaseChip[bigRound] * balance.RoundChipMult[smallRound] * balance.SpinWheelBalance.GoalMultiplier[runData.WheelIdx] * mult;
 
         if (InBossRound(runData))
         {
@@ -1536,7 +1536,7 @@ public static class Logic
 
     public static bool CheckRoundComplete(RunData runData, Balance balance)
     {
-        int goal = GetRoundGoal(runData, balance);
+        double goal = GetRoundGoal(runData, balance);
         return (runData.TotalChips >= goal);
     }
 

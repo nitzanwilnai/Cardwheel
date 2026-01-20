@@ -15,11 +15,11 @@ using UnityEngine;
 
 namespace Cardwheel
 {
-    public static class RunDataIOV4
+    public static class RunDataIOV6
     {
         public static bool LoadRun(RunData runData)
         {
-            string fileName = Application.persistentDataPath + "/save.dat";
+            string fileName = Application.persistentDataPath + "/Cardwheel/save_v6.dat";
             if (File.Exists(fileName))
             {
                 using (var stream = File.Open(fileName, FileMode.Open))
@@ -102,6 +102,7 @@ namespace Cardwheel
                             runData.JokerSellValues[i] = br.ReadInt32();
                             runData.JokerChips[i] = br.ReadInt32();
                             runData.JokerMultiplierAdd[i] = br.ReadSingle();
+                            runData.JokerMultiplierMult[i] = br.ReadSingle();
                             runData.UseJoker[i] = br.ReadInt32();
                             runData.JokerSpins[i] = br.ReadInt32();
                             runData.JokerRounds[i] = br.ReadInt32();
@@ -158,7 +159,7 @@ namespace Cardwheel
                         runData.SkipShopRareJoker = br.ReadInt32();
 
                         int numBosses = br.ReadInt32();
-                        for (int i = 0; i < numBosses; i++)
+                        for (int i = 0; i < numBosses && i < runData.BossType.Length; i++)
                             runData.BossType[i] = br.ReadInt32();
                         runData.UseBallsSpecial = br.ReadInt32();
                         runData.UseSlotsSpecial = br.ReadInt32();
@@ -169,6 +170,7 @@ namespace Cardwheel
                         runData.WheelIdx = br.ReadInt32();
 
                         Debug.Log("RunDataIO.LoadRun " + br.ReadInt32());
+
                         return true;
                     }
                 }

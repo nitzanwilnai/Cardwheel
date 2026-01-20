@@ -33,9 +33,9 @@ namespace Cardwheel
         public MENU_STATE PrevMenuState;
 
         // in game
-        public int TotalChips;
-        public int SpinChips;
-        public float SpinMultiplier;
+        public double TotalChips;
+        public double SpinChips;
+        public double SpinMultiplier;
         public int Round;
         public int CurrentSpin;
         public int ExtraSkipSpin;
@@ -69,11 +69,11 @@ namespace Cardwheel
         public int JokerBallTriggerIdx;
 
         // gameover data
-        public int BestSpin;
+        public double BestSpin;
         public int[] ColorCount;
 
         // scoring
-        public int[] BaseChips;
+        public double[] BaseChips;
         public int[] BallScoreIdxs;
         public int[] BallScoresCount;
 
@@ -82,9 +82,9 @@ namespace Cardwheel
         public int[] JokerTypes;
         public int MaxJokersInHand;
         public int[] JokerSellValues;
-        public int[] JokerChips;
-        public float[] JokerMultiplierAdd;
-        public float[] JokerMultiplierMult;
+        public double[] JokerChips;
+        public double[] JokerMultiplierAdd;
+        public double[] JokerMultiplierMult;
         public int[] JokerSpins;
         public int[] JokerRounds;
         public int[] JokerSkipCount;

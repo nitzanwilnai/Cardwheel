@@ -549,12 +549,7 @@ namespace Cardwheel
 #if UNITY_EDITOR
             if (Keyboard.current.sKey.wasPressedThisFrame)
             {
-                if (!Directory.Exists("Screenshots"))
-                    Directory.CreateDirectory("Screenshots");
-
-                DateTimeOffset now = DateTime.UtcNow;
-                string name = "Screenshots/" + Screen.width + "x" + Screen.height + "_" + now.ToString("yyyy-MM-dd HH.mm.ss") + ".png";
-                ScreenCapture.CaptureScreenshot(name);
+                TakeScreenshot();
             }
 
             if (Keyboard.current.xKey.wasPressedThisFrame)
@@ -597,6 +592,26 @@ namespace Cardwheel
                 ShowError("TestError");
 
 #endif
+        }
+
+        public static void TakeScreenshot()
+        {
+            if (!Directory.Exists("Screenshots"))
+                Directory.CreateDirectory("Screenshots");
+
+            DateTimeOffset now = DateTime.UtcNow;
+            string name = "Screenshots/" + Screen.width + "x" + Screen.height + "_" + now.ToString("yyyy-MM-dd HH.mm.ss") + ".png";
+            ScreenCapture.CaptureScreenshot(name);
+        }
+
+        public static void TakeScreenshot2X()
+        {
+            if (!Directory.Exists("Screenshots"))
+                Directory.CreateDirectory("Screenshots");
+
+            DateTimeOffset now = DateTime.UtcNow;
+            string name = "Screenshots/" + Screen.width + "x" + Screen.height + "_" + now.ToString("yyyy-MM-dd HH.mm.ss") + ".png";
+            ScreenCapture.CaptureScreenshot(name, 2);
         }
 
         void LateUpdate()
@@ -658,6 +673,11 @@ namespace Cardwheel
             hideMenuState(m_runData.MenuState);
 
             if (RunDataIO.LoadRun(m_runData))
+            {
+                Debug.Log("Loaded rundata v7");
+                // loaded v7
+            }
+            else if (RunDataIOV6.LoadRun(m_runData))
             {
                 Debug.Log("Loaded rundata v6");
                 // loaded v6

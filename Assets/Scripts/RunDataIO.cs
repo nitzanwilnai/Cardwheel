@@ -17,7 +17,7 @@ namespace Cardwheel
 {
     public static class RunDataIO
     {
-        public static int VERSION = 6;
+        public static int VERSION = 7;
 
         public static void SaveRun(RunData runData, Balance balance)
         {
@@ -180,17 +180,22 @@ namespace Cardwheel
         public static MENU_STATE LoadMenuStateOnly()
         {
             if (File.Exists(Application.persistentDataPath + "/Cardwheel/save_v"+VERSION+".dat"))
-                return LoadMenuStateFromFile("save_v"+VERSION+".dat");
-            else if (File.Exists(Application.persistentDataPath + "/Cardwheel/save.dat"))
-                return LoadMenuStateFromFile("save.dat");
+                return LoadMenuStateFromFile(Application.persistentDataPath + "/Cardwheel/save_v"+VERSION+".dat");
+            if (File.Exists(Application.persistentDataPath + "/Cardwheel/save_v6.dat"))
+                return LoadMenuStateFromFile(Application.persistentDataPath + "/Cardwheel/save_v6.dat");
+            if (File.Exists(Application.persistentDataPath + "/save_v5.dat"))
+                return LoadMenuStateFromFile(Application.persistentDataPath + "/save_v5.dat");
+            if (File.Exists(Application.persistentDataPath + "/save_v4.dat"))
+                return LoadMenuStateFromFile(Application.persistentDataPath + "/save_v4.dat");
+            else if (File.Exists(Application.persistentDataPath + "/save.dat"))
+                return LoadMenuStateFromFile(Application.persistentDataPath + "/save.dat");
             else
                 return MENU_STATE.NONE;
         }
 
-        public static MENU_STATE LoadMenuStateFromFile(string filename)
+        public static MENU_STATE LoadMenuStateFromFile(string path)
         {
             MENU_STATE menuState = MENU_STATE.NONE;
-            string path = Application.persistentDataPath + "/Cardwheel/" + filename;
             if (File.Exists(path))
             {
                 using (var stream = File.Open(path, FileMode.Open))
@@ -230,9 +235,9 @@ namespace Cardwheel
                         for (int i = 0; i < runData.RoundSeeds.Length; i++)
                             runData.RoundSeeds[i] = br.ReadUInt32();
 
-                        runData.TotalChips = br.ReadInt32();
-                        runData.SpinChips = br.ReadInt32();
-                        runData.SpinMultiplier = br.ReadSingle();
+                        runData.TotalChips = br.ReadDouble();
+                        runData.SpinChips = br.ReadDouble();
+                        runData.SpinMultiplier = br.ReadDouble();
                         runData.Round = br.ReadInt32();
                         runData.CurrentSpin = br.ReadInt32();
                         runData.ExtraSkipSpin = br.ReadInt32();
@@ -273,7 +278,7 @@ namespace Cardwheel
                             runData.SlotColors[i].b = br.ReadSingle();
                             runData.SlotColors[i].a = br.ReadSingle();
                             runData.BallScoresCount[i] = br.ReadInt32();
-                            runData.BaseChips[i] = br.ReadInt32();
+                            runData.BaseChips[i] = br.ReadDouble();
                             runData.ColorCount[i] = br.ReadInt32();
                             runData.UseSlotType[i] = br.ReadInt32();
                         }
@@ -281,7 +286,7 @@ namespace Cardwheel
                         runData.MoneyAfterBoss = br.ReadInt32();
                         runData.BossRerolls = br.ReadInt32();
                         runData.LeastPlayedColorAtRoundStart = (SLOT_TYPE)br.ReadByte();
-                        runData.BestSpin = br.ReadInt32();
+                        runData.BestSpin = br.ReadDouble();
 
                         runData.JokerBallTriggerIdx = br.ReadInt32();
 
@@ -290,9 +295,9 @@ namespace Cardwheel
                         {
                             runData.JokerTypes[i] = br.ReadInt32();
                             runData.JokerSellValues[i] = br.ReadInt32();
-                            runData.JokerChips[i] = br.ReadInt32();
-                            runData.JokerMultiplierAdd[i] = br.ReadSingle();
-                            runData.JokerMultiplierMult[i] = br.ReadSingle();
+                            runData.JokerChips[i] = br.ReadDouble();
+                            runData.JokerMultiplierAdd[i] = br.ReadDouble();
+                            runData.JokerMultiplierMult[i] = br.ReadDouble();
                             runData.UseJoker[i] = br.ReadInt32();
                             runData.JokerSpins[i] = br.ReadInt32();
                             runData.JokerRounds[i] = br.ReadInt32();

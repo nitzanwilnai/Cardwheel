@@ -19,7 +19,7 @@ namespace Cardwheel
     {
         public static void LoadRun(RunData runData, Balance balance)
         {
-            string fileName = Application.persistentDataPath + "/Cardwheel/save.dat";
+            string fileName = Application.persistentDataPath + "/save.dat";
             if (File.Exists(fileName))
             {
                 using (var stream = File.Open(fileName, FileMode.Open))

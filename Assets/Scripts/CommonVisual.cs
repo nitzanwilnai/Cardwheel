@@ -162,54 +162,54 @@ namespace Cardwheel
         {
             if (balance.JokerBalance.ChipsIncreasePerSpin[jokerType] > 0)
             {
-                int chipIncrease = jokerIdx > -1 ? runData.JokerChips[jokerIdx] : 0;
-                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + chipIncrease + ")";
+                double chipIncrease = jokerIdx > -1 ? runData.JokerChips[jokerIdx] : 0;
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + chipIncrease.ToString("N0") + ")";
             }
 
             if (balance.JokerBalance.MultIncreasePerUnusedSpin[jokerType] != 0 ||
                 balance.JokerBalance.MultIncreasePerUsedSpin[jokerType] != 0)
             {
-                float multiplierAdd = jokerIdx > -1 ? runData.JokerMultiplierAdd[jokerIdx] : 0.0f;
+                double multiplierAdd = jokerIdx > -1 ? runData.JokerMultiplierAdd[jokerIdx] : 0.0f;
                 go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + multiplierAdd.ToString("N0") + "x)";
             }
 
             if (balance.JokerBalance.SubtractChipsPerSpin[jokerType].x > 0.0f)
             {
-                int chipIncrease = jokerIdx > -1 ? runData.JokerChips[jokerIdx] : 0;
-                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + chipIncrease + ")";
+                double chipIncrease = jokerIdx > -1 ? runData.JokerChips[jokerIdx] : 0;
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + chipIncrease.ToString("N0") + ")";
             }
             if (balance.JokerBalance.SubtractMultiplierAddPerRound[jokerType].x > 0.0f)
             {
-                float multiplierAdd = jokerIdx > -1 ? runData.JokerMultiplierAdd[jokerIdx] : balance.JokerBalance.SubtractMultiplierAddPerRound[jokerType].x;
+                double multiplierAdd = jokerIdx > -1 ? runData.JokerMultiplierAdd[jokerIdx] : balance.JokerBalance.SubtractMultiplierAddPerRound[jokerType].x;
                 go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + multiplierAdd.ToString("N0") + "x)";
             }
 
             if (balance.JokerBalance.ChipsIncreasePerBall[jokerType] > 0)
             {
-                int chipIncrease = jokerIdx > -1 ? runData.JokerChips[jokerIdx] : 0;
-                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + chipIncrease + ")";
+                double chipIncrease = jokerIdx > -1 ? runData.JokerChips[jokerIdx] : 0;
+                go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + chipIncrease.ToString("N0") + ")";
             }
 
             if (balance.JokerBalance.MultAddIncreasePerBall[jokerType] > 0)
             {
-                float multiplierAdd = jokerIdx > -1 ? runData.JokerMultiplierAdd[jokerIdx] : 0.0f;
+                double multiplierAdd = jokerIdx > -1 ? runData.JokerMultiplierAdd[jokerIdx] : 0.0f;
                 go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + multiplierAdd.ToString("N1") + "x)";
             }
 
             if (balance.JokerBalance.MultMultIncreasePerBall[jokerType] > 0)
             {
-                float multiplierMult = jokerIdx > -1 ? runData.JokerMultiplierMult[jokerIdx] : 0.0f;
+                double multiplierMult = jokerIdx > -1 ? runData.JokerMultiplierMult[jokerIdx] : 0.0f;
                 go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current x" + multiplierMult.ToString("N2") + ")";
             }
 
             if (balance.JokerBalance.MultIncreaseForSize[jokerType] > 0.0f)
             {
-                float multiplierAdd = jokerIdx > -1 ? runData.JokerMultiplierAdd[jokerIdx] : 0.0f;
+                double multiplierAdd = jokerIdx > -1 ? runData.JokerMultiplierAdd[jokerIdx] : 0.0f;
                 go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + multiplierAdd.ToString("N0") + "x)";
             }
             if (balance.JokerBalance.BallIncMultRemoveSlotMod[jokerType] > 0)
             {
-                float multIncrease = jokerIdx > -1 ? runData.JokerMultiplierAdd[jokerIdx] : 0;
+                double multIncrease = jokerIdx > -1 ? runData.JokerMultiplierAdd[jokerIdx] : 0;
                 go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + multIncrease + ")";
             }
             if (balance.JokerBalance.IncreaseSellValueEveryRound[jokerType] > 0)
@@ -430,9 +430,9 @@ namespace Cardwheel
 
         }
 
-        public static string GetMultiplierString(float value)
+        public static string GetMultiplierString(double value)
         {
-            if (value - Mathf.Floor(value) > 0.0f)
+            if (value - System.Math.Floor(value) > 0.0f)
                 return value.ToString("N2");
             else
                 return value.ToString("N1");

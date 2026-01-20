@@ -458,7 +458,7 @@ namespace Cardwheel
             SoundManager.Instance.PlaySFXScoring();
         }
 
-        public void ShowBallChipsPopup(int ballIdx, int chips)
+        public void ShowBallChipsPopup(int ballIdx, double chips)
         {
             Vector3 ballPos = BallsGO[ballIdx].transform.position;
             BallsChipsGO.transform.position = new Vector3(ballPos.x, ballPos.y, ballPos.z - 10.0f);
@@ -737,8 +737,8 @@ namespace Cardwheel
                             int ballIdx = runData.BallScoreIdxs[m_scoringIdx];
                             m_scoringIdx++;
 
-                            int chips = Logic.CalculateSlotBallChips(runData, balance, ballIdx);
-                            if (chips > 0)
+                            double chips = Logic.CalculateSlotBallChips(runData, balance, ballIdx);
+                            if (chips > 0.0d)
                             {
                                 Debug.Log(Time.realtimeSinceStartupAsDouble + " " + GameState.ToString() + "  " + chips.ToString() + " Chips for Ball " + runData.BallTypesInGame[ballIdx].ToString() + " in Slot ");
 
@@ -956,8 +956,8 @@ namespace Cardwheel
                             int jokerType = runData.JokerTypes[jokerIdx];
                             if (jokerType > -1)
                             {
-                                int chips = Logic.CalculateJokerChipsAdd(runData, balance, jokerIdx, jokerType);
-                                if (chips > 0)
+                                double chips = Logic.CalculateJokerChipsAdd(runData, balance, jokerIdx, jokerType);
+                                if (chips > 0.0d)
                                 {
                                     Debug.Log(Time.realtimeSinceStartupAsDouble + " " + GameState.ToString() + "  " + chips.ToString() + " Chips for Joker " + jokerType.ToString());
 
@@ -994,8 +994,8 @@ namespace Cardwheel
                             int jokerType = runData.JokerTypes[jokerIdx];
                             if (jokerType > -1)
                             {
-                                float mult = Logic.CalculateJokerMultiplierAdd(runData, balance, jokerIdx, jokerType);
-                                if (mult > 0.0f)
+                                double mult = Logic.CalculateJokerMultiplierAdd(runData, balance, jokerIdx, jokerType);
+                                if (mult > 0.0d)
                                 {
                                     Debug.Log(Time.realtimeSinceStartupAsDouble + " " + GameState.ToString() + "  " + mult.ToString() + "x Multiplier Add for Joker " + jokerType.ToString());
 
@@ -1099,8 +1099,8 @@ namespace Cardwheel
                             int jokerType = runData.JokerTypes[jokerIdx];
                             if (jokerType > -1)
                             {
-                                float mult = Logic.CalculateJokerMultiplierMult(runData, balance, jokerIdx, jokerType);
-                                if (mult > 1.0f)
+                                double mult = Logic.CalculateJokerMultiplierMult(runData, balance, jokerIdx, jokerType);
+                                if (mult > 1.0d)
                                 {
                                     m_scoringTimer = 0.0f;
                                     Debug.Log(Time.realtimeSinceStartupAsDouble + " " + GameState.ToString() + "  " + mult.ToString() + "x Multiplier Mult for Joker " + jokerType.ToString());
@@ -1122,7 +1122,7 @@ namespace Cardwheel
                 {
                     m_scoringTimer = 0.0f;
 
-                    int roundTotalScore = Logic.CalculateTotalScore(runData);
+                    double roundTotalScore = Logic.CalculateTotalScore(runData);
                     m_totalRoundScoreText.text = roundTotalScore.ToString("N0");
                     m_totalRoundScoreAnimation.Play();
 
@@ -1313,6 +1313,11 @@ namespace Cardwheel
                         float colorMult = SlotScaleAnimCurve.Evaluate(value) * 0.5f;
                         int slotType = (int)runData.SlotTypeInGame[slotIdx];
                         m_scoringSlots[slotIdx].SpriteRenderer.color = runData.SlotColors[slotType] + Color.white * colorMult;
+
+#if UNITY_EDITOR
+                        if (value <= dt)
+                            Game.TakeScreenshot2X();
+#endif
                     }
                 }
             }
