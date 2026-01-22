@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.0.61f1
-CRC: 726407163
+CRC: 2256753850
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 5c7cca591d3efed86274e516c6da6601
+    Hash: bc542c901aee04df0acc94f4e67dd2bc
   TypeTreeHash:
     serializedVersion: 2
     Hash: 543f217589179194a7c0c2500a6ee5da
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 5696efa75432bf35c70e9313c1d51489
+    Hash: a8b2f48dd75257cde92c6b13229162e1
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -201,7 +201,7 @@ Assets:
 - Assets/Prefabs/Descriptions/Joker 0099 Gain +x0.01 mult for every ball on orange.prefab
 - Assets/Prefabs/Common/Selected.prefab
 - Assets/Textures/Jokers/0013 - Joker.png
-- Assets/Textures/Balls/B 0003 - Money.png
+- Assets/Textures/Balls/B 0004 - Money.png
 - Assets/Textures/Jokers/0030 - Joker Change Slot to Money on First Ball.png
 - Assets/Textures/Jokers/0024 - Joker +1 Mult Per Unused Spin.png
 - Assets/Textures/Jokers/0061 - Joker +2x mult for every ball falling on a modified
@@ -334,7 +334,7 @@ Assets:
 - Assets/Prefabs/Descriptions/Joker 0117 x2 mult if ball falls on orange AND blue.prefab
 - Assets/Prefabs/Descriptions/Joker 0091 Gain +0.1x mult for every ball on orange.prefab
 - Assets/Prefabs/Descriptions/Pack Balls - 0000 - Chips.prefab
-- Assets/Textures/Balls/B 0002 - Mult Mult.png
+- Assets/Textures/Balls/B 0003 - Mult Mult.png
 - Assets/Prefabs/Common/UI - Tutorial.prefab
 - Assets/Prefabs/Descriptions/Pack Balls - 0007 - Mult Red.prefab
 - Assets/Textures/Jokers/0105 - Joker x5 if no other jokers in hand.png

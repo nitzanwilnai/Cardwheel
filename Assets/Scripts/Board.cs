@@ -309,7 +309,7 @@ namespace Cardwheel
             // Debug.Log("Show() GameState " + GameState);
 
             m_goalText.text = Logic.GetRoundGoal(runData, balance).ToString("N0");
-            m_totalScoreText.text = runData.TotalChips.ToString("N0");
+            m_totalScoreText.text = CommonVisual.FormatScientific(runData.TotalChips);
 
             m_UI.SetActive(true);
             BoardSpites.SetActive(true);
@@ -446,7 +446,7 @@ namespace Cardwheel
 
         void animateRoundChipsText()
         {
-            m_roundChipsText.text = runData.SpinChips.ToString("N0");
+            m_roundChipsText.text = CommonVisual.FormatScientific(runData.SpinChips);
             m_roundScoreAnimation.Play();
             SoundManager.Instance.PlaySFXScoring();
         }
@@ -1126,7 +1126,7 @@ namespace Cardwheel
                     m_totalRoundScoreText.text = roundTotalScore.ToString("N0");
                     m_totalRoundScoreAnimation.Play();
 
-                    m_totalScoreText.text = runData.TotalChips.ToString("N0");
+                    m_totalScoreText.text = CommonVisual.FormatScientific(runData.TotalChips);
                     m_totalScoreAnimation.Play();
                     SoundManager.Instance.PlaySFXScoringTotal();
 
@@ -1313,11 +1313,6 @@ namespace Cardwheel
                         float colorMult = SlotScaleAnimCurve.Evaluate(value) * 0.5f;
                         int slotType = (int)runData.SlotTypeInGame[slotIdx];
                         m_scoringSlots[slotIdx].SpriteRenderer.color = runData.SlotColors[slotType] + Color.white * colorMult;
-
-#if UNITY_EDITOR
-                        if (value <= dt)
-                            Game.TakeScreenshot2X();
-#endif
                     }
                 }
             }
@@ -1488,7 +1483,7 @@ namespace Cardwheel
 
         public void StartRound(RunData runData, Balance balance)
         {
-            m_totalScoreText.text = runData.TotalChips.ToString("N0");
+            m_totalScoreText.text = CommonVisual.FormatScientific(runData.TotalChips);
 
             runData.SpinWheelAngle = 0.0f;
 

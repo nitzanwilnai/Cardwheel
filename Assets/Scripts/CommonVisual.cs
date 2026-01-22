@@ -9,6 +9,7 @@
   See the LICENSE file for full legal terms.
 */
 
+using System;
 using CommonTools;
 using TMPro;
 using UnityEngine;
@@ -602,5 +603,21 @@ namespace Cardwheel
 
             CardPackCommonVisual.ShowRerollButton(runData, balance, rerollButtonData.Button, rerollCostText);
         }
+
+        public static string FormatScientific(double value)
+        {
+            if (value < 1000000000)
+                return value.ToString("N0");
+            else
+            {
+                int exponent = (int)Math.Floor(Math.Log10(value));
+                double mantissa = value / Math.Pow(10, exponent);
+
+                // Keep mantissa between 1.00–9.99
+                return mantissa.ToString("0.00") + "e" + exponent;
+            }
+        }
+
     }
+
 }

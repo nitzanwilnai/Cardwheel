@@ -10,9 +10,7 @@
 */
 
 using System;
-using System.Linq;
 using Cardwheel;
-using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 
 public static class Logic
@@ -455,7 +453,9 @@ public static class Logic
     public static int GetBossTypeForRound(RunData runData, Balance balance)
     {
         int bossIdx = (runData.Round / 3) % runData.BossType.Length;
+
         int bossType = runData.BossType[bossIdx % balance.BossBalance.NumBosses];
+
         return bossType;
     }
 
@@ -478,7 +478,7 @@ public static class Logic
     public static void SetDataForNextRound(RunData runData, Balance balance)
     {
         runData.CurrentSpin = 0;
-        runData.TotalChips = 0;
+        runData.TotalChips = 0.0d;
 
         runData.ShopRerollCount = 0;
         runData.CardPackRerollCount = 0;
@@ -533,6 +533,7 @@ public static class Logic
                 turnOffOneColor(runData, balance, (int)SLOT_TYPE.BLUE);
 
             }
+
             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.ONLY_RED_ORANGE)
             {
                 turnOffOneColor(runData, balance, (int)SLOT_TYPE.GREEN);
@@ -598,7 +599,6 @@ public static class Logic
                 }
             }
         }
-
 
         spinsChange += runData.ExtraSkipSpin + runData.VoucherSpins;
         runData.MaxSpinsThisRound = spinsChange + balance.SpinWheelBalance.Spins[runData.WheelIdx];
@@ -1222,9 +1222,6 @@ public static class Logic
 
 
             chips += (int)GetValueForTriggerSpins(runData, balance.JokerBalance.ChipsIncreasePerXSpins[jokerType], jokerIdx);
-
-            if (Mathf.FloorToInt(balance.JokerBalance.ChipsIncreasePerXSpins[jokerType].y) > 0 && runData.JokerSpins[jokerIdx] % Mathf.FloorToInt(balance.JokerBalance.ChipsIncreasePerXSpins[jokerType].y) == 0)
-                Debug.Log("Increase chips! runData.JokerSpins[" + jokerIdx + "] " + runData.JokerSpins[jokerIdx] + " balance.JokerBalance.ChipsIncreasePerXSpins[jokerType] " + balance.JokerBalance.ChipsIncreasePerXSpins[jokerType].ToString());
         }
 
         chips += balance.JokerBalance.ChipsPerDollar[jokerType] * runData.Money;
@@ -1274,9 +1271,6 @@ public static class Logic
                     runData.JokerMultiplierAdd[jokerIdx] += slotTypeCount[slotType] * balance.JokerBalance.MultAddIncreasePerBall[jokerType];
 
             mult += GetValueForTriggerSpins(runData, balance.JokerBalance.MultAddIncreasePerXSpins[jokerType], jokerIdx);
-
-            if (Mathf.FloorToInt(balance.JokerBalance.MultAddIncreasePerXSpins[jokerType].y) > 0 && runData.JokerSpins[jokerIdx] % Mathf.FloorToInt(balance.JokerBalance.MultAddIncreasePerXSpins[jokerType].y) == 0)
-                Debug.Log("Increase add mult! runData.JokerSpins[" + jokerIdx + "] " + runData.JokerSpins[jokerIdx] + " balance.JokerBalance.MultAddIncreasePerXSpins[jokerType] " + balance.JokerBalance.MultAddIncreasePerXSpins[jokerType].ToString());
         }
 
         int numNoJokers = runData.MaxJokersInHand - runData.JokerCount;
@@ -1360,9 +1354,6 @@ public static class Logic
                     runData.JokerMultiplierMult[jokerIdx] += slotTypeCount[slotType] * balance.JokerBalance.MultMultIncreasePerBall[jokerType];
 
             mult += GetValueForTriggerSpins(runData, balance.JokerBalance.MultMultIncreasePerXSpins[jokerType], jokerIdx);
-
-            if (Mathf.FloorToInt(balance.JokerBalance.MultMultIncreasePerXSpins[jokerType].y) > 0 && runData.JokerSpins[jokerIdx] % Mathf.FloorToInt(balance.JokerBalance.MultMultIncreasePerXSpins[jokerType].y) == 0)
-                Debug.Log("Increase mult mult! runData.JokerSpins[" + jokerIdx + "] " + runData.JokerSpins[jokerIdx] + " balance.JokerBalance.MultMultIncreasePerXSpins[jokerType] " + balance.JokerBalance.MultMultIncreasePerXSpins[jokerType].ToString());
         }
 
         mult += runData.JokerMultiplierMult[jokerIdx];
@@ -1890,9 +1881,6 @@ public static class Logic
                 }
             }
         }
-
-        for (int i = 0; i < maxCards; i++)
-            Debug.Log("GetCardPackCards runData.CardPackCardIdxs[" + i + "] " + runData.CardPackCardIdxs[i]);
     }
 
     public static void SellJoker(RunData runData, int jokerIdx)
@@ -1911,8 +1899,6 @@ public static class Logic
         int jokerType = runData.ShopJokerIdxs[shopJokerIdx];
         runData.ShopJokerIdxs[shopJokerIdx] = -1;
         runData.Money -= GetJokerShopCost(runData, balance, jokerType);
-
-        Debug.Log("Logic.BuyShopJoker(shopJokerIdx + " + shopJokerIdx + ") jokerIdx" + jokerType);
 
         AddJoker(runData, balance, jokerType);
         return jokerType;
@@ -2064,8 +2050,6 @@ public static class Logic
                 int randomSlotIdx = avaiableSlots[randomIdx];
                 affectedSlotsIdxs[affectedSlotsCount++] = randomSlotIdx;
 
-                Debug.Log("availableSlotCount " + availableSlotCount + " runData.SlotType[" + randomSlotIdx + "] " + runData.SlotType[randomSlotIdx] + " (int) " + (int)runData.SlotType[randomSlotIdx] + " chagnging to " + (SLOT_TYPE)balance.CardPackSlotBalance.SlotChangeType[cardType] + " (int) " + (int)(SLOT_TYPE)balance.CardPackSlotBalance.SlotChangeType[cardType]);
-
                 if (balance.CardPackSlotBalance.SlotChangeType[cardType] == SLOT_CHANGE_TYPE.NONE)
                     runData.SlotModType[randomSlotIdx] = cardType;
                 else
@@ -2165,8 +2149,6 @@ public static class Logic
         addedJokerCount = 0;
 
         int skipType = GetSkipTypeForRound(runData, balance, runData.Round);
-
-        Debug.Log("Skip " + balance.SkipBalance.SkipDescription[skipType]);
 
         if (balance.SkipBalance.DoubleMoney[skipType])
         {
@@ -2425,7 +2407,6 @@ public static class Logic
     {
         return (array & 1L << bit) > 0;
     }
-
 }
 
 

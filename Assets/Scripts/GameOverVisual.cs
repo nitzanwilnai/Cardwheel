@@ -83,7 +83,7 @@ namespace Cardwheel
         {
             m_UI.SetActive(true);
 
-            m_bestSpinText.text = runData.BestSpin.ToString("N0");
+            m_bestSpinText.text = CommonVisual.FormatScientific(runData.BestSpin);
             m_roundReachedText.text = CommonVisual.GetRoundString(runData.Round / 3, runData.Round % 3);
             m_wheelPlayedText.text = CommonVisual.AddOrdinal(runData.WheelIdx + 1);
 
