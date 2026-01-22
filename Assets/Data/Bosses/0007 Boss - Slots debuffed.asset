@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bossEffects: 2
   Description: All slots debuffed
-  BossDifficulty: 0
   LevelRange: {x: 5, y: 6}
+  EndlessMode: 1

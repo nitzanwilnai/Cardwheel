@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bossEffects: 10
   Description: Only orange slots are scored
-  BossDifficulty: 2
   LevelRange: {x: 7, y: 7}
+  EndlessMode: 1

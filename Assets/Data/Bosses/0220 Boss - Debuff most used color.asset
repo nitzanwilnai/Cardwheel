@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bossEffects: 26
   Description: Debuff most used color
-  BossDifficulty: 2
   LevelRange: {x: 7, y: 8}
+  EndlessMode: 1

@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bossEffects: 25
   Description: Only play most used color
-  BossDifficulty: 1
   LevelRange: {x: 4, y: 5}
+  EndlessMode: 1

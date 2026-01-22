@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bossEffects: 15
   Description: No base chips from balls
-  BossDifficulty: 2
   LevelRange: {x: 7, y: 8}
+  EndlessMode: 1

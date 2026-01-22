@@ -15,3 +15,4 @@ MonoBehaviour:
   bossEffects: 43
   Description: "Lose \u25C71 for every ball on blue"
   LevelRange: {x: 3, y: 7}
+  EndlessMode: 1

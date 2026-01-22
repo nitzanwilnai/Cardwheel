@@ -347,12 +347,18 @@ namespace Cardwheel
             }
 
             // show voucher
-            m_voucher.CardImage.sprite = AssetManager.Instance.LoadVoucherSprite(balance.VoucherBalance.SpriteName[Logic.GetVoucherForRound(runData)]);
-            m_voucher.VoucherButtonData.Button.onClick.RemoveAllListeners();
-            m_voucher.VoucherButtonData.Button.onClick.AddListener(showVoucherBuyPopup);
-            m_voucher.VoucherButtonData.SelectedGO.SetActive(false);
-            m_voucher.CostText.text = "◇" + Logic.GetVoucherCost(runData, balance);
-            m_voucher.GO.SetActive(!runData.VoucherPurchased);
+            int voucherIndex = Logic.GetVoucherForRound(runData);
+            if (voucherIndex > -1)
+            {
+                m_voucher.CardImage.sprite = AssetManager.Instance.LoadVoucherSprite(balance.VoucherBalance.SpriteName[voucherIndex]);
+                m_voucher.VoucherButtonData.Button.onClick.RemoveAllListeners();
+                m_voucher.VoucherButtonData.Button.onClick.AddListener(showVoucherBuyPopup);
+                m_voucher.VoucherButtonData.SelectedGO.SetActive(false);
+                m_voucher.CostText.text = "◇" + Logic.GetVoucherCost(runData, balance);
+                m_voucher.GO.SetActive(!runData.VoucherPurchased);
+            }
+            else
+                m_voucher.GO.SetActive(false);
 
             CommonVisual.ShowJokersBallsAndSpinWheel(runData, balance, m_cardsBallsSpinWheelGUI, runData.SlotType);
 
@@ -561,9 +567,10 @@ namespace Cardwheel
             m_voucherBuyPopupGUI.BuyButtonImage.color = Logic.CanBuy(runData, balance, Logic.GetVoucherCost(runData, balance)) ? balance.ButtonColorEnabled : balance.ButtonColorDisabled;
             m_voucherBuyPopupGUI.Cost.text = "◇" + Logic.GetVoucherCost(runData, balance);
 
-            m_voucherBuyPopupGUI.ShopCard.sprite = AssetManager.Instance.LoadVoucherSprite(balance.VoucherBalance.SpriteName[Logic.GetVoucherForRound(runData)]);
+            int voucherIndex = Logic.GetVoucherForRound(runData);
+            m_voucherBuyPopupGUI.ShopCard.sprite = AssetManager.Instance.LoadVoucherSprite(balance.VoucherBalance.SpriteName[voucherIndex]);
 
-            m_voucherBuyPopupGUI.Description.text = balance.VoucherBalance.Description[Logic.GetVoucherForRound(runData)];
+            m_voucherBuyPopupGUI.Description.text = balance.VoucherBalance.Description[voucherIndex];
 
             m_voucherBuyPopupGUI.GO.SetActive(true);
 

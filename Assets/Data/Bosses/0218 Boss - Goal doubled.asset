@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bossEffects: 8
   Description: Goal is doubled
-  BossDifficulty: 2
   LevelRange: {x: 8, y: 8}
+  EndlessMode: 1

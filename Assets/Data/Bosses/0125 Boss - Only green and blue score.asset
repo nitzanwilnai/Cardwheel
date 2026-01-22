@@ -15,3 +15,4 @@ MonoBehaviour:
   bossEffects: 37
   Description: Only green and blue score
   LevelRange: {x: 5, y: 6}
+  EndlessMode: 1

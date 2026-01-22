@@ -2276,7 +2276,8 @@ public static class Logic
 
     public static int GetVoucherForRound(RunData runData)
     {
-        return runData.VoucherIdxs[(runData.Round / 3) % runData.VoucherIdxs.Length];
+        int index = runData.Round / 3;
+        return index  < runData.VoucherIdxs.Length ? runData.VoucherIdxs[index] : -1;
     }
 
     public static int GetJokerShopCost(RunData runData, Balance balance, int jokerType)
@@ -2302,43 +2303,47 @@ public static class Logic
         runData.Money -= cost;
 
         int voucherIdx = GetVoucherForRound(runData);
-        if (balance.VoucherBalance.Type[voucherIdx] == VOUCHER_TYPE.PLUS_ONE_SPIN)
+        if(voucherIdx == -1)
+        {
+            // do nothing
+        }
+        else if (balance.VoucherBalance.Type[voucherIdx] == VOUCHER_TYPE.PLUS_ONE_SPIN)
         {
             runData.VoucherSpins++;
         }
-        if (balance.VoucherBalance.Type[voucherIdx] == VOUCHER_TYPE.SHOP_ITEM_DISCOUNT)
+        else if (balance.VoucherBalance.Type[voucherIdx] == VOUCHER_TYPE.SHOP_ITEM_DISCOUNT)
         {
             runData.VoucherShopDiscount *= 0.75f;
         }
-        if (balance.VoucherBalance.Type[voucherIdx] == VOUCHER_TYPE.EXTRA_SHOP_JOKER)
+        else if (balance.VoucherBalance.Type[voucherIdx] == VOUCHER_TYPE.EXTRA_SHOP_JOKER)
         {
             runData.ShopJokerCount = balance.MaxShopJokers;
         }
-        if (balance.VoucherBalance.Type[voucherIdx] == VOUCHER_TYPE.CHEAP_SHOP_REROLLS)
+        else if (balance.VoucherBalance.Type[voucherIdx] == VOUCHER_TYPE.CHEAP_SHOP_REROLLS)
         {
             runData.VoucherShopRerollsDiscount += 2;
         }
-        if (balance.VoucherBalance.Type[voucherIdx] == VOUCHER_TYPE.CHEAP_CARDPACK_REROLLS)
+        else if (balance.VoucherBalance.Type[voucherIdx] == VOUCHER_TYPE.CHEAP_CARDPACK_REROLLS)
         {
             runData.VoucherCardPackRerollDiscount += 2;
         }
-        if (balance.VoucherBalance.Type[voucherIdx] == VOUCHER_TYPE.CARPACK_MOST_PLAYED_COLOR)
+        else if (balance.VoucherBalance.Type[voucherIdx] == VOUCHER_TYPE.CARPACK_MOST_PLAYED_COLOR)
         {
             runData.VoucherCardPackMostPlayedColor = true;
         }
-        if (balance.VoucherBalance.Type[voucherIdx] == VOUCHER_TYPE.RAISE_INTEREST)
+        else if (balance.VoucherBalance.Type[voucherIdx] == VOUCHER_TYPE.RAISE_INTEREST)
         {
             runData.VoucherMaxInterest += 5;
         }
-        if (balance.VoucherBalance.Type[voucherIdx] == VOUCHER_TYPE.REROLL_BOSS_TYPE)
+        else if (balance.VoucherBalance.Type[voucherIdx] == VOUCHER_TYPE.REROLL_BOSS_TYPE)
         {
             runData.BossRerolls += 3;
         }
-        if (balance.VoucherBalance.Type[voucherIdx] == VOUCHER_TYPE.RARE_CARDS_WEIGHT)
+        else if (balance.VoucherBalance.Type[voucherIdx] == VOUCHER_TYPE.RARE_CARDS_WEIGHT)
         {
             runData.VoucherRareJoker = 2.0f;
         }
-        if (balance.VoucherBalance.Type[voucherIdx] == VOUCHER_TYPE.SLOT_CARDPACK_MOST_PLAYED_COLOR)
+        else if (balance.VoucherBalance.Type[voucherIdx] == VOUCHER_TYPE.SLOT_CARDPACK_MOST_PLAYED_COLOR)
         {
             runData.VoucherSlotMostPlayedColor = true;
         }

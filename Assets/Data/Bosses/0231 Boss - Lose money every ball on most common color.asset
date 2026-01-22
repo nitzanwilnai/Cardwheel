@@ -15,3 +15,4 @@ MonoBehaviour:
   bossEffects: 44
   Description: "-\u25C71 every ball on most common color"
   LevelRange: {x: 3, y: 7}
+  EndlessMode: 1

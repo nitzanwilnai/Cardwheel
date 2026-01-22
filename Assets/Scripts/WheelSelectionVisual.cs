@@ -151,6 +151,8 @@ namespace Cardwheel
 
             m_playButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected());
 
+            autoSlideToLastUnlocked();
+
             m_UI.SetActive(true);
         }
 
@@ -281,6 +283,21 @@ namespace Cardwheel
             m_slideValue = 0.0f;
             m_description.gameObject.SetActive(false);
             m_winCount.gameObject.SetActive(false);
+        }
+
+        void autoSlideToLastUnlocked()
+        {
+            int lastWheel = 0;
+            for (int i = 0; i < gameData.SpinWheelWinCount.Length; i++)
+                if (gameData.SpinWheelWinCount[i] > 0)
+                    lastWheel = i;
+            m_wheelSelectionIdx = lastWheel + 1;
+            if (m_wheelSelectionIdx > gameData.SpinWheelWinCount.Length - 1)
+                m_wheelSelectionIdx = gameData.SpinWheelWinCount.Length - 1;
+
+            m_startX = 0.0f;
+            m_targetX = -m_wheelOffset * m_wheelSelectionIdx;
+
         }
 
     }

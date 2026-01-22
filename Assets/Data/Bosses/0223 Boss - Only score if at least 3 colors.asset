@@ -15,3 +15,4 @@ MonoBehaviour:
   bossEffects: 34
   Description: Only score if balls fall on at least 3 colors
   LevelRange: {x: 8, y: 8}
+  EndlessMode: 1

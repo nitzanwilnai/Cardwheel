@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bossEffects: 7
   Description: -1 spin
-  BossDifficulty: 2
   LevelRange: {x: 7, y: 8}
+  EndlessMode: 1

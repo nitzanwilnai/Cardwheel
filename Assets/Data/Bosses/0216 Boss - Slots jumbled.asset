@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bossEffects: 19
   Description: All slots are jumbled
-  BossDifficulty: 2
   LevelRange: {x: 8, y: 8}
+  EndlessMode: 1

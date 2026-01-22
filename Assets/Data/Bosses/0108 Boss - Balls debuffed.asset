@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bossEffects: 1
   Description: All balls debuffed
-  BossDifficulty: 1
   LevelRange: {x: 5, y: 6}
+  EndlessMode: 1

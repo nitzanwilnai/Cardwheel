@@ -15,3 +15,4 @@ MonoBehaviour:
   bossEffects: 32
   Description: Most played color's base chips always 5
   LevelRange: {x: 7, y: 8}
+  EndlessMode: 1
