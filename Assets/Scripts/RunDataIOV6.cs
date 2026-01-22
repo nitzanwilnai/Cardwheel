@@ -159,8 +159,11 @@ namespace Cardwheel
                         runData.SkipShopRareJoker = br.ReadInt32();
 
                         int numBosses = br.ReadInt32();
-                        for (int i = 0; i < numBosses && i < runData.BossType.Length; i++)
-                            runData.BossType[i] = br.ReadInt32();
+                        for (int i = 0; i < numBosses; i++)
+                            if (i < runData.BossType.Length)
+                                runData.BossType[i] = br.ReadInt32();
+                            else
+                                br.ReadInt32();
                         runData.UseBallsSpecial = br.ReadInt32();
                         runData.UseSlotsSpecial = br.ReadInt32();
                         runData.UseBaseChips = br.ReadInt32();
