@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.0.61f1
-CRC: 3982431158
+CRC: 4266133369
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 42e9be41b63c493fe585824baa3d36cc
+    Hash: af44cbf3642c6107a6159084e45dd513
   TypeTreeHash:
     serializedVersion: 2
     Hash: c142684008850ddf3636ce192491e446
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 3e7efc733fce68e67f8e641177e66eb6
+    Hash: afd21f15f59dffdaf548f2d7b3e5e127
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -168,4 +168,4 @@ Assets:
 - Assets/Prefabs/CommonH/UI - Settings.prefab
 - Assets/Prefabs/CommonH/UI - Game Over.prefab
 Dependencies:
-- /Users/nitzanwilnai/Programming/UnityRelease/Cardwheel/Assets/StreamingAssets/AssetBundles/common
+- C:/Users/nitza/Documents/GitHub/Cardwheel/Assets/StreamingAssets/AssetBundles/common
