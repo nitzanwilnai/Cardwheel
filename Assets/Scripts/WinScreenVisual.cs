@@ -23,6 +23,7 @@ namespace Cardwheel
             MAIN_MENU,
             NEW_GAME,
             RETRY,
+            CONTINUE,
             WHEEL = 11,
             BALLS = 12,
             JOKER_1 = 20,
@@ -120,6 +121,7 @@ namespace Cardwheel
                 m_mainMenuButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.MAIN_MENU);
                 m_newGameButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.NEW_GAME);
                 m_retryButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.RETRY);
+                m_continueButtonData.SelectedGO.SetActive(m_selectedButton == MENU_BUTTONS.CONTINUE);
 
                 CommonButtonVisual.CommonSelectButtonNoTopBar(m_cardsBallsSpinWheelGUI, (COMMON_BUTTONS)m_selectedButton);
             }
@@ -186,6 +188,12 @@ namespace Cardwheel
                 return;
             }
 
+            if (m_selectedButton == MENU_BUTTONS.CONTINUE && CommonButtonVisual.NavigateEnter())
+            {
+                Game.Instance.EndlessMode();
+                return;
+            }
+
             // navigation
             int newSelectedButton = CommonButtonVisual.CommonNavigation(runData, (COMMON_BUTTONS)m_selectedButton);
             if (newSelectedButton > -1)
@@ -202,17 +210,29 @@ namespace Cardwheel
 
             if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateUp())
             {
-                selectButton(MENU_BUTTONS.COPY);
+                selectButton(MENU_BUTTONS.CONTINUE);
                 return;
             }
 
             if (m_selectedButton == MENU_BUTTONS.RETRY && CommonButtonVisual.NavigateUp())
+            {
+                selectButton(MENU_BUTTONS.CONTINUE);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.CONTINUE && CommonButtonVisual.NavigateUp())
             {
                 selectButton(MENU_BUTTONS.COPY);
                 return;
             }
 
             if (m_selectedButton == MENU_BUTTONS.COPY && CommonButtonVisual.NavigateDown())
+            {
+                selectButton(MENU_BUTTONS.CONTINUE);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.CONTINUE && CommonButtonVisual.NavigateDown())
             {
                 selectButton(MENU_BUTTONS.NEW_GAME);
                 return;
@@ -243,6 +263,12 @@ namespace Cardwheel
             }
 
             if (m_selectedButton < MENU_BUTTONS.RETRY && CommonButtonVisual.NavigateLeft())
+            {
+                selectButton(MENU_BUTTONS.WHEEL);
+                return;
+            }
+
+            if (m_selectedButton == MENU_BUTTONS.CONTINUE && CommonButtonVisual.NavigateLeft())
             {
                 selectButton(MENU_BUTTONS.WHEEL);
                 return;

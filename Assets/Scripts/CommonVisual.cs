@@ -176,7 +176,7 @@ namespace Cardwheel
 
             if (balance.JokerBalance.SubtractChipsPerSpin[jokerType].x > 0.0f)
             {
-                double chipIncrease = jokerIdx > -1 ? runData.JokerChips[jokerIdx] : 0;
+                double chipIncrease = jokerIdx > -1 ? runData.JokerChips[jokerIdx] : balance.JokerBalance.SubtractChipsPerSpin[jokerType].x;
                 go.GetComponent<GUIRef>().GetTextGUI("Current").text = "(Current " + chipIncrease.ToString("N0") + ")";
             }
             if (balance.JokerBalance.SubtractMultiplierAddPerRound[jokerType].x > 0.0f)

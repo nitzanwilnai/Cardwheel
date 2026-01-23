@@ -272,7 +272,7 @@ public static class Logic
         // runData.SkipType[4] = 16;
         // runData.SkipType[5] = 16;
 
-        // AddJoker(runData, balance, 102);
+        // AddJoker(runData, balance, 34);
         // AddJoker(runData, balance, 103);
         // AddJoker(runData, balance, 104);
         // AddJoker(runData, balance, 105);
@@ -286,12 +286,12 @@ public static class Logic
 
         // for (int i = 0; i < runData.BallTypes.Length; i++)
         //     runData.BallTypes[i] = i;
-        runData.BallTypes[0] = 1;
-        runData.BallTypes[1] = 3;
-        runData.BallTypes[2] = 4;
-        runData.BallTypes[3] = 5;
-        runData.BallTypes[4] = 12;
-        runData.BallTypes[5] = 0;
+        // runData.BallTypes[0] = 1;
+        // runData.BallTypes[1] = 3;
+        // runData.BallTypes[2] = 4;
+        // runData.BallTypes[3] = 5;
+        // runData.BallTypes[4] = 12;
+        // runData.BallTypes[5] = 0;
 
         // int cnt = 0;
         // for (int i = 0; i < runData.SlotModType.Length; i++)
@@ -1769,6 +1769,10 @@ public static class Logic
                 AssignRandomJokerToShop(runData, commonJokerTypes, ref commonJokerCount, shopJokerIdx);
 
         }
+
+// #if UNITY_EDITOR
+//         runData.ShopJokerIdxs[0] = 34;
+// #endif
     }
 
     private static bool AssignRandomJokerToShop(RunData runData, Span<int> availableJokerTypes, ref int availableJokerCount, int shopJokerIdx)
@@ -2277,7 +2281,7 @@ public static class Logic
     public static int GetVoucherForRound(RunData runData)
     {
         int index = runData.Round / 3;
-        return index  < runData.VoucherIdxs.Length ? runData.VoucherIdxs[index] : -1;
+        return index < runData.VoucherIdxs.Length ? runData.VoucherIdxs[index] : -1;
     }
 
     public static int GetJokerShopCost(RunData runData, Balance balance, int jokerType)
@@ -2303,7 +2307,7 @@ public static class Logic
         runData.Money -= cost;
 
         int voucherIdx = GetVoucherForRound(runData);
-        if(voucherIdx == -1)
+        if (voucherIdx == -1)
         {
             // do nothing
         }

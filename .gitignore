@@ -101,3 +101,6 @@ InitTestScene*.unity*
 /[Ss]creenshots/*
 /[Aa]ssets/SFX/*
 /[Aa]ssets/Music/*
+
+/Assets/GoogleService-Info.plist*
+/Assets/google-services.json*
