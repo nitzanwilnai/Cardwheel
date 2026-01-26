@@ -93,7 +93,7 @@ namespace Cardwheel
         WheelSelectionVisual m_wheelSelectionVisual;
         TutorialVisual m_tutorialVisual;
         MainMenuSettingsVisual m_mainMenuSettingsVisual;
-        InfoVisual m_infoVisual;
+        // InfoVisual m_infoVisual;
 
 #if UNITY_IOS || UNITY_ANDROID
         Firebase.FirebaseApp m_firebaseApp;
@@ -238,7 +238,7 @@ namespace Cardwheel
             m_wheelSelectionVisual = AssetManager.Instance.LoadWheelSelectionVisual();
             m_tutorialVisual = new TutorialVisual();
             m_mainMenuSettingsVisual = new MainMenuSettingsVisual();
-            m_infoVisual = AssetManager.Instance.LoadInfoVisual();
+            // m_infoVisual = AssetManager.Instance.LoadInfoVisual();
 
             m_mainMenuVisual.Init(Camera, m_balance);
             m_roundSelectionVisual.Init(m_runData, m_balance, Camera);
@@ -258,7 +258,7 @@ namespace Cardwheel
             m_shopInfoVisual.Init(Camera);
             m_wheelSelectionVisual.Init(Camera, m_gameData, m_balance);
             m_tutorialVisual.Init(m_gameData, m_runData, m_balance, Camera);
-            m_infoVisual.Init(m_runData, m_balance, Camera);
+            // m_infoVisual.Init(m_runData, m_balance, Camera);
 
             MusicManager.Instance.Init(m_settingsData);
             MusicManager.Instance.PlayMusic();
@@ -345,8 +345,8 @@ namespace Cardwheel
                 m_gameInfoVisual.Hide();
             else if (menuState == MENU_STATE.SHOP_INFO)
                 m_shopInfoVisual.Hide();
-            else if (menuState == MENU_STATE.INFO)
-                m_infoVisual.Hide();
+            // else if (menuState == MENU_STATE.INFO)
+            //     m_infoVisual.Hide();
             else if (menuState == MENU_STATE.WHEEL_SELECTION)
                 m_wheelSelectionVisual.Hide();
             else if (menuState == MENU_STATE.JOKER_INFO_POPUP)
@@ -411,8 +411,8 @@ namespace Cardwheel
                 m_gameInfoVisual.Show(m_runData, m_balance);
             else if (menuState == MENU_STATE.SHOP_INFO)
                 m_shopInfoVisual.Show(m_runData, m_balance);
-            else if (menuState == MENU_STATE.INFO)
-                m_infoVisual.Show();
+            // else if (menuState == MENU_STATE.INFO)
+            //     m_infoVisual.Show();
             else if (menuState == MENU_STATE.WHEEL_SELECTION)
                 m_wheelSelectionVisual.Show();
             else if (menuState == MENU_STATE.JOKER_INFO_POPUP)
@@ -525,10 +525,10 @@ namespace Cardwheel
             {
                 m_shopInfoVisual.Tick(m_runData, dt);
             }
-            else if (m_runData.MenuState == MENU_STATE.INFO)
-            {
-                m_infoVisual.Tick(dt);
-            }
+            // else if (m_runData.MenuState == MENU_STATE.INFO)
+            // {
+            //     m_infoVisual.Tick(dt);
+            // }
             else if (m_runData.MenuState == MENU_STATE.MAIN_MENU)
             {
                 m_mainMenuVisual.Tick(m_balance, dt);

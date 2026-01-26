@@ -20,14 +20,20 @@ namespace Cardwheel
     [InitializeOnLoad]
     public class BuildGame
     {
+        private static readonly string[] ExcludedFolderTokens = { "DoNotShip", "DontShip" };
+
         [MenuItem("Cardwheel/Build/Mac")]
         public static void BuildMac()
         {
             setMacBuildNumber();
 
             string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss");
-            string outputPath = Application.dataPath + "/../../Build/Cardwheel OSX " + dateTime + "/Cardwheel.app";
-            BuildStandaloneCommon(BuildTarget.StandaloneOSX, outputPath, "");
+            string outputPath = Application.dataPath + "/../../Build/Cardwheel OSX " + dateTime + "/";
+            string outputPathWithFile = outputPath + "Cardwheel.app";
+            BuildStandaloneCommon(BuildTarget.StandaloneOSX, outputPathWithFile, "");
+
+            string steamContentDir = Application.dataPath + "/../../StoreAssets/Steamworks/tools/ContentBuilder/content_cardwheel/macosx_content";
+            CopyBuildOutput(outputPath, steamContentDir, ExcludedFolderTokens, clearDestinationFirst: true);
         }
 
         [MenuItem("Cardwheel/Build/PC")]
@@ -43,8 +49,12 @@ namespace Cardwheel
         {
             string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss");
             // string outputPath = Application.dataPath + "/../../Build/Cardwheel/Cardwheel.x86_64";
-            string outputPath = Application.dataPath + "/../../Build/Cardwheel STEAM " + dateTime + "/Cardwheel.x86_64";
-            BuildStandaloneCommon(BuildTarget.StandaloneLinux64, outputPath, "");
+            string outputPath = Application.dataPath + "/../../Build/Cardwheel STEAM " + dateTime + "/";
+            string outputPathWithFile = outputPath + "Cardwheel.x86_64";
+            BuildStandaloneCommon(BuildTarget.StandaloneLinux64, outputPathWithFile, "");
+
+            string steamContentDir = Application.dataPath + "/../../StoreAssets/Steamworks/tools/ContentBuilder/content_cardwheel/linux_content";
+            CopyBuildOutput(outputPath, steamContentDir, ExcludedFolderTokens, clearDestinationFirst: true);
         }
 
         [MenuItem("Cardwheel/Build/Mac DEMO")]
@@ -53,8 +63,12 @@ namespace Cardwheel
             setMacBuildNumber();
 
             string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss");
-            string outputPath = Application.dataPath + "/../../Build/Cardwheel OSX DEMO " + dateTime + "/Cardwheel_DEMO.app";
-            BuildStandaloneCommon(BuildTarget.StandaloneOSX, outputPath, "DEMO");
+            string outputPath = Application.dataPath + "/../../Build/Cardwheel OSX DEMO " + dateTime + "/";
+            string outputPathWithFile = outputPath + "Cardwheel_DEMO.app";
+            BuildStandaloneCommon(BuildTarget.StandaloneOSX, outputPathWithFile, "DEMO");
+
+            string steamContentDir = Application.dataPath + "/../../StoreAssets/Steamworks/tools/ContentBuilder/content_cardwheel_DEMO/macosx_content";
+            CopyBuildOutput(outputPath, steamContentDir, ExcludedFolderTokens, clearDestinationFirst: true);
         }
 
         [MenuItem("Cardwheel/Build/PC DEMO")]
@@ -69,8 +83,13 @@ namespace Cardwheel
         public static void BuildSteamdeckDemo()
         {
             string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss");
-            string outputPath = Application.dataPath + "/../../Build/Cardwheel STEAM DEMO " + dateTime + "/Cardwheel_DEMO.x86_64";
-            BuildStandaloneCommon(BuildTarget.StandaloneLinux64, outputPath, "DEMO");
+            string outputPath = Application.dataPath + "/../../Build/Cardwheel STEAM DEMO " + dateTime + "/";
+            string outputPathWithFile = outputPath + "Cardwheel_DEMO.x86_64";
+            BuildStandaloneCommon(BuildTarget.StandaloneLinux64, outputPathWithFile, "DEMO");
+
+            string buildOutputDir = outputPath;
+            string steamContentDir = Application.dataPath + "/../../StoreAssets/Steamworks/tools/ContentBuilder/content_cardwheel_DEMO/linux_content";
+            CopyBuildOutput(buildOutputDir, steamContentDir, ExcludedFolderTokens, clearDestinationFirst: true);
         }
 
         public static void BuildStandaloneCommon(BuildTarget buildTarget, string outputPath, string flag)
@@ -445,5 +464,71 @@ namespace Cardwheel
         }
 
         static string Escape(string path) => path.Replace("\"", "\\\"");
+
+
+        // copy standalone content
+        private static void CopyBuildOutput(
+            string sourceDir,
+            string destinationDir,
+            string[] excludedFolderTokens,
+            bool clearDestinationFirst)
+        {
+            if (!Directory.Exists(sourceDir))
+                throw new DirectoryNotFoundException($"Source build directory not found: {sourceDir}");
+
+            Directory.CreateDirectory(destinationDir);
+
+            if (clearDestinationFirst)
+            {
+                // Be careful: this deletes everything currently in destinationDir.
+                foreach (var entry in Directory.EnumerateFileSystemEntries(destinationDir))
+                {
+                    if (Directory.Exists(entry)) Directory.Delete(entry, recursive: true);
+                    else File.Delete(entry);
+                }
+            }
+
+            CopyDirectoryRecursive(
+                sourceDir,
+                destinationDir,
+                excludedFolderTokens ?? Array.Empty<string>());
+        }
+
+        private static void CopyDirectoryRecursive(string srcDir, string dstDir, string[] excludedFolderTokens)
+        {
+            Directory.CreateDirectory(dstDir);
+
+            // Copy files in this directory
+            foreach (string srcFilePath in Directory.EnumerateFiles(srcDir))
+            {
+                string fileName = Path.GetFileName(srcFilePath);
+                string dstFilePath = Path.Combine(dstDir, fileName);
+
+                File.Copy(srcFilePath, dstFilePath, overwrite: true);
+            }
+
+            // Recurse into subdirectories, excluding ones with tokens in their folder name
+            foreach (string srcSubDir in Directory.EnumerateDirectories(srcDir))
+            {
+                string folderName = Path.GetFileName(srcSubDir);
+
+                if (ShouldExcludeFolder(folderName, excludedFolderTokens))
+                    continue;
+
+                string dstSubDir = Path.Combine(dstDir, folderName);
+                CopyDirectoryRecursive(srcSubDir, dstSubDir, excludedFolderTokens);
+            }
+        }
+
+        private static bool ShouldExcludeFolder(string folderName, string[] tokens)
+        {
+            // Exclude if folderName contains any token (case-insensitive)
+            foreach (var t in tokens)
+            {
+                if (folderName.IndexOf(t, StringComparison.OrdinalIgnoreCase) >= 0)
+                    return true;
+            }
+            return false;
+        }
     }
 }
