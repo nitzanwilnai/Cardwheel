@@ -351,12 +351,17 @@ namespace Cardwheel
             TopBarBalls = new Image[balance.MaxBalls];
         }
 
-        public static void ShowJokersBallsAndSpinWheel(RunData runData, Balance balance, CardsBallsSpinWheelGUI cardsBallsSpinWheelGUI, SLOT_TYPE[] slotType)
+        public static void ShowBallsAndSpinWheel(RunData runData, Balance balance, CardsBallsSpinWheelGUI cardsBallsSpinWheelGUI, SLOT_TYPE[] slotType)
         {
             cardsBallsSpinWheelGUI.SortingPopup.SetActive(false);
-            ShowJokers(runData, balance, cardsBallsSpinWheelGUI.JokerParent);
             ShowBalls(runData, balance, cardsBallsSpinWheelGUI);
             CommonSlotsVisual.ShowSpinWheelUI(runData, balance, cardsBallsSpinWheelGUI.ScoringSlots, slotType);
+        }
+
+        public static void ShowJokersBallsAndSpinWheel(RunData runData, Balance balance, CardsBallsSpinWheelGUI cardsBallsSpinWheelGUI, SLOT_TYPE[] slotType)
+        {
+            ShowBallsAndSpinWheel(runData, balance, cardsBallsSpinWheelGUI, slotType);
+            ShowJokers(runData, balance, cardsBallsSpinWheelGUI.JokerParent);
         }
 
         public static void ShowBalls(RunData runData, Balance balance, CardsBallsSpinWheelGUI cardsBallsSpinWheelGUI)
@@ -459,7 +464,7 @@ namespace Cardwheel
 
         public static string GetBossDescription(RunData runData, Balance balance, string title)
         {
-            int bossType = Logic.GetBossTypeForRound(runData, balance);
+            int bossType = Logic.GetBossTypeForRound(runData);
             string bossText = title + balance.BossBalance.Description[bossType];
 
             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.ONLY_PLAY_MOST_USED_COLOR)
@@ -618,6 +623,19 @@ namespace Cardwheel
             }
         }
 
+        public static void InitSpinWheel(GUIRef guiRef, ref SpinCircle m_spinCircle, ref ScoringSlot[] m_scoringSlots)
+        {
+            SpinWheelRef spinWheelRef = guiRef.GetGameObject("SpinWheel").GetComponent<SpinWheelRef>();
+            spinWheelRef.SortingPopup.SetActive(false);
+            m_spinCircle = spinWheelRef.SpinCircle;
+            m_scoringSlots = new ScoringSlot[spinWheelRef.SlotGO.Length];
+            for (int i = 0; i < spinWheelRef.SlotGO.Length; i++)
+            {
+                m_scoringSlots[i] = spinWheelRef.SlotGO[i].GetComponentInChildren<ScoringSlot>();
+                m_scoringSlots[i].Index = i;
+            }
+
+        }
     }
 
 }

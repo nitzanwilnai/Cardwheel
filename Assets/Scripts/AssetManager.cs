@@ -241,6 +241,16 @@ namespace Cardwheel
             return Instantiate(loadGameObject(m_commonBundleUI, "UI - In Game Info", "Assets/Prefabs/" + m_commonUIBundlePath + "/UI - In Game Info.prefab"));
         }
 
+        public InfoVisual LoadInfoVisual()
+        {
+            return Instantiate(loadGameObject(m_commonBundle, "InfoVisual", "Assets/Prefabs/Common/InfoVisual.prefab")).GetComponent<InfoVisual>();
+        }
+
+        public GameObject LoadInfoUI()
+        {
+            return Instantiate(loadGameObject(m_commonBundleUI, "UI - Info", "Assets/Prefabs/" + m_commonUIBundlePath + "/UI - Info.prefab"));
+        }
+
         public ShopInfoVisual LoadShopInfoVisual()
         {
             return Instantiate(loadGameObject(m_commonBundle, "ShopInfoVisual", "Assets/Prefabs/Common/ShopInfoVisual.prefab")).GetComponent<ShopInfoVisual>();

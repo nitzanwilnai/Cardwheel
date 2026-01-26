@@ -81,15 +81,7 @@ namespace Cardwheel
             m_abandonButtonData = guiButtonRef.GetButtonData("Abandon");
             m_abandonButtonData.Button.onClick.AddListener(Game.Instance.AbandonCardPack);
 
-            SpinWheelRef spinWheelRef = guiRef.GetGameObject("SpinWheel").GetComponent<SpinWheelRef>();
-            spinWheelRef.SortingPopup.SetActive(false);
-            m_spinCircle = spinWheelRef.SpinCircle;
-            m_scoringSlots = new ScoringSlot[spinWheelRef.SlotGO.Length];
-            for (int i = 0; i < spinWheelRef.SlotGO.Length; i++)
-            {
-                m_scoringSlots[i] = spinWheelRef.SlotGO[i].GetComponentInChildren<ScoringSlot>();
-                m_scoringSlots[i].Index = i;
-            }
+            CommonVisual.InitSpinWheel(guiRef, ref m_spinCircle, ref m_scoringSlots);
 
             CommonButtonVisual.AddSelectedBorder(m_rerollButtonData);
             CommonButtonVisual.AddSelectedBorder(m_abandonButtonData);
@@ -245,6 +237,7 @@ namespace Cardwheel
                 Hide();
                 m_UI.SetActive(true);
                 CommonVisual.ShowUpdatedCards(runData, balance, balance.CardPackSlotBalance.DescriptionName, ref m_packAnimationTimer, m_cardPackCardGUIs, m_descriptionGOs, m_rerollButtonData, m_rerollCostText);
+                CommonVisual.ShowMoney(runData, m_topBarGUI);
             }
         }
 

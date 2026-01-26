@@ -346,7 +346,7 @@ namespace Cardwheel
             int useBallSprite = 1;
             if (Logic.InBossRound(runData))
             {
-                int bossType = Logic.GetBossTypeForRound(runData, balance);
+                int bossType = Logic.GetBossTypeForRound(runData);
 
                 if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.BALL_EFFECTS_HIDDEN)
                     useBallSprite = 0;
@@ -1271,7 +1271,7 @@ namespace Cardwheel
 
                     if (Logic.InBossRound(runData))
                     {
-                        int bossType = Logic.GetBossTypeForRound(runData, balance);
+                        int bossType = Logic.GetBossTypeForRound(runData);
 
                         if (runData.CurrentSpin == 1)
                         {
@@ -1546,7 +1546,7 @@ namespace Cardwheel
                     m_slotAnimTimer = m_slotAnimTime;
                 }
 
-                int bossType = Logic.GetBossTypeForRound(runData, balance);
+                int bossType = Logic.GetBossTypeForRound(runData);
                 if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.JUMBLE_BALLS)
                 {
                     Logic.JumbleBalls(runData, balance);

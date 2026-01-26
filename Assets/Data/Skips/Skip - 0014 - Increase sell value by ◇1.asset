@@ -24,7 +24,7 @@ MonoBehaviour:
   MoneyForSpinsUnused: 0
   BossReroll: 0
   CardPackIdx: -1
-  CanShowFirstTwoRounds: 1
+  CanShowFirstTwoRounds: 0
   IncreaseJokerSellValue: 1
   AddCommonRandomJoker: 0
   AddUncommonRandomJoker: 0

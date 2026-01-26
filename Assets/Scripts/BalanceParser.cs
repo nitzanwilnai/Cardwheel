@@ -153,8 +153,10 @@ namespace Cardwheel
                     }
 
                     RoundSO roundSO = (RoundSO)AssetDatabase.LoadAssetAtPath("Assets/Data/RoundSO.asset", typeof(RoundSO));
-                    for (int i = 0; i < 8; i++)
-                        bw.Write(roundSO.BaseChip[i]);
+                    int numRoundBaseChips = roundSO.RoundBaseChip.Length;
+                    bw.Write(numRoundBaseChips);
+                    for (int i = 0; i < numRoundBaseChips; i++)
+                        bw.Write(roundSO.RoundBaseChip[i]);
                     for (int i = 0; i < 3; i++)
                         bw.Write(roundSO.RoundChipMult[i]);
                     for (int i = 0; i < 3; i++)

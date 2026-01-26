@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f7a4dcac336914f5b94e423814720945, type: 3}
-  m_Name: JokerSO 0044 Gain mult +5 when all balls land on 1 color
+  m_Name: JokerSO 0044 Gain mult +3 when all balls land on 1 color
   m_EditorClassIdentifier: 
   JokerSprite: {fileID: 21300000, guid: 965c2bc0c98de4fae9c1eff118d70ef1, type: 3}
   Cost: 10
@@ -23,30 +23,41 @@ MonoBehaviour:
   TypeNotExists: 00000000
   SizeExists: 000000000001
   SizeNotExists: 000000000000
-  MultIncreaseForSize: 5
+  MultIncreaseForSize: 3
   MinTypes: 1
   ChipsPerBall: 0
   ChipsIncreasePerBall: 0
+  MultAddPerBall: 0
+  MultAddIncreasePerBall: 0
+  MultMultPerBall: 0
+  MultMultIncreasePerBall: 0
   SubtractMultiplierAddPerRound: {x: 0, y: 0}
   SubtractChipsAddPerSpin: {x: 0, y: 0}
   PerJokerMultiplierAdd: 0
   PerNoJokerMultiplierAdd: 0
+  NoJokersMultMult: 0
   ChipsIncreasePerSpin: 0
   MultIncreasePerUnusedSpin: 0
   MultIncreasePerUsedSpin: 0
   RetriggerBallsEverySpin: 0
   RetriggerBallsLastSpin: 0
+  ChipsIncreasePerXSpins: {x: 0, y: 0}
+  MultAddIncreasePerXSpins: {x: 0, y: 0}
+  MultMultIncreasePerXSpins: {x: 0, y: 0}
   MultiplierAddRandomRange: {x: 0, y: 0}
   EarnMoneyEveryRound: 0
   IncreaseSellValueEveryRound: 0
+  IncreaseSellValueAllJokersEveryRound: 0
   GoIntoDebt: 0
   InterestIncrease: 0
   ChanceBallGivesMoney: 0
   MoneyPerSpin: 0
   ChipsPerDollar: 0
   MoneyForSpecialBallOnColor: 00000000000000000000000000000000
+  AddAllSellValueToMult: 0
   MultiplierMultForSpecialBall: 0
   MultiplierMultForNonSpecialBall: 0
+  MultMultButBallsDisabled: 0
   SortSlots: 0
   FirstBallConvertSlot: {fileID: 0}
   AddSpin: 0
@@ -63,5 +74,6 @@ MonoBehaviour:
   MultiplierAddForLeastPlayedColor: 0
   MultiplierMultEveryShopReroll: 0
   MultiplierMultEveryCardPackReroll: 0
-  MultiplierAddForCardpackAbandon: 0
+  ChipsAddForCardpackAbandon: 0
+  MultiplierMultForCardpackAbandon: 0
   TriggerEveryXSpins: 1

@@ -325,7 +325,7 @@ public static class Logic
             runData.BossType[i] = -1;
 
         for (int i = 0; i < numBossRounds; i++)
-            setUniqueBossForRound(runData, balance, i + 1);
+            setUniqueBossForNormalRound(runData, balance, i);
 
         /*
                 // index bosses by difficulty
@@ -418,13 +418,51 @@ public static class Logic
 
     public static void setUniqueBossForRound(RunData runData, Balance balance, int round)
     {
+        if (round < balance.MaxRounds / 3)
+            setUniqueBossForNormalRound(runData, balance, round);
+        else
+        {
+            setUniqueBossForEndlessRound(runData, balance, round);
+        }
+    }
+
+    private static void setUniqueBossForEndlessRound(RunData runData, Balance balance, int round)
+    {
+        Span<int> endlessBosses = stackalloc int[balance.BossBalance.NumBosses];
+        int endlessBossCount = 0;
+
+        for (int i = 0; i < balance.BossBalance.NumBosses; i++)
+        {
+            if (balance.BossBalance.EndlessMode[i])
+            {
+                bool bossExists = false;
+                for (int r = 0; r < runData.BossType.Length; r++)
+                {
+                    if (runData.BossType[r] == i)
+                    {
+                        bossExists = true;
+                        break;
+                    }
+                }
+
+                if (!bossExists)
+                    endlessBosses[endlessBossCount++] = i;
+            }
+        }
+        int randomBossIdx = CustomRandInt(ref runData.BossSeed) % endlessBossCount;
+        int roundIndex = round % runData.BossType.Length;
+        runData.BossType[roundIndex] = endlessBosses[randomBossIdx];
+    }
+
+    public static void setUniqueBossForNormalRound(RunData runData, Balance balance, int round)
+    {
         // if (runData.BossType[round - 1] > -1)
         //     Debug.Log("Prev boss runData.BossType[" + (round - 1) + "] " + balance.BossBalance.Description[runData.BossType[round - 1]]);
 
         Span<int> bossesForRound = stackalloc int[balance.BossBalance.NumBosses];
         int bossesForRoundCount = 0;
         for (int i = 0; i < balance.BossBalance.NumBosses; i++)
-            if (round >= balance.BossBalance.LevelRange[i].x && round <= balance.BossBalance.LevelRange[i].y)
+            if (round >= balance.BossBalance.LevelRange[i].x - 1 && round <= balance.BossBalance.LevelRange[i].y - 1)
                 bossesForRound[bossesForRoundCount++] = i;
 
         int numBosses = runData.BossType.Length;
@@ -444,17 +482,17 @@ public static class Logic
 
         // get random boss
         int randomIdx = CustomRandInt(ref runData.BossSeed) % bossesForRoundCount;
-        runData.BossType[round - 1] = bossesForRound[randomIdx];
+        runData.BossType[round] = bossesForRound[randomIdx];
 
-        int bossType = runData.BossType[round - 1];
+        int bossType = runData.BossType[round];
         // Debug.Log("setUniqueBossForRound round " + round + " bossesForRoundCount " + bossesForRoundCount + " runData.BossType[" + (round - 1) + "] " + bossType + " " + balance.BossBalance.Description[bossType] + " min " + balance.BossBalance.LevelRange[bossType].x + " max " + balance.BossBalance.LevelRange[bossType].y);
     }
 
-    public static int GetBossTypeForRound(RunData runData, Balance balance)
+    public static int GetBossTypeForRound(RunData runData)
     {
         int bossIdx = (runData.Round / 3) % runData.BossType.Length;
 
-        int bossType = runData.BossType[bossIdx % balance.BossBalance.NumBosses];
+        int bossType = runData.BossType[bossIdx];
 
         return bossType;
     }
@@ -472,7 +510,7 @@ public static class Logic
 
     public static void RerollBoss(RunData runData, Balance balance)
     {
-        setUniqueBossForRound(runData, balance, (runData.Round / 3) + 1);
+        setUniqueBossForRound(runData, balance, runData.Round / 3);
     }
 
     public static void SetDataForNextRound(RunData runData, Balance balance)
@@ -509,7 +547,7 @@ public static class Logic
 
         if (InBossRound(runData))
         {
-            int bossType = GetBossTypeForRound(runData, balance);
+            int bossType = GetBossTypeForRound(runData);
             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.ONE_LESS_SPIN)
                 spinsChange -= 1;
 
@@ -656,7 +694,7 @@ public static class Logic
 
     static void startBossRound(RunData runData, Balance balance)
     {
-        int bossType = GetBossTypeForRound(runData, balance);
+        int bossType = GetBossTypeForRound(runData);
         if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.BALLS_DEBUFFED || balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.BALLS_DEBUFFED_FIRST_SPIN)
             runData.UseBallsSpecial = 0;
         if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.SLOTS_DEBUFFED || balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.SLOTS_DEBUFFED_FIRST_SPIN)
@@ -669,7 +707,7 @@ public static class Logic
     {
         moneyChanged = false;
 
-        int bossType = GetBossTypeForRound(runData, balance);
+        int bossType = GetBossTypeForRound(runData);
         BOSS_EFFECT bossEffect = balance.BossBalance.BossEffect[bossType];
         if (bossEffect == BOSS_EFFECT.LOSE_MONEY_EVERY_SPIN)
         {
@@ -746,7 +784,7 @@ public static class Logic
 
         if (InBossRound(runData))
         {
-            int bossType = GetBossTypeForRound(runData, balance);
+            int bossType = GetBossTypeForRound(runData);
             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.DIFFERENT_COLOR_EVERY_SPIN)
             {
                 uint seed = runData.StartSeed;
@@ -909,7 +947,7 @@ public static class Logic
         double baseChips = runData.BaseChips[slotType];
 
         if (InBossRound(runData))
-            if (balance.BossBalance.BossEffect[GetBossTypeForRound(runData, balance)] == BOSS_EFFECT.MOST_PLAYED_BASE_CHIPS_TO_FIVE)
+            if (balance.BossBalance.BossEffect[GetBossTypeForRound(runData)] == BOSS_EFFECT.MOST_PLAYED_BASE_CHIPS_TO_FIVE)
                 if (GetMostPlayedSlotType(runData) == runData.SlotTypeInGame[slotIdx])
                     baseChips = 5;
 
@@ -1141,7 +1179,7 @@ public static class Logic
             Span<int> slotTypeCount = stackalloc int[4];
             CountNumBallsOnSlotType(runData, balance.MaxBalls, slotTypeCount);
 
-            int bossType = GetBossTypeForRound(runData, balance);
+            int bossType = GetBossTypeForRound(runData);
             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.ONLY_SCORE_SIX_BALLS)
             {
                 bool sizeFound = false;
@@ -1492,12 +1530,23 @@ public static class Logic
 
         if (InBossRound(runData))
         {
-            int bossType = GetBossTypeForRound(runData, balance);
+            int bossType = GetBossTypeForRound(runData);
             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.BALLS_DEBUFFED_FIRST_SPIN && runData.CurrentSpin > 0)
                 runData.UseBallsSpecial = 1;
             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.SLOTS_DEBUFFED_FIRST_SPIN && runData.CurrentSpin > 0)
                 runData.UseSlotsSpecial = 1;
         }
+    }
+
+    public static double Term(int n)
+    {
+        int k = (n - 1) >> 1;           // floor((n-1)/2)
+        int isEven = (n & 1) ^ 1;       // 1 if n is even, 0 if odd   (branchless)
+
+        // factor = 1 for odd, 2.5 for even
+        double factor = 1.0 + 1.5 * isEven;
+
+        return 1_000_000.0 * Math.Pow(10.0, k) * factor;
     }
 
     public static double GetRoundGoal(RunData runData, Balance balance)
@@ -1506,23 +1555,34 @@ public static class Logic
     }
     public static double GetRoundGoal(RunData runData, Balance balance, int bigRound, int smallRound)
     {
-        double goal = 0;
-        double mult = 1.0f;
-        if (bigRound >= balance.BaseChip.Length)
-        {
-            int diff = bigRound - (balance.BaseChip.Length - 1);
-            mult = Mathf.Pow(2.0f, diff);
-            bigRound = balance.BaseChip.Length - 1;
-        }
-        goal = balance.BaseChip[bigRound] * balance.RoundChipMult[smallRound] * balance.SpinWheelBalance.GoalMultiplier[runData.WheelIdx] * mult;
+        double goal = GetGoalForRound(runData.WheelIdx, balance, bigRound, smallRound);
 
         if (InBossRound(runData))
         {
-            int bossType = GetBossTypeForRound(runData, balance);
+            int bossType = GetBossTypeForRound(runData);
             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.DOUBLE_GOAL)
                 goal *= 2;
         }
         return goal;
+    }
+
+    public static double GetGoalForRound(int wheelIdx, Balance balance, int bigRound, int smallRound)
+    {
+        double goal;
+        if (bigRound >= balance.RoundBaseChips.Length)
+        {
+            int diff = bigRound - balance.RoundBaseChips.Length + 1;
+            int k = (diff - 1) >> 1;           // floor((n-1)/2)
+            int isEven = (diff & 1) ^ 1;       // 1 if n is even, 0 if odd   (branchless)
+
+            // factor = 1 for odd, 2.5 for even
+            double factor = 1.0 + 1.5 * isEven;
+
+            goal = 1_000_000.0 * Math.Pow(10.0, k) * factor;
+        }
+        else
+            goal = balance.RoundBaseChips[bigRound];
+        return goal * balance.RoundChipMult[smallRound] * balance.SpinWheelBalance.GoalMultiplier[wheelIdx];
     }
 
     public static bool CheckRoundComplete(RunData runData, Balance balance)
@@ -1770,9 +1830,9 @@ public static class Logic
 
         }
 
-// #if UNITY_EDITOR
-//         runData.ShopJokerIdxs[0] = 34;
-// #endif
+        // #if UNITY_EDITOR
+        //         runData.ShopJokerIdxs[0] = 34;
+        // #endif
     }
 
     private static bool AssignRandomJokerToShop(RunData runData, Span<int> availableJokerTypes, ref int availableJokerCount, int shopJokerIdx)

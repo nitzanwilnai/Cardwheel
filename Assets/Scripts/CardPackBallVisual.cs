@@ -353,6 +353,7 @@ namespace Cardwheel
 
                 m_UI.SetActive(true);
                 CommonVisual.ShowUpdatedCards(runData, balance, balance.CardPackBallBalance.DescriptionName, ref m_packAnimationTimer, m_cardPackCardGUIs, m_descriptionGOs, m_rerollButtonData, m_rerollCostText);
+                CommonVisual.ShowMoney(runData, m_topBarGUI);
             }
         }
     }

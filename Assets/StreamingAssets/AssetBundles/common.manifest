@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.0.61f1
-CRC: 1191906910
+CRC: 2581080286
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 23f3faff014778b5f9890b74a287e506
+    Hash: 833191a7efe951f3313b4ac3c255b9de
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 543f217589179194a7c0c2500a6ee5da
+    Hash: a80a37600a5a901b5f4c16169e22f0b8
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: c02c5502dbba7f10f3d51b8498d9eec0
+    Hash: 4972113a2ede01a54a01e0bf58042b70
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -101,6 +101,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: edc441c2cc14f41ee972e8c409a7f730, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: a1df532dcec8041ea9575e6fd3003884, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -335,7 +337,7 @@ Assets:
 - Assets/Prefabs/Descriptions/Joker 0091 Gain +0.1x mult for every ball on orange.prefab
 - Assets/Prefabs/Descriptions/Pack Balls - 0000 - Chips.prefab
 - Assets/Textures/Balls/B 0003 - Mult Mult.png
-- Assets/Prefabs/Common/UI - Tutorial.prefab
+- Assets/Prefabs/Common/InfoVisual.prefab
 - Assets/Prefabs/Descriptions/Pack Balls - 0007 - Mult Red.prefab
 - Assets/Textures/Jokers/0105 - Joker x5 if no other jokers in hand.png
 - Assets/Textures/Jokers/0041 - Joker increase chips +1 for every ball on yellow.png
@@ -343,9 +345,10 @@ Assets:
 - Assets/Textures/Jokers/0108 - Joker - at the start of every round convert 1 random
   slot to orange.png
 - Assets/Textures/Effects/Star2.png
-- Assets/Textures/Effects/Star.png
+- Assets/Prefabs/Common/UI - Tutorial.prefab
 - Assets/Prefabs/Common/MainMenuVisual.prefab
 - Assets/Prefabs/Common/UI - Demo.prefab
+- Assets/Textures/Effects/Star.png
 - Assets/Prefabs/Descriptions/Joker 0086 Joker +1x mult for every ball on red.prefab
 - Assets/Prefabs/Descriptions/Joker 0017 +1 Mult Per Joker.prefab
 - Assets/Textures/Jokers/0005 - Joker.png
@@ -420,7 +423,7 @@ Assets:
 - Assets/Textures/Jokers/0048 - Joker +20 chips per ball on yellow.png
 - Assets/Textures/Jokers/0065 - Joker +100 chips if balls fall on at least 3 different
   colors.png
-- Assets/Prefabs/Descriptions/Joker 0044 Gain mult +5 when all balls land on 1 color.prefab
+- Assets/Prefabs/Descriptions/Joker 0044 Gain mult +3 when all balls land on 1 color.prefab
 - Assets/Prefabs/Descriptions/Joker 0119 x3 mult if ball falls on deactivated color
   during boss battle.prefab
 - Assets/Prefabs/Descriptions/Joker 0050 +20 chips per ball on Blue.prefab

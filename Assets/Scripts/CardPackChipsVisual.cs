@@ -245,6 +245,7 @@ namespace Cardwheel
                 Hide();
                 m_UI.SetActive(true);
                 CommonVisual.ShowUpdatedCards(runData, balance, balance.CardPackChipsBalance.DescriptionName, ref m_packAnimationTimer, m_cardPackCardGUIs, m_descriptionGOs, m_rerollButtonData, m_rerollCostText);
+                CommonVisual.ShowMoney(runData, m_topBarGUI);
 
                 for (int i = 0; i < balance.CardPackMaxCards[runData.SelectedShopCardPackIdx]; i++)
                 {

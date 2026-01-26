@@ -74,8 +74,8 @@ namespace Cardwheel
 
 #if UNITY_EDITOR
                         // gameData.MenuTutorialFlags = 0;
-                        for (int i = 0; i < gameData.SpinWheelWinCount.Length; i++)
-                            gameData.SpinWheelWinCount[i] = 1;
+                        // for (int i = 0; i < gameData.SpinWheelWinCount.Length; i++)
+                        //     gameData.SpinWheelWinCount[i] = 1;
 #endif
                     }
                 }

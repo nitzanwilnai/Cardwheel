@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81eca2c5d448d49f4bac58bdb9d0f6c1, type: 3}
   m_Name: RoundSO
   m_EditorClassIdentifier: 
-  BaseChip: 2c01000020030000d007000088130000d4300000204e0000b888000050c30000
+  RoundBaseChip: 2c01000020030000d007000088130000d4300000204e0000b888000050c3000090d00300
   RoundChipMult:
   - 1
   - 1.5

@@ -291,7 +291,7 @@ namespace Cardwheel
             for (int i = 0; i < gameData.SpinWheelWinCount.Length; i++)
                 if (gameData.SpinWheelWinCount[i] > 0)
                     lastWheel = i;
-            m_wheelSelectionIdx = lastWheel + 1;
+            m_wheelSelectionIdx = gameData.SpinWheelWinCount[0] > 0 ? lastWheel + 1 : 0;
             if (m_wheelSelectionIdx > gameData.SpinWheelWinCount.Length - 1)
                 m_wheelSelectionIdx = gameData.SpinWheelWinCount.Length - 1;
 

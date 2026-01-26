@@ -71,7 +71,7 @@ namespace Cardwheel
         LOSE_MONEY_EVERY_BALL_BLUE = 43,
         LOSE_MONEY_EVERY_BALL_MOST_COMMON_COLOR = 44,
     };
-    
+
     public enum VOUCHER_TYPE
     {
         PLUS_ONE_SPIN,
@@ -305,7 +305,7 @@ namespace Cardwheel
         public int InterestMax;
 
         [Header("RoundInfo")]
-        public int[] BaseChip;
+        public int[] RoundBaseChips;
         public float[] RoundChipMult;
         public int[] RoundReward;
 
@@ -396,11 +396,12 @@ namespace Cardwheel
                     CardPackWeight[packIdx] = br.ReadInt32();
                 }
 
-                BaseChip = new int[8];
+                int numRoundBaseChips = br.ReadInt32();
+                RoundBaseChips = new int[numRoundBaseChips];
                 RoundChipMult = new float[3];
                 RoundReward = new int[3];
-                for (int i = 0; i < 8; i++)
-                    BaseChip[i] = br.ReadInt32();
+                for (int i = 0; i < numRoundBaseChips; i++)
+                    RoundBaseChips[i] = br.ReadInt32();
                 for (int i = 0; i < 3; i++)
                     RoundChipMult[i] = br.ReadSingle();
                 for (int i = 0; i < 3; i++)
@@ -409,9 +410,9 @@ namespace Cardwheel
 
                 int numJokers = br.ReadInt32();
                 JokerBalance.NumJokers = numJokers;
-// #if DEMO
-//                 JokerBalance.NumJokers = 71;
-// #endif
+                // #if DEMO
+                //                 JokerBalance.NumJokers = 71;
+                // #endif
                 JokerBalance.JokerSpritesNames = new string[numJokers];
                 JokerBalance.Cost = new int[numJokers];
                 JokerBalance.Rarity = new RARITY[numJokers];
