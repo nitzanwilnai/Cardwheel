@@ -592,6 +592,22 @@ namespace Cardwheel
             }
         }
 
+        public static void ChangeCanvasScalerMatchingSimple(GameObject UI)
+        {
+            float ratio = (float)Screen.width / (float)Screen.height;
+
+            CanvasScaler canvasScaler = UI.GetComponent<CanvasScaler>();
+
+            if (Screen.width < Screen.height)
+            {
+                canvasScaler.matchWidthOrHeight = 0.0f;
+            }
+            else
+            {
+                canvasScaler.matchWidthOrHeight = 1.0f;
+            }
+        }
+
         public static void ShowUpdatedCards(
             RunData runData,
             Balance balance,

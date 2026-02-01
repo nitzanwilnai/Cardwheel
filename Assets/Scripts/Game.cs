@@ -757,7 +757,9 @@ namespace Cardwheel
         {
             SoundManager.Instance.PlaySFXWinGame();
 
+#if UNITY_IOS || UNITY_ANDROID
             Firebase.Analytics.FirebaseAnalytics.LogEvent("WIN_SCREEN_WHEEL_" + m_runData.WheelIdx);
+#endif
 
             Logic.WinGame(m_gameData, m_runData);
 
@@ -771,7 +773,9 @@ namespace Cardwheel
         {
             SoundManager.Instance.PlaySFXGameOver();
 
+#if UNITY_IOS || UNITY_ANDROID
             Firebase.Analytics.FirebaseAnalytics.LogEvent("GAME_OVER_WHEEL_" + m_runData.WheelIdx);
+#endif
 
             Logic.GameOver(m_gameData);
 
