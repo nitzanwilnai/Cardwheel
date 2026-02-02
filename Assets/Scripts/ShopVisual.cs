@@ -406,7 +406,7 @@ namespace Cardwheel
 
             if (selectedButton >= SHOP_MENU_BUTTONS.SHOP_JOKER_1 && selectedButton <= SHOP_MENU_BUTTONS.SHOP_JOKER_3)
             {
-                if (runData.ShopJokerIdxs[m_selectedShopButton - SHOP_MENU_BUTTONS.SHOP_JOKER_1] > -1)
+                if (runData.ShopJokerIdxs[selectedButton - SHOP_MENU_BUTTONS.SHOP_JOKER_1] > -1)
                     selectButton(selectedButton);
                 else
                 {
