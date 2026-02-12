@@ -178,6 +178,8 @@ namespace Cardwheel
         {
             if (File.Exists(Application.persistentDataPath + "/Cardwheel/save_v" + VERSION + ".dat"))
                 return LoadMenuStateFromFile(Application.persistentDataPath + "/Cardwheel/save_v" + VERSION + ".dat");
+            if (File.Exists(Application.persistentDataPath + "/Cardwheel/save_v7.dat"))
+                return LoadMenuStateFromFile(Application.persistentDataPath + "/Cardwheel/save_v7.dat");
             if (File.Exists(Application.persistentDataPath + "/Cardwheel/save_v6.dat"))
                 return LoadMenuStateFromFile(Application.persistentDataPath + "/Cardwheel/save_v6.dat");
             if (File.Exists(Application.persistentDataPath + "/save_v5.dat"))

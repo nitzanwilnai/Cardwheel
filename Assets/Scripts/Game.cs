@@ -690,6 +690,11 @@ namespace Cardwheel
         {
             hideMenuState(m_runData.MenuState);
 
+            //for backwards compatiblity
+            for (int i = 0; i < m_balance.NumSlots; i++)
+                m_runData.UseSlot[i] = 1;
+
+
             if (RunDataIO.LoadRun(m_runData))
             {
                 Debug.Log("Loaded rundata v" + RunDataIO.VERSION);
