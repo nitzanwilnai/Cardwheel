@@ -17,7 +17,7 @@ namespace Cardwheel
 {
     public static class RunDataIO
     {
-        public static int VERSION = 7;
+        public static int VERSION = 8;
 
         public static void SaveRun(RunData runData, Balance balance)
         {
@@ -26,7 +26,7 @@ namespace Cardwheel
             if (!Directory.Exists(Application.persistentDataPath + "/Cardwheel"))
                 Directory.CreateDirectory(Application.persistentDataPath + "/Cardwheel");
 
-            string fileName = Application.persistentDataPath + "/Cardwheel/save_v"+VERSION+".dat";
+            string fileName = Application.persistentDataPath + "/Cardwheel/save_v" + VERSION + ".dat";
             using (FileStream fs = File.Create(fileName))
             using (BinaryWriter bw = new BinaryWriter(fs))
             {
@@ -82,15 +82,12 @@ namespace Cardwheel
 
                 for (int i = 0; i < (int)SLOT_TYPE.LAST; i++)
                 {
-                    bw.Write(runData.SlotColors[i].r);
-                    bw.Write(runData.SlotColors[i].g);
-                    bw.Write(runData.SlotColors[i].b);
-                    bw.Write(runData.SlotColors[i].a);
                     bw.Write(runData.BallScoresCount[i]);
                     bw.Write(runData.BaseChips[i]);
                     bw.Write(runData.ColorCount[i]);
-                    bw.Write(runData.UseSlotType[i]);
                 }
+                for (int i = 0; i < balance.NumSlots; i++)
+                    bw.Write(runData.UseSlot[i]);
 
                 bw.Write(runData.MoneyAfterBoss);
                 bw.Write(runData.BossRerolls);
@@ -166,7 +163,7 @@ namespace Cardwheel
                 for (int i = 0; i < runData.BossType.Length; i++)
                     bw.Write(runData.BossType[i]);
                 bw.Write(runData.UseBallsSpecial);
-                bw.Write(runData.UseSlotsSpecial);
+                bw.Write(runData.UseSlotBuffs);
                 bw.Write(runData.UseBaseChips);
 
                 bw.Write(runData.SkipCount);
@@ -179,8 +176,8 @@ namespace Cardwheel
 
         public static MENU_STATE LoadMenuStateOnly()
         {
-            if (File.Exists(Application.persistentDataPath + "/Cardwheel/save_v"+VERSION+".dat"))
-                return LoadMenuStateFromFile(Application.persistentDataPath + "/Cardwheel/save_v"+VERSION+".dat");
+            if (File.Exists(Application.persistentDataPath + "/Cardwheel/save_v" + VERSION + ".dat"))
+                return LoadMenuStateFromFile(Application.persistentDataPath + "/Cardwheel/save_v" + VERSION + ".dat");
             if (File.Exists(Application.persistentDataPath + "/Cardwheel/save_v6.dat"))
                 return LoadMenuStateFromFile(Application.persistentDataPath + "/Cardwheel/save_v6.dat");
             if (File.Exists(Application.persistentDataPath + "/save_v5.dat"))
@@ -214,7 +211,7 @@ namespace Cardwheel
 
         public static bool LoadRun(RunData runData)
         {
-            string fileName = Application.persistentDataPath + "/Cardwheel/save_v"+VERSION+".dat";
+            string fileName = Application.persistentDataPath + "/Cardwheel/save_v" + VERSION + ".dat";
             if (File.Exists(fileName))
             {
                 using (var stream = File.Open(fileName, FileMode.Open))
@@ -273,15 +270,14 @@ namespace Cardwheel
 
                         for (int i = 0; i < (int)SLOT_TYPE.LAST; i++)
                         {
-                            runData.SlotColors[i].r = br.ReadSingle();
-                            runData.SlotColors[i].g = br.ReadSingle();
-                            runData.SlotColors[i].b = br.ReadSingle();
-                            runData.SlotColors[i].a = br.ReadSingle();
                             runData.BallScoresCount[i] = br.ReadInt32();
                             runData.BaseChips[i] = br.ReadDouble();
                             runData.ColorCount[i] = br.ReadInt32();
-                            runData.UseSlotType[i] = br.ReadInt32();
                         }
+
+
+                        for(int i = 0; i< numSlots; i++)
+                        runData.UseSlot[i] = br.ReadInt32();
 
                         runData.MoneyAfterBoss = br.ReadInt32();
                         runData.BossRerolls = br.ReadInt32();
@@ -357,7 +353,7 @@ namespace Cardwheel
                         for (int i = 0; i < numBosses && i < runData.BossType.Length; i++)
                             runData.BossType[i] = br.ReadInt32();
                         runData.UseBallsSpecial = br.ReadInt32();
-                        runData.UseSlotsSpecial = br.ReadInt32();
+                        runData.UseSlotBuffs = br.ReadInt32();
                         runData.UseBaseChips = br.ReadInt32();
 
                         runData.SkipCount = br.ReadInt32();

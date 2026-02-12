@@ -52,16 +52,15 @@ namespace Cardwheel
         public int[] BallTypesInGame;
 
         // gameplay
-        public int[] SlotScored;
-        public SLOT_TYPE[] SlotType;
-        public SLOT_TYPE[] SlotTypeInGame;
-        public int[] SlotModType;
+        public int[] SlotScored; // which ball fell on this slot, if any
+        public SLOT_TYPE[] SlotType; // the slot type on the wheel
+        public SLOT_TYPE[] SlotTypeInGame; // the slot type in the current run (can be changed by bosses)
+        public int[] SlotModType; // slot modification (buff)
         
         public int[] BallSlotIdx;
         public float[] BallSnapVelocity;
         public float[] BallSnapTime;
         public int MoneyAfterBoss;
-        public Color[] SlotColors;
         public int BossRerolls;
 
         public SLOT_TYPE LeastPlayedColorAtRoundStart;
@@ -128,8 +127,8 @@ namespace Cardwheel
         // bosses
         public int[] BossType;
         public int UseBallsSpecial;
-        public int UseSlotsSpecial;
-        public int[] UseSlotType;
+        public int UseSlotBuffs;
+        public int[] UseSlot;
         public int UseBaseChips;
         public int[] UseJoker;
     }

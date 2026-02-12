@@ -692,8 +692,13 @@ namespace Cardwheel
 
             if (RunDataIO.LoadRun(m_runData))
             {
-                Debug.Log("Loaded rundata v7");
+                Debug.Log("Loaded rundata v" + RunDataIO.VERSION);
                 // loaded v7
+            }
+            else if (RunDataIOV7.LoadRun(m_runData))
+            {
+                Debug.Log("Loaded rundata v7");
+                // loaded v6
             }
             else if (RunDataIOV6.LoadRun(m_runData))
             {

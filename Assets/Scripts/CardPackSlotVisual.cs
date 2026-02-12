@@ -146,7 +146,7 @@ namespace Cardwheel
                 m_slotAnimTimer += dt;
                 float value = m_slotAnimTimer;
 
-                CommonSlotsVisual.TickHighlightChangedSlots(value, SlotScaleCurve, m_scoringSlots, runData.SlotType, runData.SlotColors);
+                CommonSlotsVisual.TickHighlightChangedSlots(runData, balance, value, SlotScaleCurve, m_scoringSlots, runData.SlotType);
 
                 m_slotChangedTimer -= dt;
                 if (m_slotChangedTimer <= 0.0f)

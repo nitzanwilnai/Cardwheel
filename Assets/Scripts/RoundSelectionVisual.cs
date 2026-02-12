@@ -156,7 +156,7 @@ namespace Cardwheel
 
         public void Show()
         {
-            Logic.SetDataForNextRound(runData, balance);
+            Logic.SetDataForNextRound(runData, balance, CommonSlotsVisual.ChangedSlotsIdxs, ref CommonSlotsVisual.ChangedSlotsCount);
 
             int bigRound = runData.Round / 3;
             int smallRound = runData.Round % 3;
@@ -192,6 +192,9 @@ namespace Cardwheel
             CommonVisual.ShowBalls(runData, balance, m_cardsBallsSpinWheelGUI);
 
             CommonSlotsVisual.ShowSpinWheelForRound(runData, balance, m_cardsBallsSpinWheelGUI.ScoringSlots, runData.Round);
+
+            if(CommonSlotsVisual.ChangedSlotsCount > 0)
+                m_slotAnimTimer = m_slotAnimTime;
 
             selectButton(MENU_BUTTONS.PLAY);
 
@@ -284,7 +287,7 @@ namespace Cardwheel
                 float value = 1.0f - m_slotAnimTimer;
                 if (value < 0.0f)
                     value = 0.0f;
-                CommonSlotsVisual.TickHighlightChangedSlots(value, SlotScaleCurve, m_cardsBallsSpinWheelGUI.ScoringSlots, runData.SlotTypeInGame, runData.SlotColors);
+                CommonSlotsVisual.TickHighlightChangedSlots(runData, balance, value, SlotScaleCurve, m_cardsBallsSpinWheelGUI.ScoringSlots, runData.SlotTypeInGame);
             }
 
             CommonSlotsVisual.TickSpinWheelUI(runData, balance.UISpinWheelSpeed, dt, m_cardsBallsSpinWheelGUI);
@@ -425,10 +428,12 @@ namespace Cardwheel
             {
                 m_topBarGUI.MoneyAnim.Play();
             }
-            if (balance.SkipBalance.Change2SlotsToPlayedColor[skipType])
-            {
+            if(CommonSlotsVisual.ChangedSlotsCount > 0)
                 m_slotAnimTimer = m_slotAnimTime;
-            }
+
+            if (balance.SkipBalance.Change2SlotsToPlayedColor[skipType])
+                m_slotAnimTimer = m_slotAnimTime;
+
             if (balance.SkipBalance.SortSlots[skipType])
                 sortSlots();
 
@@ -497,6 +502,8 @@ namespace Cardwheel
         private void sortSlots()
         {
             CommonSlotsVisual.SortSlotsRoundSelection(runData, balance, m_cardsBallsSpinWheelGUI);
+            if(CommonSlotsVisual.ChangedSlotsCount > 0)
+                m_slotAnimTimer = m_slotAnimTime;
         }
     }
 }

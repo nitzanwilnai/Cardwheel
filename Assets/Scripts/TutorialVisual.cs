@@ -77,7 +77,7 @@ namespace Cardwheel
 
         public void Hide()
         {
-            gameData.MenuTutorialFlags = Logic.SetBit(gameData.MenuTutorialFlags, (int)runData.MenuState);
+            Logic.SetFlag(ref gameData.MenuTutorialFlags, (int)runData.MenuState);
             GameDataIO.SaveGameData(gameData);
             m_UI.SetActive(false);
         }

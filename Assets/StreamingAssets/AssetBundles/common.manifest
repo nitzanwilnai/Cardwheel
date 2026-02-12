@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.0.66f2
-CRC: 4242917931
+CRC: 2614475479
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 43a6733568c00916a843e8f258d91721
+    Hash: d4ebb091fcbffda7c5429c02edda3106
   TypeTreeHash:
     serializedVersion: 2
     Hash: ba7fa1d2db2f8ead8f2e65cd981b6566
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 9361f9639c32bd3f575adf71a9c7ac5b
+    Hash: 543e1c40115ae406a33b793ccee4a6e5
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -398,7 +398,7 @@ Assets:
 - Assets/Textures/Jokers/0014 - Joker.png
 - Assets/Textures/Jokers/0045 - Joker +300 chips -1 spins.png
 - Assets/Prefabs/Descriptions/Joker 0003 +4 Mult On Green.prefab
-- Assets/Prefabs/Descriptions/Pack Balls - 0008 - Mult Yellow.prefab
+- Assets/Prefabs/Descriptions/Pack Balls - 0008 - Mult Orange.prefab
 - Assets/Prefabs/Common/Shop Info Round Info.prefab
 - Assets/Prefabs/Descriptions/Joker 0059 Remove slot modification and GAIN mult +2x.prefab
 - "Assets/Prefabs/Descriptions/Joker 0106 Add \u25C71 to sell value of every joker

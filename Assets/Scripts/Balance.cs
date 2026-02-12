@@ -16,6 +16,7 @@ using CommonTools;
 using System;
 using System.IO;
 using Unity.Collections.LowLevel.Unsafe;
+using UnityEngine.Assertions.Must;
 
 namespace Cardwheel
 {
@@ -25,41 +26,41 @@ namespace Cardwheel
     {
         NONE = 0,
         BALLS_DEBUFFED = 1,
-        SLOTS_DEBUFFED = 2,
+        SLOTS_DEBUFFED = 2, // WORKS
         BALLS_DEBUFFED_FIRST_SPIN = 3,
-        SLOTS_DEBUFFED_FIRST_SPIN = 4,
+        SLOTS_DEBUFFED_FIRST_SPIN = 4, // WORKS
         BALL_EFFECTS_HIDDEN = 5,
-        SLOT_EFFECTS_HIDDEN = 6,
+        SLOT_EFFECTS_HIDDEN = 6, // WORKS
         ONE_LESS_SPIN = 7,
         DOUBLE_GOAL = 8,
-        ONLY_RED = 9,
-        ONLY_YELLOW = 10,
-        ONLY_GREEN = 11,
-        ONLY_BLUE = 12,
-        DIFFERENT_COLOR_EVERY_SPIN = 13,
+        ONLY_RED = 9, // WORKS
+        ONLY_ORANGE = 10, // WORKS
+        ONLY_GREEN = 11, // WORKS
+        ONLY_BLUE = 12, // WORKS
+        DIFFERENT_COLOR_EVERY_SPIN = 13, // WORKS
         LOSE_MONEY_EVERY_SPIN = 14,
         NO_BASE_CHIPS = 15,
-        NO_BASE_MULTIPLIER = 16,
+        NO_BASE_MULTIPLIER = 16, // NOT USED
         RANDOM_JOKE_DEBUFFED_PER_SPIN = 17,
         JUMBLE_BALLS = 18,
-        JUMBLE_SLOTS = 19,
-        NO_RED = 20,
-        NO_YELLOW = 21,
+        JUMBLE_SLOTS = 19, // WORKS
+        NO_RED = 20, // WORKS
+        NO_ORANGE = 21,
         NO_GREEN = 22,
         NO_BLUE = 23,
         SWAP_COLORS = 24,
         ONLY_PLAY_MOST_USED_COLOR = 25,
-        DEBUFF_MOST_USED_COLOR = 26,
-        ONLY_RED_FIRST_SPIN = 27,
-        ONLY_YELLOW_FIRST_SPIN = 28,
-        ONLY_GREEN_FIRST_SPIN = 29,
-        ONLY_BLUE_FIRST_SPIN = 30,
+        DISABLE_MOST_USED_COLOR = 26,
+        ONLY_RED_FIRST_SPIN = 27, // WORKS
+        ONLY_ORANGE_FIRST_SPIN = 28, // WORKS
+        ONLY_GREEN_FIRST_SPIN = 29, // WORKS
+        ONLY_BLUE_FIRST_SPIN = 30, // WORKS
 
         ONLY_SCORE_SIX_BALLS = 31,
         MOST_PLAYED_BASE_CHIPS_TO_FIVE = 32,
         ONLY_SCORE_AT_LEAST_TWO_COLORS = 33,
         ONLY_SCORE_AT_LEAST_THREE_COLORS = 34,
-        JUMBLE_SLOT_EFFECTS = 35,
+        JUMBLE_SLOT_EFFECTS = 35, // TEST
         ONLY_RED_ORANGE = 36,
         ONLY_GREEN_BLUE = 37,
         ONLY_RED_GREEN = 38,
@@ -70,6 +71,24 @@ namespace Cardwheel
         LOSE_MONEY_EVERY_BALL_GREEN = 42,
         LOSE_MONEY_EVERY_BALL_BLUE = 43,
         LOSE_MONEY_EVERY_BALL_MOST_COMMON_COLOR = 44,
+
+        ONLY_ONE_SPIN = 45,
+        PLAYED_SLOTS_DISABLED = 46,
+        PLAYED_COLORS_DISABLED = 47,
+        JUMBLE_SLOTS_FIRST_SPIN = 48, // TEST
+        JUMBLE_SLOTS_EVERY_SPIN = 49, // TEST
+        CHANGE_SLOTS_INTO_GROUPS_OF_THREE = 50, // TEST
+        CHANGE_SLOTS_INTO_GROUPS_OF_TWO = 51, // TEST
+        CHANGE_SLOTS_TO_ALTERNATING_COLORS = 52, // TEST
+
+        RED_SLOTS_DEBUFFED = 53,
+        ORANGE_SLOTS_DEBUFFED = 54,
+        GREEN_SLOTS_DEBUFFED = 55,
+        BLUE_SLOTS_DEBUFFED = 56,
+
+        CHANGE_SLOTS_INTO_GROUPS_OF_THREE_FIRST_SPIN = 57, // TEST
+        CHANGE_SLOTS_INTO_GROUPS_OF_TWO_FIRST_SPIN = 58, // TEST
+        CHANGE_SLOTS_TO_ALTERNATING_COLORS_FIRST_SPIN = 59, // TEST
     };
 
     public enum VOUCHER_TYPE

@@ -193,8 +193,7 @@ namespace Cardwheel
 
         public bool SpinTest = false;
 
-        bool m_showSlotEffects = true;
-        bool m_slotsDebuffed = false;
+        bool m_showSlotBuffs = true;
 
         Balance balance;
         SettingsData settingsData;
@@ -339,9 +338,8 @@ namespace Cardwheel
             //     Debug.Log("Set balls to STATIC");
             // }
 
-            m_showSlotEffects = true;
-            m_slotsDebuffed = false;
-            CommonSlotsVisual.CheckSpinWheelDebuffForNewRound(runData, balance, runData.Round, out m_showSlotEffects, out m_slotsDebuffed);
+            m_showSlotBuffs = true;
+            m_showSlotBuffs = CommonSlotsVisual.ShowSlotBuffsForRound(runData, balance, runData.Round);
 
             int useBallSprite = 1;
             if (Logic.InBossRound(runData))
@@ -362,7 +360,7 @@ namespace Cardwheel
                 m_bossDescription.text = CommonVisual.GetBossDescription(runData, balance, "Boss: ");
             CommonVisual.ShowTopBar(runData, m_topBarGUI, title);
 
-            CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotEffects, runData.UseSlotsSpecial == 0);
+            CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotBuffs, runData.UseSlotBuffs);
 
             CommonVisual.ShowJokersInGame(runData, balance, m_jokerParent);
 
@@ -587,7 +585,7 @@ namespace Cardwheel
                         if (slotChangedIdx > -1)
                         {
                             CommonSlotsVisual.ChangedSlotsIdxs[CommonSlotsVisual.ChangedSlotsCount++] = slotChangedIdx;
-                            CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotEffects, runData.UseSlotsSpecial == 0);
+                            CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotBuffs, runData.UseSlotBuffs);
                             m_slotAnimTimer = m_slotAnimTime;
 
                             CommonVisual.JokerGUIs[jokerIdx].Animation.Play("ScoreGrow");
@@ -1130,7 +1128,7 @@ namespace Cardwheel
                     m_totalScoreAnimation.Play();
                     SoundManager.Instance.PlaySFXScoringTotal();
 
-                    if (Logic.InBossRound(runData) && runData.TotalChips == 0)
+                    if (Logic.InBossRound(runData) && runData.SpinChips == 0)
                         m_bossGrowAnim.Play("ScoreGrow");
 
                     Logic.JokerPostSpin(runData, balance);
@@ -1267,7 +1265,7 @@ namespace Cardwheel
                 m_nextSpinTimer += dt;// * settingsData.Speed;
                 if (m_nextSpinTimer > NextSpinTime)
                 {
-                    Logic.SpinComplete(runData, balance);
+                    Logic.SpinComplete(runData, balance, CommonSlotsVisual.ChangedSlotsIdxs, ref CommonSlotsVisual.ChangedSlotsCount);
 
                     if (Logic.InBossRound(runData))
                     {
@@ -1277,16 +1275,21 @@ namespace Cardwheel
                         {
                             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.BALLS_DEBUFFED_FIRST_SPIN)
                                 showBallsInGame(1, runData.UseBallsSpecial == 0);
+
                             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.SLOTS_DEBUFFED_FIRST_SPIN)
-                                CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotEffects, runData.UseSlotsSpecial == 0);
+                                CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotBuffs, runData.UseSlotBuffs);
                         }
-                        if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.DIFFERENT_COLOR_EVERY_SPIN)
-                            CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotEffects, runData.UseSlotsSpecial == 0);
+                        if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.DIFFERENT_COLOR_EVERY_SPIN ||
+                            balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.PLAYED_SLOTS_DISABLED ||
+                            balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.PLAYED_COLORS_DISABLED)
+                            CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotBuffs, runData.UseSlotBuffs);
 
                         if (runData.CurrentSpin < 2 && balance.BossBalance.BossEffect[bossType] >= BOSS_EFFECT.ONLY_RED_FIRST_SPIN &&
                             balance.BossBalance.BossEffect[bossType] <= BOSS_EFFECT.ONLY_BLUE_FIRST_SPIN)
-                            CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotEffects, runData.UseSlotsSpecial == 0);
+                            CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotBuffs, runData.UseSlotBuffs);
 
+                        if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.JUMBLE_SLOTS_EVERY_SPIN)
+                            CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotBuffs, runData.UseSlotBuffs);
                     }
 
                     if (Logic.CheckWin(runData, balance))
@@ -1312,7 +1315,8 @@ namespace Cardwheel
                         m_slotJuiceTimer[slotIdx] -= dt;
                         float colorMult = SlotScaleAnimCurve.Evaluate(value) * 0.5f;
                         int slotType = (int)runData.SlotTypeInGame[slotIdx];
-                        m_scoringSlots[slotIdx].SpriteRenderer.color = runData.SlotColors[slotType] + Color.white * colorMult;
+                        Color color = runData.UseSlot[slotIdx] == 1 ? balance.SlotColors[slotType] : balance.SlotOffColor;
+                        m_scoringSlots[slotIdx].SpriteRenderer.color = color + Color.white * colorMult;
                     }
                 }
             }
@@ -1325,7 +1329,7 @@ namespace Cardwheel
                 if (value > 1.0f)
                     value = 1.0f;
 
-                CommonSlotsVisual.TickHighlightChangedSlots(value, SlotScaleAnimCurve, m_scoringSlots, runData.SlotTypeInGame, runData.SlotColors);
+                CommonSlotsVisual.TickHighlightChangedSlots(runData, balance, value, SlotScaleAnimCurve, m_scoringSlots, runData.SlotTypeInGame);
             }
 
             // AI
@@ -1538,11 +1542,10 @@ namespace Cardwheel
             Logic.StartSpin(runData, balance);
             if (Logic.InBossRound(runData))
             {
-                bool slotsChanged;
-                Logic.StartSpinBossEffect(runData, balance, out slotsChanged, CommonSlotsVisual.ChangedSlotsIdxs, ref CommonSlotsVisual.ChangedSlotsCount);
-                if (slotsChanged)
+                Logic.StartSpinBossEffect(runData, balance, CommonSlotsVisual.ChangedSlotsIdxs, ref CommonSlotsVisual.ChangedSlotsCount);
+                if (CommonSlotsVisual.ChangedSlotsCount > 0)
                 {
-                    CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotEffects, runData.UseSlotsSpecial == 0);
+                    CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotBuffs, runData.UseSlotBuffs);
                     m_slotAnimTimer = m_slotAnimTime;
                 }
 
@@ -1600,7 +1603,7 @@ namespace Cardwheel
                     m_slotAnimTimer = m_slotAnimTime;
                     CommonSlotsVisual.ChangedSlotsIdxs[CommonSlotsVisual.ChangedSlotsCount++] = slotChangedIdx;
                     CommonVisual.JokerGUIs[slotChangeJokerIdx].Animation.Play("ScoreGrow");
-                    CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotEffects, runData.UseSlotsSpecial == 0);
+                    CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotBuffs, runData.UseSlotBuffs);
                 }
 
                 if (jokerMultIncIdx > -1)

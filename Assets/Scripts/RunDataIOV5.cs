@@ -78,14 +78,11 @@ namespace Cardwheel
 
                         for (int i = 0; i < (int)SLOT_TYPE.LAST; i++)
                         {
-                            runData.SlotColors[i].r = br.ReadSingle();
-                            runData.SlotColors[i].g = br.ReadSingle();
-                            runData.SlotColors[i].b = br.ReadSingle();
-                            runData.SlotColors[i].a = br.ReadSingle();
+                            Color slotColor = new Color(br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
                             runData.BallScoresCount[i] = br.ReadInt32();
                             runData.BaseChips[i] = br.ReadInt32();
                             runData.ColorCount[i] = br.ReadInt32();
-                            runData.UseSlotType[i] = br.ReadInt32();
+                            int slotType = br.ReadInt32();
                         }
 
                         runData.MoneyAfterBoss = br.ReadInt32();
@@ -161,7 +158,7 @@ namespace Cardwheel
                         for (int i = 0; i < numBosses; i++)
                             runData.BossType[i] = br.ReadInt32();
                         runData.UseBallsSpecial = br.ReadInt32();
-                        runData.UseSlotsSpecial = br.ReadInt32();
+                        runData.UseSlotBuffs = br.ReadInt32();
                         runData.UseBaseChips = br.ReadInt32();
 
                         runData.SkipCount = br.ReadInt32();

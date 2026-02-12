@@ -12,6 +12,7 @@
 using System;
 using Cardwheel;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public static class Logic
 {
@@ -50,6 +51,19 @@ public static class Logic
         flags |= 1 << index;
     }
 
+    public static int GetFlag(int flags, int index)
+    {
+
+        return (flags & (1 << index)) > 0 ? 1 : 0;
+    }
+
+    public static int RemoveFlag(int array, int bit)
+    {
+        int mask = 1 << bit;
+        int complementedMask = ~mask;
+        return array & complementedMask;
+    }
+
     public static void ShuffleSpanIntArray(ref uint seed, Span<int> array, int count)
     {
         for (int i = 0; i < count; i++)
@@ -67,6 +81,17 @@ public static class Logic
         {
             int randomIdx = CustomRandInt(ref seed) % array.Length;
             int v = array[randomIdx];
+            array[randomIdx] = array[i];
+            array[i] = v;
+        }
+    }
+
+    public static void ShuffleSlotTypeArray(ref uint seed, SLOT_TYPE[] array)
+    {
+        for (int i = 0; i < array.Length; i++)
+        {
+            int randomIdx = CustomRandInt(ref seed) % array.Length;
+            SLOT_TYPE v = array[randomIdx];
             array[randomIdx] = array[i];
             array[i] = v;
         }
@@ -92,8 +117,6 @@ public static class Logic
         runData.BallScoreIdxs = new int[balance.MaxBalls];
         runData.BallSlotIdx = new int[balance.MaxBalls];
 
-        runData.SlotColors = new Color[(int)SLOT_TYPE.LAST];
-
         runData.BallScoresCount = new int[(int)SLOT_TYPE.LAST];
 
         runData.BaseChips = new double[(int)SLOT_TYPE.LAST];
@@ -116,7 +139,7 @@ public static class Logic
 
         runData.SkipType = new int[balance.SkipBalance.NumSkips];
         runData.BossType = new int[balance.MaxRounds / 3];
-        runData.UseSlotType = new int[(int)SLOT_TYPE.LAST];
+        runData.UseSlot = new int[balance.NumSlots];
         runData.UseJoker = new int[balance.MaxJokersInHand];
 
         runData.RoundSeeds = new uint[balance.MaxRounds];
@@ -234,9 +257,6 @@ public static class Logic
         for (int i = 0; i < (int)SLOT_TYPE.LAST; i++)
             runData.ColorCount[i] = 0;
 
-        for (int i = 0; i < (int)SLOT_TYPE.LAST; i++)
-            runData.SlotColors[i] = balance.SlotColors[i];
-
         initSkipsForNewGame(runData, balance);
 
         initBossesForNewGame(runData, balance);
@@ -250,9 +270,13 @@ public static class Logic
         runData.MoneyAfterBoss = 0;
 
         runData.UseBallsSpecial = 1;
-        runData.UseSlotsSpecial = 1;
+
+        for (int i = 0; i < balance.NumSlots; i++)
+            runData.UseSlot[i] = 1;
+
         for (int i = 0; i < (int)SLOT_TYPE.LAST; i++)
-            runData.UseSlotType[i] = 1;
+            Logic.SetFlag(ref runData.UseSlotBuffs, i);
+
         runData.UseBaseChips = 1;
 
         runData.ShopRerollCount = 0;
@@ -298,12 +322,17 @@ public static class Logic
         //     if (i % 3 == 0)
         //         runData.SlotModType[i] = (cnt++ % 4 + 4);
 
+        // int cnt = 0;
+        // for (int i = 0; i < runData.SlotModType.Length; i++)
+        //     if (i  / 6 == 0)
+        //         runData.SlotModType[i] = (cnt++ % 4 + 4);
+
         // runData.SlotModType[8] = 0;
         // runData.SlotModType[9] = 0;
         // runData.SlotModType[10] = 0;
 
         // for (int i = 0; i < balance.BossBalance.NumBosses; i++)
-        //     if (balance.BossBalance.BossEffect[i] == BOSS_EFFECT.LOSE_MONEY_EVERY_BALL_MOST_COMMON_COLOR)
+        //     if (balance.BossBalance.BossEffect[i] == BOSS_EFFECT.JUMBLE_SLOT_EFFECTS)
         //         runData.BossType[0] = i;
 
         // runData.VoucherSlotMostPlayedColor = true;
@@ -490,7 +519,13 @@ public static class Logic
 
     public static int GetBossTypeForRound(RunData runData)
     {
-        int bossIdx = (runData.Round / 3) % runData.BossType.Length;
+        return GetBossTypeForRound(runData, runData.Round);
+    }
+
+
+    public static int GetBossTypeForRound(RunData runData, int round)
+    {
+        int bossIdx = (round / 3) % runData.BossType.Length;
 
         int bossType = runData.BossType[bossIdx];
 
@@ -513,8 +548,10 @@ public static class Logic
         setUniqueBossForRound(runData, balance, runData.Round / 3);
     }
 
-    public static void SetDataForNextRound(RunData runData, Balance balance)
+    public static void SetDataForNextRound(RunData runData, Balance balance, int[] affectedSlotsIdxs, ref int affectedSlotsCount)
     {
+        affectedSlotsCount = 0;
+
         runData.CurrentSpin = 0;
         runData.TotalChips = 0.0d;
 
@@ -528,11 +565,8 @@ public static class Logic
             spinsChange += balance.JokerBalance.AddSpin[jokerType];
         }
 
-        for (int i = 0; i < (int)SLOT_TYPE.LAST; i++)
-        {
-            runData.SlotColors[i] = balance.SlotColors[i];
-            runData.UseSlotType[i] = 1;
-        }
+        for (int i = 0; i < balance.NumSlots; i++)
+            runData.UseSlot[i] = 1;
 
         for (int i = 0; i < balance.MaxJokersInHand; i++)
             runData.UseJoker[i] = 1;
@@ -545,60 +579,119 @@ public static class Logic
         for (int i = 0; i < runData.BallTypes.Length; i++)
             runData.BallTypesInGame[i] = runData.BallTypes[i];
 
+        runData.UseBaseChips = 1;
+        runData.UseBallsSpecial = 1;
+        for (int i = 0; i < (int)SLOT_TYPE.LAST; i++)
+            SetFlag(ref runData.UseSlotBuffs, i);
+
         if (InBossRound(runData))
         {
             int bossType = GetBossTypeForRound(runData);
             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.ONE_LESS_SPIN)
                 spinsChange -= 1;
 
+            // TODO move to StartSpinBossEffect
+
             if (balance.BossBalance.BossEffect[bossType] >= BOSS_EFFECT.ONLY_RED &&
                 balance.BossBalance.BossEffect[bossType] <= BOSS_EFFECT.ONLY_BLUE)
             {
                 int colorIdx = (int)balance.BossBalance.BossEffect[bossType] - (int)BOSS_EFFECT.ONLY_RED;
-                onlyUseOneSlotColor(runData, balance, colorIdx);
+                onlyUseOneSlotColor(runData, balance, colorIdx, affectedSlotsIdxs, ref affectedSlotsCount);
+            }
+
+            if (balance.BossBalance.BossEffect[bossType] >= BOSS_EFFECT.ONLY_RED_FIRST_SPIN &&
+                balance.BossBalance.BossEffect[bossType] <= BOSS_EFFECT.ONLY_BLUE_FIRST_SPIN)
+            {
+                int colorIdx = (int)balance.BossBalance.BossEffect[bossType] - (int)BOSS_EFFECT.ONLY_RED_FIRST_SPIN;
+                onlyUseOneSlotColor(runData, balance, colorIdx, affectedSlotsIdxs, ref affectedSlotsCount);
             }
 
             if (balance.BossBalance.BossEffect[bossType] >= BOSS_EFFECT.NO_RED &&
                 balance.BossBalance.BossEffect[bossType] <= BOSS_EFFECT.NO_BLUE)
             {
                 int colorIdx = (int)balance.BossBalance.BossEffect[bossType] - (int)BOSS_EFFECT.NO_RED;
-                debuffOneColor(runData, balance, colorIdx);
+                turnOffOneColor(runData, balance, colorIdx, affectedSlotsIdxs, ref affectedSlotsCount);
             }
 
             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.ONLY_RED_GREEN)
             {
-                turnOffOneColor(runData, balance, (int)SLOT_TYPE.ORANGE);
-                turnOffOneColor(runData, balance, (int)SLOT_TYPE.BLUE);
+                turnOffOneColor(runData, balance, (int)SLOT_TYPE.ORANGE, affectedSlotsIdxs, ref affectedSlotsCount);
+                turnOffOneColor(runData, balance, (int)SLOT_TYPE.BLUE, affectedSlotsIdxs, ref affectedSlotsCount);
 
             }
 
             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.ONLY_RED_ORANGE)
             {
-                turnOffOneColor(runData, balance, (int)SLOT_TYPE.GREEN);
-                turnOffOneColor(runData, balance, (int)SLOT_TYPE.BLUE);
+                turnOffOneColor(runData, balance, (int)SLOT_TYPE.GREEN, affectedSlotsIdxs, ref affectedSlotsCount);
+                turnOffOneColor(runData, balance, (int)SLOT_TYPE.BLUE, affectedSlotsIdxs, ref affectedSlotsCount);
             }
             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.ONLY_GREEN_BLUE)
             {
-                turnOffOneColor(runData, balance, (int)SLOT_TYPE.RED);
-                turnOffOneColor(runData, balance, (int)SLOT_TYPE.ORANGE);
+                turnOffOneColor(runData, balance, (int)SLOT_TYPE.RED, affectedSlotsIdxs, ref affectedSlotsCount);
+                turnOffOneColor(runData, balance, (int)SLOT_TYPE.ORANGE, affectedSlotsIdxs, ref affectedSlotsCount);
 
             }
             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.ONLY_BLUE_ORANGE)
             {
-                turnOffOneColor(runData, balance, (int)SLOT_TYPE.RED);
-                turnOffOneColor(runData, balance, (int)SLOT_TYPE.GREEN);
+                turnOffOneColor(runData, balance, (int)SLOT_TYPE.RED, affectedSlotsIdxs, ref affectedSlotsCount);
+                turnOffOneColor(runData, balance, (int)SLOT_TYPE.GREEN, affectedSlotsIdxs, ref affectedSlotsCount);
             }
 
             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.ONLY_PLAY_MOST_USED_COLOR)
             {
                 int colorIdx = (int)GetMostPlayedSlotType(runData);
-                onlyUseOneSlotColor(runData, balance, colorIdx);
+                onlyUseOneSlotColor(runData, balance, colorIdx, affectedSlotsIdxs, ref affectedSlotsCount);
             }
 
-            if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.DEBUFF_MOST_USED_COLOR)
+            if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.DISABLE_MOST_USED_COLOR)
             {
                 int colorIdx = (int)GetMostPlayedSlotType(runData);
-                debuffOneColor(runData, balance, colorIdx);
+                turnOffOneColor(runData, balance, colorIdx, affectedSlotsIdxs, ref affectedSlotsCount);
+            }
+
+            if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.JUMBLE_SLOTS ||
+                balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.JUMBLE_SLOTS_FIRST_SPIN ||
+                balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.JUMBLE_SLOTS_EVERY_SPIN)
+            {
+                for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
+                {
+                    runData.SlotTypeInGame[slotIdx] = runData.SlotType[slotIdx];
+                    affectedSlotsIdxs[affectedSlotsCount++] = slotIdx;
+                }
+
+                ShuffleSlotTypeArray(ref runData.GameSeed, runData.SlotTypeInGame);
+            }
+
+            if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.CHANGE_SLOTS_INTO_GROUPS_OF_THREE ||
+                balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.CHANGE_SLOTS_INTO_GROUPS_OF_THREE_FIRST_SPIN)
+            {
+                for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
+                {
+                    int slotType = (slotIdx / 3) % 4;
+                    runData.SlotTypeInGame[slotIdx] = (SLOT_TYPE)slotType;
+                    affectedSlotsIdxs[affectedSlotsCount++] = slotIdx;
+                }
+            }
+
+            if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.CHANGE_SLOTS_INTO_GROUPS_OF_TWO ||
+                balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.CHANGE_SLOTS_INTO_GROUPS_OF_TWO_FIRST_SPIN)
+            {
+                for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
+                {
+                    int slotType = (slotIdx / 2) % 4;
+                    runData.SlotTypeInGame[slotIdx] = (SLOT_TYPE)slotType;
+                    affectedSlotsIdxs[affectedSlotsCount++] = slotIdx;
+                }
+            }
+
+            if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.CHANGE_SLOTS_TO_ALTERNATING_COLORS ||
+                balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.CHANGE_SLOTS_TO_ALTERNATING_COLORS_FIRST_SPIN)
+            {
+                for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
+                {
+                    runData.SlotTypeInGame[slotIdx] = (SLOT_TYPE)(slotIdx % 4);
+                    affectedSlotsIdxs[affectedSlotsCount++] = slotIdx;
+                }
             }
 
             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.SWAP_COLORS)
@@ -606,44 +699,57 @@ public static class Logic
                 SLOT_TYPE mostPlayedType = GetMostPlayedSlotType(runData);
                 SLOT_TYPE leastPlayedType = GetLeastPlayedSlotType(runData);
 
-                for (int i = 0; i < balance.NumSlots; i++)
+                for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
                 {
-                    if (runData.SlotType[i] == mostPlayedType)
-                        runData.SlotTypeInGame[i] = leastPlayedType;
-                    if (runData.SlotType[i] == leastPlayedType)
-                        runData.SlotTypeInGame[i] = mostPlayedType;
-                }
-            }
-
-            if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.JUMBLE_SLOTS)
-            {
-                for (int i = 0; i < balance.NumSlots; i++)
-                {
-                    SLOT_TYPE slotType = runData.SlotTypeInGame[i];
-                    int randomIndex = CustomRandInt(ref runData.BossSeed) % balance.NumSlots;
-                    runData.SlotTypeInGame[i] = runData.SlotTypeInGame[randomIndex];
-                    runData.SlotTypeInGame[randomIndex] = slotType;
+                    if (runData.SlotType[slotIdx] == mostPlayedType)
+                    {
+                        runData.SlotTypeInGame[slotIdx] = leastPlayedType;
+                        affectedSlotsIdxs[affectedSlotsCount++] = slotIdx;
+                    }
+                    else if (runData.SlotType[slotIdx] == leastPlayedType)
+                    {
+                        runData.SlotTypeInGame[slotIdx] = mostPlayedType;
+                        affectedSlotsIdxs[affectedSlotsCount++] = slotIdx;
+                    }
                 }
             }
 
             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.JUMBLE_SLOT_EFFECTS)
             {
-                for (int i = 0; i < balance.NumSlots; i++)
+                for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
                 {
-                    int slotType = runData.SlotModType[i];
+                    int slotType = runData.SlotModType[slotIdx];
                     int randomIndex = CustomRandInt(ref runData.BossSeed) % balance.NumSlots;
-                    runData.SlotModType[i] = runData.SlotModType[randomIndex];
+                    runData.SlotModType[slotIdx] = runData.SlotModType[randomIndex];
                     runData.SlotModType[randomIndex] = slotType;
                 }
+
+                for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
+                    if (runData.SlotModType[slotIdx] > -1)
+                        affectedSlotsIdxs[affectedSlotsCount++] = slotIdx;
             }
-        }
+
+            if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.SLOTS_DEBUFFED_FIRST_SPIN)
+            {
+                runData.UseSlotBuffs = 0;
+
+                for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
+                    if (runData.SlotModType[slotIdx] > -1)
+                        affectedSlotsIdxs[affectedSlotsCount++] = slotIdx;
+            }
+
+
+        } // in boss round
 
         spinsChange += runData.ExtraSkipSpin + runData.VoucherSpins;
         runData.MaxSpinsThisRound = spinsChange + balance.SpinWheelBalance.Spins[runData.WheelIdx];
 
-        runData.UseBaseChips = 1;
-        runData.UseBallsSpecial = 1;
-        runData.UseSlotsSpecial = 1;
+        if (InBossRound(runData))
+        {
+            int bossType = GetBossTypeForRound(runData);
+            if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.ONLY_ONE_SPIN)
+                runData.MaxSpinsThisRound = 1;
+        }
 
         for (int jkrIdx = 0; jkrIdx < runData.JokerCount; jkrIdx++)
         {
@@ -665,31 +771,37 @@ public static class Logic
 
     public static bool InBossRound(RunData runData)
     {
-        return runData.Round % 3 == 2;
+        return InBossRound(runData.Round);
     }
 
-    private static void onlyUseOneSlotColor(RunData runData, Balance balance, int colorIdx)
+    public static bool InBossRound(int round)
     {
-        for (int i = 0; i < (int)SLOT_TYPE.LAST; i++)
+        return round % 3 == 2;
+    }
+
+
+    private static void onlyUseOneSlotColor(RunData runData, Balance balance, int colorIdx, int[] affectedSlotsIdxs, ref int affectedSlotsCount)
+    {
+        for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
         {
-            runData.SlotColors[i] = (i == colorIdx) ? balance.SlotColors[i] : balance.SlotOffColor;
-            runData.UseSlotType[i] = (i == colorIdx) ? 1 : 0;
+            int slotType = (int)runData.SlotTypeInGame[slotIdx];
+            runData.UseSlot[slotIdx] = slotType == colorIdx ? 1 : 0;
+
+            if (slotType == colorIdx)
+                affectedSlotsIdxs[affectedSlotsCount++] = slotIdx;
         }
     }
 
-    private static void debuffOneColor(RunData runData, Balance balance, int colorIdx)
+    private static void turnOffOneColor(RunData runData, Balance balance, int colorIdx, int[] affectedSlotsIdxs, ref int affectedSlotsCount)
     {
-        for (int i = 0; i < (int)SLOT_TYPE.LAST; i++)
+        for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
         {
-            runData.SlotColors[i] = (i == colorIdx) ? balance.SlotOffColor : balance.SlotColors[i];
-            runData.UseSlotType[i] = (i == colorIdx) ? 0 : 1;
-        }
-    }
+            int slotType = (int)runData.SlotTypeInGame[slotIdx];
+            runData.UseSlot[slotIdx] = slotType == colorIdx ? 0 : 1;
 
-    private static void turnOffOneColor(RunData runData, Balance balance, int colorIdx)
-    {
-        runData.SlotColors[colorIdx] = balance.SlotOffColor;
-        runData.UseSlotType[colorIdx] = 0;
+            if (slotType == colorIdx)
+                affectedSlotsIdxs[affectedSlotsCount++] = slotIdx;
+        }
     }
 
     static void startBossRound(RunData runData, Balance balance)
@@ -697,10 +809,29 @@ public static class Logic
         int bossType = GetBossTypeForRound(runData);
         if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.BALLS_DEBUFFED || balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.BALLS_DEBUFFED_FIRST_SPIN)
             runData.UseBallsSpecial = 0;
-        if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.SLOTS_DEBUFFED || balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.SLOTS_DEBUFFED_FIRST_SPIN)
-            runData.UseSlotsSpecial = 0;
+
+        runData.UseSlotBuffs = GetSlotBuffsForBoss(runData, balance);
+
         if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.NO_BASE_CHIPS)
             runData.UseBaseChips = 0;
+    }
+
+    public static int GetSlotBuffsForBoss(RunData runData, Balance balance)
+    {
+        int useSlotBuffs = 15;
+
+        int bossType = GetBossTypeForRound(runData);
+
+        if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.SLOTS_DEBUFFED || balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.SLOTS_DEBUFFED_FIRST_SPIN)
+            useSlotBuffs = 0;
+
+        if (balance.BossBalance.BossEffect[bossType] >= BOSS_EFFECT.RED_SLOTS_DEBUFFED && balance.BossBalance.BossEffect[bossType] <= BOSS_EFFECT.BLUE_SLOTS_DEBUFFED)
+        {
+            int slotType = (int)(balance.BossBalance.BossEffect[bossType] - BOSS_EFFECT.RED_SLOTS_DEBUFFED);
+            useSlotBuffs = RemoveFlag(useSlotBuffs, slotType);
+        }
+
+        return useSlotBuffs;
     }
 
     public static void PostRoundBossEffect(RunData runData, Balance balance, out bool moneyChanged)
@@ -778,10 +909,8 @@ public static class Logic
         }
     }
 
-    public static void StartSpinBossEffect(RunData runData, Balance balance, out bool slotsChanged, int[] affectedSlotsIdxs, ref int affectedSlotsCount)
+    public static void StartSpinBossEffect(RunData runData, Balance balance, int[] affectedSlotsIdxs, ref int affectedSlotsCount)
     {
-        slotsChanged = false;
-
         if (InBossRound(runData))
         {
             int bossType = GetBossTypeForRound(runData);
@@ -790,34 +919,22 @@ public static class Logic
                 uint seed = runData.StartSeed;
                 int randomOffset = CustomRandInt(ref seed);
                 int colorIdx = (randomOffset + runData.CurrentSpin) % (int)SLOT_TYPE.LAST;
-                onlyUseOneSlotColor(runData, balance, colorIdx);
-                slotsChanged = true;
+                onlyUseOneSlotColor(runData, balance, colorIdx, affectedSlotsIdxs, ref affectedSlotsCount);
 
                 affectedSlotsCount = 0;
                 for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
-                {
-                    int slotType = (int)runData.SlotTypeInGame[slotIdx];
-                    if (runData.UseSlotType[slotType] == 1)
+                    if (runData.UseSlot[slotIdx] == 1)
                         affectedSlotsIdxs[affectedSlotsCount++] = slotIdx;
-                }
             }
-            if (balance.BossBalance.BossEffect[bossType] >= BOSS_EFFECT.ONLY_RED_FIRST_SPIN &&
-                balance.BossBalance.BossEffect[bossType] <= BOSS_EFFECT.ONLY_BLUE_FIRST_SPIN)
+
+            if (runData.CurrentSpin == 1 && (balance.BossBalance.BossEffect[bossType] >= BOSS_EFFECT.ONLY_RED_FIRST_SPIN &&
+                balance.BossBalance.BossEffect[bossType] <= BOSS_EFFECT.ONLY_BLUE_FIRST_SPIN))
             {
-                if (runData.CurrentSpin > 0)
+                for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
                 {
-                    for (int i = 0; i < (int)SLOT_TYPE.LAST; i++)
-                    {
-                        runData.SlotColors[i] = balance.SlotColors[i];
-                        runData.UseSlotType[i] = 1;
-                    }
+                    runData.UseSlot[slotIdx] = 1;
+                    affectedSlotsIdxs[affectedSlotsCount++] = slotIdx;
                 }
-                else
-                {
-                    int colorIdx = (int)(balance.BossBalance.BossEffect[bossType] - BOSS_EFFECT.ONLY_RED_FIRST_SPIN);
-                    onlyUseOneSlotColor(runData, balance, colorIdx);
-                }
-                slotsChanged = true;
             }
 
 
@@ -839,6 +956,62 @@ public static class Logic
                     runData.UseJoker[randomJokerIdx] = 0;
 
                     Debug.Log("Debuffed joker " + randomJokerIdx);
+                }
+            }
+
+            if (runData.CurrentSpin == 1 && balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.SLOTS_DEBUFFED_FIRST_SPIN)
+            {
+                runData.UseSlotBuffs = 15;
+
+                for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
+                    if (runData.SlotModType[slotIdx] > -1)
+                        affectedSlotsIdxs[affectedSlotsCount++] = slotIdx;
+            }
+
+            if (runData.CurrentSpin == 1 && balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.JUMBLE_SLOTS_FIRST_SPIN)
+            {
+                for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
+                {
+                    runData.SlotTypeInGame[slotIdx] = runData.SlotType[slotIdx];
+                    affectedSlotsIdxs[affectedSlotsCount++] = slotIdx;
+                }
+            }
+
+            if (runData.CurrentSpin > 0 && balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.JUMBLE_SLOTS_EVERY_SPIN)
+            {
+                for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
+                {
+                    runData.SlotTypeInGame[slotIdx] = runData.SlotType[slotIdx];
+                    affectedSlotsIdxs[affectedSlotsCount++] = slotIdx;
+                }
+                ShuffleSlotTypeArray(ref runData.GameSeed, runData.SlotTypeInGame);
+            }
+
+
+            if (runData.CurrentSpin == 1 && balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.CHANGE_SLOTS_INTO_GROUPS_OF_THREE_FIRST_SPIN)
+            {
+                for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
+                {
+                    runData.SlotTypeInGame[slotIdx] = runData.SlotType[slotIdx];
+                    affectedSlotsIdxs[affectedSlotsCount++] = slotIdx;
+                }
+            }
+
+            if (runData.CurrentSpin == 1 && balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.CHANGE_SLOTS_INTO_GROUPS_OF_TWO_FIRST_SPIN)
+            {
+                for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
+                {
+                    runData.SlotTypeInGame[slotIdx] = runData.SlotType[slotIdx];
+                    affectedSlotsIdxs[affectedSlotsCount++] = slotIdx;
+                }
+            }
+
+            if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.CHANGE_SLOTS_TO_ALTERNATING_COLORS_FIRST_SPIN)
+            {
+                for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
+                {
+                    runData.SlotTypeInGame[slotIdx] = runData.SlotType[slotIdx];
+                    affectedSlotsIdxs[affectedSlotsCount++] = slotIdx;
                 }
             }
         }
@@ -955,9 +1128,9 @@ public static class Logic
         double chips = runData.BallScoresCount[slotType] * baseChips * runData.UseBaseChips;
         int slotModType = runData.SlotModType[slotIdx];
         if (slotModType > -1)
-            chips += balance.CardPackSlotBalance.Chips[slotModType] * runData.UseSlotsSpecial;
+            chips += balance.CardPackSlotBalance.Chips[slotModType] * GetFlag(runData.UseSlotBuffs, slotType);
 
-        chips *= runData.UseSlotType[slotType];
+        chips *= runData.UseSlot[slotIdx];
 
         if (!scoringBossCheck(runData, balance))
             chips = 0.0d;
@@ -979,10 +1152,10 @@ public static class Logic
         int slotModType = runData.SlotModType[slotIdx];
         if (slotModType > -1)
         {
-            multiplier += balance.CardPackSlotBalance.MultiplierAdd[slotModType] * runData.UseSlotsSpecial;
+            multiplier += balance.CardPackSlotBalance.MultiplierAdd[slotModType] * GetFlag(runData.UseSlotBuffs, slotType);
         }
 
-        multiplier *= runData.UseSlotType[slotType];
+        multiplier *= runData.UseSlot[slotIdx];
 
         if (!scoringBossCheck(runData, balance))
             multiplier = 0;
@@ -999,9 +1172,9 @@ public static class Logic
         int slotModType = runData.SlotModType[slotIdx];
         int multiplier = 0;
         if (slotModType > -1)
-            multiplier += balance.CardPackSlotBalance.MultiplierMult[slotModType] * runData.UseSlotsSpecial;
+            multiplier += balance.CardPackSlotBalance.MultiplierMult[slotModType] * GetFlag(runData.UseSlotBuffs, slotType);
 
-        multiplier *= runData.UseSlotType[slotType];
+        multiplier *= runData.UseSlot[slotIdx];
 
         if (!scoringBossCheck(runData, balance))
             multiplier = 0;
@@ -1098,7 +1271,7 @@ public static class Logic
         int slotType = (int)runData.SlotTypeInGame[slotIdx];
         value = value * perColorArray[ballType][slotType];
 
-        value *= runData.UseSlotType[slotType];
+        value *= runData.UseSlot[slotIdx];
 
         return value;
     }
@@ -1111,7 +1284,7 @@ public static class Logic
         int slotIdx = runData.BallSlotIdx[ballIdx];
         int slotType = (int)runData.SlotTypeInGame[slotIdx];
 
-        money += balance.BallBalance.BallMoney[ballType] * runData.UseBallsSpecial * runData.UseSlotType[slotType];
+        money += balance.BallBalance.BallMoney[ballType] * runData.UseBallsSpecial * runData.UseSlot[slotIdx];
 
         for (int jkrIdx = 0; jkrIdx < runData.JokerCount; jkrIdx++)
         {
@@ -1122,7 +1295,7 @@ public static class Logic
                 money++;
             }
 
-            if (ballType > 0 && runData.UseSlotType[slotType] > 0 && balance.JokerBalance.MoneyForSpecialBallOnColor[jokerType][slotType] > 0)
+            if (ballType > 0 && runData.UseSlot[slotIdx] > 0 && balance.JokerBalance.MoneyForSpecialBallOnColor[jokerType][slotType] > 0)
             {
                 jokerIdxs[jokerCount++] = jkrIdx;
                 money += balance.JokerBalance.MoneyForSpecialBallOnColor[jokerType][slotType];
@@ -1141,13 +1314,13 @@ public static class Logic
     {
         int money = 0;
         int slotIdx = runData.BallSlotIdx[ballIdx];
+        int slotType = (int)runData.SlotTypeInGame[slotIdx];
 
         int slotModType = runData.SlotModType[slotIdx];
         if (slotModType > -1)
-            money += balance.CardPackSlotBalance.Money[slotModType] * runData.UseSlotsSpecial;
+            money += balance.CardPackSlotBalance.Money[slotModType] * GetFlag(runData.UseSlotBuffs, slotType);
 
-        int slotType = (int)runData.SlotTypeInGame[slotIdx];
-        money *= runData.UseSlotType[slotType];
+        money *= runData.UseSlot[slotIdx];
 
         runData.Money += money;
 
@@ -1184,7 +1357,7 @@ public static class Logic
             {
                 bool sizeFound = false;
                 for (int slotType = 0; slotType < 4; slotType++)
-                    if (runData.UseSlotType[slotType] == 1 && slotTypeCount[slotType] == 6)
+                    if (slotTypeCount[slotType] == 6)
                         sizeFound = true;
                 if (!sizeFound)
                     return false;
@@ -1195,7 +1368,7 @@ public static class Logic
             {
                 int numTypes = 0;
                 for (int slotType = 0; slotType < 4; slotType++)
-                    if (runData.UseSlotType[slotType] == 1 && slotTypeCount[slotType] > 0)
+                    if (slotTypeCount[slotType] > 0)
                         numTypes++;
 
                 if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.ONLY_SCORE_AT_LEAST_TWO_COLORS && numTypes < 2)
@@ -1301,11 +1474,11 @@ public static class Logic
                 mult += balance.JokerBalance.LastSpinMultiplierAdd[jokerType];
 
             for (int slotType = 0; slotType < 4; slotType++)
-                if (runData.UseSlotType[slotType] == 1 && IsFlagSet(balance.JokerBalance.TypeExists[jokerType], slotType))
+                if (IsFlagSet(balance.JokerBalance.TypeExists[jokerType], slotType))
                     mult += slotTypeCount[slotType] * balance.JokerBalance.MultAddPerBall[jokerType];
 
             for (int slotType = 0; slotType < 4; slotType++)
-                if (runData.UseSlotType[slotType] == 1 && IsFlagSet(balance.JokerBalance.TypeExists[jokerType], slotType))
+                if (IsFlagSet(balance.JokerBalance.TypeExists[jokerType], slotType))
                     runData.JokerMultiplierAdd[jokerIdx] += slotTypeCount[slotType] * balance.JokerBalance.MultAddIncreasePerBall[jokerType];
 
             mult += GetValueForTriggerSpins(runData, balance.JokerBalance.MultAddIncreasePerXSpins[jokerType], jokerIdx);
@@ -1384,11 +1557,11 @@ public static class Logic
             mult += balance.JokerBalance.BaseMultiplierMult[jokerType];
 
             for (int slotType = 0; slotType < 4; slotType++)
-                if (runData.UseSlotType[slotType] == 1 && IsFlagSet(balance.JokerBalance.TypeExists[jokerType], slotType))
+                if (IsFlagSet(balance.JokerBalance.TypeExists[jokerType], slotType))
                     mult += slotTypeCount[slotType] * balance.JokerBalance.MultMultPerBall[jokerType];
 
             for (int slotType = 0; slotType < 4; slotType++)
-                if (runData.UseSlotType[slotType] == 1 && IsFlagSet(balance.JokerBalance.TypeExists[jokerType], slotType))
+                if (IsFlagSet(balance.JokerBalance.TypeExists[jokerType], slotType))
                     runData.JokerMultiplierMult[jokerIdx] += slotTypeCount[slotType] * balance.JokerBalance.MultMultIncreasePerBall[jokerType];
 
             mult += GetValueForTriggerSpins(runData, balance.JokerBalance.MultMultIncreasePerXSpins[jokerType], jokerIdx);
@@ -1431,7 +1604,7 @@ public static class Logic
     {
         bool use = false;
         for (int slotType = 0; slotType < 4; slotType++)
-            if (runData.UseSlotType[slotType] == 1 && slotTypeCount[slotType] > 0 && IsFlagSet(balance.JokerBalance.TypeExists[jokerType], slotType))
+            if (slotTypeCount[slotType] > 0 && IsFlagSet(balance.JokerBalance.TypeExists[jokerType], slotType))
                 use = true;
         return use;
     }
@@ -1440,7 +1613,7 @@ public static class Logic
     {
         bool use = true;
         for (int slotType = 0; slotType < 4; slotType++)
-            if (runData.UseSlotType[slotType] == 1 && slotTypeCount[slotType] > 0 && IsFlagSet(balance.JokerBalance.TypeNotExists[jokerType], slotType))
+            if (slotTypeCount[slotType] > 0 && IsFlagSet(balance.JokerBalance.TypeNotExists[jokerType], slotType))
                 use = false;
         return use;
     }
@@ -1455,7 +1628,7 @@ public static class Logic
             {
                 bool sizeFound = false;
                 for (int slotType = 0; slotType < 4; slotType++)
-                    if (runData.UseSlotType[slotType] == 1 && slotTypeCount[slotType] == (size + 1))
+                    if (slotTypeCount[slotType] == (size + 1))
                         sizeFound = true;
                 if (!sizeFound)
                     use = false;
@@ -1465,7 +1638,7 @@ public static class Logic
             {
                 bool sizeFound = false;
                 for (int slotType = 0; slotType < 4; slotType++)
-                    if (runData.UseSlotType[slotType] == 1 && slotTypeCount[slotType] == (size + 1))
+                    if (slotTypeCount[slotType] == (size + 1))
                         sizeFound = true;
                 if (sizeFound)
                     use = false;
@@ -1479,7 +1652,7 @@ public static class Logic
         bool numTypesOk;
         int numTypes = 0;
         for (int slotType = 0; slotType < 4; slotType++)
-            if (runData.UseSlotType[slotType] == 1 && slotTypeCount[slotType] > 0)
+            if (slotTypeCount[slotType] > 0)
                 numTypes++;
         numTypesOk = numTypes >= balance.JokerBalance.MinTypes[jokerType];
         return numTypesOk;
@@ -1494,7 +1667,8 @@ public static class Logic
         {
             int slotIdx = runData.BallSlotIdx[ballIdx];
             int slotType = (int)runData.SlotTypeInGame[slotIdx];
-            slotTypeCount[slotType]++;
+            if (runData.UseSlot[slotIdx] == 1)
+                slotTypeCount[slotType]++;
         }
     }
 
@@ -1522,7 +1696,7 @@ public static class Logic
         }
     }
 
-    public static void SpinComplete(RunData runData, Balance balance)
+    public static void SpinComplete(RunData runData, Balance balance, int[] affectedSlotsIdxs, ref int affectedSlotsCount)
     {
         runData.CurrentSpin++;
         runData.TotalSpins++;
@@ -1533,8 +1707,30 @@ public static class Logic
             int bossType = GetBossTypeForRound(runData);
             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.BALLS_DEBUFFED_FIRST_SPIN && runData.CurrentSpin > 0)
                 runData.UseBallsSpecial = 1;
-            if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.SLOTS_DEBUFFED_FIRST_SPIN && runData.CurrentSpin > 0)
-                runData.UseSlotsSpecial = 1;
+
+            if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.PLAYED_SLOTS_DISABLED)
+            {
+                for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
+                    if (runData.SlotScored[slotIdx] > -1)
+                    {
+                        runData.UseSlot[slotIdx] = 0;
+                        affectedSlotsIdxs[affectedSlotsCount++] = slotIdx;
+                    }
+            }
+            if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.PLAYED_COLORS_DISABLED)
+            {
+                for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
+                    if (runData.SlotScored[slotIdx] > -1)
+                    {
+                        SLOT_TYPE slotType = runData.SlotType[slotIdx];
+                        for (int slotIdx2 = 0; slotIdx2 < balance.NumSlots; slotIdx2++)
+                            if (runData.SlotType[slotIdx2] == slotType)
+                            {
+                                runData.UseSlot[slotIdx2] = 0;
+                                affectedSlotsIdxs[affectedSlotsCount++] = slotIdx;
+                            }
+                    }
+            }
         }
     }
 
@@ -1726,11 +1922,9 @@ public static class Logic
 
     public static void ResetSlots(RunData runData, Balance balance)
     {
-        for (int i = 0; i < (int)SLOT_TYPE.LAST; i++)
-        {
-            runData.SlotColors[i] = balance.SlotColors[i];
-            runData.UseSlotType[i] = 1;
-        }
+        for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
+            runData.UseSlot[slotIdx] = 1;
+
         for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
             runData.SlotTypeInGame[slotIdx] = runData.SlotType[slotIdx];
     }
@@ -2432,50 +2626,6 @@ public static class Logic
         return decoded;
     }
 
-    public static byte SetBit(byte array, int bit)
-    {
-        return (array |= (byte)(1 << bit));
-    }
-
-    public static int SetBit(int array, int bit)
-    {
-        return (array |= 1 << bit);
-    }
-
-    public static long SetBit(long array, int bit)
-    {
-        return (array |= 1L << bit);
-    }
-
-    public static byte RemoveBit(byte array, int bit)
-    {
-        return (array &= (byte)~bit);
-    }
-
-    public static int RemoveBit(int array, int bit)
-    {
-        return (array &= ~bit);
-    }
-
-    public static long RemoveBit(long array, int bit)
-    {
-        return (array &= ~bit);
-    }
-
-    public static bool IsBitSet(byte array, byte bit)
-    {
-        return (array & (byte)(1 << bit)) > 0;
-    }
-
-    public static bool IsBitSet(int array, byte bit)
-    {
-        return (array & (1 << bit)) > 0;
-    }
-
-    public static bool IsBitSet(long array, int bit)
-    {
-        return (array & 1L << bit) > 0;
-    }
 }
 
 

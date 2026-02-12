@@ -31,7 +31,7 @@ public static class CommonSlotsVisual
         ChangedSlotsCount = 0;
     }
 
-    public static void TickHighlightChangedSlots(float value, AnimationCurve SlotScaleCurve, ScoringSlot[] scoringSlots, SLOT_TYPE[] slotTypes, Color[] slotColors)
+    public static void TickHighlightChangedSlots(RunData runData, Balance balance, float value, AnimationCurve SlotScaleCurve, ScoringSlot[] scoringSlots, SLOT_TYPE[] slotTypes)
     {
         if (value > 1.0f)
             value = 1.0f;
@@ -40,7 +40,8 @@ public static class CommonSlotsVisual
         {
             int slotIdx = ChangedSlotsIdxs[i];
             int slotType = (int)slotTypes[slotIdx];
-            scoringSlots[slotIdx].SpriteRenderer.color = slotColors[slotType] + Color.white * colorMult;
+            Color color = runData.UseSlot[slotIdx] == 1 ? balance.SlotColors[slotType] : balance.SlotOffColor;
+            scoringSlots[slotIdx].SpriteRenderer.color = color + Color.white * colorMult;
         }
         if (value >= 1.0f)
             ChangedSlotsCount = 0;
@@ -85,7 +86,7 @@ public static class CommonSlotsVisual
     public static void SortSlotsRoundSelection(RunData runData, Balance balance, CardsBallsSpinWheelGUI cardsBallsSpinWheelGUI)
     {
         Logic.SortSlots(runData);
-        Logic.SetDataForNextRound(runData, balance);
+        Logic.SetDataForNextRound(runData, balance, ChangedSlotsIdxs, ref ChangedSlotsCount);
         cardsBallsSpinWheelGUI.SortingPopup.SetActive(true);
         SortingTimer = SortingTime;
         ShowSpinWheelUI(runData, balance, cardsBallsSpinWheelGUI.ScoringSlots, runData.SlotType);
@@ -93,48 +94,51 @@ public static class CommonSlotsVisual
 
     public static void ShowSpinWheelUI(RunData runData, Balance balance, ScoringSlot[] scoringSlots, SLOT_TYPE[] slotType)
     {
-        ShowSpinWheel(runData, balance, scoringSlots, slotType, true, false);
+        ShowSpinWheel(runData, balance, scoringSlots, slotType, true, 15);
     }
-    public static void ShowSpinWheel(RunData runData, Balance balance, ScoringSlot[] scoringSlots, SLOT_TYPE[] slotType, bool showSlotEffects, bool slotsDebuffed)
-    {
-        for (int i = 0; i < scoringSlots.Length; i++)
-        {
-            scoringSlots[i].SetSlotColor(runData.SlotColors[(int)slotType[i]]);
 
-            int slotModType = runData.SlotModType[i];
-            scoringSlots[i].ChipsGO.SetActive(showSlotEffects && slotModType > -1 && balance.CardPackSlotBalance.Chips[slotModType] > 0);
-            scoringSlots[i].MultGO.SetActive(showSlotEffects && slotModType > -1 && balance.CardPackSlotBalance.MultiplierAdd[slotModType] > 0);
-            scoringSlots[i].MoneyGO.SetActive(showSlotEffects && slotModType > -1 && balance.CardPackSlotBalance.Money[slotModType] > 0);
-            scoringSlots[i].BonusGO.SetActive(showSlotEffects && slotModType > -1 && balance.CardPackSlotBalance.MultiplierMult[slotModType] > 0);
-            scoringSlots[i].DebuffedGO.SetActive(slotsDebuffed && slotModType > -1);
+    public static void ShowSpinWheel(RunData runData, Balance balance, ScoringSlot[] scoringSlots, SLOT_TYPE[] slotTypes, bool showSlotEffects, int slotsDebuffed)
+    {
+        for (int slotIdx = 0; slotIdx < scoringSlots.Length; slotIdx++)
+        {
+            int slotType = (int)slotTypes[slotIdx];
+            Color color = runData.UseSlot[slotIdx] == 1 ? balance.SlotColors[slotType] : balance.SlotOffColor;
+            scoringSlots[slotIdx].SetSlotColor(color);
+
+            int slotModType = runData.SlotModType[slotIdx];
+            scoringSlots[slotIdx].ChipsGO.SetActive(showSlotEffects && slotModType > -1 && balance.CardPackSlotBalance.Chips[slotModType] > 0);
+            scoringSlots[slotIdx].MultGO.SetActive(showSlotEffects && slotModType > -1 && balance.CardPackSlotBalance.MultiplierAdd[slotModType] > 0);
+            scoringSlots[slotIdx].MoneyGO.SetActive(showSlotEffects && slotModType > -1 && balance.CardPackSlotBalance.Money[slotModType] > 0);
+            scoringSlots[slotIdx].BonusGO.SetActive(showSlotEffects && slotModType > -1 && balance.CardPackSlotBalance.MultiplierMult[slotModType] > 0);
+
+            bool slotDebuffed = !Logic.IsFlagSet(slotsDebuffed, slotType);
+            scoringSlots[slotIdx].DebuffedGO.SetActive(slotDebuffed && slotModType > -1);
         }
     }
 
     public static void ShowSpinWheelForRound(RunData runData, Balance balance, ScoringSlot[] scoringSlots, int round)
     {
-        bool showSlotEffects;
-        bool slotsDebuffed;
+        bool showSlotBuffs = ShowSlotBuffsForRound(runData, balance, round);
 
-        CheckSpinWheelDebuffForNewRound(runData, balance, round, out showSlotEffects, out slotsDebuffed);
+        int useSlotBuffs = 15; // (1111)
+        if (Logic.InBossRound(runData))
+            useSlotBuffs = Logic.GetSlotBuffsForBoss(runData, balance);
 
-        ShowSpinWheel(runData, balance, scoringSlots, runData.SlotTypeInGame, showSlotEffects, slotsDebuffed);
+        ShowSpinWheel(runData, balance, scoringSlots, runData.SlotTypeInGame, showSlotBuffs, useSlotBuffs);
     }
 
-    public static void CheckSpinWheelDebuffForNewRound(RunData runData, Balance balance, int round, out bool showSlotEffects, out bool slotsDebuffed)
+    public static bool ShowSlotBuffsForRound(RunData runData, Balance balance, int round)
     {
-        showSlotEffects = true;
-        slotsDebuffed = false;
+        bool showSlotEffects = true;
 
-        if (round % 3 == 2)
+        if (Logic.InBossRound(round))
         {
-            int bossType = Logic.GetBossTypeForRound(runData);
+            int bossType = Logic.GetBossTypeForRound(runData, round);
 
             if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.SLOT_EFFECTS_HIDDEN)
                 showSlotEffects = false;
-
-            if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.SLOTS_DEBUFFED ||
-                balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.SLOTS_DEBUFFED_FIRST_SPIN)
-                slotsDebuffed = true;
         }
+
+        return showSlotEffects;
     }
 }
