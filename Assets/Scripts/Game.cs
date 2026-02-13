@@ -694,7 +694,7 @@ namespace Cardwheel
             for (int i = 0; i < m_balance.NumSlots; i++)
                 m_runData.UseSlot[i] = 1;
 
-
+            bool backwardsCompatibility = false; ;
             if (RunDataIO.LoadRun(m_runData))
             {
                 Debug.Log("Loaded rundata v" + RunDataIO.VERSION);
@@ -702,23 +702,33 @@ namespace Cardwheel
             }
             else if (RunDataIOV7.LoadRun(m_runData))
             {
+                backwardsCompatibility = true;
                 Debug.Log("Loaded rundata v7");
                 // loaded v6
             }
             else if (RunDataIOV6.LoadRun(m_runData))
             {
+                backwardsCompatibility = true;
                 Debug.Log("Loaded rundata v6");
                 // loaded v6
             }
             else if (RunDataIOV5.LoadRun(m_runData))
             {
+                backwardsCompatibility = true;
                 Debug.Log("Loaded rundata v5");
                 // loaded v5
             }
             else if (RunDataIOV4.LoadRun(m_runData))
             {
+                backwardsCompatibility = true;
                 Debug.Log("Loaded rundata v4");
                 // loaded v4
+            }
+
+            if (backwardsCompatibility)
+            {
+                for (int i = 0; i < m_balance.NumSlots; i++)
+                    m_runData.UseSlot[i] = 1;
             }
 
             if (m_runData.MenuState == MENU_STATE.JOKER_INFO_POPUP)
