@@ -301,7 +301,7 @@ public static class Logic
         // runData.SkipType[4] = 16;
         // runData.SkipType[5] = 16;
 
-        // AddJoker(runData, balance, 34);
+        AddJoker(runData, balance, 31);
         // AddJoker(runData, balance, 103);
         // AddJoker(runData, balance, 104);
         // AddJoker(runData, balance, 105);
@@ -337,7 +337,7 @@ public static class Logic
         // runData.SlotModType[10] = 0;
 
         for (int i = 0; i < balance.BossBalance.NumBosses; i++)
-            if (balance.BossBalance.BossEffect[i] == BOSS_EFFECT.PLAYED_SLOTS_DISABLED)
+            if (balance.BossBalance.BossEffect[i] == BOSS_EFFECT.ONLY_BLUE_ORANGE)
                 runData.BossType[0] = i;
 
         // runData.VoucherSlotMostPlayedColor = true;
@@ -918,7 +918,8 @@ public static class Logic
         for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
         {
             int slotType = (int)runData.SlotTypeInGame[slotIdx];
-            runData.UseSlot[slotIdx] = slotType == colorIdx ? 0 : 1;
+            if (slotType == colorIdx)
+                runData.UseSlot[slotIdx] = 0;
 
             if (slotType == colorIdx)
                 affectedSlotsIdxs[affectedSlotsCount++] = slotIdx;

@@ -76,7 +76,7 @@ namespace Cardwheel
 
             m_copyButtonData.Button.onClick.AddListener(Game.Instance.CopySeed);
             m_mainMenuButtonData.Button.onClick.AddListener(Game.Instance.GoToMainMenu);
-            m_newGameButtonData.Button.onClick.AddListener(Game.Instance.StartNewRunSameWheel);
+            m_newGameButtonData.Button.onClick.AddListener(Game.Instance.GoToWheelSelection);
             m_retryButtonData.Button.onClick.AddListener(Game.Instance.RetryRun);
             m_continueButtonData.Button.onClick.AddListener(Game.Instance.EndlessMode);
 
@@ -178,7 +178,7 @@ namespace Cardwheel
 
             if (m_selectedButton == MENU_BUTTONS.NEW_GAME && CommonButtonVisual.NavigateEnter())
             {
-                Game.Instance.StartNewRunSameWheel();
+                Game.Instance.GoToWheelSelection();
                 return;
             }
 

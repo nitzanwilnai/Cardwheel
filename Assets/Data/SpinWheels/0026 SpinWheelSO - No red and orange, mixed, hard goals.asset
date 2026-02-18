@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Description: 'Only blue and green
 
-    Mixed slots & hard goals'
+    Hard goals'
   Spins: 4
   StartingMoney: 4
   GoalMultiplier: 1.5

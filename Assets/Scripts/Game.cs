@@ -14,9 +14,8 @@ using System.IO;
 using CommonTools;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.XInput;
 using UnityEngine.InputSystem.DualShock;
-
+using UnityEngine.InputSystem.XInput;
 // #if UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX || UNITY_STANDALONE_OSX
 // using Steamworks;
 // #endif
@@ -57,7 +56,11 @@ namespace Cardwheel
         LAST, // should always be last!
     };
 
-    public enum INPUT_TYPES { KEYBOARD, GAMEPAD };
+    public enum INPUT_TYPES
+    {
+        KEYBOARD,
+        GAMEPAD,
+    };
 
     public class Game : Singleton<Game>
     {
@@ -152,33 +155,39 @@ namespace Cardwheel
             return GamepadType;
         }
 
-        override protected void Awake()
+        protected override void Awake()
         {
             base.Awake();
 
             Application.targetFrameRate = 60;
 
 #if UNITY_IOS || UNITY_ANDROID
-            Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
-            {
-                var dependencyStatus = task.Result;
-                if (dependencyStatus == Firebase.DependencyStatus.Available)
+            Firebase
+                .FirebaseApp.CheckAndFixDependenciesAsync()
+                .ContinueWithOnMainThread(task =>
                 {
-                    // Create and hold a reference to your FirebaseApp,
-                    // where app is a Firebase.FirebaseApp property of your application class.
-                    m_firebaseApp = Firebase.FirebaseApp.DefaultInstance;
+                    var dependencyStatus = task.Result;
+                    if (dependencyStatus == Firebase.DependencyStatus.Available)
+                    {
+                        // Create and hold a reference to your FirebaseApp,
+                        // where app is a Firebase.FirebaseApp property of your application class.
+                        m_firebaseApp = Firebase.FirebaseApp.DefaultInstance;
 
-                    Debug.Log("m_firebaseApp set!");
+                        Debug.Log("m_firebaseApp set!");
 
-                    // Set a flag here to indicate whether Firebase is ready to use by your app.
-                }
-                else
-                {
-                    UnityEngine.Debug.LogError(System.String.Format(
-                      "Could not resolve all Firebase dependencies: {0}", dependencyStatus));
-                    // Firebase Unity SDK is not safe to use here.
-                }
-            });
+                        // Set a flag here to indicate whether Firebase is ready to use by your app.
+                    }
+                    else
+                    {
+                        UnityEngine.Debug.LogError(
+                            System.String.Format(
+                                "Could not resolve all Firebase dependencies: {0}",
+                                dependencyStatus
+                            )
+                        );
+                        // Firebase Unity SDK is not safe to use here.
+                    }
+                });
 #endif
 
             gamepadInit();
@@ -189,7 +198,10 @@ namespace Cardwheel
             LastSelectedMenuButton = new int[(int)MENU_STATE.LAST];
 
             AssetManager.Instance.LoadCommonAssetBundle();
-            AssetManager.Instance.LoadCommonUIAssetBundle(GameInfoSO.CommonBundle, GameInfoSO.CommonBundleUIPath);
+            AssetManager.Instance.LoadCommonUIAssetBundle(
+                GameInfoSO.CommonBundle,
+                GameInfoSO.CommonBundleUIPath
+            );
 
             m_settingsData = new SettingsData();
             m_settingsData.SFX = m_settingsData.Music = m_settingsData.Vibrate = true;
@@ -201,7 +213,9 @@ namespace Cardwheel
 
             string encodedSeed = Logic.EncodeSeed(StartSeed);
             uint decodedSeed = Logic.DecodeSeed(encodedSeed);
-            Debug.Log("Start seed " + StartSeed + " Encdoed " + encodedSeed + " decoded " + decodedSeed);
+            Debug.Log(
+                "Start seed " + StartSeed + " Encdoed " + encodedSeed + " decoded " + decodedSeed
+            );
 
             m_balance = new Balance();
             m_balance.LoadBalance();
@@ -267,7 +281,16 @@ namespace Cardwheel
 
 #if UNITY_EDITOR
             for (int i = 0; i < 48; i++)
-                Debug.Log("Round " + (Mathf.FloorToInt(i / 3) + 1) + " - " + ((i % 3) + 1) + "\t" + Logic.GetGoalForRound(0, m_balance, Mathf.FloorToInt(i / 3), i % 3).ToString("N0"));
+                Debug.Log(
+                    "Round "
+                        + (Mathf.FloorToInt(i / 3) + 1)
+                        + " - "
+                        + ((i % 3) + 1)
+                        + "\t"
+                        + Logic
+                            .GetGoalForRound(0, m_balance, Mathf.FloorToInt(i / 3), i % 3)
+                            .ToString("N0")
+                );
 #endif
         }
 
@@ -365,13 +388,17 @@ namespace Cardwheel
             {
                 m_roundSelectionVisual.Show();
                 if (goingBackToPrevMenu)
-                    m_roundSelectionVisual.SelectPrevButton((RoundSelectionVisual.MENU_BUTTONS)prevSelectedMenuButton);
+                    m_roundSelectionVisual.SelectPrevButton(
+                        (RoundSelectionVisual.MENU_BUTTONS)prevSelectedMenuButton
+                    );
             }
             else if (menuState == MENU_STATE.ROUND_COMPLETE)
             {
                 m_roundCompleteVisual.Show();
                 if (goingBackToPrevMenu)
-                    m_roundCompleteVisual.SelectPrevButton((RoundCompleteVisual.MENU_BUTTONS)prevSelectedMenuButton);
+                    m_roundCompleteVisual.SelectPrevButton(
+                        (RoundCompleteVisual.MENU_BUTTONS)prevSelectedMenuButton
+                    );
             }
             else if (menuState == MENU_STATE.GAME_OVER)
                 m_gameOverVisual.Show();
@@ -379,7 +406,9 @@ namespace Cardwheel
             {
                 m_shopVisual.Show();
                 if (goingBackToPrevMenu)
-                    m_shopVisual.SelectPrevButton((ShopVisual.SHOP_MENU_BUTTONS)prevSelectedMenuButton);
+                    m_shopVisual.SelectPrevButton(
+                        (ShopVisual.SHOP_MENU_BUTTONS)prevSelectedMenuButton
+                    );
             }
             else if (menuState == MENU_STATE.CARD_PACK_BALL)
                 m_cardPackBallVisual.Show();
@@ -403,7 +432,9 @@ namespace Cardwheel
             {
                 m_winScreenVisual.Show();
                 if (goingBackToPrevMenu)
-                    m_winScreenVisual.SelectPrevButton((WinScreenVisual.MENU_BUTTONS)prevSelectedMenuButton);
+                    m_winScreenVisual.SelectPrevButton(
+                        (WinScreenVisual.MENU_BUTTONS)prevSelectedMenuButton
+                    );
             }
             else if (menuState == MENU_STATE.CHIPS_INFO)
                 m_chipsInfoVisual.Show(m_runData, m_balance);
@@ -420,7 +451,10 @@ namespace Cardwheel
                 // has to be shown after setMenuState;
             }
 
-            if (!Logic.IsFlagSet(m_gameData.MenuTutorialFlags, (int)menuState) && m_balance.MenuTutorialText[(int)menuState].Length > 0)
+            if (
+                !Logic.IsFlagSet(m_gameData.MenuTutorialFlags, (int)menuState)
+                && m_balance.MenuTutorialText[(int)menuState].Length > 0
+            )
                 m_tutorialVisual.Show();
             else
                 m_tutorialVisual.Hide();
@@ -450,7 +484,8 @@ namespace Cardwheel
 #if UNITY_EDITOR
                 UIDebug.SetActive(true);
                 GUIRef guiRef = UIDebug.GetComponent<GUIRef>();
-                guiRef.GetTextGUI("DebugText").text = type.ToString() + "\n\n" + logString + "\n\n" + stackTrace;
+                guiRef.GetTextGUI("DebugText").text =
+                    type.ToString() + "\n\n" + logString + "\n\n" + stackTrace;
                 Canvas.ForceUpdateCanvases();
 #else
                 ShowError(type.ToString() + "\n\n" + logString + "\n\n" + stackTrace);
@@ -562,53 +597,11 @@ namespace Cardwheel
                 m_winScreenVisual.Tick(dt);
             }
 
-
 #if UNITY_EDITOR
             if (Keyboard.current.sKey.wasPressedThisFrame)
             {
                 TakeScreenshot();
             }
-
-            if (Keyboard.current.xKey.wasPressedThisFrame)
-            {
-                if (m_runData.TotalChips < 100000)
-                    m_runData.TotalChips += 100000;
-                else
-                    m_runData.TotalChips *= 2;
-            }
-
-            if (Keyboard.current.cKey.wasPressedThisFrame)
-                RoundComplete();
-
-            if (Keyboard.current.oKey.wasPressedThisFrame)
-                ContinueRun();
-
-            if (Keyboard.current.iKey.wasPressedThisFrame)
-                SetMenuState(MENU_STATE.INFO);
-
-            if (Keyboard.current.mKey.wasPressedThisFrame)
-                m_runData.Money += 100;
-
-            if (Keyboard.current.rKey.wasPressedThisFrame)
-                m_runData.BossRerolls++;
-
-            if (Keyboard.current.wKey.wasPressedThisFrame)
-                WinScreen();
-
-            if (Keyboard.current.gKey.wasPressedThisFrame)
-                SetMenuState(MENU_STATE.GAME_OVER);
-
-            if (Keyboard.current.pKey.wasPressedThisFrame)
-                EditorApplication.isPaused = true;
-
-            if (Keyboard.current.dKey.wasPressedThisFrame)
-            {
-                gamepadCheck();
-            }
-
-            if (Keyboard.current.eKey.wasReleasedThisFrame)
-                ShowError("TestError");
-
 #endif
         }
 
@@ -618,7 +611,14 @@ namespace Cardwheel
                 Directory.CreateDirectory("Screenshots");
 
             DateTimeOffset now = DateTime.UtcNow;
-            string name = "Screenshots/" + Screen.width + "x" + Screen.height + "_" + now.ToString("yyyy-MM-dd HH.mm.ss") + ".png";
+            string name =
+                "Screenshots/"
+                + Screen.width
+                + "x"
+                + Screen.height
+                + "_"
+                + now.ToString("yyyy-MM-dd HH.mm.ss")
+                + ".png";
             ScreenCapture.CaptureScreenshot(name);
         }
 
@@ -628,7 +628,14 @@ namespace Cardwheel
                 Directory.CreateDirectory("Screenshots");
 
             DateTimeOffset now = DateTime.UtcNow;
-            string name = "Screenshots/" + Screen.width + "x" + Screen.height + "_" + now.ToString("yyyy-MM-dd HH.mm.ss") + ".png";
+            string name =
+                "Screenshots/"
+                + Screen.width
+                + "x"
+                + Screen.height
+                + "_"
+                + now.ToString("yyyy-MM-dd HH.mm.ss")
+                + ".png";
             ScreenCapture.CaptureScreenshot(name, 2);
         }
 
@@ -669,16 +676,20 @@ namespace Cardwheel
             SetMenuState(MENU_STATE.ROUND_COMPLETE);
         }
 
-        public void StartNewRunSameWheel()
+        public void GoToWheelSelection()
         {
-            StartNewRun(m_runData.WheelIdx);
+            SetMenuState(MENU_STATE.WHEEL_SELECTION);
         }
 
-        public void StartNewRun(int wheelIdx)
+        public void StartNewRunSameWheel()
+        {
+            StartNewRun(m_runData.WheelIdx, m_runData.StartSeed);
+        }
+
+        public void StartNewRun(int wheelIdx, uint seed)
         {
             SoundManager.Instance.PlaySFXButtonOK();
 
-            uint seed = (uint)Mathf.FloorToInt(UnityEngine.Random.value * int.MaxValue);
 #if UNITY_EDITOR
             if (StartSeed > 0)
                 seed = StartSeed;
@@ -694,7 +705,8 @@ namespace Cardwheel
             for (int i = 0; i < m_balance.NumSlots; i++)
                 m_runData.UseSlot[i] = 1;
 
-            bool backwardsCompatibility = false; ;
+            bool backwardsCompatibility = false;
+            ;
             if (RunDataIO.LoadRun(m_runData))
             {
                 Debug.Log("Loaded rundata v" + RunDataIO.VERSION);
@@ -750,7 +762,6 @@ namespace Cardwheel
             if (!m_gameData.AdsRemoved)
                 GoogleAdsManager.Instance.LoadInterstitialAd();
 #endif
-
         }
 
         public void StartRound()
@@ -920,7 +931,9 @@ namespace Cardwheel
 
         public void GoToWishlist()
         {
-            Application.OpenURL("steam://openurl/https://store.steampowered.com/app/4047130/Cardwheel/");
+            Application.OpenURL(
+                "steam://openurl/https://store.steampowered.com/app/4047130/Cardwheel/"
+            );
         }
 
         public void ExitGame()

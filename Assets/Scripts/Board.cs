@@ -11,16 +11,34 @@
 
 using System;
 using CommonTools;
+using ParticleSystemDOD;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.InputSystem;
-using ParticleSystemDOD;
+using UnityEngine.UI;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Cardwheel
 {
-    public enum SLOT_TYPE { RED, ORANGE, GREEN, BLUE, LAST, NONE };
-    public enum CARD_PACK_TYPE { NONE, BALL, SLOT, CHIPS };
+    public enum SLOT_TYPE
+    {
+        RED,
+        ORANGE,
+        GREEN,
+        BLUE,
+        LAST,
+        NONE,
+    };
+
+    public enum CARD_PACK_TYPE
+    {
+        NONE,
+        BALL,
+        SLOT,
+        CHIPS,
+    };
 
     public struct BallSprites
     {
@@ -63,6 +81,7 @@ namespace Cardwheel
             JOKER_4 = 23,
             JOKER_5 = 24,
         };
+
         MENU_BUTTONS m_selectedButton = MENU_BUTTONS.DROP;
 
         public GameObject GateGO;
@@ -89,11 +108,21 @@ namespace Cardwheel
             JOKER_POST_SPIN,
             JOKER_POST_ROUND,
             BOSS_POST_SPIN,
-            SPIN_OVER
+            SPIN_OVER,
         };
+
         public GAME_STATE GameState = GAME_STATE.SPIN_UP;
 
-        public enum SPIN_STATE { SPIN_UP, SPIN_WAIT, SPIN_BALLS, RE_SPIN, SPIN_DOWN, DONE };
+        public enum SPIN_STATE
+        {
+            SPIN_UP,
+            SPIN_WAIT,
+            SPIN_BALLS,
+            RE_SPIN,
+            SPIN_DOWN,
+            DONE,
+        };
+
         public SPIN_STATE SpinState = SPIN_STATE.SPIN_UP;
 
         public SpinWheelLights SpinWheelLights;
@@ -204,7 +233,13 @@ namespace Cardwheel
         public float DebugRotationSpeed;
 
         // Start is called before the first frame update
-        public void Init(RunData runData, Balance balance, GameInfoSO gameInfoSO, SettingsData settingsData, Camera camera)
+        public void Init(
+            RunData runData,
+            Balance balance,
+            GameInfoSO gameInfoSO,
+            SettingsData settingsData,
+            Camera camera
+        )
         {
             this.runData = runData;
             this.balance = balance;
@@ -216,7 +251,9 @@ namespace Cardwheel
 
             m_numBalls = BallsGO.Length;
             if (m_numBalls != balance.MaxBalls)
-                Debug.LogError("Balance MaxBalls " + balance.MaxBalls + " BallsGO.Length " + m_numBalls);
+                Debug.LogError(
+                    "Balance MaxBalls " + balance.MaxBalls + " BallsGO.Length " + m_numBalls
+                );
 
             m_ballsRB = new Rigidbody2D[m_numBalls];
             m_ballStartPos = new Vector3[m_numBalls];
@@ -228,7 +265,9 @@ namespace Cardwheel
                 m_ballsRB[i] = BallsGO[i].GetComponentInChildren<Rigidbody2D>();
                 m_ballsRB[i].name = i.ToString();
                 GUIRef ballGuiRef = BallsGO[i].GetComponent<GUIRef>();
-                m_ballSprites[i].BallSprite = ballGuiRef.GetGameObject("Ball").GetComponent<SpriteRenderer>();
+                m_ballSprites[i].BallSprite = ballGuiRef
+                    .GetGameObject("Ball")
+                    .GetComponent<SpriteRenderer>();
                 m_ballSprites[i].BallDebuffedGO = ballGuiRef.GetGameObject("Debuffed");
             }
 
@@ -339,7 +378,11 @@ namespace Cardwheel
             // }
 
             m_showSlotBuffs = true;
-            m_showSlotBuffs = CommonSlotsVisual.ShowSlotBuffsForRound(runData, balance, runData.Round);
+            m_showSlotBuffs = CommonSlotsVisual.ShowSlotBuffsForRound(
+                runData,
+                balance,
+                runData.Round
+            );
 
             int useBallSprite = 1;
             if (Logic.InBossRound(runData))
@@ -357,10 +400,21 @@ namespace Cardwheel
             title += (bigRound + 1).ToString() + " - " + (smallRound + 1).ToString();
             m_bossDescriptionGO.SetActive(Logic.InBossRound(runData));
             if (Logic.InBossRound(runData))
-                m_bossDescription.text = CommonVisual.GetBossDescription(runData, balance, "Boss: ");
+                m_bossDescription.text = CommonVisual.GetBossDescription(
+                    runData,
+                    balance,
+                    "Boss: "
+                );
             CommonVisual.ShowTopBar(runData, m_topBarGUI, title);
 
-            CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotBuffs, runData.UseSlotBuffs);
+            CommonSlotsVisual.ShowSpinWheel(
+                runData,
+                balance,
+                m_scoringSlots,
+                runData.SlotTypeInGame,
+                m_showSlotBuffs,
+                runData.UseSlotBuffs
+            );
 
             CommonVisual.ShowJokersInGame(runData, balance, m_jokerParent);
 
@@ -372,7 +426,10 @@ namespace Cardwheel
 
             CommonButtonVisual.UpdateButtonIcons(m_spinButtonData, Game.Instance.GetGamepadType());
             CommonButtonVisual.UpdateButtonIcons(m_infoButtonData, Game.Instance.GetGamepadType());
-            CommonButtonVisual.UpdateButtonIcons(m_topBarGUI.SettingsButtonData, Game.Instance.GetGamepadType());
+            CommonButtonVisual.UpdateButtonIcons(
+                m_topBarGUI.SettingsButtonData,
+                Game.Instance.GetGamepadType()
+            );
 
             BallsChipsGO.SetActive(false);
             BallsMultiplierGO.SetActive(false);
@@ -387,13 +444,22 @@ namespace Cardwheel
 
             m_selectedButton = selectedButton;
 
-            m_spinButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.DROP);
-            m_infoButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.INFO);
+            m_spinButtonData.SelectedGO.SetActive(
+                CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.DROP
+            );
+            m_infoButtonData.SelectedGO.SetActive(
+                CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.INFO
+            );
 
-            m_topBarGUI.SettingsButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.SETTINGS);
+            m_topBarGUI.SettingsButtonData.SelectedGO.SetActive(
+                CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.SETTINGS
+            );
 
             CommonVisual.UnselectAllJokers();
-            if (m_selectedButton >= MENU_BUTTONS.JOKER_1 && m_selectedButton <= MENU_BUTTONS.JOKER_5)
+            if (
+                m_selectedButton >= MENU_BUTTONS.JOKER_1
+                && m_selectedButton <= MENU_BUTTONS.JOKER_5
+            )
                 CommonVisual.SelectJoker((int)m_selectedButton - (int)MENU_BUTTONS.JOKER_1);
         }
 
@@ -417,7 +483,9 @@ namespace Cardwheel
             for (int ballIdx = 0; ballIdx < BallsGO.Length; ballIdx++)
             {
                 int ballTypeForSprite = runData.BallTypesInGame[ballIdx] * useBallSprite;
-                m_ballSprites[ballIdx].BallSprite.sprite = AssetManager.Instance.LoadBallSprite(balance.BallBalance.BallSprite[ballTypeForSprite]);
+                m_ballSprites[ballIdx].BallSprite.sprite = AssetManager.Instance.LoadBallSprite(
+                    balance.BallBalance.BallSprite[ballTypeForSprite]
+                );
                 m_ballSprites[ballIdx].BallDebuffedGO.SetActive(ballTypeForSprite > 0 && debuffed);
             }
         }
@@ -468,7 +536,11 @@ namespace Cardwheel
         public void ShowBallMultiplierPopup(int ballIdx, string text)
         {
             Vector3 ballPos = BallsGO[ballIdx].transform.position;
-            BallsMultiplierGO.transform.position = new Vector3(ballPos.x, ballPos.y, ballPos.z - 10.0f);
+            BallsMultiplierGO.transform.position = new Vector3(
+                ballPos.x,
+                ballPos.y,
+                ballPos.z - 10.0f
+            );
             BallsMultiplierGO.SetActive(true);
             m_ballsMultiplierText.text = text;
         }
@@ -546,8 +618,10 @@ namespace Cardwheel
             runData.SpinWheelAngle += runData.RotationSpeed * dt;
             SpinCircle.Angle = runData.SpinWheelAngle;
 
-            float prevTickAngle = m_prevSpinWheelAngle - (Mathf.FloorToInt(m_prevSpinWheelAngle / 15) * 15.0f);
-            float currentTickAngle = runData.SpinWheelAngle - (Mathf.FloorToInt(runData.SpinWheelAngle / 15) * 15.0f);
+            float prevTickAngle =
+                m_prevSpinWheelAngle - (Mathf.FloorToInt(m_prevSpinWheelAngle / 15) * 15.0f);
+            float currentTickAngle =
+                runData.SpinWheelAngle - (Mathf.FloorToInt(runData.SpinWheelAngle / 15) * 15.0f);
             if (prevTickAngle < currentTickAngle & runData.RotationSpeed < 0.0f)
             {
                 SoundManager.Instance.PlaySFXWheelSpin();
@@ -555,7 +629,7 @@ namespace Cardwheel
 
             if (GameState == GAME_STATE.START_ROUND)
             {
-                m_scoringTimer += dt;// * settingsData.Speed;
+                m_scoringTimer += dt; // * settingsData.Speed;
                 if (m_scoringTimer > ScoringTime)
                 {
                     setGameState(GAME_STATE.JOKER_PRE_ROUND);
@@ -564,7 +638,7 @@ namespace Cardwheel
             }
             if (GameState == GAME_STATE.JOKER_PRE_ROUND)
             {
-                m_scoringTimer += dt;// * settingsData.Speed;
+                m_scoringTimer += dt; // * settingsData.Speed;
                 if (m_scoringTimer > ScoringTime)
                 {
                     while (m_scoringIdx < runData.JokerCount)
@@ -581,11 +655,24 @@ namespace Cardwheel
                             break;
                         }
 
-                        int slotChangedIdx = Logic.JokerPreRoundTryModifySlot(runData, balance, jokerType);
+                        int slotChangedIdx = Logic.JokerPreRoundTryModifySlot(
+                            runData,
+                            balance,
+                            jokerType
+                        );
                         if (slotChangedIdx > -1)
                         {
-                            CommonSlotsVisual.ChangedSlotsIdxs[CommonSlotsVisual.ChangedSlotsCount++] = slotChangedIdx;
-                            CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotBuffs, runData.UseSlotBuffs);
+                            CommonSlotsVisual.ChangedSlotsIdxs[
+                                CommonSlotsVisual.ChangedSlotsCount++
+                            ] = slotChangedIdx;
+                            CommonSlotsVisual.ShowSpinWheel(
+                                runData,
+                                balance,
+                                m_scoringSlots,
+                                runData.SlotTypeInGame,
+                                m_showSlotBuffs,
+                                runData.UseSlotBuffs
+                            );
                             m_slotAnimTimer = m_slotAnimTime;
 
                             CommonVisual.JokerGUIs[jokerIdx].Animation.Play("ScoreGrow");
@@ -604,7 +691,9 @@ namespace Cardwheel
             {
                 if (m_spinAnimTime < SpinUpTime)
                 {
-                    float spinMultiplier = SpinUpAnimationCurve.Evaluate(m_spinAnimTime / SpinUpTime);
+                    float spinMultiplier = SpinUpAnimationCurve.Evaluate(
+                        m_spinAnimTime / SpinUpTime
+                    );
                     runData.RotationSpeed = MaxSpin * spinMultiplier;
 
                     m_spinAnimTime += dt;
@@ -631,7 +720,9 @@ namespace Cardwheel
                 {
                     if (runData.BallSlotIdx[ballIdx] > -1)
                     {
-                        Vector3 slotPos = m_scoringSlots[runData.BallSlotIdx[ballIdx]].transform.position;
+                        Vector3 slotPos = m_scoringSlots[runData.BallSlotIdx[ballIdx]]
+                            .transform
+                            .position;
                         Vector3 ballPos = BallsGO[ballIdx].transform.position;
                         ballPos.z = slotPos.z;
 
@@ -639,9 +730,13 @@ namespace Cardwheel
                         runData.BallSnapTime[ballIdx] += dt;
                         if (runData.BallSnapTime[ballIdx] > 1.0f)
                             runData.BallSnapTime[ballIdx] = 1.0f;
-                        runData.BallSnapVelocity[ballIdx] = BallSnapAnimCurve.Evaluate(runData.BallSnapTime[ballIdx]) * 25.0f;
+                        runData.BallSnapVelocity[ballIdx] =
+                            BallSnapAnimCurve.Evaluate(runData.BallSnapTime[ballIdx]) * 25.0f;
                         float ballTravelDist = dt * runData.BallSnapVelocity[ballIdx];
-                        if (!m_ballLockedInSlot[ballIdx] && Vector3.Distance(ballPos, slotPos) > ballTravelDist * 1.01f)
+                        if (
+                            !m_ballLockedInSlot[ballIdx]
+                            && Vector3.Distance(ballPos, slotPos) > ballTravelDist * 1.01f
+                        )
                         {
                             ballPos += (slotPos - ballPos).normalized * ballTravelDist;
                         }
@@ -738,7 +833,16 @@ namespace Cardwheel
                             double chips = Logic.CalculateSlotBallChips(runData, balance, ballIdx);
                             if (chips > 0.0d)
                             {
-                                Debug.Log(Time.realtimeSinceStartupAsDouble + " " + GameState.ToString() + "  " + chips.ToString() + " Chips for Ball " + runData.BallTypesInGame[ballIdx].ToString() + " in Slot ");
+                                Debug.Log(
+                                    Time.realtimeSinceStartupAsDouble
+                                        + " "
+                                        + GameState.ToString()
+                                        + "  "
+                                        + chips.ToString()
+                                        + " Chips for Ball "
+                                        + runData.BallTypesInGame[ballIdx].ToString()
+                                        + " in Slot "
+                                );
 
                                 m_scoringTimer = 0.0f;
 
@@ -769,14 +873,30 @@ namespace Cardwheel
                         {
                             int ballIdx = runData.BallScoreIdxs[m_scoringIdx];
                             m_scoringIdx++;
-                            float multiplier = Logic.CalculateSlotBallMultiplierAdd(runData, balance, ballIdx);
+                            float multiplier = Logic.CalculateSlotBallMultiplierAdd(
+                                runData,
+                                balance,
+                                ballIdx
+                            );
                             if (multiplier > 0.0f)
                             {
-                                Debug.Log(Time.realtimeSinceStartupAsDouble + " " + GameState.ToString() + "  " + multiplier.ToString() + "x Multiplier Add for Ball " + runData.BallTypesInGame[ballIdx].ToString() + " in Slot");
+                                Debug.Log(
+                                    Time.realtimeSinceStartupAsDouble
+                                        + " "
+                                        + GameState.ToString()
+                                        + "  "
+                                        + multiplier.ToString()
+                                        + "x Multiplier Add for Ball "
+                                        + runData.BallTypesInGame[ballIdx].ToString()
+                                        + " in Slot"
+                                );
 
                                 m_scoringTimer = 0.0f;
 
-                                ShowBallMultiplierPopup(ballIdx, "+" + CommonVisual.GetMultiplierString(multiplier) + "x");
+                                ShowBallMultiplierPopup(
+                                    ballIdx,
+                                    "+" + CommonVisual.GetMultiplierString(multiplier) + "x"
+                                );
 
                                 animateRoundMultipierText();
                                 break;
@@ -806,7 +926,15 @@ namespace Cardwheel
                             int money = Logic.CalculateSlotMoney(runData, balance, ballIdx);
                             if (money > 0)
                             {
-                                Debug.Log(Time.realtimeSinceStartupAsDouble + " " + GameState.ToString() + "  " + money.ToString() + " Money for ball " + runData.BallTypesInGame[ballIdx].ToString());
+                                Debug.Log(
+                                    Time.realtimeSinceStartupAsDouble
+                                        + " "
+                                        + GameState.ToString()
+                                        + "  "
+                                        + money.ToString()
+                                        + " Money for ball "
+                                        + runData.BallTypesInGame[ballIdx].ToString()
+                                );
 
                                 m_scoringTimer = 0.0f;
 
@@ -839,7 +967,15 @@ namespace Cardwheel
                             int chips = Logic.CalculateBallChips(runData, balance, ballIdx);
                             if (chips > 0)
                             {
-                                Debug.Log(Time.realtimeSinceStartupAsDouble + " " + GameState.ToString() + "  " + chips.ToString() + "Chips for ball " + runData.BallTypesInGame[ballIdx].ToString());
+                                Debug.Log(
+                                    Time.realtimeSinceStartupAsDouble
+                                        + " "
+                                        + GameState.ToString()
+                                        + "  "
+                                        + chips.ToString()
+                                        + "Chips for ball "
+                                        + runData.BallTypesInGame[ballIdx].ToString()
+                                );
 
                                 m_scoringTimer = 0.0f;
 
@@ -870,14 +1006,29 @@ namespace Cardwheel
                         {
                             int ballIdx = runData.BallScoreIdxs[m_scoringIdx];
                             m_scoringIdx++;
-                            float multiplier = Logic.CalculateBallMultiplierAdd(runData, balance, ballIdx);
+                            float multiplier = Logic.CalculateBallMultiplierAdd(
+                                runData,
+                                balance,
+                                ballIdx
+                            );
                             if (multiplier > 0.0f)
                             {
-                                Debug.Log(Time.realtimeSinceStartupAsDouble + " " + GameState.ToString() + "  " + multiplier.ToString() + "x Multiplier Add for ball " + runData.BallTypesInGame[ballIdx].ToString());
+                                Debug.Log(
+                                    Time.realtimeSinceStartupAsDouble
+                                        + " "
+                                        + GameState.ToString()
+                                        + "  "
+                                        + multiplier.ToString()
+                                        + "x Multiplier Add for ball "
+                                        + runData.BallTypesInGame[ballIdx].ToString()
+                                );
 
                                 m_scoringTimer = 0.0f;
 
-                                ShowBallMultiplierPopup(ballIdx, "+" + CommonVisual.GetMultiplierString(multiplier) + "x");
+                                ShowBallMultiplierPopup(
+                                    ballIdx,
+                                    "+" + CommonVisual.GetMultiplierString(multiplier) + "x"
+                                );
 
                                 animateRoundMultipierText();
                                 break;
@@ -916,17 +1067,33 @@ namespace Cardwheel
                             int jokerCount = 0;
                             int ballIdx = runData.BallScoreIdxs[m_scoringIdx];
                             m_scoringIdx++;
-                            int money = Logic.CalculateBallMoney(runData, balance, ballIdx, jokerIdxs, ref jokerCount);
+                            int money = Logic.CalculateBallMoney(
+                                runData,
+                                balance,
+                                ballIdx,
+                                jokerIdxs,
+                                ref jokerCount
+                            );
                             if (money > 0)
                             {
-                                Debug.Log(Time.realtimeSinceStartupAsDouble + " " + GameState.ToString() + "  " + money.ToString() + " Money for ball " + runData.BallTypesInGame[ballIdx].ToString());
+                                Debug.Log(
+                                    Time.realtimeSinceStartupAsDouble
+                                        + " "
+                                        + GameState.ToString()
+                                        + "  "
+                                        + money.ToString()
+                                        + " Money for ball "
+                                        + runData.BallTypesInGame[ballIdx].ToString()
+                                );
 
                                 m_scoringTimer = 0.0f;
 
                                 ShowBallMoney(runData, settingsData, ballIdx, money);
 
                                 for (int jIdx = 0; jIdx < jokerCount; jIdx++)
-                                    CommonVisual.JokerGUIs[jokerIdxs[jIdx]].Animation.Play("ScoreGrow");
+                                    CommonVisual
+                                        .JokerGUIs[jokerIdxs[jIdx]]
+                                        .Animation.Play("ScoreGrow");
                                 break;
                             }
                         }
@@ -954,10 +1121,23 @@ namespace Cardwheel
                             int jokerType = runData.JokerTypes[jokerIdx];
                             if (jokerType > -1)
                             {
-                                double chips = Logic.CalculateJokerChipsAdd(runData, balance, jokerIdx, jokerType);
+                                double chips = Logic.CalculateJokerChipsAdd(
+                                    runData,
+                                    balance,
+                                    jokerIdx,
+                                    jokerType
+                                );
                                 if (chips > 0.0d)
                                 {
-                                    Debug.Log(Time.realtimeSinceStartupAsDouble + " " + GameState.ToString() + "  " + chips.ToString() + " Chips for Joker " + jokerType.ToString());
+                                    Debug.Log(
+                                        Time.realtimeSinceStartupAsDouble
+                                            + " "
+                                            + GameState.ToString()
+                                            + "  "
+                                            + chips.ToString()
+                                            + " Chips for Joker "
+                                            + jokerType.ToString()
+                                    );
 
                                     m_scoringTimer = 0.0f;
 
@@ -992,14 +1172,30 @@ namespace Cardwheel
                             int jokerType = runData.JokerTypes[jokerIdx];
                             if (jokerType > -1)
                             {
-                                double mult = Logic.CalculateJokerMultiplierAdd(runData, balance, jokerIdx, jokerType);
+                                double mult = Logic.CalculateJokerMultiplierAdd(
+                                    runData,
+                                    balance,
+                                    jokerIdx,
+                                    jokerType
+                                );
                                 if (mult > 0.0d)
                                 {
-                                    Debug.Log(Time.realtimeSinceStartupAsDouble + " " + GameState.ToString() + "  " + mult.ToString() + "x Multiplier Add for Joker " + jokerType.ToString());
+                                    Debug.Log(
+                                        Time.realtimeSinceStartupAsDouble
+                                            + " "
+                                            + GameState.ToString()
+                                            + "  "
+                                            + mult.ToString()
+                                            + "x Multiplier Add for Joker "
+                                            + jokerType.ToString()
+                                    );
 
                                     m_scoringTimer = 0.0f;
 
-                                    ShowJokerMultPopup(jokerIdx, "+" + CommonVisual.GetMultiplierString(mult) + "x");
+                                    ShowJokerMultPopup(
+                                        jokerIdx,
+                                        "+" + CommonVisual.GetMultiplierString(mult) + "x"
+                                    );
 
                                     animateRoundMultipierText();
                                     break;
@@ -1027,14 +1223,30 @@ namespace Cardwheel
                         {
                             int ballIdx = runData.BallScoreIdxs[m_scoringIdx];
                             m_scoringIdx++;
-                            float multiplier = Logic.CalculateSlotBallMultiplierMult(runData, balance, ballIdx);
+                            float multiplier = Logic.CalculateSlotBallMultiplierMult(
+                                runData,
+                                balance,
+                                ballIdx
+                            );
                             if (multiplier > 0.0f)
                             {
-                                Debug.Log(Time.realtimeSinceStartupAsDouble + " " + GameState.ToString() + "  " + multiplier.ToString() + "x Multiplier Add for Ball " + runData.BallTypesInGame[ballIdx].ToString() + " in Slot");
+                                Debug.Log(
+                                    Time.realtimeSinceStartupAsDouble
+                                        + " "
+                                        + GameState.ToString()
+                                        + "  "
+                                        + multiplier.ToString()
+                                        + "x Multiplier Add for Ball "
+                                        + runData.BallTypesInGame[ballIdx].ToString()
+                                        + " in Slot"
+                                );
 
                                 m_scoringTimer = 0.0f;
 
-                                ShowBallMultiplierPopup(ballIdx, "x" + CommonVisual.GetMultiplierString(multiplier));
+                                ShowBallMultiplierPopup(
+                                    ballIdx,
+                                    "x" + CommonVisual.GetMultiplierString(multiplier)
+                                );
 
                                 animateRoundMultipierText();
                                 break;
@@ -1061,14 +1273,29 @@ namespace Cardwheel
                         {
                             int ballIdx = runData.BallScoreIdxs[m_scoringIdx];
                             m_scoringIdx++;
-                            float multiplier = Logic.CalculateBallMultiplierMult(runData, balance, ballIdx);
+                            float multiplier = Logic.CalculateBallMultiplierMult(
+                                runData,
+                                balance,
+                                ballIdx
+                            );
                             if (multiplier > 1.0f)
                             {
-                                Debug.Log(Time.realtimeSinceStartupAsDouble + " " + GameState.ToString() + "  " + multiplier.ToString() + "x Multiplier Mult for ball " + runData.BallTypesInGame[ballIdx].ToString());
+                                Debug.Log(
+                                    Time.realtimeSinceStartupAsDouble
+                                        + " "
+                                        + GameState.ToString()
+                                        + "  "
+                                        + multiplier.ToString()
+                                        + "x Multiplier Mult for ball "
+                                        + runData.BallTypesInGame[ballIdx].ToString()
+                                );
 
                                 m_scoringTimer = 0.0f;
 
-                                ShowBallMultiplierPopup(ballIdx, "x" + CommonVisual.GetMultiplierString(multiplier));
+                                ShowBallMultiplierPopup(
+                                    ballIdx,
+                                    "x" + CommonVisual.GetMultiplierString(multiplier)
+                                );
 
                                 animateRoundMultipierText();
                                 break;
@@ -1097,13 +1324,29 @@ namespace Cardwheel
                             int jokerType = runData.JokerTypes[jokerIdx];
                             if (jokerType > -1)
                             {
-                                double mult = Logic.CalculateJokerMultiplierMult(runData, balance, jokerIdx, jokerType);
+                                double mult = Logic.CalculateJokerMultiplierMult(
+                                    runData,
+                                    balance,
+                                    jokerIdx,
+                                    jokerType
+                                );
                                 if (mult > 1.0d)
                                 {
                                     m_scoringTimer = 0.0f;
-                                    Debug.Log(Time.realtimeSinceStartupAsDouble + " " + GameState.ToString() + "  " + mult.ToString() + "x Multiplier Mult for Joker " + jokerType.ToString());
+                                    Debug.Log(
+                                        Time.realtimeSinceStartupAsDouble
+                                            + " "
+                                            + GameState.ToString()
+                                            + "  "
+                                            + mult.ToString()
+                                            + "x Multiplier Mult for Joker "
+                                            + jokerType.ToString()
+                                    );
 
-                                    ShowJokerMultPopup(jokerIdx, "x" + CommonVisual.GetMultiplierString(mult - 1));
+                                    ShowJokerMultPopup(
+                                        jokerIdx,
+                                        "x" + CommonVisual.GetMultiplierString(mult - 1)
+                                    );
 
                                     animateRoundMultipierText();
                                     break;
@@ -1138,7 +1381,7 @@ namespace Cardwheel
             }
             if (GameState == GAME_STATE.JOKER_POST_SPIN)
             {
-                m_scoringTimer += dt;// * settingsData.Speed;
+                m_scoringTimer += dt; // * settingsData.Speed;
                 if (m_scoringTimer > ScoringTime)
                 {
                     if (m_scoringIdx >= runData.JokerCount)
@@ -1164,11 +1407,24 @@ namespace Cardwheel
                             int jokerType = runData.JokerTypes[jokerIdx];
                             if (jokerType > -1)
                             {
-                                if (balance.JokerBalance.SubtractChipsPerSpin[jokerType].y > 0 && runData.JokerChips[jokerIdx] > 0)
+                                if (
+                                    balance.JokerBalance.SubtractChipsPerSpin[jokerType].y > 0
+                                    && runData.JokerChips[jokerIdx] > 0
+                                )
                                 {
-                                    int amount = Mathf.FloorToInt(balance.JokerBalance.SubtractChipsPerSpin[jokerType].y);
+                                    int amount = Mathf.FloorToInt(
+                                        balance.JokerBalance.SubtractChipsPerSpin[jokerType].y
+                                    );
                                     m_scoringTimer = 0.0f;
-                                    Debug.Log(Time.realtimeSinceStartupAsDouble + " " + GameState.ToString() + " -" + amount.ToString() + " Chips for Joker " + jokerType.ToString());
+                                    Debug.Log(
+                                        Time.realtimeSinceStartupAsDouble
+                                            + " "
+                                            + GameState.ToString()
+                                            + " -"
+                                            + amount.ToString()
+                                            + " Chips for Joker "
+                                            + jokerType.ToString()
+                                    );
 
                                     ShowJokerChipsPopup(jokerIdx, "-" + amount.ToString("N0"));
 
@@ -1210,11 +1466,28 @@ namespace Cardwheel
                             int jokerType = runData.JokerTypes[jokerIdx];
                             if (jokerType > -1)
                             {
-                                if (balance.JokerBalance.SubtractMultiplierAddPerRound[jokerType].y > 0 && runData.JokerMultiplierAdd[jokerIdx] > 0)
+                                if (
+                                    balance.JokerBalance.SubtractMultiplierAddPerRound[jokerType].y
+                                        > 0
+                                    && runData.JokerMultiplierAdd[jokerIdx] > 0
+                                )
                                 {
-                                    int amount = Mathf.FloorToInt(balance.JokerBalance.SubtractMultiplierAddPerRound[jokerType].y);
+                                    int amount = Mathf.FloorToInt(
+                                        balance
+                                            .JokerBalance
+                                            .SubtractMultiplierAddPerRound[jokerType]
+                                            .y
+                                    );
                                     m_scoringTimer = 0.0f;
-                                    Debug.Log(Time.realtimeSinceStartupAsDouble + " " + GameState.ToString() + " -" + amount.ToString() + "x Mult for Joker " + jokerType.ToString());
+                                    Debug.Log(
+                                        Time.realtimeSinceStartupAsDouble
+                                            + " "
+                                            + GameState.ToString()
+                                            + " -"
+                                            + amount.ToString()
+                                            + "x Mult for Joker "
+                                            + jokerType.ToString()
+                                    );
 
                                     ShowJokerMultPopup(jokerIdx, "-" + amount.ToString("N0"));
                                     break;
@@ -1222,10 +1495,16 @@ namespace Cardwheel
 
                                 int increaseSellAmount = 0;
                                 for (int allJKIdx = 0; allJKIdx < runData.JokerCount; allJKIdx++)
-                                    increaseSellAmount += balance.JokerBalance.IncreaseSellValueAllJokersEveryRound[runData.JokerTypes[allJKIdx]];
+                                    increaseSellAmount += balance
+                                        .JokerBalance
+                                        .IncreaseSellValueAllJokersEveryRound[
+                                        runData.JokerTypes[allJKIdx]
+                                    ];
 
                                 if (balance.JokerBalance.IncreaseSellValueEveryRound[jokerType] > 0)
-                                    increaseSellAmount += balance.JokerBalance.IncreaseSellValueEveryRound[jokerType];
+                                    increaseSellAmount += balance
+                                        .JokerBalance
+                                        .IncreaseSellValueEveryRound[jokerType];
 
                                 if (increaseSellAmount > 0)
                                 {
@@ -1240,7 +1519,7 @@ namespace Cardwheel
             }
             if (GameState == GAME_STATE.BOSS_POST_SPIN)
             {
-                m_scoringTimer += dt;// * settingsData.Speed;
+                m_scoringTimer += dt; // * settingsData.Speed;
                 if (m_scoringTimer > ScoringTime)
                 {
                     if (Logic.InBossRound(runData))
@@ -1262,10 +1541,15 @@ namespace Cardwheel
             }
             if (GameState == GAME_STATE.SPIN_OVER)
             {
-                m_nextSpinTimer += dt;// * settingsData.Speed;
+                m_nextSpinTimer += dt; // * settingsData.Speed;
                 if (m_nextSpinTimer > NextSpinTime)
                 {
-                    Logic.SpinComplete(runData, balance, CommonSlotsVisual.ChangedSlotsIdxs, ref CommonSlotsVisual.ChangedSlotsCount);
+                    Logic.SpinComplete(
+                        runData,
+                        balance,
+                        CommonSlotsVisual.ChangedSlotsIdxs,
+                        ref CommonSlotsVisual.ChangedSlotsCount
+                    );
 
                     if (Logic.InBossRound(runData))
                     {
@@ -1273,23 +1557,70 @@ namespace Cardwheel
 
                         if (runData.CurrentSpin == 1)
                         {
-                            if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.BALLS_DEBUFFED_FIRST_SPIN)
+                            if (
+                                balance.BossBalance.BossEffect[bossType]
+                                == BOSS_EFFECT.BALLS_DEBUFFED_FIRST_SPIN
+                            )
                                 showBallsInGame(1, runData.UseBallsSpecial == 0);
 
-                            if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.SLOTS_DEBUFFED_FIRST_SPIN)
-                                CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotBuffs, runData.UseSlotBuffs);
+                            if (
+                                balance.BossBalance.BossEffect[bossType]
+                                == BOSS_EFFECT.SLOTS_DEBUFFED_FIRST_SPIN
+                            )
+                                CommonSlotsVisual.ShowSpinWheel(
+                                    runData,
+                                    balance,
+                                    m_scoringSlots,
+                                    runData.SlotTypeInGame,
+                                    m_showSlotBuffs,
+                                    runData.UseSlotBuffs
+                                );
                         }
-                        if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.DIFFERENT_COLOR_EVERY_SPIN ||
-                            balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.PLAYED_SLOTS_DISABLED ||
-                            balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.PLAYED_COLORS_DISABLED)
-                            CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotBuffs, runData.UseSlotBuffs);
+                        if (
+                            balance.BossBalance.BossEffect[bossType]
+                                == BOSS_EFFECT.DIFFERENT_COLOR_EVERY_SPIN
+                            || balance.BossBalance.BossEffect[bossType]
+                                == BOSS_EFFECT.PLAYED_SLOTS_DISABLED
+                            || balance.BossBalance.BossEffect[bossType]
+                                == BOSS_EFFECT.PLAYED_COLORS_DISABLED
+                        )
+                            CommonSlotsVisual.ShowSpinWheel(
+                                runData,
+                                balance,
+                                m_scoringSlots,
+                                runData.SlotTypeInGame,
+                                m_showSlotBuffs,
+                                runData.UseSlotBuffs
+                            );
 
-                        if (runData.CurrentSpin < 2 && balance.BossBalance.BossEffect[bossType] >= BOSS_EFFECT.ONLY_RED_FIRST_SPIN &&
-                            balance.BossBalance.BossEffect[bossType] <= BOSS_EFFECT.ONLY_BLUE_FIRST_SPIN)
-                            CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotBuffs, runData.UseSlotBuffs);
+                        if (
+                            runData.CurrentSpin < 2
+                            && balance.BossBalance.BossEffect[bossType]
+                                >= BOSS_EFFECT.ONLY_RED_FIRST_SPIN
+                            && balance.BossBalance.BossEffect[bossType]
+                                <= BOSS_EFFECT.ONLY_BLUE_FIRST_SPIN
+                        )
+                            CommonSlotsVisual.ShowSpinWheel(
+                                runData,
+                                balance,
+                                m_scoringSlots,
+                                runData.SlotTypeInGame,
+                                m_showSlotBuffs,
+                                runData.UseSlotBuffs
+                            );
 
-                        if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.JUMBLE_SLOTS_EVERY_SPIN)
-                            CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotBuffs, runData.UseSlotBuffs);
+                        if (
+                            balance.BossBalance.BossEffect[bossType]
+                            == BOSS_EFFECT.JUMBLE_SLOTS_EVERY_SPIN
+                        )
+                            CommonSlotsVisual.ShowSpinWheel(
+                                runData,
+                                balance,
+                                m_scoringSlots,
+                                runData.SlotTypeInGame,
+                                m_showSlotBuffs,
+                                runData.UseSlotBuffs
+                            );
                     }
 
                     if (Logic.CheckWin(runData, balance))
@@ -1315,8 +1646,12 @@ namespace Cardwheel
                         m_slotJuiceTimer[slotIdx] -= dt;
                         float colorMult = SlotScaleAnimCurve.Evaluate(value) * 0.5f;
                         int slotType = (int)runData.SlotTypeInGame[slotIdx];
-                        Color color = runData.UseSlot[slotIdx] == 1 ? balance.SlotColors[slotType] : balance.SlotOffColor;
-                        m_scoringSlots[slotIdx].SpriteRenderer.color = color + Color.white * colorMult;
+                        Color color =
+                            runData.UseSlot[slotIdx] == 1
+                                ? balance.SlotColors[slotType]
+                                : balance.SlotOffColor;
+                        m_scoringSlots[slotIdx].SpriteRenderer.color =
+                            color + Color.white * colorMult;
                     }
                 }
             }
@@ -1329,7 +1664,14 @@ namespace Cardwheel
                 if (value > 1.0f)
                     value = 1.0f;
 
-                CommonSlotsVisual.TickHighlightChangedSlots(runData, balance, value, SlotScaleAnimCurve, m_scoringSlots, runData.SlotTypeInGame);
+                CommonSlotsVisual.TickHighlightChangedSlots(
+                    runData,
+                    balance,
+                    value,
+                    SlotScaleAnimCurve,
+                    m_scoringSlots,
+                    runData.SlotTypeInGame
+                );
             }
 
             // AI
@@ -1340,7 +1682,10 @@ namespace Cardwheel
                 if (AUTO_DROP)
                 {
                     // m_waitingForInputTime 0.9099129 angle 238.6025
-                    if (m_prevSpinWheelZ > AutoDropAngle && SpinCircle.transform.eulerAngles.z < AutoDropAngle)
+                    if (
+                        m_prevSpinWheelZ > AutoDropAngle
+                        && SpinCircle.transform.eulerAngles.z < AutoDropAngle
+                    )
                     {
                         dropBalls();
                     }
@@ -1375,13 +1720,19 @@ namespace Cardwheel
                     return;
                 }
             }
-            if (m_selectedButton == MENU_BUTTONS.INFO && CommonButtonVisual.NavigateEnter() || CommonButtonVisual.NavigateGamepadButton(m_infoButtonData))
+            if (
+                m_selectedButton == MENU_BUTTONS.INFO && CommonButtonVisual.NavigateEnter()
+                || CommonButtonVisual.NavigateGamepadButton(m_infoButtonData)
+            )
             {
                 showGameInfo();
                 return;
             }
 
-            if (m_selectedButton == MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateEnter() || CommonButtonVisual.NavigateGamepadButton(m_topBarGUI.SettingsButtonData))
+            if (
+                m_selectedButton == MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateEnter()
+                || CommonButtonVisual.NavigateGamepadButton(m_topBarGUI.SettingsButtonData)
+            )
             {
                 Game.Instance.GoToSettings();
                 return;
@@ -1392,9 +1743,16 @@ namespace Cardwheel
                 return;
             }
 
-            if ((m_selectedButton >= MENU_BUTTONS.JOKER_1 && m_selectedButton <= MENU_BUTTONS.JOKER_5) && CommonButtonVisual.NavigateEnter())
+            if (
+                (
+                    m_selectedButton >= MENU_BUTTONS.JOKER_1
+                    && m_selectedButton <= MENU_BUTTONS.JOKER_5
+                ) && CommonButtonVisual.NavigateEnter()
+            )
             {
-                Game.Instance.ShowJokerInfoPopupInGame((int)m_selectedButton - (int)MENU_BUTTONS.JOKER_1);
+                Game.Instance.ShowJokerInfoPopupInGame(
+                    (int)m_selectedButton - (int)MENU_BUTTONS.JOKER_1
+                );
                 return;
             }
 
@@ -1438,26 +1796,71 @@ namespace Cardwheel
                 return;
             }
 
-            if ((m_selectedButton >= MENU_BUTTONS.JOKER_1 && m_selectedButton <= MENU_BUTTONS.JOKER_5) && CommonButtonVisual.NavigateDown())
+            if (
+                (
+                    m_selectedButton >= MENU_BUTTONS.JOKER_1
+                    && m_selectedButton <= MENU_BUTTONS.JOKER_5
+                ) && CommonButtonVisual.NavigateDown()
+            )
             {
                 selectButton(MENU_BUTTONS.DROP);
                 return;
             }
 
-            if ((m_selectedButton >= MENU_BUTTONS.JOKER_1 && m_selectedButton <= MENU_BUTTONS.JOKER_5) && CommonButtonVisual.NavigateLeft())
+            if (
+                (
+                    m_selectedButton >= MENU_BUTTONS.JOKER_1
+                    && m_selectedButton <= MENU_BUTTONS.JOKER_5
+                ) && CommonButtonVisual.NavigateLeft()
+            )
             {
                 selectButton(MENU_BUTTONS.SETTINGS);
                 return;
             }
 
-            int selectedJokerButton = CommonButtonVisual.CommonNavigation(runData, (COMMON_BUTTONS)m_selectedButton);
+            int selectedJokerButton = CommonButtonVisual.CommonNavigation(
+                runData,
+                (COMMON_BUTTONS)m_selectedButton
+            );
             if (selectedJokerButton > -1)
                 selectButton((MENU_BUTTONS)selectedJokerButton);
 
 #if UNITY_EDITOR
-            if (Keyboard.current.vKey.wasReleasedThisFrame)
-                for (int i = 0; i < m_numBalls; i++)
-                    ParticleSystemSmokeBoard.Emit(Color.white, BallsGO[i].transform.position, 1.0f);
+            if (Keyboard.current.xKey.wasPressedThisFrame)
+            {
+                if (runData.TotalChips < 100000)
+                    runData.TotalChips += 100000;
+                else
+                    runData.TotalChips *= 2;
+            }
+
+            if (Keyboard.current.cKey.wasPressedThisFrame)
+                Game.Instance.RoundComplete();
+
+            if (Keyboard.current.oKey.wasPressedThisFrame)
+                Game.Instance.ContinueRun();
+
+            if (Keyboard.current.iKey.wasPressedThisFrame)
+                Game.Instance.SetMenuState(MENU_STATE.INFO);
+
+            if (Keyboard.current.mKey.wasPressedThisFrame)
+                runData.Money += 100;
+
+            if (Keyboard.current.rKey.wasPressedThisFrame)
+                runData.BossRerolls++;
+
+            if (Keyboard.current.wKey.wasPressedThisFrame)
+                Game.Instance.WinScreen();
+
+            if (Keyboard.current.gKey.wasPressedThisFrame)
+                Game.Instance.SetMenuState(MENU_STATE.GAME_OVER);
+
+            if (Keyboard.current.pKey.wasPressedThisFrame)
+                EditorApplication.isPaused = true;
+
+            if (Keyboard.current.eKey.wasReleasedThisFrame)
+                Game.Instance.ShowError("TestError");
+
 #endif
         }
 
@@ -1472,7 +1875,6 @@ namespace Cardwheel
                 if (!m_ballLockedInSlot[i])
                     return false;
             return true;
-
         }
 
         private void startScoring(RunData runData, Balance balance)
@@ -1496,7 +1898,8 @@ namespace Cardwheel
             setGameState(GAME_STATE.START_ROUND);
 
             m_roundChipsText.text = "0";
-            m_roundMultiplierText.text = CommonVisual.GetMultiplierString(balance.BaseMultiplier) + "x";
+            m_roundMultiplierText.text =
+                CommonVisual.GetMultiplierString(balance.BaseMultiplier) + "x";
             m_totalRoundScoreText.text = "0";
 
             BallsChipsGO.SetActive(false);
@@ -1542,10 +1945,22 @@ namespace Cardwheel
             Logic.StartSpin(runData, balance);
             if (Logic.InBossRound(runData))
             {
-                Logic.StartSpinBossEffect(runData, balance, CommonSlotsVisual.ChangedSlotsIdxs, ref CommonSlotsVisual.ChangedSlotsCount);
+                Logic.StartSpinBossEffect(
+                    runData,
+                    balance,
+                    CommonSlotsVisual.ChangedSlotsIdxs,
+                    ref CommonSlotsVisual.ChangedSlotsCount
+                );
                 if (CommonSlotsVisual.ChangedSlotsCount > 0)
                 {
-                    CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotBuffs, runData.UseSlotBuffs);
+                    CommonSlotsVisual.ShowSpinWheel(
+                        runData,
+                        balance,
+                        m_scoringSlots,
+                        runData.SlotTypeInGame,
+                        m_showSlotBuffs,
+                        runData.UseSlotBuffs
+                    );
                     m_slotAnimTimer = m_slotAnimTime;
                 }
 
@@ -1555,13 +1970,19 @@ namespace Cardwheel
                     Logic.JumbleBalls(runData, balance);
                     showBallsInGame(1, runData.UseBallsSpecial == 0);
                 }
-                if (balance.BossBalance.BossEffect[bossType] == BOSS_EFFECT.RANDOM_JOKE_DEBUFFED_PER_SPIN)
+                if (
+                    balance.BossBalance.BossEffect[bossType]
+                    == BOSS_EFFECT.RANDOM_JOKE_DEBUFFED_PER_SPIN
+                )
                 {
                     CommonVisual.UpdateJokerDebuff(runData);
                 }
             }
 
-            m_spinsText.text = (runData.CurrentSpin + 1).ToString("N0") + " / " + runData.MaxSpinsThisRound.ToString("N0");
+            m_spinsText.text =
+                (runData.CurrentSpin + 1).ToString("N0")
+                + " / "
+                + runData.MaxSpinsThisRound.ToString("N0");
 
             RunDataIO.SaveRun(runData, balance);
         }
@@ -1574,7 +1995,12 @@ namespace Cardwheel
             {
 #if UNITY_EDITOR
                 // m_waitingForInputTime 0.9099129 angle 238.6025 - 6 balls
-                Debug.Log("m_waitingForInputTime " + m_waitingForInputTime + " angle " + SpinCircle.transform.rotation.eulerAngles.z);
+                Debug.Log(
+                    "m_waitingForInputTime "
+                        + m_waitingForInputTime
+                        + " angle "
+                        + SpinCircle.transform.rotation.eulerAngles.z
+                );
                 m_droppedAngle = SpinCircle.transform.rotation.eulerAngles.z;
 #endif
 
@@ -1594,23 +2020,45 @@ namespace Cardwheel
             int slotChangeJokerIdx;
             int jokerMultIncIdx;
             int jokerMultInc;
-            if (Logic.BallInSlot(runData, balance, ballIdx, slotIdx, out slotChangedIdx, out slotChangeJokerIdx, out jokerMultIncIdx, out jokerMultInc))
+            if (
+                Logic.BallInSlot(
+                    runData,
+                    balance,
+                    ballIdx,
+                    slotIdx,
+                    out slotChangedIdx,
+                    out slotChangeJokerIdx,
+                    out jokerMultIncIdx,
+                    out jokerMultInc
+                )
+            )
             {
                 m_ballsRB[ballIdx].bodyType = RigidbodyType2D.Static;
                 // Debug.Log("Set ball " + ballIdx + " to STATIC");
                 if (slotChangedIdx > -1)
                 {
                     m_slotAnimTimer = m_slotAnimTime;
-                    CommonSlotsVisual.ChangedSlotsIdxs[CommonSlotsVisual.ChangedSlotsCount++] = slotChangedIdx;
+                    CommonSlotsVisual.ChangedSlotsIdxs[CommonSlotsVisual.ChangedSlotsCount++] =
+                        slotChangedIdx;
                     CommonVisual.JokerGUIs[slotChangeJokerIdx].Animation.Play("ScoreGrow");
-                    CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotBuffs, runData.UseSlotBuffs);
+                    CommonSlotsVisual.ShowSpinWheel(
+                        runData,
+                        balance,
+                        m_scoringSlots,
+                        runData.SlotTypeInGame,
+                        m_showSlotBuffs,
+                        runData.UseSlotBuffs
+                    );
                 }
 
                 if (jokerMultIncIdx > -1)
                 {
                     CommonVisual.JokerGUIs[slotChangeJokerIdx].Animation.Play("ScoreGrow");
 
-                    ShowJokerMultPopup(jokerMultIncIdx, "+" + CommonVisual.GetMultiplierString(jokerMultInc) + "x");
+                    ShowJokerMultPopup(
+                        jokerMultIncIdx,
+                        "+" + CommonVisual.GetMultiplierString(jokerMultInc) + "x"
+                    );
                 }
 
                 // for (int i = 0; i < m_scoringSlots.Length; i++)
@@ -1620,7 +2068,12 @@ namespace Cardwheel
             }
         }
 
-        private void ShowBallMoney(RunData runData, SettingsData settingsData, int ballIdx, int money)
+        private void ShowBallMoney(
+            RunData runData,
+            SettingsData settingsData,
+            int ballIdx,
+            int money
+        )
         {
             Vector3 ballPos = BallsGO[ballIdx].transform.position;
             BallsMoneyGO.SetActive(true);
@@ -1649,10 +2102,10 @@ namespace Cardwheel
             Game.Instance.SetMenuState(MENU_STATE.IN_GAME_INFO);
         }
 
-
 #if UNITY_EDITOR
         float m_droppedAngle;
         float m_increaseSize;
+
         void doSpinTest(RunData runData, Balance balance)
         {
             Span<int> slotTypeCount = stackalloc int[4];

@@ -96,7 +96,7 @@ namespace Cardwheel
             m_skipRound1ButtonData.Button.onClick.AddListener(toggleSkipRound1);
 
             m_mainMenuButtonData.Button.onClick.AddListener(Game.Instance.GoToMainMenu);
-            m_newRunButtonData.Button.onClick.AddListener(Game.Instance.StartNewRunSameWheel);
+            m_newRunButtonData.Button.onClick.AddListener(Game.Instance.GoToWheelSelection);
             m_retryButtonData.Button.onClick.AddListener(Game.Instance.RetryRun);
 
             m_closeButtonData.Button.onClick.AddListener(closeSettings);
@@ -172,7 +172,7 @@ namespace Cardwheel
 
             if (m_selectedButton == MENU_BUTTONS.NEW_RUN && CommonButtonVisual.NavigateEnter())
             {
-                Game.Instance.StartNewRunSameWheel();
+                Game.Instance.GoToWheelSelection();
                 return;
             }
 
