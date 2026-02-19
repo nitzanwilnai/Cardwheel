@@ -1,17 +1,17 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.0.66f2
-CRC: 4006240511
+CRC: 2382965743
 HashAppended: 0
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: common
-      Dependencies: {}
-    Info_1:
-      Name: common_h
+      Name: common_v
       Dependencies:
         Dependency_0: common
+    Info_1:
+      Name: common
+      Dependencies: {}
     Info_2:
-      Name: common_v
+      Name: common_h
       Dependencies:
         Dependency_0: common

@@ -13,6 +13,7 @@ using System;
 using CommonTools;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Cardwheel
@@ -77,6 +78,9 @@ namespace Cardwheel
 
         RunData runData;
         Balance balance;
+
+        bool m_skipHappened;
+        int m_abandonCount;
 
         int m_sortSlotsCount;
 
@@ -271,6 +275,16 @@ namespace Cardwheel
             Canvas.ForceUpdateCanvases();
 
             m_sortSlotsCount = 0;
+
+            Debug.Log("prevMenuState " + runData.PrevMenuState.ToString());
+
+            // should only show it if chips/mult gained
+            if (m_skipHappened)
+                CommonVisual.ShowAbandonedCardPackPopups(runData, balance, m_abandonCount);
+
+            m_abandonCount = runData.CardPackAbandonTotal;
+
+            m_skipHappened = false;
 
             // CommonSlotsVisual.ChangedSlotsCount = 0;
         }
@@ -534,6 +548,8 @@ namespace Cardwheel
         {
             SoundManager.Instance.PlaySFXButtonOK();
 
+            m_skipHappened = true;
+
             int skipType = Logic.GetSkipTypeForRound(runData, balance, runData.Round);
 
             int addedJokerCount;
@@ -544,7 +560,6 @@ namespace Cardwheel
                 ref CommonSlotsVisual.ChangedSlotsCount,
                 out addedJokerCount
             );
-            Show();
 
             if (
                 balance.SkipBalance.DoubleMoney[skipType]
@@ -576,6 +591,8 @@ namespace Cardwheel
                 if (balance.CardPackType[runData.SelectedShopCardPackIdx] == CARD_PACK_TYPE.CHIPS)
                     Game.Instance.SetMenuState(MENU_STATE.CARD_PACK_CHIPS);
             }
+            else
+                Show();
 
             for (int jkrIdx = 0; jkrIdx < runData.JokerCount; jkrIdx++)
             {

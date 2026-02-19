@@ -11,19 +11,27 @@
 
 using System;
 using CommonTools;
-#if !(PLATFORM_IOS || PLATFORM_ANDROID)
-using Steamworks;
-#endif
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+#if !(PLATFORM_IOS || PLATFORM_ANDROID)
+using Steamworks;
+#endif
 
 namespace Cardwheel
 {
     public class MainMenuVisual : MonoBehaviour
     {
-        public enum MENU_BUTTONS { NEW_GAME, CONTINUE, EXIT, SETTINGS, WISHLIST };
+        public enum MENU_BUTTONS
+        {
+            NEW_GAME,
+            CONTINUE,
+            EXIT,
+            SETTINGS,
+            WISHLIST,
+        };
+
         MENU_BUTTONS m_selectedButton;
 
         GameObject m_UI;
@@ -122,7 +130,6 @@ namespace Cardwheel
             }
 #endif
 
-
             Joker1Parent = guiRef.GetGameObject("Jokers1").transform;
             Joker2Parent = guiRef.GetGameObject("Jokers2").transform;
 
@@ -146,10 +153,14 @@ namespace Cardwheel
                 m_jokersGO[i] = jokerGO;
 
                 Image image = jokerGO.AddComponent<Image>();
-                image.sprite = AssetManager.Instance.LoadJokerSprite(balance.JokerBalance.JokerSpritesNames[i]);
+                image.sprite = AssetManager.Instance.LoadJokerSprite(
+                    balance.JokerBalance.JokerSpritesNames[i]
+                );
 
                 RectTransform trans = jokerGO.GetComponent<RectTransform>();
-                trans.transform.SetParent(UnityEngine.Random.value < 0.5f ? Joker1Parent : Joker2Parent); // setting parent
+                trans.transform.SetParent(
+                    UnityEngine.Random.value < 0.5f ? Joker1Parent : Joker2Parent
+                ); // setting parent
                 trans.localScale = new Vector3(0.5f, 0.5f, 1.0f);
 
                 trans.sizeDelta = new Vector2(256, 448); // custom size
@@ -189,14 +200,23 @@ namespace Cardwheel
             //             m_version.text += " STEAM " + SteamUtils.GetAppID();
             // #endif
 
-
             MENU_STATE menuState = RunDataIO.LoadMenuStateOnly();
-            m_continueButtonOk = menuState >= MENU_STATE.IN_GAME && menuState < MENU_STATE.GAME_OVER;
+            m_continueButtonOk =
+                menuState >= MENU_STATE.IN_GAME && menuState < MENU_STATE.GAME_OVER;
             m_continueButtonData.Button.gameObject.SetActive(m_continueButtonOk);
 
-            CommonButtonVisual.UpdateButtonIcons(m_newGameButtonData, Game.Instance.GetGamepadType());
-            CommonButtonVisual.UpdateButtonIcons(m_continueButtonData, Game.Instance.GetGamepadType());
-            CommonButtonVisual.UpdateButtonIcons(m_settingsButtonData, Game.Instance.GetGamepadType());
+            CommonButtonVisual.UpdateButtonIcons(
+                m_newGameButtonData,
+                Game.Instance.GetGamepadType()
+            );
+            CommonButtonVisual.UpdateButtonIcons(
+                m_continueButtonData,
+                Game.Instance.GetGamepadType()
+            );
+            CommonButtonVisual.UpdateButtonIcons(
+                m_settingsButtonData,
+                Game.Instance.GetGamepadType()
+            );
 
 #if DEMO
             m_wishlistButtonData.Button.gameObject.SetActive(true);
@@ -210,21 +230,32 @@ namespace Cardwheel
             m_UI.SetActive(true);
 
             m_adsRemoved.SetActive(Screen.width < Screen.height && gameData.AdsRemoved);
-            m_removeAdsButtonData.Button.gameObject.SetActive(Screen.width < Screen.height && !gameData.AdsRemoved);
+            m_removeAdsButtonData.Button.gameObject.SetActive(
+                Screen.width < Screen.height && !gameData.AdsRemoved
+            );
         }
 
         void selectButton(MENU_BUTTONS selectedButton)
         {
             m_selectedButton = selectedButton;
-            m_newGameButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.NEW_GAME);
-            m_continueButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.CONTINUE);
-            m_exitButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.EXIT);
+            m_newGameButtonData.SelectedGO.SetActive(
+                CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.NEW_GAME
+            );
+            m_continueButtonData.SelectedGO.SetActive(
+                CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.CONTINUE
+            );
+            m_exitButtonData.SelectedGO.SetActive(
+                CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.EXIT
+            );
 #if DEMO
-            m_wishlistButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.WISHLIST);
+            m_wishlistButtonData.SelectedGO.SetActive(
+                CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.WISHLIST
+            );
 #endif
-            m_settingsButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.SETTINGS);
+            m_settingsButtonData.SelectedGO.SetActive(
+                CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.SETTINGS
+            );
         }
-
 
         public void Tick(Balance balance, float dt)
         {
@@ -244,11 +275,12 @@ namespace Cardwheel
                 m_jokerAngle[i] += m_jokerRotationSpeed[i] * dt;
                 if (m_jokerAngle[i] > 360.0f)
                     m_jokerAngle[i] -= 360.0f;
-                m_jokersGO[i].transform.localRotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, m_jokerAngle[i]));
+                m_jokersGO[i].transform.localRotation = Quaternion.Euler(
+                    new Vector3(0.0f, 0.0f, m_jokerAngle[i])
+                );
             }
 
             handleInput();
-
         }
 
         private void handleInput()
@@ -359,7 +391,6 @@ namespace Cardwheel
                 return;
             }
 #endif
-
         }
 
         public void Hide()
@@ -369,16 +400,27 @@ namespace Cardwheel
 
         void animateGoToWheelSelection()
         {
+            Debug.Log(Game.Instance.FrameCounter +  " animateGoToWheelSelection()");
             SoundManager.Instance.PlaySFXButtonOK();
 
-            CommonVisual.AnimateClose(ref m_goToWheelSelectTimer, m_goToWheelSelectionTime, m_animation, "Main Menu Close");
+            CommonVisual.AnimateClose(
+                ref m_goToWheelSelectTimer,
+                m_goToWheelSelectionTime,
+                m_animation,
+                "Main Menu Close"
+            );
         }
 
         void animateContinueGame()
         {
             SoundManager.Instance.PlaySFXButtonOK();
 
-            CommonVisual.AnimateClose(ref m_continueGametTimer, m_continueGameTime, m_animation, "Main Menu Close");
+            CommonVisual.AnimateClose(
+                ref m_continueGametTimer,
+                m_continueGameTime,
+                m_animation,
+                "Main Menu Close"
+            );
         }
 
         void goToMainMenuSettings()

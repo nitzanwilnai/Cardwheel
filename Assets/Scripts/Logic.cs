@@ -301,9 +301,8 @@ public static class Logic
         // runData.SkipType[4] = 16;
         // runData.SkipType[5] = 16;
 
-        AddJoker(runData, balance, 31);
-        // AddJoker(runData, balance, 103);
-        // AddJoker(runData, balance, 104);
+        AddJoker(runData, balance, 69);
+        AddJoker(runData, balance, 70);
         // AddJoker(runData, balance, 105);
         // AddJoker(runData, balance, 106);
 

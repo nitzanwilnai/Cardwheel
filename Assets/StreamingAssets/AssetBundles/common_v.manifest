@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.0.66f2
-CRC: 473084499
+CRC: 566399176
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6f3248e169b8f1d3a919edcb88a0b687
+    Hash: c36a1b56700f5d926203fbd1ee56aab5
   TypeTreeHash:
     serializedVersion: 2
     Hash: 7aa6d4cb947c91f7e8d7bb7753451791
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 05bdc878f9115fb69b2d5288c58620f1
+    Hash: 887f09b2807464bfa0e4685c97075647
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -191,4 +191,4 @@ Assets:
 - Assets/Prefabs/CommonV/UI - Info.prefab
 - Assets/Prefabs/CommonV/UI - Boss Info.prefab
 Dependencies:
-- C:/Users/nitza/Documents/GitHub/Cardwheel/Assets/StreamingAssets/AssetBundles/common
+- /Users/nitzanwilnai/Programming/UnityRelease/Cardwheel/Assets/StreamingAssets/AssetBundles/common

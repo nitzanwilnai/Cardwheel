@@ -12,6 +12,7 @@
 using CommonTools;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
@@ -26,9 +27,19 @@ namespace Cardwheel
 
     public class WheelSelectionVisual : MonoBehaviour
     {
+        public enum MENU_BUTTONS
+        {
+            PLAY,
+            SEED,
+            BACK,
+        };
+
+        MENU_BUTTONS m_selectedButton;
+
         GameObject m_UI;
         TextMeshProUGUI m_description;
         TextMeshProUGUI m_winCount;
+        TextMeshProUGUI m_seedPlaceholder;
         TextMeshProUGUI m_seedText;
 
         int m_wheelSelectionIdx;
@@ -59,9 +70,12 @@ namespace Cardwheel
         GUIButtonData m_playButtonData;
         GUIButtonData m_prevButtonData;
         GUIButtonData m_nextButtonData;
+        GUIButtonData m_backButtonData;
+        GameObject m_seedSelected;
 
         uint m_seed = 0;
         Image m_seedGlyph;
+        float m_seedChangedTime;
 
         TMP_InputField m_seedInputField;
         GameObject m_demoGO;
@@ -83,14 +97,17 @@ namespace Cardwheel
             m_playButtonData = guiButtonRef.GetButtonData("Play");
             m_prevButtonData = guiButtonRef.GetButtonData("Prev");
             m_nextButtonData = guiButtonRef.GetButtonData("Next");
+            m_backButtonData = guiButtonRef.GetButtonData("Back");
 
             CommonButtonVisual.AddSelectedBorder(m_playButtonData);
             CommonButtonVisual.AddSelectedBorder(m_prevButtonData);
             CommonButtonVisual.AddSelectedBorder(m_nextButtonData);
+            CommonButtonVisual.AddSelectedBorder(m_backButtonData);
 
             m_playButtonData.Button.onClick.AddListener(animateClose);
             m_prevButtonData.Button.onClick.AddListener(prev);
             m_nextButtonData.Button.onClick.AddListener(next);
+            m_backButtonData.Button.onClick.AddListener(Game.Instance.GoToMainMenu);
 
             GUIRef guiRef = m_UI.GetComponent<GUIRef>();
             m_description = guiRef.GetTextGUI("Description");
@@ -102,10 +119,14 @@ namespace Cardwheel
             m_lockedGO = guiRef.GetGameObject("Locked");
 
             m_seedText = guiRef.GetTextGUI("Seed");
+            m_seedPlaceholder = guiRef.GetTextGUI("Placeholder");
             m_seedInputField = guiRef
                 .GetGameObject("Seed")
                 .gameObject.GetComponent<TMP_InputField>();
-            m_seedInputField.onValueChanged.AddListener(changeSeed);
+            // m_seedInputField.onValueChanged.AddListener(changeSeed);
+            m_seedInputField.onEndEdit.AddListener(changeSeed);
+            m_seedSelected = guiRef.GetGameObject("SeedSelected");
+            m_seedSelected.SetActive(false);
 
 #if UNITY_STANDALONE
             m_seedGlyph = guiRef.GetImage("Seed");
@@ -152,6 +173,8 @@ namespace Cardwheel
                             ]
                         );
                 }
+
+                m_wheelSelectionSpinWheels[wheelIdx].SpinWheelGO.SetActive(false);
             }
 
 #if UNITY_STANDALONE
@@ -172,7 +195,12 @@ namespace Cardwheel
 
         void changeSeed(string newText)
         {
+            Debug.Log(Game.Instance.FrameCounter + " changeSeed(" + newText + ")");
+
             m_seed = Logic.DecodeSeed(newText.ToUpper());
+            m_seedChangedTime = Time.realtimeSinceStartup;
+
+            stopSeedEditing();
         }
 
         public void Show()
@@ -185,6 +213,7 @@ namespace Cardwheel
             CommonButtonVisual.UpdateButtonIcons(m_playButtonData, gamepadType);
             CommonButtonVisual.UpdateButtonIcons(m_nextButtonData, gamepadType);
             CommonButtonVisual.UpdateButtonIcons(m_prevButtonData, gamepadType);
+            CommonButtonVisual.UpdateButtonIcons(m_backButtonData, gamepadType);
 
             m_playButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected());
 
@@ -192,7 +221,8 @@ namespace Cardwheel
 
             m_seed = (uint)Mathf.FloorToInt(UnityEngine.Random.value * int.MaxValue);
 
-            m_seedText.text = Logic.EncodeSeed(m_seed);
+            m_seedInputField.text = "";
+            m_seedPlaceholder.text = Logic.EncodeSeed(m_seed);
 
             m_UI.SetActive(true);
 
@@ -203,6 +233,10 @@ namespace Cardwheel
                 (int)GAMEPAD_BUTTON.NORTH - 1
             );
 #endif
+
+            m_seedChangedTime = Time.realtimeSinceStartup;
+
+            selectButton(MENU_BUTTONS.PLAY);
         }
 
         void updateText()
@@ -268,6 +302,26 @@ namespace Cardwheel
                 Vector3 pos = m_spinWheelParent.localPosition;
                 pos.x = posX;
                 m_spinWheelParent.localPosition = pos;
+
+                float negativeX = -posX;
+                for (int i = 0; i < m_wheelSelectionSpinWheels.Length; i++)
+                {
+                    float localX = m_wheelSelectionSpinWheels[i]
+                        .SpinWheelGO
+                        .transform
+                        .localPosition
+                        .x;
+                    if (localX >= negativeX - 1080.0f && localX <= negativeX + 1080.0f)
+                    {
+                        if (!m_wheelSelectionSpinWheels[i].SpinWheelGO.activeSelf)
+                            m_wheelSelectionSpinWheels[i].SpinWheelGO.SetActive(true);
+                    }
+                    else
+                    {
+                        if (m_wheelSelectionSpinWheels[i].SpinWheelGO.activeSelf)
+                            m_wheelSelectionSpinWheels[i].SpinWheelGO.SetActive(false);
+                    }
+                }
             }
 
             handleInput();
@@ -275,27 +329,95 @@ namespace Cardwheel
 
         void handleInput()
         {
+            if (m_seedInputField.isFocused && Keyboard.current.enterKey.wasPressedThisFrame)
+            {
+                stopSeedEditing();
+                return;
+            }
+
             if (!m_seedInputField.isFocused)
             {
                 if (CommonButtonVisual.NavigateLeft())
+                {
                     prev();
+                    return;
+                }
 
                 if (CommonButtonVisual.NavigateRight())
-                    next();
-
-                if (canPlayWheel())
                 {
-                    if (CommonButtonVisual.NavigateGamepadButton(m_playButtonData))
-                        animateClose();
+                    next();
+                    return;
+                }
 
-                    if (CommonButtonVisual.NavigateEnter())
-                        animateClose();
+                if (Time.realtimeSinceStartup - m_seedChangedTime >= 0.5f)
+                {
+                    if (canPlayWheel())
+                    {
+                        if (CommonButtonVisual.NavigateGamepadButton(m_playButtonData))
+                        {
+                            animateClose();
+                            return;
+                        }
+
+                        if (
+                            m_selectedButton == MENU_BUTTONS.PLAY
+                            && CommonButtonVisual.NavigateEnter()
+                        )
+                        {
+                            animateClose();
+                            return;
+                        }
+                    }
 
                     if (Gamepad.current != null && Gamepad.current.buttonNorth.wasPressedThisFrame)
                     {
+                        Debug.Log(Game.Instance.FrameCounter + " edit field");
                         m_seedInputField.Select();
                         m_seedInputField.ActivateInputField();
+                        return;
                     }
+                    if (m_selectedButton == MENU_BUTTONS.SEED && CommonButtonVisual.NavigateEnter())
+                    {
+                        Debug.Log(Game.Instance.FrameCounter + " edit field");
+                        m_seedInputField.Select();
+                        m_seedInputField.ActivateInputField();
+                        return;
+                    }
+                }
+
+                if (CommonButtonVisual.NavigateGamepadButton(m_backButtonData))
+                {
+                    Game.Instance.GoToMainMenu();
+                    return;
+                }
+
+                if (m_selectedButton == MENU_BUTTONS.BACK && CommonButtonVisual.NavigateEnter())
+                {
+                    Game.Instance.GoToMainMenu();
+                    return;
+                }
+
+                // down
+                if (m_selectedButton == MENU_BUTTONS.PLAY && CommonButtonVisual.NavigateDown())
+                {
+                    selectButton(MENU_BUTTONS.SEED);
+                    return;
+                }
+                if (m_selectedButton == MENU_BUTTONS.SEED && CommonButtonVisual.NavigateDown())
+                {
+                    selectButton(MENU_BUTTONS.BACK);
+                    return;
+                }
+                // up
+                if (m_selectedButton == MENU_BUTTONS.BACK && CommonButtonVisual.NavigateUp())
+                {
+                    selectButton(MENU_BUTTONS.SEED);
+                    return;
+                }
+                if (m_selectedButton == MENU_BUTTONS.SEED && CommonButtonVisual.NavigateUp())
+                {
+                    selectButton(MENU_BUTTONS.PLAY);
+                    return;
                 }
             }
         }
@@ -312,6 +434,7 @@ namespace Cardwheel
 
         public void animateClose()
         {
+            Debug.Log(Game.Instance.FrameCounter + " animateClose()");
             SoundManager.Instance.PlaySFXButtonOK();
 
             CommonVisual.AnimateClose(
@@ -367,6 +490,38 @@ namespace Cardwheel
 
             m_startX = 0.0f;
             m_targetX = -m_wheelOffset * m_wheelSelectionIdx;
+        }
+
+        void selectButton(MENU_BUTTONS selectedButton)
+        {
+            Debug.Log(
+                Game.Instance.FrameCounter + " selectButton(" + selectedButton.ToString() + ")"
+            );
+
+            m_selectedButton = selectedButton;
+
+            m_playButtonData.SelectedGO.SetActive(
+                CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.PLAY
+            );
+
+            m_seedSelected.SetActive(
+                CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.SEED
+            );
+
+            m_backButtonData.SelectedGO.SetActive(
+                CommonButtonVisual.ShowSelected() && m_selectedButton == MENU_BUTTONS.BACK
+            );
+        }
+
+        void stopSeedEditing()
+        {
+            Debug.Log(Game.Instance.FrameCounter + " handleInput() stopSeedEditing()");
+
+            m_seedInputField.DeactivateInputField();
+
+            EventSystem es = EventSystem.current;
+            if (es != null && es.currentSelectedGameObject == m_seedInputField.gameObject)
+                es.SetSelectedGameObject(null);
         }
     }
 }

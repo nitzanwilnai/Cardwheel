@@ -114,6 +114,8 @@ namespace Cardwheel
 
         public int[] LastSelectedMenuButton;
 
+        public int FrameCounter = 0;
+
         void gamepadInit()
         {
             // #if STEAM
@@ -602,6 +604,8 @@ namespace Cardwheel
             {
                 TakeScreenshot();
             }
+
+            FrameCounter++;
 #endif
         }
 
@@ -655,6 +659,7 @@ namespace Cardwheel
 
         public void GoToMainMenu()
         {
+            Debug.Log(FrameCounter + " GoToMainMenu()");
             SoundManager.Instance.PlaySFXButtonOK();
 
             SetMenuState(MENU_STATE.MAIN_MENU);

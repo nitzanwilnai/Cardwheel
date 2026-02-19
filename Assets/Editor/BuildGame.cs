@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using NUnit.Framework.Constraints;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.WindowsStandalone;
 using UnityEngine;
-using NUnit.Framework.Constraints;
-using System.Linq;
-
-
 
 #if UNITY_EDITOR_OSX
 using UnityEditor.iOS.Xcode;
@@ -16,7 +14,6 @@ using UnityEditor.iOS.Xcode;
 
 namespace Cardwheel
 {
-
     [InitializeOnLoad]
     public class BuildGame
     {
@@ -28,19 +25,28 @@ namespace Cardwheel
             setMacBuildNumber();
 
             string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss");
-            string outputPath = Application.dataPath + "/../../Build/Cardwheel OSX " + dateTime + "/";
+            string outputPath =
+                Application.dataPath + "/../../Build/Cardwheel OSX " + dateTime + "/";
             string outputPathWithFile = outputPath + "Cardwheel.app";
             BuildStandaloneCommon(BuildTarget.StandaloneOSX, outputPathWithFile, "");
 
-            string steamContentDir = Application.dataPath + "/../../StoreAssets/Steamworks/tools/ContentBuilder/content_cardwheel/macosx_content";
-            CopyBuildOutput(outputPath, steamContentDir, ExcludedFolderTokens, clearDestinationFirst: true);
+            string steamContentDir =
+                Application.dataPath
+                + "/../../StoreAssets/Steamworks/tools/ContentBuilder/content_cardwheel/macosx_content";
+            CopyBuildOutput(
+                outputPath,
+                steamContentDir,
+                ExcludedFolderTokens,
+                clearDestinationFirst: true
+            );
         }
 
         [MenuItem("Cardwheel/Build/PC")]
         public static void BuildPC()
         {
             string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss");
-            string outputPath = Application.dataPath + "/../../Build/Cardwheel WIN " + dateTime + "/Cardwheel.exe";
+            string outputPath =
+                Application.dataPath + "/../../Build/Cardwheel WIN " + dateTime + "/Cardwheel.exe";
             BuildStandaloneCommon(BuildTarget.StandaloneWindows64, outputPath, "");
         }
 
@@ -49,12 +55,20 @@ namespace Cardwheel
         {
             string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss");
             // string outputPath = Application.dataPath + "/../../Build/Cardwheel/Cardwheel.x86_64";
-            string outputPath = Application.dataPath + "/../../Build/Cardwheel STEAM " + dateTime + "/";
+            string outputPath =
+                Application.dataPath + "/../../Build/Cardwheel STEAM " + dateTime + "/";
             string outputPathWithFile = outputPath + "Cardwheel.x86_64";
             BuildStandaloneCommon(BuildTarget.StandaloneLinux64, outputPathWithFile, "");
 
-            string steamContentDir = Application.dataPath + "/../../StoreAssets/Steamworks/tools/ContentBuilder/content_cardwheel/linux_content";
-            CopyBuildOutput(outputPath, steamContentDir, ExcludedFolderTokens, clearDestinationFirst: true);
+            string steamContentDir =
+                Application.dataPath
+                + "/../../StoreAssets/Steamworks/tools/ContentBuilder/content_cardwheel/linux_content";
+            CopyBuildOutput(
+                outputPath,
+                steamContentDir,
+                ExcludedFolderTokens,
+                clearDestinationFirst: true
+            );
         }
 
         [MenuItem("Cardwheel/Build/Mac DEMO")]
@@ -63,19 +77,31 @@ namespace Cardwheel
             setMacBuildNumber();
 
             string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss");
-            string outputPath = Application.dataPath + "/../../Build/Cardwheel OSX DEMO " + dateTime + "/";
+            string outputPath =
+                Application.dataPath + "/../../Build/Cardwheel OSX DEMO " + dateTime + "/";
             string outputPathWithFile = outputPath + "Cardwheel_DEMO.app";
             BuildStandaloneCommon(BuildTarget.StandaloneOSX, outputPathWithFile, "DEMO");
 
-            string steamContentDir = Application.dataPath + "/../../StoreAssets/Steamworks/tools/ContentBuilder/content_cardwheel_DEMO/macosx_content";
-            CopyBuildOutput(outputPath, steamContentDir, ExcludedFolderTokens, clearDestinationFirst: true);
+            string steamContentDir =
+                Application.dataPath
+                + "/../../StoreAssets/Steamworks/tools/ContentBuilder/content_cardwheel_DEMO/macosx_content";
+            CopyBuildOutput(
+                outputPath,
+                steamContentDir,
+                ExcludedFolderTokens,
+                clearDestinationFirst: true
+            );
         }
 
         [MenuItem("Cardwheel/Build/PC DEMO")]
         public static void BuildPCDemo()
         {
             string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss");
-            string outputPath = Application.dataPath + "/../../Build/Cardwheel WIN DEMO " + dateTime + "/Cardwheel_DEMO.exe";
+            string outputPath =
+                Application.dataPath
+                + "/../../Build/Cardwheel WIN DEMO "
+                + dateTime
+                + "/Cardwheel_DEMO.exe";
             BuildStandaloneCommon(BuildTarget.StandaloneWindows64, outputPath, "DEMO");
         }
 
@@ -83,21 +109,36 @@ namespace Cardwheel
         public static void BuildSteamdeckDemo()
         {
             string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss");
-            string outputPath = Application.dataPath + "/../../Build/Cardwheel STEAM DEMO " + dateTime + "/";
+            string outputPath =
+                Application.dataPath + "/../../Build/Cardwheel STEAM DEMO " + dateTime + "/";
             string outputPathWithFile = outputPath + "Cardwheel_DEMO.x86_64";
             BuildStandaloneCommon(BuildTarget.StandaloneLinux64, outputPathWithFile, "DEMO");
 
             string buildOutputDir = outputPath;
-            string steamContentDir = Application.dataPath + "/../../StoreAssets/Steamworks/tools/ContentBuilder/content_cardwheel_DEMO/linux_content";
-            CopyBuildOutput(buildOutputDir, steamContentDir, ExcludedFolderTokens, clearDestinationFirst: true);
+            string steamContentDir =
+                Application.dataPath
+                + "/../../StoreAssets/Steamworks/tools/ContentBuilder/content_cardwheel_DEMO/linux_content";
+            CopyBuildOutput(
+                buildOutputDir,
+                steamContentDir,
+                ExcludedFolderTokens,
+                clearDestinationFirst: true
+            );
         }
 
-        public static void BuildStandaloneCommon(BuildTarget buildTarget, string outputPath, string flag)
+        public static void BuildStandaloneCommon(
+            BuildTarget buildTarget,
+            string outputPath,
+            string flag
+        )
         {
             setMacBuildNumber();
 
             // Get current defines
-            PlayerSettings.GetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Standalone, out var definesArray);
+            PlayerSettings.GetScriptingDefineSymbols(
+                UnityEditor.Build.NamedBuildTarget.Standalone,
+                out var definesArray
+            );
             var originalDefines = definesArray.ToArray(); // copy to restore later
 
             // Add DEMO define (uppercase; case-sensitive)
@@ -110,15 +151,26 @@ namespace Cardwheel
 
             try
             {
-                PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Standalone, definesList.ToArray());
+                PlayerSettings.SetScriptingDefineSymbols(
+                    UnityEditor.Build.NamedBuildTarget.Standalone,
+                    definesList.ToArray()
+                );
 
                 // BuildOptions.Development | BuildOptions.AllowDebugging
-                Build(buildTarget, outputPath, BuildOptions.None, "Assets/Scenes/MainGameScene H.unity");
+                Build(
+                    buildTarget,
+                    outputPath,
+                    BuildOptions.None,
+                    "Assets/Scenes/MainGameScene H.unity"
+                );
             }
             finally
             {
                 // Restore original defines no matter what
-                PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Standalone, originalDefines);
+                PlayerSettings.SetScriptingDefineSymbols(
+                    UnityEditor.Build.NamedBuildTarget.Standalone,
+                    originalDefines
+                );
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
             }
@@ -144,14 +196,22 @@ namespace Cardwheel
         {
             setAndroidBuildNumber();
 
-            PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Android, "");
+            PlayerSettings.SetScriptingDefineSymbols(
+                UnityEditor.Build.NamedBuildTarget.Android,
+                ""
+            );
 
             DateTime theTime = DateTime.Now;
             string dateTime = theTime.ToString("yyyy-MM-dd HH.mm.ss");
 
             EditorUserBuildSettings.buildAppBundle = false;
 
-            Build(BuildTarget.Android, Application.dataPath + "/../../Build/Cardwheel " + dateTime + ".apk", BuildOptions.None, "Assets/Scenes/MainGameScene V.unity");
+            Build(
+                BuildTarget.Android,
+                Application.dataPath + "/../../Build/Cardwheel " + dateTime + ".apk",
+                BuildOptions.None,
+                "Assets/Scenes/MainGameScene V.unity"
+            );
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -165,8 +225,16 @@ namespace Cardwheel
             DateTime theTime = DateTime.Now;
             string dateTime = theTime.ToString("yyyy-MM-dd HH.mm.ss");
             EditorUserBuildSettings.buildAppBundle = false;
-            Build(BuildTarget.Android, Application.dataPath + "/../../Build/ReleaseTest " + dateTime + ".apk", BuildOptions.None, "Assets/Scenes/MainGameScene V.unity");
-            PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Android, "");
+            Build(
+                BuildTarget.Android,
+                Application.dataPath + "/../../Build/ReleaseTest " + dateTime + ".apk",
+                BuildOptions.None,
+                "Assets/Scenes/MainGameScene V.unity"
+            );
+            PlayerSettings.SetScriptingDefineSymbols(
+                UnityEditor.Build.NamedBuildTarget.Android,
+                ""
+            );
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -192,13 +260,27 @@ namespace Cardwheel
             //UnityEditor.Android.UserBuildSettings.DebugSymbols.level = Unity.Android.Types.DebugSymbolLevel.Full;
             //UserBuildSettings.DebugSymbols.format = DebugSymbolFormat.IncludeInBundle | DebugSymbolFormat.Zip | DebugSymbolFormat.LegacyExtensions;
 
-            PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARMv7 | AndroidArchitecture.ARM64;
+            PlayerSettings.Android.targetArchitectures =
+                AndroidArchitecture.ARMv7 | AndroidArchitecture.ARM64;
 
-            Build(BuildTarget.Android, Application.dataPath + "/../../Build/Release " + PlayerSettings.productName + " " + dateTime + ".aab", BuildOptions.None, "Assets/Scenes/MainGameScene V.unity");
+            Build(
+                BuildTarget.Android,
+                Application.dataPath
+                    + "/../../Build/Release "
+                    + PlayerSettings.productName
+                    + " "
+                    + dateTime
+                    + ".aab",
+                BuildOptions.None,
+                "Assets/Scenes/MainGameScene V.unity"
+            );
 
             //UnityEditor.Android.UserBuildSettings.DebugSymbols.level = Unity.Android.Types.DebugSymbolLevel.None;
             EditorUserBuildSettings.buildAppBundle = false;
-            PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Android, "");
+            PlayerSettings.SetScriptingDefineSymbols(
+                UnityEditor.Build.NamedBuildTarget.Android,
+                ""
+            );
 
             // PlayerSettings.Android.useCustomKeystore = false;
 
@@ -228,7 +310,12 @@ namespace Cardwheel
 
             PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.iOS, "");
 
-            Build(BuildTarget.iOS, Application.dataPath + "/../../Build/" + PlayerSettings.productName + "_iOSBuild", BuildOptions.AutoRunPlayer, "Assets/Scenes/MainGameScene V.unity");
+            Build(
+                BuildTarget.iOS,
+                Application.dataPath + "/../../Build/" + PlayerSettings.productName + "_iOSBuild",
+                BuildOptions.AutoRunPlayer,
+                "Assets/Scenes/MainGameScene V.unity"
+            );
 
             PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.iOS, "");
         }
@@ -238,9 +325,17 @@ namespace Cardwheel
         {
             setiOSBuildNumber();
 
-            PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.iOS, "RELEASE");
+            PlayerSettings.SetScriptingDefineSymbols(
+                UnityEditor.Build.NamedBuildTarget.iOS,
+                "RELEASE"
+            );
 
-            Build(BuildTarget.iOS, Application.dataPath + "/../../Build/" + PlayerSettings.productName + "_iOSBuild", BuildOptions.AutoRunPlayer, "Assets/Scenes/MainGameScene V.unity");
+            Build(
+                BuildTarget.iOS,
+                Application.dataPath + "/../../Build/" + PlayerSettings.productName + "_iOSBuild",
+                BuildOptions.AutoRunPlayer,
+                "Assets/Scenes/MainGameScene V.unity"
+            );
 
             PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.iOS, "");
         }
@@ -279,7 +374,10 @@ namespace Cardwheel
 
             CreateAssetBundles.BuildAllAssetBundles(buildTarget);
 
-            UnityEngine.Debug.LogFormat("BuildAllAssetBundles elapsed time {0}", Time.realtimeSinceStartup - time);
+            UnityEngine.Debug.LogFormat(
+                "BuildAllAssetBundles elapsed time {0}",
+                Time.realtimeSinceStartup - time
+            );
 
             // Get filename.
             string[] levels = new string[] { scene };
@@ -315,7 +413,6 @@ namespace Cardwheel
                 //         Directory.Move(oldProjectPath, newProjectPath);
                 //         UnityEngine.Debug.Log($"Renamed Xcode project to: {newProjectPath}");
                 //     }
-
             }
             else if (buildTarget == BuildTarget.StandaloneLinux64)
             {
@@ -334,17 +431,27 @@ namespace Cardwheel
 
             string mainTargetGuid = project.GetUnityMainTargetGuid();
 
-            foreach (var targetGuid in new[] { mainTargetGuid, project.GetUnityFrameworkTargetGuid() })
+            foreach (
+                var targetGuid in new[] { mainTargetGuid, project.GetUnityFrameworkTargetGuid() }
+            )
             {
                 project.SetBuildProperty(targetGuid, "ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES", "NO");
                 project.SetBuildProperty(targetGuid, "ENABLE_BITCODE", "NO");
                 project.SetTeamId(targetGuid, "CLKC34YN6T");
 
-                UnityEngine.Debug.Log("project.GetUnityMainTargetGuid()" + project.GetUnityMainTargetGuid());
-                UnityEngine.Debug.Log("project.GetUnityFrameworkTargetGuid() " + project.GetUnityFrameworkTargetGuid());
+                UnityEngine.Debug.Log(
+                    "project.GetUnityMainTargetGuid()" + project.GetUnityMainTargetGuid()
+                );
+                UnityEngine.Debug.Log(
+                    "project.GetUnityFrameworkTargetGuid() " + project.GetUnityFrameworkTargetGuid()
+                );
             }
 
-            project.SetBuildProperty(mainTargetGuid, "ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES", "YES");
+            project.SetBuildProperty(
+                mainTargetGuid,
+                "ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES",
+                "YES"
+            );
             project.SetBuildProperty(mainTargetGuid, "ENABLE_BITCODE", "NO");
 
             project.WriteToFile(projPath);
@@ -361,7 +468,10 @@ namespace Cardwheel
             PlistElementDict rootDict = plist.root;
 
             rootDict.SetBoolean("ITSAppUsesNonExemptEncryption", false);
-            rootDict.SetString("GADApplicationIdentifier", "ca-app-pub-2715576489475489~7867603494");
+            rootDict.SetString(
+                "GADApplicationIdentifier",
+                "ca-app-pub-2715576489475489~7867603494"
+            );
 
             File.WriteAllText(plistPath, plist.WriteToString());
 #endif
@@ -380,7 +490,9 @@ namespace Cardwheel
                 sw.WriteLine("  installer.generated_projects.each do |project|");
                 sw.WriteLine("    project.targets.each do |target|");
                 sw.WriteLine("        target.build_configurations.each do |config|");
-                sw.WriteLine("            config.build_settings[\"DEVELOPMENT_TEAM\"] = \"CLKC34YN6T\"");
+                sw.WriteLine(
+                    "            config.build_settings[\"DEVELOPMENT_TEAM\"] = \"CLKC34YN6T\""
+                );
                 sw.WriteLine("         end");
                 sw.WriteLine("    end");
                 sw.WriteLine("  end");
@@ -388,7 +500,6 @@ namespace Cardwheel
             }
 #endif
         }
-
 
         //////// LINUX STEAMDECK ///////
         public static void OnPostprocessLinux(BuildTarget target, string buildPath)
@@ -401,7 +512,11 @@ namespace Cardwheel
             if (Directory.Exists(buildPath))
             {
                 // Find the .x86_64 in the folder
-                var candidates = Directory.GetFiles(buildPath, "*.x86_64", SearchOption.TopDirectoryOnly);
+                var candidates = Directory.GetFiles(
+                    buildPath,
+                    "*.x86_64",
+                    SearchOption.TopDirectoryOnly
+                );
                 if (candidates.Length == 0)
                 {
                     UnityEngine.Debug.LogWarning($"PostBuild: No .x86_64 found in {buildPath}");
@@ -423,7 +538,9 @@ namespace Cardwheel
                 RunFindChmod(pluginsDir, "*.so");
             }
 
-            UnityEngine.Debug.Log($"PostBuild chmod done:\n  exe: {exePath}\n  plugins: {pluginsDir}");
+            UnityEngine.Debug.Log(
+                $"PostBuild chmod done:\n  exe: {exePath}\n  plugins: {pluginsDir}"
+            );
         }
 
         static void RunChmod(string path)
@@ -436,7 +553,7 @@ namespace Cardwheel
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
-                CreateNoWindow = true
+                CreateNoWindow = true,
             };
             using var p = Process.Start(psi);
             p.WaitForExit();
@@ -455,7 +572,7 @@ namespace Cardwheel
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
-                CreateNoWindow = true
+                CreateNoWindow = true,
             };
             using var p = Process.Start(psi);
             p.WaitForExit();
@@ -465,16 +582,18 @@ namespace Cardwheel
 
         static string Escape(string path) => path.Replace("\"", "\\\"");
 
-
         // copy standalone content
         private static void CopyBuildOutput(
             string sourceDir,
             string destinationDir,
             string[] excludedFolderTokens,
-            bool clearDestinationFirst)
+            bool clearDestinationFirst
+        )
         {
             if (!Directory.Exists(sourceDir))
-                throw new DirectoryNotFoundException($"Source build directory not found: {sourceDir}");
+                throw new DirectoryNotFoundException(
+                    $"Source build directory not found: {sourceDir}"
+                );
 
             Directory.CreateDirectory(destinationDir);
 
@@ -483,18 +602,25 @@ namespace Cardwheel
                 // Be careful: this deletes everything currently in destinationDir.
                 foreach (var entry in Directory.EnumerateFileSystemEntries(destinationDir))
                 {
-                    if (Directory.Exists(entry)) Directory.Delete(entry, recursive: true);
-                    else File.Delete(entry);
+                    if (Directory.Exists(entry))
+                        Directory.Delete(entry, recursive: true);
+                    else
+                        File.Delete(entry);
                 }
             }
 
             CopyDirectoryRecursive(
                 sourceDir,
                 destinationDir,
-                excludedFolderTokens ?? Array.Empty<string>());
+                excludedFolderTokens ?? Array.Empty<string>()
+            );
         }
 
-        private static void CopyDirectoryRecursive(string srcDir, string dstDir, string[] excludedFolderTokens)
+        private static void CopyDirectoryRecursive(
+            string srcDir,
+            string dstDir,
+            string[] excludedFolderTokens
+        )
         {
             Directory.CreateDirectory(dstDir);
 

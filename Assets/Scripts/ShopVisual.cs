@@ -9,11 +9,11 @@
   See the LICENSE file for full legal terms.
 */
 
-using UnityEngine;
-using UnityEngine.UI;
+using System;
 using CommonTools;
 using TMPro;
-using System;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace Cardwheel
 {
@@ -74,7 +74,6 @@ namespace Cardwheel
         public GUIButtonData CardPackButtonData;
     }
 
-
     public struct VoucherGUI
     {
         public GameObject GO;
@@ -86,7 +85,14 @@ namespace Cardwheel
 
     public class ShopVisual : MonoBehaviour
     {
-        public enum POPUP_STATE { NONE, JOKER, CARDPACK, VOUCHER };
+        public enum POPUP_STATE
+        {
+            NONE,
+            JOKER,
+            CARDPACK,
+            VOUCHER,
+        };
+
         POPUP_STATE m_popupState = POPUP_STATE.NONE;
 
         public enum SHOP_MENU_BUTTONS
@@ -109,13 +115,15 @@ namespace Cardwheel
             JOKER_4 = 23,
             JOKER_5 = 24,
         };
+
         SHOP_MENU_BUTTONS m_selectedShopButton;
 
         public enum POPUP_BUTTONS
         {
             BUY,
-            CANCEL
+            CANCEL,
         };
+
         POPUP_BUTTONS m_popupButtons;
 
         GameObject m_UI;
@@ -149,6 +157,10 @@ namespace Cardwheel
         GUIButtonData m_nextRoundButtonData;
         GUIButtonData m_rerollButtonData;
 
+        bool m_rerollHappened;
+        int m_abandonCount;
+        int m_cardpackRerollCount;
+
         RunData runData;
         Balance balance;
 
@@ -166,13 +178,19 @@ namespace Cardwheel
 
             m_jokers = new ShopCardGUI[3];
             for (int i = 0; i < m_jokers.Length; i++)
-                initShopCardGUI(guiRef.GetGameObject("Joker" + (i + 1).ToString()), ref m_jokers[i]);
+                initShopCardGUI(
+                    guiRef.GetGameObject("Joker" + (i + 1).ToString()),
+                    ref m_jokers[i]
+                );
 
             initVoucherGUI(guiRef.GetGameObject("Voucher"), ref m_voucher);
 
             m_cardPacks = new CardPackGUI[2];
             for (int i = 0; i < m_cardPacks.Length; i++)
-                initCardPackGUI(guiRef.GetGameObject("CardPack" + (i + 1).ToString()), ref m_cardPacks[i]);
+                initCardPackGUI(
+                    guiRef.GetGameObject("CardPack" + (i + 1).ToString()),
+                    ref m_cardPacks[i]
+                );
             for (int i = 0; i < m_cardPacks.Length; i++)
                 m_cardPacks[i].GO.SetActive(false);
 
@@ -195,18 +213,25 @@ namespace Cardwheel
             m_voucherPopupAnimation = guiRef.GetAnimation("VoucherPopup");
 
             CommonVisual.InitTopBarGUI(guiRef.GetGameObject("TopBar"), ref m_topBarGUI);
-            CommonVisual.InitCardsBallsSpinWheelGUI(balance, guiRef.GetGameObject("CardsAndBalls"), ref m_cardsBallsSpinWheelGUI);
+            CommonVisual.InitCardsBallsSpinWheelGUI(
+                balance,
+                guiRef.GetGameObject("CardsAndBalls"),
+                ref m_cardsBallsSpinWheelGUI
+            );
 
             m_jokerBuyPopupGUI.GO = guiRef.GetGameObject("JokerBuyPopup");
             GUIRef jokerBuyPopupGUIRef = m_jokerBuyPopupGUI.GO.GetComponent<GUIRef>();
             m_jokerBuyPopupGUI.ShopCard = jokerBuyPopupGUIRef.GetImage("Card");
-            m_jokerBuyPopupGUI.DescriptionParent = jokerBuyPopupGUIRef.GetGameObject("Description").transform;
+            m_jokerBuyPopupGUI.DescriptionParent = jokerBuyPopupGUIRef
+                .GetGameObject("Description")
+                .transform;
             m_jokerBuyPopupGUI.Cost = jokerBuyPopupGUIRef.GetTextGUI("Cost");
             m_jokerBuyPopupGUI.BuyButtonImage = jokerBuyPopupGUIRef.GetImage("Buy");
             m_jokerBuyPopupGUI.RarityText = jokerBuyPopupGUIRef.GetTextGUI("Rarity");
             m_jokerBuyPopupGUI.Border = jokerBuyPopupGUIRef.GetImage("Border");
             m_jokerBuyPopupGUI.BorderRarity = jokerBuyPopupGUIRef.GetImage("BorderRarity");
-            GUIButtonRef jokerBuyPopupButtonRef = m_jokerBuyPopupGUI.GO.GetComponent<GUIButtonRef>();
+            GUIButtonRef jokerBuyPopupButtonRef =
+                m_jokerBuyPopupGUI.GO.GetComponent<GUIButtonRef>();
             m_jokerBuyPopupGUI.BuyButtonData = jokerBuyPopupButtonRef.GetButtonData("Buy");
             m_jokerBuyPopupGUI.CancelButtonData = jokerBuyPopupButtonRef.GetButtonData("Cancel");
             CommonButtonVisual.AddSelectedBorder(m_jokerBuyPopupGUI.BuyButtonData);
@@ -219,9 +244,12 @@ namespace Cardwheel
             m_cardPackBuyPopupGUI.Description = cardPackBuyPopupGUIRef.GetTextGUI("Description");
             m_cardPackBuyPopupGUI.Cost = cardPackBuyPopupGUIRef.GetTextGUI("Cost");
             m_cardPackBuyPopupGUI.BuyButtonImage = cardPackBuyPopupGUIRef.GetImage("Buy");
-            GUIButtonRef cardPackBuyPopupButtonRef = m_cardPackBuyPopupGUI.GO.GetComponent<GUIButtonRef>();
+            GUIButtonRef cardPackBuyPopupButtonRef =
+                m_cardPackBuyPopupGUI.GO.GetComponent<GUIButtonRef>();
             m_cardPackBuyPopupGUI.BuyButtonData = cardPackBuyPopupButtonRef.GetButtonData("Buy");
-            m_cardPackBuyPopupGUI.CancelButtonData = cardPackBuyPopupButtonRef.GetButtonData("Cancel");
+            m_cardPackBuyPopupGUI.CancelButtonData = cardPackBuyPopupButtonRef.GetButtonData(
+                "Cancel"
+            );
             CommonButtonVisual.AddSelectedBorder(m_cardPackBuyPopupGUI.BuyButtonData);
             CommonButtonVisual.AddSelectedBorder(m_cardPackBuyPopupGUI.CancelButtonData);
             m_cardPackBuyPopupGUI.CancelButtonData.Button.onClick.AddListener(HideCardpackBuyPopup);
@@ -232,9 +260,12 @@ namespace Cardwheel
             m_voucherBuyPopupGUI.Description = voucherBuyPopupGUIRef.GetTextGUI("Description");
             m_voucherBuyPopupGUI.Cost = voucherBuyPopupGUIRef.GetTextGUI("Cost");
             m_voucherBuyPopupGUI.BuyButtonImage = voucherBuyPopupGUIRef.GetImage("Buy");
-            GUIButtonRef voucherBuyPopupButtonRef = m_voucherBuyPopupGUI.GO.GetComponent<GUIButtonRef>();
+            GUIButtonRef voucherBuyPopupButtonRef =
+                m_voucherBuyPopupGUI.GO.GetComponent<GUIButtonRef>();
             m_voucherBuyPopupGUI.BuyButtonData = voucherBuyPopupButtonRef.GetButtonData("Buy");
-            m_voucherBuyPopupGUI.CancelButtonData = voucherBuyPopupButtonRef.GetButtonData("Cancel");
+            m_voucherBuyPopupGUI.CancelButtonData = voucherBuyPopupButtonRef.GetButtonData(
+                "Cancel"
+            );
             CommonButtonVisual.AddSelectedBorder(m_voucherBuyPopupGUI.BuyButtonData);
             CommonButtonVisual.AddSelectedBorder(m_voucherBuyPopupGUI.CancelButtonData);
             m_voucherBuyPopupGUI.CancelButtonData.Button.onClick.AddListener(HideVoucherBuyPopup);
@@ -311,14 +342,20 @@ namespace Cardwheel
                 {
                     m_jokers[i].GO.SetActive(true);
 
-                    m_jokers[i].CardImage.sprite = AssetManager.Instance.LoadJokerSprite(balance.JokerBalance.JokerSpritesNames[jokerType]);
+                    m_jokers[i].CardImage.sprite = AssetManager.Instance.LoadJokerSprite(
+                        balance.JokerBalance.JokerSpritesNames[jokerType]
+                    );
 
                     int localI = i;
                     m_jokers[i].JokerButtonData.Button.onClick.RemoveAllListeners();
-                    m_jokers[i].JokerButtonData.Button.onClick.AddListener(() => showJokerBuyPopup(localI));
+                    m_jokers[i]
+                        .JokerButtonData.Button.onClick.AddListener(() =>
+                            showJokerBuyPopup(localI)
+                        );
                     m_jokers[i].JokerButtonData.SelectedGO.SetActive(false);
 
-                    m_jokers[i].CostText.text = "◇" + Logic.GetJokerShopCost(runData, balance, jokerType).ToString();
+                    m_jokers[i].CostText.text =
+                        "◇" + Logic.GetJokerShopCost(runData, balance, jokerType).ToString();
                 }
             }
 
@@ -331,18 +368,25 @@ namespace Cardwheel
                     CARD_PACK_TYPE cardPackType = balance.CardPackType[cardPackIdx];
                     m_cardPacks[i].GO.SetActive(cardPackType > CARD_PACK_TYPE.NONE);
                     if (cardPackType == CARD_PACK_TYPE.BALL)
-                        m_cardPacks[i].CardImage.sprite = AssetManager.Instance.LoadBallCardPackSprite();
+                        m_cardPacks[i].CardImage.sprite =
+                            AssetManager.Instance.LoadBallCardPackSprite();
                     else if (cardPackType == CARD_PACK_TYPE.SLOT)
-                        m_cardPacks[i].CardImage.sprite = AssetManager.Instance.LoadSlotCardPackSprite();
+                        m_cardPacks[i].CardImage.sprite =
+                            AssetManager.Instance.LoadSlotCardPackSprite();
                     else if (cardPackType == CARD_PACK_TYPE.CHIPS)
-                        m_cardPacks[i].CardImage.sprite = AssetManager.Instance.LoadChipsCardPackSprite();
+                        m_cardPacks[i].CardImage.sprite =
+                            AssetManager.Instance.LoadChipsCardPackSprite();
 
                     int localI = i;
                     m_cardPacks[i].CardPackButtonData.Button.onClick.RemoveAllListeners();
-                    m_cardPacks[i].CardPackButtonData.Button.onClick.AddListener(() => showCardBuyPopup(localI));
+                    m_cardPacks[i]
+                        .CardPackButtonData.Button.onClick.AddListener(() =>
+                            showCardBuyPopup(localI)
+                        );
                     m_cardPacks[i].CardPackButtonData.SelectedGO.SetActive(false);
 
-                    m_cardPacks[i].CostText.text = "◇" + Logic.GetCardPackShopCost(runData, balance, cardPackIdx);
+                    m_cardPacks[i].CostText.text =
+                        "◇" + Logic.GetCardPackShopCost(runData, balance, cardPackIdx);
                 }
             }
 
@@ -350,7 +394,9 @@ namespace Cardwheel
             int voucherIndex = Logic.GetVoucherForRound(runData);
             if (voucherIndex > -1)
             {
-                m_voucher.CardImage.sprite = AssetManager.Instance.LoadVoucherSprite(balance.VoucherBalance.SpriteName[voucherIndex]);
+                m_voucher.CardImage.sprite = AssetManager.Instance.LoadVoucherSprite(
+                    balance.VoucherBalance.SpriteName[voucherIndex]
+                );
                 m_voucher.VoucherButtonData.Button.onClick.RemoveAllListeners();
                 m_voucher.VoucherButtonData.Button.onClick.AddListener(showVoucherBuyPopup);
                 m_voucher.VoucherButtonData.SelectedGO.SetActive(false);
@@ -360,7 +406,12 @@ namespace Cardwheel
             else
                 m_voucher.GO.SetActive(false);
 
-            CommonVisual.ShowJokersBallsAndSpinWheel(runData, balance, m_cardsBallsSpinWheelGUI, runData.SlotType);
+            CommonVisual.ShowJokersBallsAndSpinWheel(
+                runData,
+                balance,
+                m_cardsBallsSpinWheelGUI,
+                runData.SlotType
+            );
 
             HideBuyPopupCommon();
 
@@ -383,19 +434,48 @@ namespace Cardwheel
 
             UpdateRerollButton();
 
-            CommonButtonVisual.UpdateButtonIcons(m_topBarGUI.SettingsButtonData, Game.Instance.GetGamepadType());
-            CommonButtonVisual.UpdateButtonIcons(m_nextRoundButtonData, Game.Instance.GetGamepadType());
+            CommonButtonVisual.UpdateButtonIcons(
+                m_topBarGUI.SettingsButtonData,
+                Game.Instance.GetGamepadType()
+            );
+            CommonButtonVisual.UpdateButtonIcons(
+                m_nextRoundButtonData,
+                Game.Instance.GetGamepadType()
+            );
             CommonButtonVisual.UpdateButtonIcons(m_infoButtonData, Game.Instance.GetGamepadType());
+
+            showJokerPopups();
 
             selectButton(SHOP_MENU_BUTTONS.NEXT_ROUND);
         }
 
+        private void showJokerPopups()
+        {
+            CommonVisual.ShowAbandonedCardPackPopups(runData, balance, m_abandonCount);
+            m_abandonCount = runData.CardPackAbandonTotal;
+
+            if (m_rerollHappened)
+            {
+                CommonVisual.ShowShopRerollPopups(runData, balance);
+                m_rerollHappened = false;
+            }
+
+            CommonVisual.ShowCardPackRerollPopups(runData, balance, m_cardpackRerollCount);
+        }
+
         public void SelectPrevButton(SHOP_MENU_BUTTONS selectedButton)
         {
-            if (selectedButton == SHOP_MENU_BUTTONS.BALLS || selectedButton == SHOP_MENU_BUTTONS.WHEEL || selectedButton == SHOP_MENU_BUTTONS.SETTINGS)
+            if (
+                selectedButton == SHOP_MENU_BUTTONS.BALLS
+                || selectedButton == SHOP_MENU_BUTTONS.WHEEL
+                || selectedButton == SHOP_MENU_BUTTONS.SETTINGS
+            )
                 selectButton(selectedButton);
 
-            if (selectedButton >= SHOP_MENU_BUTTONS.JOKER_1 && selectedButton <= SHOP_MENU_BUTTONS.JOKER_5)
+            if (
+                selectedButton >= SHOP_MENU_BUTTONS.JOKER_1
+                && selectedButton <= SHOP_MENU_BUTTONS.JOKER_5
+            )
             {
                 int jokerIdx = selectedButton - SHOP_MENU_BUTTONS.JOKER_1;
                 if (jokerIdx < runData.JokerCount)
@@ -404,7 +484,10 @@ namespace Cardwheel
                     selectButton(SHOP_MENU_BUTTONS.JOKER_1);
             }
 
-            if (selectedButton >= SHOP_MENU_BUTTONS.SHOP_JOKER_1 && selectedButton <= SHOP_MENU_BUTTONS.SHOP_JOKER_3)
+            if (
+                selectedButton >= SHOP_MENU_BUTTONS.SHOP_JOKER_1
+                && selectedButton <= SHOP_MENU_BUTTONS.SHOP_JOKER_3
+            )
             {
                 if (runData.ShopJokerIdxs[selectedButton - SHOP_MENU_BUTTONS.SHOP_JOKER_1] > -1)
                     selectButton(selectedButton);
@@ -419,9 +502,15 @@ namespace Cardwheel
                 }
             }
 
-            if (selectedButton >= SHOP_MENU_BUTTONS.SHOP_CARDPACK_1 && selectedButton <= SHOP_MENU_BUTTONS.SHOP_CARDPACK_2)
+            if (
+                selectedButton >= SHOP_MENU_BUTTONS.SHOP_CARDPACK_1
+                && selectedButton <= SHOP_MENU_BUTTONS.SHOP_CARDPACK_2
+            )
             {
-                if (runData.ShopCardPackIdxs[selectedButton - SHOP_MENU_BUTTONS.SHOP_CARDPACK_1] > -1)
+                if (
+                    runData.ShopCardPackIdxs[selectedButton - SHOP_MENU_BUTTONS.SHOP_CARDPACK_1]
+                    > -1
+                )
                     selectButton(selectedButton);
                 else if (runData.ShopCardPackIdxs[0] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_CARDPACK_1);
@@ -442,20 +531,47 @@ namespace Cardwheel
             m_selectedShopButton = selectedButton;
             if (CommonButtonVisual.ShowSelected())
             {
-                m_nextRoundButtonData.SelectedGO.SetActive(m_selectedShopButton == SHOP_MENU_BUTTONS.NEXT_ROUND);
-                m_rerollButtonData.SelectedGO.SetActive(m_selectedShopButton == SHOP_MENU_BUTTONS.REROLL);
-                m_infoButtonData.SelectedGO.SetActive(m_selectedShopButton == SHOP_MENU_BUTTONS.INFO);
+                m_nextRoundButtonData.SelectedGO.SetActive(
+                    m_selectedShopButton == SHOP_MENU_BUTTONS.NEXT_ROUND
+                );
+                m_rerollButtonData.SelectedGO.SetActive(
+                    m_selectedShopButton == SHOP_MENU_BUTTONS.REROLL
+                );
+                m_infoButtonData.SelectedGO.SetActive(
+                    m_selectedShopButton == SHOP_MENU_BUTTONS.INFO
+                );
 
-                m_jokers[0].JokerButtonData.SelectedGO.SetActive(m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_1);
-                m_jokers[1].JokerButtonData.SelectedGO.SetActive(m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_2);
-                m_jokers[2].JokerButtonData.SelectedGO.SetActive(m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_3);
+                m_jokers[0]
+                    .JokerButtonData.SelectedGO.SetActive(
+                        m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_1
+                    );
+                m_jokers[1]
+                    .JokerButtonData.SelectedGO.SetActive(
+                        m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_2
+                    );
+                m_jokers[2]
+                    .JokerButtonData.SelectedGO.SetActive(
+                        m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_3
+                    );
 
-                m_cardPacks[0].CardPackButtonData.SelectedGO.SetActive(m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_1);
-                m_cardPacks[1].CardPackButtonData.SelectedGO.SetActive(m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_2);
+                m_cardPacks[0]
+                    .CardPackButtonData.SelectedGO.SetActive(
+                        m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_1
+                    );
+                m_cardPacks[1]
+                    .CardPackButtonData.SelectedGO.SetActive(
+                        m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_2
+                    );
 
-                m_voucher.VoucherButtonData.SelectedGO.SetActive(m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_VOUCHER);
+                m_voucher.VoucherButtonData.SelectedGO.SetActive(
+                    m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_VOUCHER
+                );
 
-                CommonButtonVisual.CommonSelectButton(m_topBarGUI, m_cardsBallsSpinWheelGUI, (COMMON_BUTTONS)m_selectedShopButton);
+                CommonButtonVisual.CommonSelectButton(
+                    m_topBarGUI,
+                    m_cardsBallsSpinWheelGUI,
+                    (COMMON_BUTTONS)m_selectedShopButton
+                );
             }
         }
 
@@ -468,8 +584,9 @@ namespace Cardwheel
         {
             int cost = Logic.GetShopRerollCost(runData, balance);
             m_rerollCostText.text = "◇" + cost.ToString("N0");
-            m_rerollButtonImage.color = Logic.CanBuy(runData, balance, cost) ? balance.RerollColorEnabled : balance.ButtonColorDisabled;
-
+            m_rerollButtonImage.color = Logic.CanBuy(runData, balance, cost)
+                ? balance.RerollColorEnabled
+                : balance.ButtonColorDisabled;
         }
 
         public void Hide()
@@ -491,30 +608,68 @@ namespace Cardwheel
 
                 Debug.Log("ShopVisual.ShowBuyPopup(shopJokerIdx " + shopJokerIdx + ")");
                 m_jokerBuyPopupGUI.BuyButtonData.Button.onClick.RemoveAllListeners();
-                m_jokerBuyPopupGUI.BuyButtonData.Button.onClick.AddListener(() => buyShopJoker(shopJokerIdx));
-                m_jokerBuyPopupGUI.BuyButtonData.Button.interactable = Logic.RoomForJokerInHand(runData) && Logic.CanBuy(runData, balance, Logic.GetJokerShopCost(runData, balance, jokerType));
-                m_jokerBuyPopupGUI.BuyButtonImage.color = (Logic.RoomForJokerInHand(runData) && Logic.CanBuy(runData, balance, Logic.GetJokerShopCost(runData, balance, jokerType))) ? balance.ButtonColorEnabled : balance.ButtonColorDisabled;
-                m_jokerBuyPopupGUI.Cost.text = "◇" + Logic.GetJokerShopCost(runData, balance, jokerType).ToString();
+                m_jokerBuyPopupGUI.BuyButtonData.Button.onClick.AddListener(() =>
+                    buyShopJoker(shopJokerIdx)
+                );
+                m_jokerBuyPopupGUI.BuyButtonData.Button.interactable =
+                    Logic.RoomForJokerInHand(runData)
+                    && Logic.CanBuy(
+                        runData,
+                        balance,
+                        Logic.GetJokerShopCost(runData, balance, jokerType)
+                    );
+                m_jokerBuyPopupGUI.BuyButtonImage.color =
+                    (
+                        Logic.RoomForJokerInHand(runData)
+                        && Logic.CanBuy(
+                            runData,
+                            balance,
+                            Logic.GetJokerShopCost(runData, balance, jokerType)
+                        )
+                    )
+                        ? balance.ButtonColorEnabled
+                        : balance.ButtonColorDisabled;
+                m_jokerBuyPopupGUI.Cost.text =
+                    "◇" + Logic.GetJokerShopCost(runData, balance, jokerType).ToString();
                 RARITY rarity = balance.JokerBalance.Rarity[jokerType];
                 m_jokerBuyPopupGUI.RarityText.text = rarity.ToString();
                 m_jokerBuyPopupGUI.Border.color = balance.RarityColors[(int)rarity];
                 m_jokerBuyPopupGUI.BorderRarity.color = balance.RarityColors[(int)rarity];
 
-                m_jokerBuyPopupGUI.ShopCard.sprite = AssetManager.Instance.LoadJokerSprite(balance.JokerBalance.JokerSpritesNames[jokerType]);
+                m_jokerBuyPopupGUI.ShopCard.sprite = AssetManager.Instance.LoadJokerSprite(
+                    balance.JokerBalance.JokerSpritesNames[jokerType]
+                );
 
-                GameObject descriptionGO = AssetManager.Instance.GetDescriptionGO(balance.JokerBalance.DescriptionName[jokerType], m_jokerBuyPopupGUI.DescriptionParent);
+                GameObject descriptionGO = AssetManager.Instance.GetDescriptionGO(
+                    balance.JokerBalance.DescriptionName[jokerType],
+                    m_jokerBuyPopupGUI.DescriptionParent
+                );
                 descriptionGO.transform.localPosition = Vector3.zero;
                 descriptionGO.transform.localScale = Vector3.one;
                 m_descriptionGO = descriptionGO;
 
-                CommonVisual.ShowJokerDescriptionCommon(runData, balance, m_descriptionGO, jokerType, -1);
+                CommonVisual.ShowJokerDescriptionCommon(
+                    runData,
+                    balance,
+                    m_descriptionGO,
+                    jokerType,
+                    -1
+                );
 
                 m_jokerBuyPopupGUI.GO.SetActive(true);
 
-                CommonButtonVisual.UpdateButtonIcons(m_jokerBuyPopupGUI.BuyButtonData, Game.Instance.GetGamepadType());
-                CommonButtonVisual.UpdateButtonIcons(m_jokerBuyPopupGUI.CancelButtonData, Game.Instance.GetGamepadType());
+                CommonButtonVisual.UpdateButtonIcons(
+                    m_jokerBuyPopupGUI.BuyButtonData,
+                    Game.Instance.GetGamepadType()
+                );
+                CommonButtonVisual.UpdateButtonIcons(
+                    m_jokerBuyPopupGUI.CancelButtonData,
+                    Game.Instance.GetGamepadType()
+                );
 
-                m_jokerBuyPopupGUI.BuyButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected());
+                m_jokerBuyPopupGUI.BuyButtonData.SelectedGO.SetActive(
+                    CommonButtonVisual.ShowSelected()
+                );
                 m_jokerBuyPopupGUI.CancelButtonData.SelectedGO.SetActive(false);
             }
         }
@@ -529,27 +684,59 @@ namespace Cardwheel
             int cardPackIdx = runData.ShopCardPackIdxs[shopPackIdx];
 
             m_cardPackBuyPopupGUI.BuyButtonData.Button.onClick.RemoveAllListeners();
-            m_cardPackBuyPopupGUI.BuyButtonData.Button.onClick.AddListener(() => buyShopCardPack(shopPackIdx));
-            m_cardPackBuyPopupGUI.BuyButtonData.Button.interactable = Logic.CanBuy(runData, balance, Logic.GetCardPackShopCost(runData, balance, cardPackIdx));
-            m_cardPackBuyPopupGUI.BuyButtonImage.color = Logic.CanBuy(runData, balance, Logic.GetCardPackShopCost(runData, balance, cardPackIdx)) ? balance.ButtonColorEnabled : balance.ButtonColorDisabled;
-            m_cardPackBuyPopupGUI.Cost.text = "◇" + Logic.GetCardPackShopCost(runData, balance, cardPackIdx);
+            m_cardPackBuyPopupGUI.BuyButtonData.Button.onClick.AddListener(() =>
+                buyShopCardPack(shopPackIdx)
+            );
+            m_cardPackBuyPopupGUI.BuyButtonData.Button.interactable = Logic.CanBuy(
+                runData,
+                balance,
+                Logic.GetCardPackShopCost(runData, balance, cardPackIdx)
+            );
+            m_cardPackBuyPopupGUI.BuyButtonImage.color = Logic.CanBuy(
+                runData,
+                balance,
+                Logic.GetCardPackShopCost(runData, balance, cardPackIdx)
+            )
+                ? balance.ButtonColorEnabled
+                : balance.ButtonColorDisabled;
+            m_cardPackBuyPopupGUI.Cost.text =
+                "◇" + Logic.GetCardPackShopCost(runData, balance, cardPackIdx);
 
             if (balance.CardPackType[cardPackIdx] == CARD_PACK_TYPE.BALL)
-                m_cardPackBuyPopupGUI.ShopCard.sprite = AssetManager.Instance.LoadBallCardPackSprite();
+                m_cardPackBuyPopupGUI.ShopCard.sprite =
+                    AssetManager.Instance.LoadBallCardPackSprite();
             else if (balance.CardPackType[cardPackIdx] == CARD_PACK_TYPE.SLOT)
-                m_cardPackBuyPopupGUI.ShopCard.sprite = AssetManager.Instance.LoadSlotCardPackSprite();
+                m_cardPackBuyPopupGUI.ShopCard.sprite =
+                    AssetManager.Instance.LoadSlotCardPackSprite();
             else if (balance.CardPackType[cardPackIdx] == CARD_PACK_TYPE.CHIPS)
-                m_cardPackBuyPopupGUI.ShopCard.sprite = AssetManager.Instance.LoadChipsCardPackSprite();
+                m_cardPackBuyPopupGUI.ShopCard.sprite =
+                    AssetManager.Instance.LoadChipsCardPackSprite();
 
-            string typeString = balance.CardPackType[cardPackIdx] == CARD_PACK_TYPE.BALL ? "Ball" : "Slot";
-            m_cardPackBuyPopupGUI.Description.text = "Pick " + balance.CardPackPickCards[cardPackIdx] + " of " + balance.CardPackMaxCards[cardPackIdx] + " " + typeString + " Upgrades";
+            string typeString =
+                balance.CardPackType[cardPackIdx] == CARD_PACK_TYPE.BALL ? "Ball" : "Slot";
+            m_cardPackBuyPopupGUI.Description.text =
+                "Pick "
+                + balance.CardPackPickCards[cardPackIdx]
+                + " of "
+                + balance.CardPackMaxCards[cardPackIdx]
+                + " "
+                + typeString
+                + " Upgrades";
 
             m_cardPackBuyPopupGUI.GO.SetActive(true);
 
-            CommonButtonVisual.UpdateButtonIcons(m_cardPackBuyPopupGUI.BuyButtonData, Game.Instance.GetGamepadType());
-            CommonButtonVisual.UpdateButtonIcons(m_cardPackBuyPopupGUI.CancelButtonData, Game.Instance.GetGamepadType());
+            CommonButtonVisual.UpdateButtonIcons(
+                m_cardPackBuyPopupGUI.BuyButtonData,
+                Game.Instance.GetGamepadType()
+            );
+            CommonButtonVisual.UpdateButtonIcons(
+                m_cardPackBuyPopupGUI.CancelButtonData,
+                Game.Instance.GetGamepadType()
+            );
 
-            m_cardPackBuyPopupGUI.BuyButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected());
+            m_cardPackBuyPopupGUI.BuyButtonData.SelectedGO.SetActive(
+                CommonButtonVisual.ShowSelected()
+            );
             m_cardPackBuyPopupGUI.CancelButtonData.SelectedGO.SetActive(false);
         }
 
@@ -563,21 +750,43 @@ namespace Cardwheel
             m_voucherBuyPopupGUI.BuyButtonData.Button.onClick.RemoveAllListeners();
             m_voucherBuyPopupGUI.BuyButtonData.Button.onClick.AddListener(buyVoucher);
 
-            m_voucherBuyPopupGUI.BuyButtonData.Button.interactable = Logic.CanBuy(runData, balance, Logic.GetVoucherCost(runData, balance));
-            m_voucherBuyPopupGUI.BuyButtonImage.color = Logic.CanBuy(runData, balance, Logic.GetVoucherCost(runData, balance)) ? balance.ButtonColorEnabled : balance.ButtonColorDisabled;
+            m_voucherBuyPopupGUI.BuyButtonData.Button.interactable = Logic.CanBuy(
+                runData,
+                balance,
+                Logic.GetVoucherCost(runData, balance)
+            );
+            m_voucherBuyPopupGUI.BuyButtonImage.color = Logic.CanBuy(
+                runData,
+                balance,
+                Logic.GetVoucherCost(runData, balance)
+            )
+                ? balance.ButtonColorEnabled
+                : balance.ButtonColorDisabled;
             m_voucherBuyPopupGUI.Cost.text = "◇" + Logic.GetVoucherCost(runData, balance);
 
             int voucherIndex = Logic.GetVoucherForRound(runData);
-            m_voucherBuyPopupGUI.ShopCard.sprite = AssetManager.Instance.LoadVoucherSprite(balance.VoucherBalance.SpriteName[voucherIndex]);
+            m_voucherBuyPopupGUI.ShopCard.sprite = AssetManager.Instance.LoadVoucherSprite(
+                balance.VoucherBalance.SpriteName[voucherIndex]
+            );
 
-            m_voucherBuyPopupGUI.Description.text = balance.VoucherBalance.Description[voucherIndex];
+            m_voucherBuyPopupGUI.Description.text = balance.VoucherBalance.Description[
+                voucherIndex
+            ];
 
             m_voucherBuyPopupGUI.GO.SetActive(true);
 
-            CommonButtonVisual.UpdateButtonIcons(m_voucherBuyPopupGUI.BuyButtonData, Game.Instance.GetGamepadType());
-            CommonButtonVisual.UpdateButtonIcons(m_voucherBuyPopupGUI.CancelButtonData, Game.Instance.GetGamepadType());
+            CommonButtonVisual.UpdateButtonIcons(
+                m_voucherBuyPopupGUI.BuyButtonData,
+                Game.Instance.GetGamepadType()
+            );
+            CommonButtonVisual.UpdateButtonIcons(
+                m_voucherBuyPopupGUI.CancelButtonData,
+                Game.Instance.GetGamepadType()
+            );
 
-            m_voucherBuyPopupGUI.BuyButtonData.SelectedGO.SetActive(CommonButtonVisual.ShowSelected());
+            m_voucherBuyPopupGUI.BuyButtonData.SelectedGO.SetActive(
+                CommonButtonVisual.ShowSelected()
+            );
             m_voucherBuyPopupGUI.CancelButtonData.SelectedGO.SetActive(false);
         }
 
@@ -619,7 +828,12 @@ namespace Cardwheel
 
         public void Tick(float dt)
         {
-            CommonSlotsVisual.TickSpinWheelUI(runData, balance.UISpinWheelSpeed, dt, m_cardsBallsSpinWheelGUI);
+            CommonSlotsVisual.TickSpinWheelUI(
+                runData,
+                balance.UISpinWheelSpeed,
+                dt,
+                m_cardsBallsSpinWheelGUI
+            );
             CommonSlotsVisual.TickSortingPopup(dt, m_cardsBallsSpinWheelGUI);
 
             if (m_hidePopupTimer > 0.0f)
@@ -639,45 +853,71 @@ namespace Cardwheel
         {
             // buy
             if (m_popupState == POPUP_STATE.JOKER)
-                if (CommonButtonVisual.NavigateGamepadButton(m_jokerBuyPopupGUI.BuyButtonData) ||
-                m_popupButtons == POPUP_BUTTONS.BUY && CommonButtonVisual.NavigateEnter())
+                if (
+                    CommonButtonVisual.NavigateGamepadButton(m_jokerBuyPopupGUI.BuyButtonData)
+                    || m_popupButtons == POPUP_BUTTONS.BUY && CommonButtonVisual.NavigateEnter()
+                )
                 {
                     int shopJokerIdx = m_selectedShopButton - SHOP_MENU_BUTTONS.SHOP_JOKER_1;
                     int jokerType = runData.ShopJokerIdxs[shopJokerIdx];
-                    if (Logic.RoomForJokerInHand(runData) && Logic.CanBuy(runData, balance, Logic.GetJokerShopCost(runData, balance, jokerType)))
+                    if (
+                        Logic.RoomForJokerInHand(runData)
+                        && Logic.CanBuy(
+                            runData,
+                            balance,
+                            Logic.GetJokerShopCost(runData, balance, jokerType)
+                        )
+                    )
                         buyShopJoker(shopJokerIdx);
                 }
 
             if (m_popupState == POPUP_STATE.CARDPACK)
-                if (CommonButtonVisual.NavigateGamepadButton(m_cardPackBuyPopupGUI.BuyButtonData) ||
-                m_popupButtons == POPUP_BUTTONS.BUY && CommonButtonVisual.NavigateEnter())
+                if (
+                    CommonButtonVisual.NavigateGamepadButton(m_cardPackBuyPopupGUI.BuyButtonData)
+                    || m_popupButtons == POPUP_BUTTONS.BUY && CommonButtonVisual.NavigateEnter()
+                )
                 {
-                    int cardPackShopIndex = m_selectedShopButton - SHOP_MENU_BUTTONS.SHOP_CARDPACK_1;
+                    int cardPackShopIndex =
+                        m_selectedShopButton - SHOP_MENU_BUTTONS.SHOP_CARDPACK_1;
                     int cardPackIdx = runData.ShopCardPackIdxs[cardPackShopIndex];
-                    if (Logic.CanBuy(runData, balance, Logic.GetCardPackShopCost(runData, balance, cardPackIdx)))
+                    if (
+                        Logic.CanBuy(
+                            runData,
+                            balance,
+                            Logic.GetCardPackShopCost(runData, balance, cardPackIdx)
+                        )
+                    )
                         buyShopCardPack(cardPackShopIndex);
                 }
 
             if (m_popupState == POPUP_STATE.VOUCHER)
-                if (CommonButtonVisual.NavigateGamepadButton(m_voucherBuyPopupGUI.BuyButtonData) ||
-                m_popupButtons == POPUP_BUTTONS.BUY && CommonButtonVisual.NavigateEnter())
+                if (
+                    CommonButtonVisual.NavigateGamepadButton(m_voucherBuyPopupGUI.BuyButtonData)
+                    || m_popupButtons == POPUP_BUTTONS.BUY && CommonButtonVisual.NavigateEnter()
+                )
                     if (Logic.CanBuy(runData, balance, Logic.GetVoucherCost(runData, balance)))
                         buyVoucher();
 
             // cancel
             if (m_popupState == POPUP_STATE.JOKER)
-                if (CommonButtonVisual.NavigateGamepadButton(m_jokerBuyPopupGUI.CancelButtonData) ||
-                m_popupButtons == POPUP_BUTTONS.CANCEL && CommonButtonVisual.NavigateEnter())
+                if (
+                    CommonButtonVisual.NavigateGamepadButton(m_jokerBuyPopupGUI.CancelButtonData)
+                    || m_popupButtons == POPUP_BUTTONS.CANCEL && CommonButtonVisual.NavigateEnter()
+                )
                     HideJokerBuyPopup();
 
             if (m_popupState == POPUP_STATE.CARDPACK)
-                if (CommonButtonVisual.NavigateGamepadButton(m_cardPackBuyPopupGUI.CancelButtonData) ||
-                    m_popupButtons == POPUP_BUTTONS.CANCEL && CommonButtonVisual.NavigateEnter())
+                if (
+                    CommonButtonVisual.NavigateGamepadButton(m_cardPackBuyPopupGUI.CancelButtonData)
+                    || m_popupButtons == POPUP_BUTTONS.CANCEL && CommonButtonVisual.NavigateEnter()
+                )
                     HideCardpackBuyPopup();
 
             if (m_popupState == POPUP_STATE.VOUCHER)
-                if (CommonButtonVisual.NavigateGamepadButton(m_voucherBuyPopupGUI.CancelButtonData) ||
-                    m_popupButtons == POPUP_BUTTONS.CANCEL && CommonButtonVisual.NavigateEnter())
+                if (
+                    CommonButtonVisual.NavigateGamepadButton(m_voucherBuyPopupGUI.CancelButtonData)
+                    || m_popupButtons == POPUP_BUTTONS.CANCEL && CommonButtonVisual.NavigateEnter()
+                )
                     HideVoucherBuyPopup();
 
             if (m_popupButtons == POPUP_BUTTONS.BUY && CommonButtonVisual.NavigateDown())
@@ -727,47 +967,76 @@ namespace Cardwheel
 
         void handleShopInput()
         {
-            if (CommonButtonVisual.CommonHandleInput(m_topBarGUI, m_cardsBallsSpinWheelGUI, (COMMON_BUTTONS)m_selectedShopButton))
+            if (
+                CommonButtonVisual.CommonHandleInput(
+                    m_topBarGUI,
+                    m_cardsBallsSpinWheelGUI,
+                    (COMMON_BUTTONS)m_selectedShopButton
+                )
+            )
                 return;
 
-            int newSelectedButton = CommonButtonVisual.CommonNavigation(runData, (COMMON_BUTTONS)m_selectedShopButton);
+            int newSelectedButton = CommonButtonVisual.CommonNavigation(
+                runData,
+                (COMMON_BUTTONS)m_selectedShopButton
+            );
             if (newSelectedButton > -1)
             {
                 selectButton((SHOP_MENU_BUTTONS)newSelectedButton);
                 return;
             }
 
-            if (CommonButtonVisual.NavigateGamepadButton(m_infoButtonData) ||
-            m_selectedShopButton == SHOP_MENU_BUTTONS.INFO && CommonButtonVisual.NavigateEnter())
+            if (
+                CommonButtonVisual.NavigateGamepadButton(m_infoButtonData)
+                || m_selectedShopButton == SHOP_MENU_BUTTONS.INFO
+                    && CommonButtonVisual.NavigateEnter()
+            )
             {
                 showShopInfo();
                 return;
             }
-            if (CommonButtonVisual.NavigateGamepadButton(m_rerollButtonData) ||
-            m_selectedShopButton == SHOP_MENU_BUTTONS.REROLL && CommonButtonVisual.NavigateEnter())
+            if (
+                CommonButtonVisual.NavigateGamepadButton(m_rerollButtonData)
+                || m_selectedShopButton == SHOP_MENU_BUTTONS.REROLL
+                    && CommonButtonVisual.NavigateEnter()
+            )
             {
                 rerollShop();
                 selectButton(SHOP_MENU_BUTTONS.REROLL);
                 return;
             }
-            if (CommonButtonVisual.NavigateGamepadButton(m_nextRoundButtonData) ||
-            m_selectedShopButton == SHOP_MENU_BUTTONS.NEXT_ROUND && CommonButtonVisual.NavigateEnter())
+            if (
+                CommonButtonVisual.NavigateGamepadButton(m_nextRoundButtonData)
+                || m_selectedShopButton == SHOP_MENU_BUTTONS.NEXT_ROUND
+                    && CommonButtonVisual.NavigateEnter()
+            )
             {
                 goToRoundSelection();
                 return;
             }
 
-            if (m_selectedShopButton >= SHOP_MENU_BUTTONS.SHOP_JOKER_1 && m_selectedShopButton <= SHOP_MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateEnter())
+            if (
+                m_selectedShopButton >= SHOP_MENU_BUTTONS.SHOP_JOKER_1
+                && m_selectedShopButton <= SHOP_MENU_BUTTONS.SHOP_JOKER_3
+                && CommonButtonVisual.NavigateEnter()
+            )
             {
                 showJokerBuyPopup(m_selectedShopButton - SHOP_MENU_BUTTONS.SHOP_JOKER_1);
             }
 
-            if (m_selectedShopButton >= SHOP_MENU_BUTTONS.SHOP_CARDPACK_1 && m_selectedShopButton <= SHOP_MENU_BUTTONS.SHOP_CARDPACK_2 && CommonButtonVisual.NavigateEnter())
+            if (
+                m_selectedShopButton >= SHOP_MENU_BUTTONS.SHOP_CARDPACK_1
+                && m_selectedShopButton <= SHOP_MENU_BUTTONS.SHOP_CARDPACK_2
+                && CommonButtonVisual.NavigateEnter()
+            )
             {
                 showCardBuyPopup(m_selectedShopButton - SHOP_MENU_BUTTONS.SHOP_CARDPACK_1);
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_VOUCHER && CommonButtonVisual.NavigateEnter())
+            if (
+                m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_VOUCHER
+                && CommonButtonVisual.NavigateEnter()
+            )
             {
                 showVoucherBuyPopup();
             }
@@ -788,34 +1057,49 @@ namespace Cardwheel
             }
 
             // navigate down left column
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateDown())
+            if (
+                m_selectedShopButton == SHOP_MENU_BUTTONS.SETTINGS
+                && CommonButtonVisual.NavigateDown()
+            )
             {
                 selectButton(SHOP_MENU_BUTTONS.REROLL);
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.REROLL && CommonButtonVisual.NavigateDown())
+            if (
+                m_selectedShopButton == SHOP_MENU_BUTTONS.REROLL
+                && CommonButtonVisual.NavigateDown()
+            )
             {
                 selectButton(SHOP_MENU_BUTTONS.INFO);
                 return;
             }
 
             // navigate up right column
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.NEXT_ROUND && CommonButtonVisual.NavigateUp())
+            if (
+                m_selectedShopButton == SHOP_MENU_BUTTONS.NEXT_ROUND
+                && CommonButtonVisual.NavigateUp()
+            )
             {
                 selectButton(SHOP_MENU_BUTTONS.WHEEL);
                 return;
             }
 
             // navigate up right column
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.WHEEL && CommonButtonVisual.NavigateDown())
+            if (
+                m_selectedShopButton == SHOP_MENU_BUTTONS.WHEEL
+                && CommonButtonVisual.NavigateDown()
+            )
             {
                 selectButton(SHOP_MENU_BUTTONS.NEXT_ROUND);
                 return;
             }
 
             // navigate left bottom row
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.NEXT_ROUND && CommonButtonVisual.NavigateLeft())
+            if (
+                m_selectedShopButton == SHOP_MENU_BUTTONS.NEXT_ROUND
+                && CommonButtonVisual.NavigateLeft()
+            )
             {
                 if (runData.ShopCardPackIdxs[1] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_CARDPACK_2);
@@ -828,7 +1112,10 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_2 && CommonButtonVisual.NavigateLeft())
+            if (
+                m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_2
+                && CommonButtonVisual.NavigateLeft()
+            )
             {
                 if (runData.ShopCardPackIdxs[0] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_CARDPACK_1);
@@ -839,7 +1126,10 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_1 && CommonButtonVisual.NavigateLeft())
+            if (
+                m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_1
+                && CommonButtonVisual.NavigateLeft()
+            )
             {
                 if (!runData.VoucherPurchased)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_VOUCHER);
@@ -848,14 +1138,22 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_VOUCHER && CommonButtonVisual.NavigateLeft())
+            if (
+                m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_VOUCHER
+                && CommonButtonVisual.NavigateLeft()
+            )
             {
                 selectButton(SHOP_MENU_BUTTONS.INFO);
                 return;
             }
 
             // navigate right bottom row
-            if ((m_selectedShopButton == SHOP_MENU_BUTTONS.INFO || m_selectedShopButton == SHOP_MENU_BUTTONS.REROLL) && CommonButtonVisual.NavigateRight())
+            if (
+                (
+                    m_selectedShopButton == SHOP_MENU_BUTTONS.INFO
+                    || m_selectedShopButton == SHOP_MENU_BUTTONS.REROLL
+                ) && CommonButtonVisual.NavigateRight()
+            )
             {
                 if (!runData.VoucherPurchased)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_VOUCHER);
@@ -868,7 +1166,10 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_VOUCHER && CommonButtonVisual.NavigateRight())
+            if (
+                m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_VOUCHER
+                && CommonButtonVisual.NavigateRight()
+            )
             {
                 if (runData.ShopCardPackIdxs[0] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_CARDPACK_1);
@@ -879,7 +1180,10 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_1 && CommonButtonVisual.NavigateRight())
+            if (
+                m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_1
+                && CommonButtonVisual.NavigateRight()
+            )
             {
                 if (runData.ShopCardPackIdxs[1] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_CARDPACK_2);
@@ -888,15 +1192,26 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_2 && CommonButtonVisual.NavigateRight())
+            if (
+                m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_2
+                && CommonButtonVisual.NavigateRight()
+            )
             {
                 selectButton(SHOP_MENU_BUTTONS.NEXT_ROUND);
                 return;
             }
 
             // navigate left top row
-            if (((m_selectedShopButton >= SHOP_MENU_BUTTONS.JOKER_1 && m_selectedShopButton <= SHOP_MENU_BUTTONS.JOKER_5) || m_selectedShopButton == SHOP_MENU_BUTTONS.BALLS || m_selectedShopButton == SHOP_MENU_BUTTONS.WHEEL) &&
-            CommonButtonVisual.NavigateLeft())
+            if (
+                (
+                    (
+                        m_selectedShopButton >= SHOP_MENU_BUTTONS.JOKER_1
+                        && m_selectedShopButton <= SHOP_MENU_BUTTONS.JOKER_5
+                    )
+                    || m_selectedShopButton == SHOP_MENU_BUTTONS.BALLS
+                    || m_selectedShopButton == SHOP_MENU_BUTTONS.WHEEL
+                ) && CommonButtonVisual.NavigateLeft()
+            )
             {
                 if (runData.ShopJokerCount > 2 && runData.ShopJokerIdxs[2] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_JOKER_3);
@@ -909,7 +1224,10 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateLeft())
+            if (
+                m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_3
+                && CommonButtonVisual.NavigateLeft()
+            )
             {
                 if (runData.ShopJokerIdxs[1] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_JOKER_2);
@@ -920,7 +1238,10 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_2 && CommonButtonVisual.NavigateLeft())
+            if (
+                m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_2
+                && CommonButtonVisual.NavigateLeft()
+            )
             {
                 if (runData.ShopJokerIdxs[0] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_JOKER_1);
@@ -929,14 +1250,20 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_1 && CommonButtonVisual.NavigateLeft())
+            if (
+                m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_1
+                && CommonButtonVisual.NavigateLeft()
+            )
             {
                 selectButton(SHOP_MENU_BUTTONS.SETTINGS);
                 return;
             }
 
             // navigate right top row
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SETTINGS && CommonButtonVisual.NavigateRight())
+            if (
+                m_selectedShopButton == SHOP_MENU_BUTTONS.SETTINGS
+                && CommonButtonVisual.NavigateRight()
+            )
             {
                 if (runData.ShopJokerIdxs[0] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_JOKER_1);
@@ -951,7 +1278,10 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_1 && CommonButtonVisual.NavigateRight())
+            if (
+                m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_1
+                && CommonButtonVisual.NavigateRight()
+            )
             {
                 if (runData.ShopJokerIdxs[1] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_JOKER_2);
@@ -964,7 +1294,10 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_2 && CommonButtonVisual.NavigateRight())
+            if (
+                m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_2
+                && CommonButtonVisual.NavigateRight()
+            )
             {
                 if (runData.ShopJokerCount > 2 && runData.ShopJokerIdxs[2] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_JOKER_3);
@@ -975,7 +1308,10 @@ namespace Cardwheel
                 return;
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateRight())
+            if (
+                m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_3
+                && CommonButtonVisual.NavigateRight()
+            )
             {
                 if (runData.JokerCount > 0)
                     selectButton(SHOP_MENU_BUTTONS.JOKER_1);
@@ -1000,7 +1336,10 @@ namespace Cardwheel
             if (availableJokerCount > 2)
             {
                 // if only 2 jokers, left joker should go to voucher first, then cardpack 1, then card pack 2
-                if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_1 && CommonButtonVisual.NavigateDown())
+                if (
+                    m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_1
+                    && CommonButtonVisual.NavigateDown()
+                )
                 {
                     if (!runData.VoucherPurchased)
                         selectButton(SHOP_MENU_BUTTONS.SHOP_VOUCHER);
@@ -1012,7 +1351,10 @@ namespace Cardwheel
                 }
 
                 // if more than 2 jokers, center joker should go to cardpack 1, then cardpack 2, then voucher
-                if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_2 && CommonButtonVisual.NavigateDown())
+                if (
+                    m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_2
+                    && CommonButtonVisual.NavigateDown()
+                )
                 {
                     if (runData.ShopCardPackIdxs[0] > -1)
                         selectButton(SHOP_MENU_BUTTONS.SHOP_CARDPACK_1);
@@ -1024,7 +1366,10 @@ namespace Cardwheel
                 }
 
                 // if more than 2 jokers, right joker should go to cardpack 2, then cardpack 1, then voucher
-                if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateDown())
+                if (
+                    m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_JOKER_3
+                    && CommonButtonVisual.NavigateDown()
+                )
                 {
                     if (runData.ShopCardPackIdxs[1] > -1)
                         selectButton(SHOP_MENU_BUTTONS.SHOP_CARDPACK_2);
@@ -1038,8 +1383,14 @@ namespace Cardwheel
 
             if (availableJokerCount == 2)
             {
-                SHOP_MENU_BUTTONS leftJoker = runData.ShopJokerIdxs[0] > -1 ? SHOP_MENU_BUTTONS.SHOP_JOKER_1 : SHOP_MENU_BUTTONS.SHOP_JOKER_2;
-                SHOP_MENU_BUTTONS rightJoker = runData.ShopJokerIdxs[1] > -1 ? SHOP_MENU_BUTTONS.SHOP_JOKER_2 : SHOP_MENU_BUTTONS.SHOP_JOKER_3;
+                SHOP_MENU_BUTTONS leftJoker =
+                    runData.ShopJokerIdxs[0] > -1
+                        ? SHOP_MENU_BUTTONS.SHOP_JOKER_1
+                        : SHOP_MENU_BUTTONS.SHOP_JOKER_2;
+                SHOP_MENU_BUTTONS rightJoker =
+                    runData.ShopJokerIdxs[1] > -1
+                        ? SHOP_MENU_BUTTONS.SHOP_JOKER_2
+                        : SHOP_MENU_BUTTONS.SHOP_JOKER_3;
 
                 // if more than 2 jokers, left most joker should go to voucher, then cardpack 1, then card pack 2
                 if (m_selectedShopButton == leftJoker && CommonButtonVisual.NavigateDown())
@@ -1065,7 +1416,12 @@ namespace Cardwheel
                 }
             }
 
-            if (availableJokerCount == 1 && m_selectedShopButton >= SHOP_MENU_BUTTONS.SHOP_JOKER_1 && m_selectedShopButton <= SHOP_MENU_BUTTONS.SHOP_JOKER_3 && CommonButtonVisual.NavigateDown())
+            if (
+                availableJokerCount == 1
+                && m_selectedShopButton >= SHOP_MENU_BUTTONS.SHOP_JOKER_1
+                && m_selectedShopButton <= SHOP_MENU_BUTTONS.SHOP_JOKER_3
+                && CommonButtonVisual.NavigateDown()
+            )
             {
                 if (runData.ShopCardPackIdxs[0] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_CARDPACK_1);
@@ -1074,11 +1430,13 @@ namespace Cardwheel
                 else if (!runData.VoucherPurchased)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_VOUCHER);
                 return;
-
             }
 
             // navigate up from voucher/cardpacks
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_VOUCHER && CommonButtonVisual.NavigateUp())
+            if (
+                m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_VOUCHER
+                && CommonButtonVisual.NavigateUp()
+            )
             {
                 if (runData.ShopJokerIdxs[0] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_JOKER_1);
@@ -1088,7 +1446,10 @@ namespace Cardwheel
                     selectButton(SHOP_MENU_BUTTONS.SHOP_JOKER_3);
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_1 && CommonButtonVisual.NavigateUp())
+            if (
+                m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_1
+                && CommonButtonVisual.NavigateUp()
+            )
             {
                 if (runData.ShopJokerIdxs[1] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_JOKER_2);
@@ -1098,7 +1459,10 @@ namespace Cardwheel
                     selectButton(SHOP_MENU_BUTTONS.SHOP_JOKER_3);
             }
 
-            if (m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_2 && CommonButtonVisual.NavigateUp())
+            if (
+                m_selectedShopButton == SHOP_MENU_BUTTONS.SHOP_CARDPACK_2
+                && CommonButtonVisual.NavigateUp()
+            )
             {
                 if (runData.ShopJokerCount == 3 && runData.ShopJokerIdxs[2] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_JOKER_3);
@@ -1107,7 +1471,6 @@ namespace Cardwheel
                 else if (runData.ShopJokerIdxs[0] > -1)
                     selectButton(SHOP_MENU_BUTTONS.SHOP_JOKER_1);
             }
-
         }
 
         void buyShopJoker(int shopJokerIdx)
@@ -1142,6 +1505,8 @@ namespace Cardwheel
 
             Logic.BuyCardPack(runData, balance, shopPackIdx);
             m_cardPacks[shopPackIdx].GO.SetActive(false);
+
+            m_cardpackRerollCount = runData.CardPackRerollCount;
 
             CommonVisual.UpdateTopBarMoney(runData, m_topBarGUI);
 
@@ -1178,12 +1543,13 @@ namespace Cardwheel
 
         void rerollShop()
         {
-            SoundManager.Instance.PlaySFXMoney();
-
             if (Logic.TryRerollShop(runData, balance))
+            {
+                SoundManager.Instance.PlaySFXMoney();
+                m_rerollHappened = true;
                 Show();
-
-            RunDataIO.SaveRun(runData, balance);
+                RunDataIO.SaveRun(runData, balance);
+            }
         }
 
         void showShopInfo()
@@ -1200,5 +1566,4 @@ namespace Cardwheel
             Game.Instance.SetMenuState(MENU_STATE.ROUND_SELECTION);
         }
     }
-
 }
