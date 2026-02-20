@@ -342,7 +342,7 @@ namespace Cardwheel
             hideMenuState(m_runData.PrevMenuState);
             showMenuState(m_runData.MenuState, goingBackToPrevMenu);
 
-            tryHideMouseCursor(1.0f);
+            tryHideMouseCursor(30.0f);
         }
 
         void hideMenuState(MENU_STATE menuState)
@@ -524,7 +524,7 @@ namespace Cardwheel
             //             SteamInput.RunFrame();
             // #endif
 
-            tryHideMouseCursor(10.0f);
+            // tryHideMouseCursor(10.0f);
 
             if (!Logic.IsFlagSet(m_gameData.MenuTutorialFlags, (int)m_runData.MenuState))
                 if (m_tutorialVisual.TutorialClosed())
@@ -786,6 +786,8 @@ namespace Cardwheel
 
             if (m_runData.MenuState == MENU_STATE.JOKER_INFO_POPUP)
                 m_runData.MenuState = m_runData.PrevMenuState;
+            if (m_runData.MenuState == MENU_STATE.IN_GAME)
+                Board.StartRound(m_runData, m_balance);
             showMenuState(m_runData.MenuState, false);
         }
 

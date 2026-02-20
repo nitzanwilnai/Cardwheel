@@ -354,7 +354,7 @@ namespace Cardwheel
 
             if (GameState == GAME_STATE.START_ROUND)
             {
-                resetSpin(runData, balance);
+                ResetSpin(runData, balance);
             }
 
             // if (GameState < GAME_STATE.WAITING_FOR_INPUT)
@@ -1907,7 +1907,7 @@ namespace Cardwheel
             BallsMoneyGO.SetActive(false);
         }
 
-        private void resetSpin(RunData runData, Balance balance)
+        public void ResetSpin(RunData runData, Balance balance)
         {
             runData.RotationSpeed = 0.0f;
             m_spinAnimTime = 0.0f;
@@ -1937,7 +1937,7 @@ namespace Cardwheel
 
         private void startSpin(RunData runData, Balance balance)
         {
-            resetSpin(runData, balance);
+            ResetSpin(runData, balance);
 
             setGameState(GAME_STATE.SPIN_UP);
             SpinState = SPIN_STATE.SPIN_UP;
