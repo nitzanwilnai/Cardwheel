@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bossEffects: 57
   Description: Change slots to groups of 3 first spin only
-  LevelRange: {x: 6, y: 8}
+  LevelRange: {x: 2, y: 4}
   EndlessMode: 1

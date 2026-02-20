@@ -114,6 +114,9 @@ namespace Cardwheel
 
         public int[] LastSelectedMenuButton;
 
+        float m_lastMouseActivityTime;
+        bool m_cursorVisible;
+
         public int FrameCounter = 0;
 
         void gamepadInit()
@@ -147,7 +150,7 @@ namespace Cardwheel
                     else if (gamepadString.Contains("Steam"))
                         GamepadType = GAMEPAD_TYPE.STEAM;
 
-                    Cursor.visible = false;
+                    // Cursor.visible = false;
                 }
             }
         }
@@ -317,6 +320,10 @@ namespace Cardwheel
         public void Start()
         {
             SoundManager.Instance.Init(m_settingsData);
+
+            m_lastMouseActivityTime = Time.unscaledTime;
+            if (Mouse.current != null)
+                Cursor.visible = true;
         }
 
         public void SetMenuState(MENU_STATE newMenuState)
@@ -334,6 +341,8 @@ namespace Cardwheel
 
             hideMenuState(m_runData.PrevMenuState);
             showMenuState(m_runData.MenuState, goingBackToPrevMenu);
+
+            tryHideMouseCursor(1.0f);
         }
 
         void hideMenuState(MENU_STATE menuState)
@@ -515,6 +524,8 @@ namespace Cardwheel
             //             SteamInput.RunFrame();
             // #endif
 
+            tryHideMouseCursor(10.0f);
+
             if (!Logic.IsFlagSet(m_gameData.MenuTutorialFlags, (int)m_runData.MenuState))
                 if (m_tutorialVisual.TutorialClosed())
                     return;
@@ -607,6 +618,31 @@ namespace Cardwheel
 
             FrameCounter++;
 #endif
+        }
+
+        private void tryHideMouseCursor(float time)
+        {
+            if (Mouse.current != null && Mouse.current.delta.ReadValue().sqrMagnitude > 0.0f)
+            {
+                m_lastMouseActivityTime = Time.unscaledTime;
+
+                if (!m_cursorVisible)
+                {
+                    m_cursorVisible = true;
+                    Cursor.visible = true;
+                }
+            }
+
+            if (
+                m_cursorVisible
+                && GamepadType > GAMEPAD_TYPE.NONE
+                && Time.unscaledTime - m_lastMouseActivityTime > time
+            )
+            {
+                Debug.Log("Hide cursor!");
+                m_cursorVisible = false;
+                Cursor.visible = false;
+            }
         }
 
         public static void TakeScreenshot()
