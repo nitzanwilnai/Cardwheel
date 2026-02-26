@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.0.66f2
-CRC: 600879899
+CRC: 1083205837
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 0a4c1a5b400fdcce92bdd3b59761b8fe
+    Hash: daba24a60b0ea5222d147ef16fe02329
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 7aa6d4cb947c91f7e8d7bb7753451791
+    Hash: 63469957dd6977677a7eada780c0219c
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: cd738f628a912d611d407c2ea48f038f
+    Hash: fd969301539fd4c883f1b6b21d6c85c2
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -74,14 +74,22 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: c35a6a8a50c7444739f3d31d10b2a7fb, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 34654a47762b94a499210916b75690cf, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: a7036bc2d38944289865bedfcde44582, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
+  Script: {instanceID: 0}
+- Class: 198
+  Script: {instanceID: 0}
+- Class: 199
   Script: {instanceID: 0}
 - Class: 212
   Script: {instanceID: 0}
@@ -104,6 +112,8 @@ SerializeReferenceClassIdentifiers:
   ClassName: CommonTools.GUIRefGameObject
 - AssemblyName: Assembly-CSharp
   ClassName: CommonTools.GUIRefImage
+- AssemblyName: Assembly-CSharp
+  ClassName: CommonTools.GUIRefParticleSystem
 - AssemblyName: Assembly-CSharp
   ClassName: CommonTools.GUIRefTextGUI
 - AssemblyName: Unity.TextMeshPro
@@ -190,4 +200,4 @@ Assets:
 - Assets/Prefabs/CommonH/UI - Settings.prefab
 - Assets/Prefabs/CommonH/UI - Game Over.prefab
 Dependencies:
-- C:/Users/nitza/Documents/GitHub/Cardwheel/Assets/StreamingAssets/AssetBundles/common
+- /Users/nitzanwilnai/Programming/UnityRelease/Cardwheel/Assets/StreamingAssets/AssetBundles/common

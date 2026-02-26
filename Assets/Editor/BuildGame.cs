@@ -7,7 +7,6 @@ using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.WindowsStandalone;
 using UnityEngine;
-
 #if UNITY_EDITOR_OSX
 using UnityEditor.iOS.Xcode;
 #endif
@@ -359,7 +358,7 @@ namespace Cardwheel
         {
             BalanceParser.ParseLocal();
 
-            float time = Time.realtimeSinceStartup;
+            DateTime startTime = DateTime.UtcNow;
 
             DateTime theTime = DateTime.Now;
             string dateTime = theTime.ToString("yyyy-MM-dd HH.mm.ss");
@@ -374,18 +373,15 @@ namespace Cardwheel
 
             CreateAssetBundles.BuildAllAssetBundles(buildTarget);
 
-            UnityEngine.Debug.LogFormat(
-                "BuildAllAssetBundles elapsed time {0}",
-                Time.realtimeSinceStartup - time
-            );
-
             // Get filename.
             string[] levels = new string[] { scene };
 
             // Build player.
             BuildPipeline.BuildPlayer(levels, path, buildTarget, options);
 
-            UnityEngine.Debug.LogFormat("Build elapsed time {0}", Time.realtimeSinceStartup - time);
+            UnityEngine.Debug.Log(
+                $"Built time: {(DateTime.UtcNow - startTime).TotalSeconds} seconds"
+            );
         }
 
         [PostProcessBuild(999)]

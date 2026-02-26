@@ -436,15 +436,13 @@ MonoBehaviour:
     Value: {fileID: 5280829954159947987}
   - Name: RoundSelection
     Value: {fileID: 1464843602537922288}
-  GUIRefTexts: []
   GUIRefTextGUI:
   - Name: Money
     Value: {fileID: 0}
   GUIRefImages: []
-  GUIRefRawImages: []
   GUIRefButtons: []
-  GUIRefSliders: []
   GUIRefAnimations: []
+  GUIRefParticleSystems: []
 --- !u!1001 &1502695576181064078
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1133,7 +1131,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6211026159284875877, guid: b24cb9f4faa7e4bd3a9b93f5f6ad83c7, type: 3}
       propertyPath: m_fontSize
-      value: 44.3
+      value: 44.6
       objectReference: {fileID: 0}
     - target: {fileID: 6211026159284875877, guid: b24cb9f4faa7e4bd3a9b93f5f6ad83c7, type: 3}
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'

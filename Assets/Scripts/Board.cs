@@ -171,6 +171,8 @@ namespace Cardwheel
         Animation m_roundMultiplierAnimation;
         TextMeshProUGUI m_roundChipsText;
         TextMeshProUGUI m_roundMultiplierText;
+        ParticleSystem m_chipsPS;
+        ParticleSystem m_multPS;
         TextMeshProUGUI m_totalScoreText;
         Animation m_totalScoreAnimation;
         TextMeshProUGUI m_totalRoundScoreText;
@@ -306,6 +308,8 @@ namespace Cardwheel
             m_spinButtonImage = guiRef.GetImage("Spin");
             m_roundChipsText = guiRef.GetTextGUI("Score");
             m_roundMultiplierText = guiRef.GetTextGUI("Multiplier");
+            m_chipsPS = guiRef.GetParticleSystem("Chips");
+            m_multPS = guiRef.GetParticleSystem("Mult");
             m_roundMultiplierAnimation = guiRef.GetAnimation("Multiplier");
             m_roundScoreAnimation = guiRef.GetAnimation("Score");
             m_totalScoreText = guiRef.GetTextGUI("TotalScore");
@@ -515,6 +519,7 @@ namespace Cardwheel
             m_roundChipsText.text = CommonVisual.FormatScientific(runData.SpinChips);
             m_roundScoreAnimation.Play();
             SoundManager.Instance.PlaySFXScoring();
+            m_chipsPS.Play();
         }
 
         void animateRoundMultipierText()
@@ -522,6 +527,7 @@ namespace Cardwheel
             m_roundMultiplierText.text = CommonVisual.GetMultiplierString(runData.SpinMultiplier);
             m_roundMultiplierAnimation.Play();
             SoundManager.Instance.PlaySFXScoring();
+            m_multPS.Play();
         }
 
         public void ShowBallChipsPopup(int ballIdx, double chips)

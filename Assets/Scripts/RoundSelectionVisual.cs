@@ -26,6 +26,7 @@ namespace Cardwheel
         public GameObject Cover;
         public TextMeshProUGUI Description;
         public GUIButtonData PlayButtonData;
+        public GameObject Shine;
     }
 
     public class RegularRoundGUIInfo
@@ -38,6 +39,7 @@ namespace Cardwheel
         // boss only
         public TextMeshProUGUI RerollButtonText;
         public GUIButtonData RerollButtonData;
+        public GameObject Shine;
     }
 
     public class RoundSelectionVisual : MonoBehaviour
@@ -146,6 +148,8 @@ namespace Cardwheel
             roundGUIInfo.PlayButtonData.Button.onClick.AddListener(Game.Instance.StartRound);
             CommonButtonVisual.AddSelectedBorder(roundGUIInfo.PlayButtonData);
 
+            roundGUIInfo.Shine = guiRef.GetGameObject("Shine");
+
             roundGUIInfo.Description = guiRef.GetTextGUI("Description");
         }
 
@@ -211,6 +215,7 @@ namespace Cardwheel
                 m_roundGUIInfos[i].Goal.text = goalText;
                 m_roundGUIInfos[i].Reward.text = "◇" + balance.RoundReward[i].ToString("N0");
                 m_roundGUIInfos[i].Cover.SetActive(smallRound != i);
+                m_roundGUIInfos[i].Shine.SetActive(smallRound == i);
                 CommonButtonVisual.UpdateButtonIcons(
                     m_roundGUIInfos[i].PlayButtonData,
                     Game.Instance.GetGamepadType()

@@ -10,11 +10,9 @@
 */
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 namespace CommonTools
 {
@@ -23,13 +21,6 @@ namespace CommonTools
     {
         public string Name;
         public GameObject Value;
-    }
-
-    [Serializable]
-    public struct GUIRefText
-    {
-        public string Name;
-        public TextMeshPro Value;
     }
 
     [Serializable]
@@ -47,24 +38,10 @@ namespace CommonTools
     }
 
     [Serializable]
-    public struct GUIRefRawImage
-    {
-        public string Name;
-        public RawImage Value;
-    }
-
-    [Serializable]
     public struct GUIRefButton
     {
         public string Name;
         public Button Value;
-    }
-
-    [Serializable]
-    public struct GUIRefSlider
-    {
-        public string Name;
-        public Slider Value;
     }
 
     [Serializable]
@@ -74,16 +51,21 @@ namespace CommonTools
         public Animation Value;
     }
 
+    [Serializable]
+    public struct GUIRefParticleSystem
+    {
+        public string Name;
+        public ParticleSystem Value;
+    }
+
     public class GUIRef : MonoBehaviour
     {
         public GUIRefGameObject[] GUIRefGameObjects;
-        public GUIRefText[] GUIRefTexts;
         public GUIRefTextGUI[] GUIRefTextGUI;
         public GUIRefImage[] GUIRefImages;
-        public GUIRefRawImage[] GUIRefRawImages;
         public GUIRefButton[] GUIRefButtons;
-        public GUIRefSlider[] GUIRefSliders;
         public GUIRefAnimation[] GUIRefAnimations;
+        public GUIRefParticleSystem[] GUIRefParticleSystems;
 
         public GameObject GetGameObject(string name)
         {
@@ -92,18 +74,9 @@ namespace CommonTools
                 if (GUIRefGameObjects[i].Name == name)
                     return GUIRefGameObjects[i].Value;
 
-            Debug.LogErrorFormat("GUIRef " + gameObject.name + " GetGameObject(" + name + ") does not exist!");
-            return null;
-        }
-
-        public TextMeshPro GetText(string name)
-        {
-            int numObjects = GUIRefTexts.Length;
-            for (int i = 0; i < numObjects; i++)
-                if (GUIRefTexts[i].Name == name)
-                    return GUIRefTexts[i].Value;
-
-            Debug.LogErrorFormat("GUIRef " + gameObject.name + " GetText(" + name + ") does not exist!");
+            Debug.LogErrorFormat(
+                "GUIRef " + gameObject.name + " GetGameObject(" + name + ") does not exist!"
+            );
             return null;
         }
 
@@ -114,7 +87,9 @@ namespace CommonTools
                 if (GUIRefTextGUI[i].Name == name)
                     return GUIRefTextGUI[i].Value;
 
-            Debug.LogErrorFormat("GUIRef " + gameObject.name + " GetTextGUI(" + name + ") does not exist!");
+            Debug.LogErrorFormat(
+                "GUIRef " + gameObject.name + " GetTextGUI(" + name + ") does not exist!"
+            );
             return null;
         }
 
@@ -125,18 +100,9 @@ namespace CommonTools
                 if (GUIRefImages[i].Name == name)
                     return GUIRefImages[i].Value;
 
-            Debug.LogErrorFormat("GUIRef " + gameObject.name + " GetImage(" + name + ") does not exist!");
-            return null;
-        }
-
-        public RawImage GetRawImage(string name)
-        {
-            int numObjects = GUIRefRawImages.Length;
-            for (int i = 0; i < numObjects; i++)
-                if (GUIRefRawImages[i].Name == name)
-                    return GUIRefRawImages[i].Value;
-
-            Debug.LogErrorFormat("GUIRef " + gameObject.name + " GetRawImage(" + name + ") does not exist!");
+            Debug.LogErrorFormat(
+                "GUIRef " + gameObject.name + " GetImage(" + name + ") does not exist!"
+            );
             return null;
         }
 
@@ -147,18 +113,9 @@ namespace CommonTools
                 if (GUIRefButtons[i].Name == name)
                     return GUIRefButtons[i].Value;
 
-            Debug.LogErrorFormat("GUIRef " + gameObject.name + " GetButton(" + name + ") does not exist!");
-            return null;
-        }
-
-        public Slider GetSlider(string name)
-        {
-            int numObjects = GUIRefSliders.Length;
-            for (int i = 0; i < numObjects; i++)
-                if (GUIRefSliders[i].Name == name)
-                    return GUIRefSliders[i].Value;
-
-            Debug.LogErrorFormat("GUIRef " + gameObject.name + " GetSlider(" + name + ") does not exist!");
+            Debug.LogErrorFormat(
+                "GUIRef " + gameObject.name + " GetButton(" + name + ") does not exist!"
+            );
             return null;
         }
 
@@ -169,7 +126,22 @@ namespace CommonTools
                 if (GUIRefAnimations[i].Name == name)
                     return GUIRefAnimations[i].Value;
 
-            Debug.LogErrorFormat("GUIRef " + gameObject.name + " GetAnimation(" + name + ") does not exist!");
+            Debug.LogErrorFormat(
+                "GUIRef " + gameObject.name + " GetAnimation(" + name + ") does not exist!"
+            );
+            return null;
+        }
+
+        public ParticleSystem GetParticleSystem(string name)
+        {
+            int numObjects = GUIRefParticleSystems.Length;
+            for (int i = 0; i < numObjects; i++)
+                if (GUIRefParticleSystems[i].Name == name)
+                    return GUIRefParticleSystems[i].Value;
+
+            Debug.LogErrorFormat(
+                "GUIRef " + gameObject.name + " GetParticleSystem(" + name + ") does not exist!"
+            );
             return null;
         }
     }

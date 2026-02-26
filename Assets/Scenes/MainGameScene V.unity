@@ -499,89 +499,45 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 616485796340501115, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
-      propertyPath: particleBalance.TargetRadiusMax
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 616485796340501115, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
-      propertyPath: particleBalance.TargetRadiusMin
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 1069817559547407666, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
-      propertyPath: particleBalance.TargetRadiusMax
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1069817559547407666, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
-      propertyPath: particleBalance.TargetRadiusMin
-      value: 0.8
-      objectReference: {fileID: 0}
     - target: {fileID: 2646132462451246873, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
       propertyPath: m_Name
       value: Board
       objectReference: {fileID: 0}
-    - target: {fileID: 2646132462451246873, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
-      propertyPath: m_IsActive
-      value: 1
+    - target: {fileID: 2708210276350364677, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.1
       objectReference: {fileID: 0}
-    - target: {fileID: 2822832657620230224, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
-      propertyPath: particleBalance.TargetRadiusMax
-      value: 1.2
+    - target: {fileID: 2708210276350364677, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 0.05
       objectReference: {fileID: 0}
-    - target: {fileID: 2822832657620230224, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
-      propertyPath: particleBalance.TargetRadiusMin
-      value: 0.8
+    - target: {fileID: 2708210276350364677, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
+      value: 11
       objectReference: {fileID: 0}
-    - target: {fileID: 3246488481537512494, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
-      propertyPath: particleBalance.MaxSprites
-      value: 216
+    - target: {fileID: 7064318124498950053, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.1
       objectReference: {fileID: 0}
-    - target: {fileID: 4072154811109636285, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
-      propertyPath: m_IsActive
-      value: 0
+    - target: {fileID: 7064318124498950053, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 0.05
       objectReference: {fileID: 0}
-    - target: {fileID: 4730729846408639163, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
-      propertyPath: m_IsActive
-      value: 0
+    - target: {fileID: 7064318124498950053, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
+      value: 11
       objectReference: {fileID: 0}
-    - target: {fileID: 6360666786618593020, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
-      propertyPath: particleBalance.TargetRadiusMax
-      value: 1.2
+    - target: {fileID: 7769603913598037453, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.1
       objectReference: {fileID: 0}
-    - target: {fileID: 6360666786618593020, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
-      propertyPath: particleBalance.TargetRadiusMin
-      value: 0.8
+    - target: {fileID: 7769603913598037453, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 0.05
       objectReference: {fileID: 0}
-    - target: {fileID: 6638826757461630101, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6878048658971693395, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6906052799605867510, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
-      propertyPath: particleBalance.TargetRadiusMax
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6906052799605867510, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
-      propertyPath: particleBalance.TargetRadiusMin
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 7063361928916150422, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
-      propertyPath: BallParticleParent
-      value: 
-      objectReference: {fileID: 551517369}
-    - target: {fileID: 7074447944681563893, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8167971580209956445, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
-      propertyPath: particleBalance.TargetRadiusMax
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8167971580209956445, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
-      propertyPath: particleBalance.TargetRadiusMin
-      value: 0.8
+    - target: {fileID: 7769603913598037453, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 9154548170960038479, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
       propertyPath: m_LocalPosition.x
@@ -648,11 +604,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8b9e20286d74487cb0ea369d8a9148f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &551517369 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5186817056899343701, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
-  m_PrefabInstance: {fileID: 551517367}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &697370008
 GameObject:
   m_ObjectHideFlags: 0
@@ -732,10 +683,11 @@ MonoBehaviour:
   UIError: {fileID: 2132037731}
   CommonBundle: common
   GameInfoSO: {fileID: 11400000, guid: 9d25ef7a2653d4d07ae5ff249d5d3c28, type: 2}
-  IAPManager: {fileID: 697370009}
+  IAPManager: {fileID: 0}
   StartSeed: 0
   GamepadType: 0
   LastSelectedMenuButton: 
+  FrameCounter: 0
 --- !u!4 &844177295
 Transform:
   m_ObjectHideFlags: 0
@@ -827,6 +779,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0

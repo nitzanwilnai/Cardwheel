@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.0.66f2
-CRC: 3518154731
+CRC: 3836616034
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 565f41ff3d9487ef14aae9f8495e349f
+    Hash: e490cb14f5295e6961c16f012d9acefb
   TypeTreeHash:
     serializedVersion: 2
-    Hash: ba7fa1d2db2f8ead8f2e65cd981b6566
+    Hash: 0cf2a73c5fa2153bcffc1bf751de789a
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: a5905667313e7cbe83b03b61a3e1db48
+    Hash: 9f26194a9f82bad2ade803b28e87ae43
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -98,11 +98,15 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: edc441c2cc14f41ee972e8c409a7f730, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: a7036bc2d38944289865bedfcde44582, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -527,6 +531,7 @@ Assets:
 - Assets/Textures/Effects/Star3.png
 - Assets/Textures/Jokers/0047 - Joker +20 chips per ball on red.png
 - Assets/Prefabs/Descriptions/Joker 0032 +1 Spins.prefab
+- Assets/Textures/Effects/circle_64x64.png
 - Assets/Textures/Jokers/0033 - Joker -1 Spins X3 Mult.png
 - "Assets/Prefabs/Descriptions/Joker 0039 2 chips for every \u25C7 in bank.prefab"
 - Assets/Textures/Vouchers/0002 Voucher - Shop item discount.png
