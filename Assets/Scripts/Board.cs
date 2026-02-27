@@ -670,9 +670,7 @@ namespace Cardwheel
                         );
                         if (slotChangedIdx > -1)
                         {
-                            CommonSlotsVisual.ChangedSlotsIdxs[
-                                CommonSlotsVisual.ChangedSlotsCount++
-                            ] = slotChangedIdx;
+                            CommonSlotsVisual.ChangedSlotsIdxs[CommonSlotsVisual.ChangedSlotsCount++] = slotChangedIdx;
                             CommonSlotsVisual.ShowSpinWheel(
                                 runData,
                                 balance,
