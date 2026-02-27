@@ -33,7 +33,9 @@ namespace Cardwheel
                         for (int i = 0; i < savedNumSpinWheels; i++)
                             tempArray[i] = br.ReadInt32();
 
-                        gameData.SpinWheelWinCount = new int[balance.SpinWheelBalance.NumSpinWheels];
+                        gameData.SpinWheelWinCount = new int[
+                            balance.SpinWheelBalance.NumSpinWheels
+                        ];
                         for (int i = 0; i < gameData.SpinWheelWinCount.Length && i < savedNumSpinWheels; i++)
                             gameData.SpinWheelWinCount[i] = tempArray[i];
 

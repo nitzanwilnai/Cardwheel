@@ -9,11 +9,6 @@
   See the LICENSE file for full legal terms.
 */
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Animations;
-
 namespace Cardwheel
 {
     public class RunData
@@ -45,7 +40,7 @@ namespace Cardwheel
         public int SpinsUsed;
         public int SpinsUnused;
 
-        public float RotationSpeed; 
+        public float RotationSpeed;
         public float SpinWheelAngle;
 
         public int[] BallTypes;
@@ -56,7 +51,7 @@ namespace Cardwheel
         public SLOT_TYPE[] SlotType; // the slot type on the wheel
         public SLOT_TYPE[] SlotTypeInGame; // the slot type in the current run (can be changed by bosses)
         public int[] SlotModType; // slot modification (buff)
-        
+
         public int[] BallSlotIdx;
         public float[] BallSnapVelocity;
         public float[] BallSnapTime;
@@ -96,7 +91,7 @@ namespace Cardwheel
         public int ShopJokerCount;
         public int[] VoucherIdxs;
         public int[] ShopCardPackIdxs;
-        public int ShopRerollCount; 
+        public int ShopRerollCount;
         public int CardPackRerollCount;
         public int ShopRerollTotal;
         public int CardPackRerollTotal;

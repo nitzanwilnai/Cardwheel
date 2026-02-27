@@ -111,7 +111,7 @@ namespace Cardwheel
             SPIN_OVER,
         };
 
-        public GAME_STATE GameState = GAME_STATE.SPIN_UP;
+        public GAME_STATE GameState = GAME_STATE.SPIN_UP; // should move to RunData
 
         public enum SPIN_STATE
         {
@@ -135,8 +135,10 @@ namespace Cardwheel
         public Transform BallParticleParent;
         int m_numBalls;
         public Ball[] BallsGO;
+
         public Transform[] BallStartPos;
         Vector3[] m_ballStartPos;
+
         Rigidbody2D[] m_ballsRB;
         BallSprites[] m_ballSprites;
         public ParticleSystemSmokeBoard ParticleSystemSmokeBoard;
@@ -1904,8 +1906,7 @@ namespace Cardwheel
             setGameState(GAME_STATE.START_ROUND);
 
             m_roundChipsText.text = "0";
-            m_roundMultiplierText.text =
-                CommonVisual.GetMultiplierString(balance.BaseMultiplier) + "x";
+            m_roundMultiplierText.text = CommonVisual.GetMultiplierString(balance.BaseMultiplier) + "x";
             m_totalRoundScoreText.text = "0";
 
             BallsChipsGO.SetActive(false);

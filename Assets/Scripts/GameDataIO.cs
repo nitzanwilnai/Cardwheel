@@ -10,12 +10,8 @@
 */
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
 using UnityEngine;
-
 
 namespace Cardwheel
 {
@@ -61,8 +57,14 @@ namespace Cardwheel
                         for (int i = 0; i < savedNumSpinWheels; i++)
                             tempArray[i] = br.ReadInt32();
 
-                        gameData.SpinWheelWinCount = new int[balance.SpinWheelBalance.NumSpinWheels];
-                        for (int i = 0; i < gameData.SpinWheelWinCount.Length && i < savedNumSpinWheels; i++)
+                        gameData.SpinWheelWinCount = new int[
+                            balance.SpinWheelBalance.NumSpinWheels
+                        ];
+                        for (
+                            int i = 0;
+                            i < gameData.SpinWheelWinCount.Length && i < savedNumSpinWheels;
+                            i++
+                        )
                             gameData.SpinWheelWinCount[i] = tempArray[i];
 
                         gameData.MenuTutorialFlags = br.ReadInt32();
@@ -83,6 +85,5 @@ namespace Cardwheel
 
             return gameDataLoaded;
         }
-
     }
 }

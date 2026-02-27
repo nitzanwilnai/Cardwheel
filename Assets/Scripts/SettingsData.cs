@@ -9,11 +9,6 @@
   See the LICENSE file for full legal terms.
 */
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Animations;
-
 namespace Cardwheel
 {
     public class SettingsData
