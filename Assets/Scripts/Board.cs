@@ -1636,7 +1636,11 @@ namespace Cardwheel
                     else if (Logic.CheckGameOver(runData))
                         Game.Instance.GameOver();
                     else
+                    {
+                        RunDataIO.SaveRun(runData, balance);
                         startSpin(runData, balance);
+                    }
+
                 }
             }
 
@@ -1901,7 +1905,10 @@ namespace Cardwheel
 
             m_scoringTimer = ScoringTime;
             m_scoringIdx = 0;
-            setGameState(GAME_STATE.START_ROUND);
+            if (runData.CurrentSpin == 0)
+                setGameState(GAME_STATE.START_ROUND);
+            else
+                startSpin(runData, balance);
 
             m_roundChipsText.text = "0";
             m_roundMultiplierText.text = CommonVisual.GetMultiplierString(balance.BaseMultiplier) + "x";
@@ -1988,8 +1995,6 @@ namespace Cardwheel
                 (runData.CurrentSpin + 1).ToString("N0")
                 + " / "
                 + runData.MaxSpinsThisRound.ToString("N0");
-
-            RunDataIO.SaveRun(runData, balance);
         }
 
         public void dropBalls()
@@ -2015,7 +2020,7 @@ namespace Cardwheel
                 setGameState(GAME_STATE.BALLS_DROPPED);
                 SpinState = SPIN_STATE.SPIN_BALLS;
 
-                RunDataIO.SaveRun(runData, balance);
+                // RunDataIO.SaveRun(runData, balance);
             }
         }
 

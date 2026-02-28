@@ -232,6 +232,7 @@ namespace Cardwheel
         public float[] MultiplierAddForLeastPlayedColor;
 
         public int[] StartRoundChangeSlotID;
+        public SLOT_TYPE[] StartRoundChangeSlotColor;
 
         public bool[] RetriggerBallsEverySpin;
         public bool[] RetriggerBallsLastSpin;
@@ -504,6 +505,7 @@ namespace Cardwheel
                 JokerBalance.MultiplierAddForLeastPlayedColor = new float[numJokers];
 
                 JokerBalance.StartRoundChangeSlotID = new int[numJokers];
+                JokerBalance.StartRoundChangeSlotColor = new SLOT_TYPE[numJokers];
 
                 JokerBalance.RetriggerBallsEverySpin = new bool[numJokers];
                 JokerBalance.RetriggerBallsLastSpin = new bool[numJokers];
@@ -604,6 +606,7 @@ namespace Cardwheel
                     JokerBalance.MultiplierAddForLeastPlayedColor[jkrIdx] = br.ReadSingle();
 
                     JokerBalance.StartRoundChangeSlotID[jkrIdx] = br.ReadInt32();
+                    JokerBalance.StartRoundChangeSlotColor[jkrIdx] = (SLOT_TYPE)br.ReadByte();
 
                     JokerBalance.RetriggerBallsEverySpin[jkrIdx] = br.ReadBoolean();
                     JokerBalance.RetriggerBallsLastSpin[jkrIdx] = br.ReadBoolean();

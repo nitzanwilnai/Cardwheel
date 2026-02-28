@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.0.66f2
-CRC: 3836616034
+CRC: 3077253008
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: e490cb14f5295e6961c16f012d9acefb
+    Hash: 9ce30c66d97232eb2d3eb5b4346d4c87
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 0cf2a73c5fa2153bcffc1bf751de789a
+    Hash: 828aa0c2c81a8a2b461f3f6bd674415f
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 9f26194a9f82bad2ade803b28e87ae43
+    Hash: d1d4b99264b3e6f4c1633d8ed322adca
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -74,6 +74,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: debee259641b849589ded1d17feb1dd3, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: a7036bc2d38944289865bedfcde44582, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 99ec229ab9087491a8e353c4facde73e, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: e780b53b370c14913812810c1e9aa29d, type: 3}
@@ -105,8 +107,6 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: edc441c2cc14f41ee972e8c409a7f730, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: a7036bc2d38944289865bedfcde44582, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -222,12 +222,13 @@ Assets:
   slot.png
 - Assets/Textures/Jokers/0092 - Joker Gain +0.1x mult every ball on green.png
 - Assets/Prefabs/Descriptions/Joker 0116 x2 mult if ball falls on all colors.prefab
-- Assets/Prefabs/Descriptions/Joker 0025  Random +0 to +20 Multiplier Add.prefab
+- Assets/Textures/Jokers/0121 - Joker Upgrade random color base chips every round.png
 - "Assets/Textures/Jokers/0021 - Joker +Earn \u25C74 Every Round.png"
 - "Assets/Textures/Jokers/0078 - Joker Earn \u25C71 for every special ball on Red.png"
 - Assets/Textures/Jokers/0069 - Joker +x0.1 for every shop reroll.png
 - Assets/Textures/Jokers/0006 - Joker.png
 - Assets/Prefabs/Descriptions/Joker 0072 3 on green, 3 on blue +9x mult.prefab
+- Assets/Prefabs/Descriptions/Joker 0025  Random +0 to +20 Multiplier Add.prefab
 - "Assets/Prefabs/Descriptions/Joker 0078 Earn \u25C71 for every special ball on
   red.prefab"
 - "Assets/Prefabs/Descriptions/Joker 0020 Sell Value Increases \u25C73 Every  Round.prefab"
@@ -252,25 +253,25 @@ Assets:
 - Assets/Textures/Jokers/0084 - Joker Gains x0.1 every abandoned cardpack.png
 - Assets/Prefabs/Common/Shop Card Pack.prefab
 - Assets/Textures/Jokers/0000 - Joker +3 Mult.png
+- Assets/Textures/Jokers/0043 - Joker increase chips +1 for every ball on blue.png
 - Assets/Prefabs/Descriptions/Joker 0030 Change Slot to Money on First Ball.prefab
-- Assets/Prefabs/Descriptions/Joker 0052 +40 chips +2x mult if 4 balls land on one
-  color and 2 on another.prefab
 - "Assets/Textures/Jokers/0022 - Joker Incease Interest by \u25C71.png"
 - Assets/Textures/Jokers/0085 - Add sell value of all jokers to mult.png
 - Assets/Textures/Jokers/0002 - Joker +4 Mult Yellow.png
 - "Assets/Textures/Jokers/0020 - Joker +Sell Value Increases \u25C73 Every Round.png"
+- Assets/Prefabs/Descriptions/Joker 0052 +40 chips +2x mult if 4 balls land on one
+  color and 2 on another.prefab
 - Assets/Prefabs/Descriptions/Joker 0095 +x0.1 mult for every ball on orange.prefab
 - Assets/Prefabs/Descriptions/Joker 0082 Joker x3 but all balls debuffed.prefab
 - Assets/Textures/Jokers/0032 - Joker +1 Spins.png
 - Assets/Textures/Balls/B 0021 - Yellow multiplier.png
 - Assets/Textures/Jokers/0103 - Joker Gain 1x mult every 5 spins.png
 - Assets/Prefabs/Descriptions/Joker 0061 +2x for every ball falling on modified slot.prefab
-- Assets/Textures/Jokers/0043 - Joker increase chips +1 for every ball on blue.png
+- Assets/Textures/Vouchers/0009 Voucher - Rare cards appear 2x more frequently.png
 - Assets/Prefabs/Descriptions/Joker 0092 Gain +0.1x mult for every ball on green.prefab
 - Assets/Textures/Jokers/0035 - Joker +5 mult, -1 every round.png
 - Assets/Textures/Jokers/0120 - Joker x2 mult but loses 0.1x every spin.png
 - Assets/Prefabs/Descriptions/Joker 0073 +20 mult 1 ball on 1 color last spin.prefab
-- Assets/Textures/Vouchers/0009 Voucher - Rare cards appear 2x more frequently.png
 - Assets/Prefabs/Descriptions/Joker 0009 +6 Mult Only 5.prefab
 - Assets/Textures/CardPack/CardPack_SlotChips.png
 - Assets/Textures/Jokers/0044 - Joker increase mult +5 when 6 balls land on same
@@ -278,7 +279,7 @@ Assets:
 - Assets/Prefabs/Descriptions/Joker 0037 Last Spin +15 Mult.prefab
 - Assets/Textures/Jokers/0049 - Joker +20 chips per ball on green.png
 - Assets/Prefabs/Descriptions/Joker 0115 GAIN +5 cihips when special ball is scored.prefab
-- Assets/Textures/Jokers/0111 - Joker Cardpacks guaranteed to have most used color.png
+- Assets/Textures/Jokers/0112 - Joker Cardpacks guaranteed to have most used color.png
 - Assets/Prefabs/Descriptions/Joker 0105 x5 if no other jokers in hand.prefab
 - Assets/Prefabs/Descriptions/Joker 0007 +6 Mult Only 3.prefab
 - Assets/Prefabs/Descriptions/Joker 0089 Joker +1x mult for every ball on blue.prefab
@@ -339,7 +340,7 @@ Assets:
 - Assets/Prefabs/Descriptions/Joker 0034 +100 Chips -5 Per Spin.prefab
 - Assets/Prefabs/Descriptions/Pack Slots - 0005 - Multiplier Add.prefab
 - Assets/Textures/Jokers/0087 - Joker +x1 mult for every ball on orange.png
-- Assets/Textures/Jokers/0112 - Joker Change random slot to most used color.png
+- Assets/Textures/Jokers/0111 - Joker Change random slot to most used color.png
 - Assets/Prefabs/Descriptions/Joker 0088 Joker +1x mult for every ball on green.prefab
 - Assets/Textures/Vouchers/0010 Voucher - Slot modifiers affect most played color.png
 - Assets/Prefabs/Descriptions/Joker 0026 +3 Mult on Orange or Blue.prefab

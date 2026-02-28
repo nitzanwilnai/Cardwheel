@@ -301,10 +301,10 @@ public static class Logic
         // runData.SkipType[4] = 16;
         // runData.SkipType[5] = 16;
 
-        // AddJoker(runData, balance, 69);
-        // AddJoker(runData, balance, 70);
-        // AddJoker(runData, balance, 105);
-        // AddJoker(runData, balance, 106);
+        AddJoker(runData, balance, 107);
+        AddJoker(runData, balance, 108);
+        AddJoker(runData, balance, 62);
+        AddJoker(runData, balance, 63);
 
         // AddJoker(runData, balance, 90);
         // AddJoker(runData, balance, 91);
@@ -1193,22 +1193,35 @@ public static class Logic
 
     public static int JokerPreRoundTryModifySlot(RunData runData, Balance balance, int jokerType)
     {
-        int slotIdx = -1;
+        int modifiedSlotIdx = -1;
 
         if (balance.JokerBalance.StartRoundChangeSlotID[jokerType] > -1)
         {
             int availableSlotCount = 0;
             Span<int> avaiableSlots = stackalloc int[balance.NumSlots];
 
-            for (int j = 0; j < balance.NumSlots; j++)
-                if (runData.SlotModType[j] == -1)
-                    avaiableSlots[availableSlotCount++] = j;
+            for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
+                if (runData.SlotModType[slotIdx] == -1)
+                    avaiableSlots[availableSlotCount++] = slotIdx;
 
-            slotIdx = CustomRandInt(ref runData.GameSeed) % availableSlotCount;
-            runData.SlotModType[slotIdx] = balance.JokerBalance.StartRoundChangeSlotID[jokerType];
+            modifiedSlotIdx = avaiableSlots[CustomRandInt(ref runData.GameSeed) % availableSlotCount];
+            runData.SlotModType[modifiedSlotIdx] = balance.JokerBalance.StartRoundChangeSlotID[jokerType];
+        }
+        if (balance.JokerBalance.StartRoundChangeSlotColor[jokerType] != SLOT_TYPE.NONE)
+        {
+            int availableSlotCount = 0;
+            Span<int> avaiableSlots = stackalloc int[balance.NumSlots];
+
+            for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
+                if (runData.SlotTypeInGame[slotIdx] != balance.JokerBalance.StartRoundChangeSlotColor[jokerType])
+                    avaiableSlots[availableSlotCount++] = slotIdx;
+
+            modifiedSlotIdx = avaiableSlots[CustomRandInt(ref runData.GameSeed) % availableSlotCount];
+            Debug.Log("Changing slot runData.SlotType[" + modifiedSlotIdx + "] " + runData.SlotType[modifiedSlotIdx] + " runData.SlotTypeInGame[" + modifiedSlotIdx + "] " + runData.SlotTypeInGame[modifiedSlotIdx] + " color to " + balance.JokerBalance.StartRoundChangeSlotColor[jokerType]);
+            runData.SlotType[modifiedSlotIdx] = runData.SlotTypeInGame[modifiedSlotIdx] = balance.JokerBalance.StartRoundChangeSlotColor[jokerType];
         }
 
-        return slotIdx;
+        return modifiedSlotIdx;
     }
 
     public static bool BallInSlot(

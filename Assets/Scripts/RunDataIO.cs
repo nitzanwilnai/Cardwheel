@@ -21,7 +21,7 @@ namespace Cardwheel
 
         public static void SaveRun(RunData runData, Balance balance)
         {
-            Debug.LogFormat("SaveGame()");
+            Debug.LogFormat("SaveRun()");
 
             if (!Directory.Exists(Application.persistentDataPath + "/Cardwheel"))
                 Directory.CreateDirectory(Application.persistentDataPath + "/Cardwheel");

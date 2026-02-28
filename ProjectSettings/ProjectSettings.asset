@@ -171,7 +171,7 @@ PlayerSettings:
   buildNumber:
     Standalone: 221
     VisionOS: 0
-    iPhone: 315
+    iPhone: 318
     tvOS: 0
   overrideDefaultApplicationIdentifier: 0
   AndroidBundleVersionCode: 148
@@ -821,7 +821,7 @@ PlayerSettings:
   scriptingDefineSymbols:
     Android: MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
     Standalone: MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED;STEAMWORKS_NET
-    iPhone: 
+    iPhone: RELEASE
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

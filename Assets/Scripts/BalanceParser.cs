@@ -255,6 +255,7 @@ namespace Cardwheel
 
                         slotID = jokerSO.StartRoundChangeSlotID == null ? -1 : jokerSO.StartRoundChangeSlotID.ID;
                         bw.Write(slotID);
+                        bw.Write((byte)jokerSO.StartRoundChangeSlotColor);
 
                         bw.Write(jokerSO.RetriggerBallsEverySpin);
                         bw.Write(jokerSO.RetriggerBallsLastSpin);

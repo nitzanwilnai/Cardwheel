@@ -105,6 +105,7 @@ namespace Cardwheel
         public float MultiplierAddForEverySlotMod = 0.0f; // works
         public float BallMultiplierAddForSlotMod = 0.0f; // works
         public CardPackSlotSO StartRoundChangeSlotID; // works
+        public SLOT_TYPE StartRoundChangeSlotColor = SLOT_TYPE.NONE;
 
         [Header("LEAST COLOR")]
         public float MultiplierAddForLeastPlayedColor = 0.0f; // works
