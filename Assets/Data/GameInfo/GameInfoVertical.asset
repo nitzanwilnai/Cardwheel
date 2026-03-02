@@ -15,6 +15,7 @@ MonoBehaviour:
   CommonBundle: common_v
   CommonBundleUIPath: CommonV
   Position: {x: 0, y: -0.75, z: 0}
+  CameraSize: 5
   Scale: {x: 0.95, y: 0.95, z: 1}
   Gravity: -9.81
   KeyboardGamepadSupport: 0

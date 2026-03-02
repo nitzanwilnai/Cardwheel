@@ -90,6 +90,7 @@ namespace Cardwheel
         {
             START_ROUND,
             JOKER_PRE_ROUND,
+            JOKER_SORT_SLOTS,
             SPIN_UP,
             WAITING_FOR_INPUT,
             BALLS_DROPPED,
@@ -250,6 +251,7 @@ namespace Cardwheel
             this.settingsData = settingsData;
 
             transform.localPosition = gameInfoSO.Position;
+            camera.orthographicSize = gameInfoSO.CameraSize;
             transform.localScale = gameInfoSO.Scale;
             Physics2D.gravity = new Vector3(0.0f, gameInfoSO.Gravity, 0.0f);
 
@@ -670,15 +672,10 @@ namespace Cardwheel
                         );
                         if (slotChangedIdx > -1)
                         {
-                            CommonSlotsVisual.ChangedSlotsIdxs[CommonSlotsVisual.ChangedSlotsCount++] = slotChangedIdx;
-                            CommonSlotsVisual.ShowSpinWheel(
-                                runData,
-                                balance,
-                                m_scoringSlots,
-                                runData.SlotTypeInGame,
-                                m_showSlotBuffs,
-                                runData.UseSlotBuffs
-                            );
+                            if (CommonSlotsVisual.ChangedSlotsCount < balance.NumSlots)
+                                CommonSlotsVisual.ChangedSlotsIdxs[CommonSlotsVisual.ChangedSlotsCount++] = slotChangedIdx;
+
+                            CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotBuffs, runData.UseSlotBuffs);
                             m_slotAnimTimer = m_slotAnimTime;
 
                             CommonVisual.JokerGUIs[jokerIdx].Animation.Play("ScoreGrow");
@@ -689,6 +686,43 @@ namespace Cardwheel
 
                     if (m_scoringIdx >= runData.JokerCount && m_scoringTimer > ScoringTime)
                     {
+                        m_scoringIdx = 0;
+                        setGameState(GAME_STATE.JOKER_SORT_SLOTS);
+                        return;
+                    }
+                }
+            }
+            if (GameState == GAME_STATE.JOKER_SORT_SLOTS)
+            {
+                m_scoringTimer += dt; // * settingsData.Speed;
+                if (m_scoringTimer > ScoringTime)
+                {
+                    while (m_scoringIdx < runData.JokerCount)
+                    {
+                        int jokerIdx = m_scoringIdx;
+                        int jokerType = runData.JokerTypes[jokerIdx];
+                        m_scoringIdx++;
+
+                        if (balance.JokerBalance.SortSlots[jokerType])
+                        {
+                            Logic.SortSlotsInGame(runData, balance);
+
+                            CommonSlotsVisual.ChangedSlotsCount = 0;
+                            for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
+                                CommonSlotsVisual.ChangedSlotsIdxs[CommonSlotsVisual.ChangedSlotsCount++] = slotIdx;
+                            CommonSlotsVisual.ShowSpinWheel(runData, balance, m_scoringSlots, runData.SlotTypeInGame, m_showSlotBuffs, runData.UseSlotBuffs);
+                            m_slotAnimTimer = m_slotAnimTime;
+
+                            CommonVisual.JokerGUIs[jokerIdx].Animation.Play("ScoreGrow");
+
+                            m_scoringTimer = 0.0f;
+                            break;
+                        }
+                    }
+
+                    if (m_scoringIdx >= runData.JokerCount && m_scoringTimer > ScoringTime)
+                    {
+                        m_scoringIdx = 0;
                         startSpin(runData, balance);
                     }
                 }
@@ -1718,7 +1752,7 @@ namespace Cardwheel
                         dropBalls();
 
                 // button trigger
-                if (m_selectedButton == MENU_BUTTONS.DROP && CommonButtonVisual.NavigateEnter())
+                if (m_selectedButton == MENU_BUTTONS.DROP && CommonButtonVisual.NavigateEnterPressed())
                 {
                     dropBalls();
                     return;
@@ -2098,11 +2132,6 @@ namespace Cardwheel
         {
             CommonVisual.UpdateTopBarMoney(runData, m_topBarGUI);
             CommonVisual.ShowJokersInGame(runData, balance, m_jokerParent);
-        }
-
-        public static void SortSlots(RunData runData)
-        {
-            Logic.SortSlots(runData);
         }
 
         void showGameInfo()

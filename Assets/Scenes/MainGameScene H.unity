@@ -152,15 +152,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GUIRefGameObjects: []
-  GUIRefTexts: []
   GUIRefTextGUI:
   - Name: DebugText
     Value: {fileID: 937363689}
   GUIRefImages: []
-  GUIRefRawImages: []
   GUIRefButtons: []
-  GUIRefSliders: []
   GUIRefAnimations: []
+  GUIRefParticleSystems: []
 --- !u!114 &315485194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -832,6 +830,7 @@ MonoBehaviour:
   StartSeed: 0
   GamepadType: 0
   LastSelectedMenuButton: 
+  FrameCounter: 0
 --- !u!4 &844177295
 Transform:
   m_ObjectHideFlags: 0
@@ -1596,6 +1595,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Board
       objectReference: {fileID: 0}
+    - target: {fileID: 2708210276350364677, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2708210276350364677, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2708210276350364677, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: InitialModule.startSpeed.minScalar
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2814498264226045707, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.105
@@ -1659,6 +1670,34 @@ PrefabInstance:
     - target: {fileID: 7063361928916150422, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
       propertyPath: ParticleSystemSparks
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7064318124498950053, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7064318124498950053, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: InitialModule.size3D
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7064318124498950053, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7064318124498950053, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: InitialModule.startSpeed.minScalar
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7769603913598037453, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7769603913598037453, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7769603913598037453, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
+      propertyPath: InitialModule.startSpeed.minScalar
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 8176807368564177158, guid: 12b8f258d63564aa19e4e7c678c01918, type: 3}
       propertyPath: m_LocalPosition.x

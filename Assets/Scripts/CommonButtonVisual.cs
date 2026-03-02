@@ -53,8 +53,33 @@ namespace Cardwheel
             gUIButtonData.SelectedGO.SetActive(false);
         }
 
+        public static bool NavigateEnterPressed()
+        {
+            if (Gamepad.current != null)
+                if (Gamepad.current.buttonSouth.wasPressedThisFrame)
+                {
+                    LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
+                    return true;
+                }
+
+
+            if (Keyboard.current != null)
+                if (Keyboard.current.enterKey.wasPressedThisFrame)
+                {
+                    LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
+                    return true;
+                }
+
+            return false;
+        }
+
         public static bool NavigateEnter()
         {
+            if (Time.realtimeSinceStartupAsDouble - LastKeyboardInputTime < 0.1d)
+            {
+                return false;
+            }
+
             if (Gamepad.current != null)
                 if (Gamepad.current.buttonSouth.wasReleasedThisFrame)
                 {
@@ -78,7 +103,6 @@ namespace Cardwheel
             if (Gamepad.current != null)
                 if (Gamepad.current.buttonSouth.isPressed)
                 {
-                    LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
                     return true;
                 }
 
@@ -86,7 +110,6 @@ namespace Cardwheel
             if (Keyboard.current != null)
                 if (Keyboard.current.enterKey.isPressed)
                 {
-                    LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
                     return true;
                 }
 
@@ -173,7 +196,7 @@ namespace Cardwheel
         public static bool NavigateEscape()
         {
             if (Keyboard.current != null)
-                if (Keyboard.current.escapeKey.wasPressedThisFrame)
+                if (Keyboard.current.escapeKey.wasReleasedThisFrame)
                 {
                     LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
                     return true;
@@ -218,7 +241,7 @@ namespace Cardwheel
 
             if (guiButtonData.GamepadButton == GAMEPAD_BUTTON.OPTIONS)
                 if (Gamepad.current != null)
-                    if (Gamepad.current.startButton.wasPressedThisFrame)
+                    if (Gamepad.current.startButton.wasReleasedThisFrame)
                     {
                         LastKeyboardInputTime = Time.realtimeSinceStartupAsDouble;
                         return true;

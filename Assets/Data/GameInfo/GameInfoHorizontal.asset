@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CommonBundle: common_h
   CommonBundleUIPath: CommonH
-  Position: {x: -0.35, y: 0, z: 0}
-  Scale: {x: 1.3, y: 1.3, z: 1}
-  Gravity: -13.424211
+  Position: {x: -0.1, y: 0, z: 0}
+  CameraSize: 3.5
+  Scale: {x: 0.95, y: 0.95, z: 1}
+  Gravity: -9.81
   KeyboardGamepadSupport: 1

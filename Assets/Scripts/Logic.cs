@@ -301,11 +301,6 @@ public static class Logic
         // runData.SkipType[4] = 16;
         // runData.SkipType[5] = 16;
 
-        AddJoker(runData, balance, 107);
-        AddJoker(runData, balance, 108);
-        AddJoker(runData, balance, 62);
-        AddJoker(runData, balance, 63);
-
         // AddJoker(runData, balance, 90);
         // AddJoker(runData, balance, 91);
         // AddJoker(runData, balance, 92);
@@ -1194,6 +1189,8 @@ public static class Logic
     public static int JokerPreRoundTryModifySlot(RunData runData, Balance balance, int jokerType)
     {
         int modifiedSlotIdx = -1;
+
+        Debug.Log("JokerPreRoundTryModifySlot");
 
         if (balance.JokerBalance.StartRoundChangeSlotID[jokerType] > -1)
         {
@@ -2803,8 +2800,16 @@ public static class Logic
         return true;
     }
 
+    public static void SortSlotsInGame(RunData runData, Balance balance)
+    {
+        SortSlots(runData);
+        for (int slotIdx = 0; slotIdx < balance.NumSlots; slotIdx++)
+            runData.SlotTypeInGame[slotIdx] = runData.SlotType[slotIdx];
+    }
+
     public static void SortSlots(RunData runData)
     {
+        Debug.Log("SortSlots()");
         do
         {
             for (int slotType = 0; slotType < 4; slotType++)

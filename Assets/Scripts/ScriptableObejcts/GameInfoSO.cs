@@ -22,6 +22,7 @@ namespace Cardwheel
 
         [Header("Board Position")]
         public Vector3 Position;
+        public float CameraSize;
         public Vector3 Scale;
         public float Gravity;
 
