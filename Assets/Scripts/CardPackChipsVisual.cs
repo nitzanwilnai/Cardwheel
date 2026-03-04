@@ -165,8 +165,8 @@ namespace Cardwheel
                     Game.Instance.SetMenuState(runData.PrevMenuState);
                 }
             }
-
-            handleInput();
+            else
+                handleInput();
         }
 
         void handleInput()

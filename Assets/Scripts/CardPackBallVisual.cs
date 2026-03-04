@@ -220,8 +220,8 @@ namespace Cardwheel
                     Game.Instance.SetMenuState(runData.PrevMenuState);
                 }
             }
-
-            handleInput();
+            else
+                handleInput();
         }
 
         public void HandleTouchInput()
