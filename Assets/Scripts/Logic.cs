@@ -1201,8 +1201,11 @@ public static class Logic
                 if (runData.SlotModType[slotIdx] == -1)
                     avaiableSlots[availableSlotCount++] = slotIdx;
 
-            modifiedSlotIdx = avaiableSlots[CustomRandInt(ref runData.GameSeed) % availableSlotCount];
-            runData.SlotModType[modifiedSlotIdx] = balance.JokerBalance.StartRoundChangeSlotID[jokerType];
+            if (availableSlotCount > 0)
+            {
+                modifiedSlotIdx = avaiableSlots[CustomRandInt(ref runData.GameSeed) % availableSlotCount];
+                runData.SlotModType[modifiedSlotIdx] = balance.JokerBalance.StartRoundChangeSlotID[jokerType];
+            }
         }
         if (balance.JokerBalance.StartRoundChangeSlotColor[jokerType] != SLOT_TYPE.NONE)
         {
@@ -1213,9 +1216,12 @@ public static class Logic
                 if (runData.SlotTypeInGame[slotIdx] != balance.JokerBalance.StartRoundChangeSlotColor[jokerType])
                     avaiableSlots[availableSlotCount++] = slotIdx;
 
-            modifiedSlotIdx = avaiableSlots[CustomRandInt(ref runData.GameSeed) % availableSlotCount];
-            Debug.Log("Changing slot runData.SlotType[" + modifiedSlotIdx + "] " + runData.SlotType[modifiedSlotIdx] + " runData.SlotTypeInGame[" + modifiedSlotIdx + "] " + runData.SlotTypeInGame[modifiedSlotIdx] + " color to " + balance.JokerBalance.StartRoundChangeSlotColor[jokerType]);
-            runData.SlotType[modifiedSlotIdx] = runData.SlotTypeInGame[modifiedSlotIdx] = balance.JokerBalance.StartRoundChangeSlotColor[jokerType];
+            if (availableSlotCount > 0)
+            {
+                modifiedSlotIdx = avaiableSlots[CustomRandInt(ref runData.GameSeed) % availableSlotCount];
+                Debug.Log("Changing slot runData.SlotType[" + modifiedSlotIdx + "] " + runData.SlotType[modifiedSlotIdx] + " runData.SlotTypeInGame[" + modifiedSlotIdx + "] " + runData.SlotTypeInGame[modifiedSlotIdx] + " color to " + balance.JokerBalance.StartRoundChangeSlotColor[jokerType]);
+                runData.SlotType[modifiedSlotIdx] = runData.SlotTypeInGame[modifiedSlotIdx] = balance.JokerBalance.StartRoundChangeSlotColor[jokerType];
+            }
         }
 
         return modifiedSlotIdx;

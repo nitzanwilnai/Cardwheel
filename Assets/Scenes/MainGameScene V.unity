@@ -152,15 +152,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GUIRefGameObjects: []
-  GUIRefTexts: []
   GUIRefTextGUI:
   - Name: DebugText
     Value: {fileID: 937363689}
   GUIRefImages: []
-  GUIRefRawImages: []
   GUIRefButtons: []
-  GUIRefSliders: []
   GUIRefAnimations: []
+  GUIRefParticleSystems: []
 --- !u!114 &315485194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -683,7 +681,7 @@ MonoBehaviour:
   UIError: {fileID: 2132037731}
   CommonBundle: common
   GameInfoSO: {fileID: 11400000, guid: 9d25ef7a2653d4d07ae5ff249d5d3c28, type: 2}
-  IAPManager: {fileID: 0}
+  IAPManager: {fileID: 697370009}
   StartSeed: 0
   GamepadType: 0
   LastSelectedMenuButton: 
